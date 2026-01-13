@@ -21,7 +21,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${onest.className} scroll-smooth`}>{children}</body>
+      <body
+        className={`${onest.className} scroll-smooth min-h-screen h-screen overflow-y-auto`}
+      >
+        {children}
+      </body>
     </html>
   );
 }

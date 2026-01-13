@@ -13,3 +13,21 @@
   --color-primary: #0d0d0d;
   --color-secondary: #f2f2f2;
 }
+
+@layer utilities {
+  button {
+    cursor: pointer;
+  }
+
+  button:hover {
+    filter: brightness(105%);
+  }
+
+  button:disabled {
+    filter: saturate(0);
+  }
+
+  button:active {
+    filter: brightness(95%);
+  }
+}
