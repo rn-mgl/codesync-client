@@ -49,8 +49,8 @@ const Hero = () => {
               </p>
             </div>
           </div>
-          <div className="w-full p-4 rounded-b-md bg-neutral-900 border border-neutral-600 border-t-0 text-left">
-            <p className="font-mono">
+          <div className="w-full p-4 font-mono rounded-b-md bg-neutral-900 border border-neutral-600 border-t-0 text-left">
+            <p>
               <span className="text-red-400">const</span>{" "}
               <span className="text-purple-400">solveTogether</span>{" "}
               <span className="text-red-400">=</span>{" "}
@@ -60,9 +60,36 @@ const Hero = () => {
               <span className="text-green-400">[]</span>
               <span className="text-blue-400">)</span>
               <span className="text-red-400">:</span>
-              <span className="text-blue-400"> number </span>{" "}
+              <span className="text-blue-400"> string </span>{" "}
               <span className="text-red-400">=&gt;</span>{" "}
               <span className="text-blue-400">&#123;</span> <br />
+            </p>
+            <p className="indent-4">
+              <span className="text-red-400 indent-4">if</span>{" "}
+              <span className="text-green-400">(</span>
+              <span className="text-amber-400">users</span>
+              <span className="text-white">.</span>
+              <span className="text-blue-400">length</span>{" "}
+              <span className="text-red-400 indent-4">&gt;</span>{" "}
+              <span className="text-blue-400">1</span>
+              <span className="text-green-400">) &#123;</span>{" "}
+            </p>
+            <p className="indent-8">
+              <span className="text-red-400 indent-4">return</span>{" "}
+              <span className="text-blue-400">
+                &quot;Real-time Sync Active 🚀&quot;
+              </span>
+              <span className="text-white">;</span>
+            </p>
+            <p className="indent-4">
+              <span className="text-green-400">&#125;</span>{" "}
+            </p>
+            <p className="indent-4">
+              <span className="text-red-400 indent-4">return</span>{" "}
+              <span className="text-blue-400">&quot;Building...&quot;</span>
+              <span className="text-white">;</span>
+            </p>
+            <p>
               <span className="text-blue-400">&#125;</span>{" "}
             </p>
           </div>
