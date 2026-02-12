@@ -1,9 +1,22 @@
 import React from "react";
 
 const Offer = () => {
+  const mappedLines = React.useMemo(
+    () =>
+      new Array(50).fill(null).map((_, i) => {
+        return (
+          <div
+            key={i}
+            className={`border-neutral-950/10 border ${i % 2 === 0 ? "w-px h-full border-r border-l-0" : "h-px w-full border-b border-t-0"}`}
+          ></div>
+        );
+      }),
+    [],
+  );
+
   return (
-    <div className="w-full h-auto bg-secondary flex flex-col items-center justify-center min-h-screen p-4 t:p-8">
-      <div className="w-full items-center justify-center flex flex-col gap-8 h-full max-w-(--breakpoint-l-s)">
+    <div className="w-full h-auto bg-secondary flex flex-col items-center justify-center min-h-screen p-4 t:p-8 relative">
+      <div className="w-full items-center justify-center flex flex-col gap-8 h-full max-w-(--breakpoint-l-s) z-10">
         <div className="text-center">
           <p className="text-neutral-600 l-l:text-lg">all in one place</p>
           <h1 className="text-2xl font-black text-primary t:text-5xl l-l:text-7xl">
@@ -52,6 +65,10 @@ const Offer = () => {
             </p>
           </div>
         </div>
+      </div>
+
+      <div className="w-full absolute h-full top-0 left-0 grid grid-cols-5 grid-rows-10 z-0">
+        {mappedLines}
       </div>
     </div>
   );
