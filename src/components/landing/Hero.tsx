@@ -1,11 +1,10 @@
-import React from "react";
 import { FaArrowRightLong } from "react-icons/fa6";
 
 const Hero = () => {
   return (
-    <div className="w-full h-full bg-primary p-2 flex flex-col items-center justify-center">
+    <div className="w-full bg-primary p-4 flex flex-col items-center justify-center min-h-screen h-screen t:p-8">
       <div
-        className="w-full h-full text-center flex flex-col items-center justify-center max-w-(--breakpoint-l-l)
+        className="w-full h-full text-center flex flex-col items-center justify-center max-w-(--breakpoint-l-s)
                 gap-4 t:gap-8"
       >
         <div className="w-full flex flex-col items-center justify-center gap-2">
