@@ -25,7 +25,7 @@ const Offer = () => {
         </div>
 
         <div className="grid grid-cols-1 gap-4 t:grid-cols-2">
-          <div className="bg-linear-to-tl from-lime-400/10 w-full p-4 t:p-8 rounded-md bg-neutral-200 border-neutral-300 border-2 flex flex-col items-start justify-center gap-4">
+          <div className="w-full p-4 t:p-8 rounded-md bg-neutral-200 border-neutral-300 border-2 flex flex-col items-start justify-center gap-4">
             <h2 className="text-primary font-bold t:text-lg l-l:text-xl">
               Problem Library
             </h2>
@@ -35,7 +35,7 @@ const Offer = () => {
             </p>
           </div>
 
-          <div className="bg-linear-to-tr from-amber-400/10 w-full p-4 t:p-8 rounded-md bg-neutral-200 border-neutral-300 border-2 flex flex-col items-end justify-center gap-4 text-right">
+          <div className="w-full p-4 t:p-8 rounded-md bg-neutral-200 border-neutral-300 border-2 flex flex-col items-end justify-center gap-4 text-right">
             <h2 className="text-primary font-bold t:text-lg l-l:text-xl">
               Real-Time Editor
             </h2>
@@ -45,7 +45,7 @@ const Offer = () => {
             </p>
           </div>
 
-          <div className="bg-linear-to-tl from-cyan-400/10 t:bg-linear-to-bl w-full p-4 t:p-8 rounded-md bg-neutral-200 border-neutral-300 border-2 flex flex-col items-start justify-center gap-4">
+          <div className="w-full p-4 t:p-8 rounded-md bg-neutral-200 border-neutral-300 border-2 flex flex-col items-start justify-center gap-4">
             <h2 className="text-primary font-bold t:text-lg l-l:text-xl">
               Mock Interviews
             </h2>
@@ -55,7 +55,7 @@ const Offer = () => {
             </p>
           </div>
 
-          <div className="bg-linear-to-tr from-pink-400/10 t:bg-linear-to-br  w-full p-4 t:p-8 rounded-md bg-neutral-200 border-neutral-300 border-2 flex flex-col items-end justify-center gap-4 text-right">
+          <div className=" w-full p-4 t:p-8 rounded-md bg-neutral-200 border-neutral-300 border-2 flex flex-col items-end justify-center gap-4 text-right">
             <h2 className="text-primary font-bold t:text-lg l-l:text-xl">
               AI Insights
             </h2>
