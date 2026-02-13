@@ -1,5 +1,3 @@
-import { FaArrowRightLong } from "react-icons/fa6";
-
 const Action = () => {
   const mappedLinesGoingUp = new Array(10).fill(null).map((_, i) => {
     return <div key={i} className="w-full h-px bg-secondary/20 -skew-60" />;
@@ -22,15 +20,6 @@ const Action = () => {
           <p className="text-secondary/80 t:text-base l-l:text-lg">
             Join developers; break your limits
           </p>
-        </div>
-
-        <div className="w-full hover:bg-linear-to-br hover:from-teal-600/80 hover:to-fuchsia-600/80 hover:p-1 transition-all rounded-md t:w-fit">
-          <button
-            className="bg-linear-to-br from-secondary to-white p-2 rounded-md t:max-w-fit t:px-4 font-bold text-primary w-full
-                    flex flex-row items-center justify-center gap-2"
-          >
-            Join Now <FaArrowRightLong />
-          </button>
         </div>
       </div>
 
