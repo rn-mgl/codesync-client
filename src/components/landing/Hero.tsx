@@ -1,8 +1,12 @@
+import Link from "next/link";
 import { FaArrowRightLong } from "react-icons/fa6";
 
 const Hero = () => {
   return (
-    <div className="w-full bg-primary p-4 flex flex-col items-center justify-center min-h-screen h-screen t:p-8 relative ">
+    <div
+      id="hero"
+      className="w-full bg-primary p-4 flex flex-col items-center justify-center min-h-screen h-screen t:p-8 relative "
+    >
       <div
         className="absolute z-0 top-0 -translate-y-1/2 w-full blur-3xl aspect-square rounded-full 
                     bg-linear-to-b from-neutral-900/10 from-60% to-secondary/20"
@@ -31,12 +35,13 @@ const Hero = () => {
         </div>
 
         <div className="w-full hover:bg-linear-to-br hover:from-fuchsia-600/80 hover:to-teal-600/80 hover:p-1 transition-all rounded-md t:w-fit">
-          <button
+          <Link
+            href="/auth/register"
             className="bg-linear-to-br from-secondary to-white p-2 rounded-md t:max-w-fit t:px-4 font-bold text-primary w-full
                     flex flex-row items-center justify-center gap-2"
           >
             Start Now <FaArrowRightLong />
-          </button>
+          </Link>
         </div>
 
         <div className="w-full flex flex-col items-center justify-center max-w-(--breakpoint-t)">

@@ -15,7 +15,10 @@ const Offer = () => {
   );
 
   return (
-    <div className="w-full h-auto bg-secondary flex flex-col items-center justify-center min-h-screen p-4 t:p-8 relative">
+    <div
+      id="offer"
+      className="w-full h-auto bg-secondary flex flex-col items-center justify-center min-h-screen p-4 t:p-8 relative"
+    >
       <div className="w-full items-center justify-center flex flex-col gap-8 h-full max-w-(--breakpoint-l-s) z-10">
         <div className="text-center">
           <p className="text-neutral-600 l-l:text-lg">all in one place</p>
