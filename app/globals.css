@@ -14,9 +14,23 @@
   --color-secondary: #f2f2f2;
 }
 
+@theme {
+  --animate-fade: fade 500ms ease-in-out infinite alternate;
+
+  @keyframes fade {
+    0% {
+      opacity: 0%;
+    }
+    100% {
+      opacity: 100%;
+    }
+  }
+}
+
 @layer base {
   button {
     cursor: pointer;
+    /* animation:; */
   }
 
   button:hover {

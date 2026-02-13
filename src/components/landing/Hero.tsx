@@ -2,10 +2,15 @@ import { FaArrowRightLong } from "react-icons/fa6";
 
 const Hero = () => {
   return (
-    <div className="w-full bg-primary p-4 flex flex-col items-center justify-center min-h-screen h-screen t:p-8">
+    <div className="w-full bg-primary p-4 flex flex-col items-center justify-center min-h-screen h-screen t:p-8 relative ">
+      <div
+        className="absolute z-0 top-0 -translate-y-1/2 w-full blur-3xl aspect-square rounded-full 
+                    bg-linear-to-b from-neutral-900/10 from-60% to-secondary/20"
+      />
+
       <div
         className="w-full h-full text-center flex flex-col items-center justify-center max-w-(--breakpoint-l-s)
-                gap-4 t:gap-8"
+                gap-4 t:gap-8 z-10"
       >
         <div className="w-full flex flex-col items-center justify-center gap-2">
           <h1 className="text-3xl font-black text-secondary t:text-5xl l-l:text-7xl">
