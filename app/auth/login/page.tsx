@@ -7,9 +7,10 @@ import Link from "next/link";
 import { FaRegEnvelope, FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import login from "@/public/auth/login.svg";
 import Input from "@/src/components/field/Input";
+import { LoginInterface } from "@/src/interface/AuthInterface";
 
 const Login = () => {
-  const [credentials, setCredentials] = React.useState({
+  const [credentials, setCredentials] = React.useState<LoginInterface>({
     email: "",
     password: "",
   });
@@ -44,7 +45,7 @@ const Login = () => {
                       t:mx-auto t:max-w-(--breakpoint-m-l) l-s:max-w-none"
           >
             <div className="flex flex-col items-start justify-center gap-4 w-full">
-              <h1 className="text-3xl  t:text-5xl">
+              <h1 className="text-3xl  t:text-4xl">
                 <span className="text-primary font-black">Hello,</span>
                 <br />
                 <span className="text-primary/80 font-bold">Welcome Back</span>
