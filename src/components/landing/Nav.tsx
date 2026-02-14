@@ -16,7 +16,10 @@ const Nav = () => {
           Action
         </Link>
 
-        <Link href="/auth/login" className="ml-auto border p-1 px-2 rounded-sm">
+        <Link
+          href="/auth/login"
+          className="ml-auto border p-1 px-2 rounded-sm hover:bg-secondary hover:text-primary transition-all"
+        >
           Log In
         </Link>
       </div>

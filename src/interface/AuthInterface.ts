@@ -3,6 +3,16 @@ export interface LoginInterface {
   password: string;
 }
 
+export interface ForgotInterface {
+  username: string;
+  email: string;
+}
+
+export interface ResetInterface {
+  password: string;
+  confirm_password: string;
+}
+
 export interface RegisterInterface {
   first_name: string;
   last_name: string;

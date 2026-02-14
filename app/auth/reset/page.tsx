@@ -1,21 +1,23 @@
 "use client";
 
-import React from "react";
+import reset from "@/public/auth/reset.svg";
+import Input from "@/src/components/field/Input";
 import Logo from "@/src/components/global/Logo";
+import { ResetInterface } from "@/src/interface/AuthInterface";
 import Image from "next/image";
 import Link from "next/link";
-import { FaRegEnvelope, FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
-import login from "@/public/auth/login.svg";
-import Input from "@/src/components/field/Input";
-import { LoginInterface } from "@/src/interface/AuthInterface";
+import React from "react";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 
-const Login = () => {
-  const [credentials, setCredentials] = React.useState<LoginInterface>({
-    email: "",
+const Reset = () => {
+  const [credentials, setCredentials] = React.useState<ResetInterface>({
     password: "",
+    confirm_password: "",
   });
-
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [showPassword, setShowPassword] = React.useState({
+    password: false,
+    confirm_password: false,
+  });
 
   const handleCredentials = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -28,9 +30,16 @@ const Login = () => {
     });
   };
 
-  const handleShowPassword = () => {
-    setShowPassword((prev) => !prev);
+  const handleShowPassword = (name: string) => {
+    setShowPassword((prev) => {
+      return {
+        ...prev,
+        [name]: !prev[name as keyof object],
+      };
+    });
   };
+
+  console.log(showPassword);
 
   return (
     <div className="w-full h-screen flex flex-col items-center justify-center bg-primary p-4 t:p-8">
@@ -46,85 +55,76 @@ const Login = () => {
           >
             <div className="flex flex-col items-start justify-center gap-4 w-full">
               <h1 className="text-3xl  t:text-4xl">
-                <span className="text-primary font-black">Hello,</span>
-                <br />
-                <span className="text-primary/80 font-bold">Welcome Back</span>
+                <span className="text-primary font-black">Reset Password</span>
               </h1>
 
               <p className="text-primary/60 text-sm font-semibold t:text-base">
-                Ready to learn?
+                Enter new password
               </p>
             </div>
 
             <form className="w-full flex flex-col items-center justify-center gap-2">
               <Input
-                id="email"
-                name="email"
+                id="password"
+                name="password"
                 onChange={handleCredentials}
-                type="email"
-                value={credentials.email}
-                icon={<FaRegEnvelope />}
-                label="Email"
+                type={showPassword.password ? "text" : "password"}
+                value={credentials.password}
+                icon={
+                  showPassword.password ? (
+                    <FaRegEyeSlash
+                      className="cursor-pointer"
+                      onClick={() => handleShowPassword("password")}
+                    />
+                  ) : (
+                    <FaRegEye
+                      className="cursor-pointer"
+                      onClick={() => handleShowPassword("password")}
+                    />
+                  )
+                }
+                label="Password"
                 required={true}
               />
 
               <Input
-                id="password"
-                name="password"
+                id="confirm_password"
+                name="confirm_password"
                 onChange={handleCredentials}
-                type="password"
-                value={credentials.password}
-                label="Password"
-                required={true}
+                type={showPassword.confirm_password ? "text" : "password"}
+                value={credentials.confirm_password}
                 icon={
-                  showPassword ? (
+                  showPassword.confirm_password ? (
                     <FaRegEyeSlash
-                      onClick={handleShowPassword}
                       className="cursor-pointer"
+                      onClick={() => handleShowPassword("confirm_password")}
                     />
                   ) : (
                     <FaRegEye
-                      onClick={handleShowPassword}
                       className="cursor-pointer"
+                      onClick={() => handleShowPassword("confirm_password")}
                     />
                   )
                 }
+                label="Confirm Password"
+                required={true}
               />
-
-              <div className="w-full flex flex-row text-xs gap-1">
-                <Link
-                  href="/auth/forgot"
-                  className="font-bold text-blue-500 hover:underline transition-all"
-                >
-                  Forgot Password?
-                </Link>
-              </div>
 
               <button
                 type="submit"
                 className="mt-4 bg-primary text-secondary font-bold w-full p-2 rounded-md"
               >
-                Log In
+                Submit
               </button>
             </form>
-
-            <div className="w-full flex flex-row text-xs gap-1">
-              <p className="text-primary/60">Don&apos;t have an account?</p>
-              <Link
-                href="/auth/register"
-                className="font-bold text-blue-500 hover:underline transition-all"
-              >
-                Sign Up
-              </Link>
-            </div>
           </div>
         </div>
 
         <div className="hidden l-s:flex w-full h-full bg-linear-to-b from-primary/80 to-primary rounded-xl flex-col items-center justify-center">
           <div className="w-full flex flex-col items-center justify-center">
             <Image
-              src={login}
-              alt="login"
+              src={reset}
+              alt="reset"
               className="aspect-square drop-shadow-lg drop-shadow-secondary/50 animate-float"
             />
           </div>
@@ -134,4 +134,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Reset;
