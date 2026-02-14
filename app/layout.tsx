@@ -1,10 +1,8 @@
-import type { Metadata } from "next";
+"use client";
+
+import { SessionProvider } from "next-auth/react";
 import { Onest } from "next/font/google";
 import "./globals.css";
-
-export const metadata: Metadata = {
-  title: "CodeSync",
-};
 
 const onest = Onest({
   display: "block",
@@ -20,12 +18,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${onest.className} scroll-smooth min-h-screen h-screen overflow-y-auto`}
-      >
-        {children}
-      </body>
-    </html>
+    <SessionProvider refetchOnWindowFocus={false}>
+      <html lang="en">
+        <body
+          className={`${onest.className} scroll-smooth min-h-screen h-screen overflow-y-auto`}
+        >
+          {children}
+        </body>
+      </html>
+    </SessionProvider>
   );
 }

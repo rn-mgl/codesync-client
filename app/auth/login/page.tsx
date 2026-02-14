@@ -1,21 +1,27 @@
 "use client";
 
-import React from "react";
-import Logo from "@/src/components/global/Logo";
-import Image from "next/image";
-import Link from "next/link";
-import { FaRegEnvelope, FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import login from "@/public/auth/login.svg";
 import Input from "@/src/components/field/Input";
+import Logo from "@/src/components/global/Logo";
 import { LoginInterface } from "@/src/interface/AuthInterface";
+import axios from "axios";
+import { signIn, useSession } from "next-auth/react";
+import Image from "next/image";
+import Link from "next/link";
+import React from "react";
+import { FaRegEnvelope, FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 
 const Login = () => {
   const [credentials, setCredentials] = React.useState<LoginInterface>({
-    email: "",
-    password: "",
+    candidateEmail: "",
+    candidatePassword: "",
   });
 
   const [showPassword, setShowPassword] = React.useState(false);
+
+  const url = process.env.SERVER_URL;
+
+  const { data: session } = useSession();
 
   const handleCredentials = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -30,6 +36,37 @@ const Login = () => {
 
   const handleShowPassword = () => {
     setShowPassword((prev) => !prev);
+  };
+
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const { data } = await axios.post<{
+        token: string;
+        user: { id: number; is_verified: boolean };
+      }>(`${url}/auth/login`, {
+        credentials,
+      });
+
+      if (!data || !data.user.is_verified) {
+        return;
+      }
+
+      const authenticated = await signIn("credentials", {
+        redirect: false,
+        credentials: JSON.stringify({
+          token: data.token,
+          id: data.user.id,
+        }),
+      });
+
+      if (authenticated?.ok) {
+        console.log("logged in");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -56,24 +93,27 @@ const Login = () => {
               </p>
             </div>
 
-            <form className="w-full flex flex-col items-center justify-center gap-2">
+            <form
+              onSubmit={(e) => handleLogin(e)}
+              className="w-full flex flex-col items-center justify-center gap-2"
+            >
               <Input
-                id="email"
-                name="email"
+                id="candidateEmail"
+                name="candidateEmail"
                 onChange={handleCredentials}
                 type="email"
-                value={credentials.email}
+                value={credentials.candidateEmail}
                 icon={<FaRegEnvelope />}
                 label="Email"
                 required={true}
               />
 
               <Input
-                id="password"
-                name="password"
+                id="candidatePassword"
+                name="candidatePassword"
                 onChange={handleCredentials}
-                type="password"
-                value={credentials.password}
+                type={showPassword ? "text" : "password"}
+                value={credentials.candidatePassword}
                 label="Password"
                 required={true}
                 icon={
