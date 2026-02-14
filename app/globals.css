@@ -16,6 +16,7 @@
 
 @theme {
   --animate-fade: fade 500ms ease-in-out infinite alternate;
+  --animate-float: float 2s ease-in-out infinite alternate;
 
   @keyframes fade {
     0% {
@@ -23,6 +24,15 @@
     }
     100% {
       opacity: 100%;
+    }
+  }
+
+  @keyframes float {
+    0% {
+      transform: translateY(0rem);
+    }
+    100% {
+      transform: translateY(1rem);
     }
   }
 }
@@ -43,5 +53,10 @@
 
   button:active {
     filter: brightness(95%);
+  }
+
+  input[type="password"]::-ms-reveal,
+  input[type="password"]::-ms-clear {
+    display: none;
   }
 }
