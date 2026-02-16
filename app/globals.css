@@ -60,3 +60,19 @@
     display: none;
   }
 }
+
+@layer utilities {
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-primary);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-secondary);
+    border-radius: 999rem;
+  }
+}
