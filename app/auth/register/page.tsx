@@ -7,6 +7,7 @@ import { RegisterInterface } from "@/src/interface/AuthInterface";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 import {
   FaRegEnvelope,
@@ -26,6 +27,8 @@ const Register = () => {
   const [showPassword, setShowPassword] = React.useState(false);
 
   const url = process.env.SERVER_URL;
+
+  const router = useRouter();
 
   const handleCredentials = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -54,7 +57,7 @@ const Register = () => {
         return;
       }
 
-      console.log(data);
+      router.push("/auth/sending?type=verification");
     } catch (error) {
       console.log(error);
     }
@@ -62,7 +65,7 @@ const Register = () => {
 
   return (
     <div className="w-full h-screen flex flex-col items-center justify-center bg-primary p-4 t:p-8">
-      <div className="w-full max-w-(--breakpoint-l-s) bg-secondary h-full rounded-2xl grid grid-cols-1 l-s:grid-cols-2 p-2 gap-10">
+      <div className="w-full max-w-(--breakpoint-l-s) bg-secondary h-full rounded-2xl grid grid-cols-1 l-s:grid-cols-2 p-2 gap-10 overflow-y-auto">
         <div className="w-full flex flex-col items-start justify-start p-4">
           <Link href="/" className="w-8">
             <Logo type="dark" />
@@ -181,6 +184,7 @@ const Register = () => {
           <div className="w-full flex flex-col items-center justify-center">
             <Image
               src={register}
+              draggable={false}
               alt="register"
               className="aspect-square drop-shadow-lg drop-shadow-secondary/50 animate-float"
             />

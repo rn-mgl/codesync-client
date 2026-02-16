@@ -163,6 +163,7 @@ const Login = () => {
             <Image
               src={login}
               alt="login"
+              draggable={false}
               className="aspect-square drop-shadow-lg drop-shadow-secondary/50 animate-float"
             />
           </div>
