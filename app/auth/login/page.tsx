@@ -5,7 +5,7 @@ import Input from "@/src/components/field/Input";
 import Logo from "@/src/components/global/Logo";
 import { LoginInterface } from "@/src/interface/AuthInterface";
 import axios from "axios";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -20,8 +20,6 @@ const Login = () => {
   const [showPassword, setShowPassword] = React.useState(false);
 
   const url = process.env.SERVER_URL;
-
-  const { data: session } = useSession();
 
   const handleCredentials = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

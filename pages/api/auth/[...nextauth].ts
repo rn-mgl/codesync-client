@@ -52,6 +52,8 @@ export const authOptions: AuthOptions = {
     signOut: "/",
     error: "/auth/login",
   },
+
+  secret: process.env.AUTH_SECRET,
 };
 
 export default NextAuth(authOptions);

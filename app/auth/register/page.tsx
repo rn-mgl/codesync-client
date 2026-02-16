@@ -4,6 +4,7 @@ import register from "@/public/auth/register.svg";
 import Input from "@/src/components/field/Input";
 import Logo from "@/src/components/global/Logo";
 import { RegisterInterface } from "@/src/interface/AuthInterface";
+import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -24,6 +25,8 @@ const Register = () => {
   });
   const [showPassword, setShowPassword] = React.useState(false);
 
+  const url = process.env.SERVER_URL;
+
   const handleCredentials = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
@@ -37,6 +40,24 @@ const Register = () => {
 
   const handleShowPassword = () => {
     setShowPassword((prev) => !prev);
+  };
+
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const { data } = await axios.post(`${url}/auth/register`, {
+        credentials,
+      });
+
+      if (!data) {
+        return;
+      }
+
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -65,7 +86,10 @@ const Register = () => {
               </p>
             </div>
 
-            <form className="w-full flex flex-col items-center justify-center gap-2">
+            <form
+              onSubmit={(e) => handleRegister(e)}
+              className="w-full flex flex-col items-center justify-center gap-2"
+            >
               <Input
                 id="first_name"
                 name="first_name"

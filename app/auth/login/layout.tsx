@@ -5,6 +5,10 @@ export const metadata: Metadata = {
   title: "Log In | CodeSync",
 };
 
-export default function layout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return children;
 }
