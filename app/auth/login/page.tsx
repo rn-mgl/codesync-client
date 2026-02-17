@@ -8,6 +8,7 @@ import axios from "axios";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { FaRegEnvelope, FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 
@@ -20,6 +21,8 @@ const Login = () => {
   const [showPassword, setShowPassword] = React.useState(false);
 
   const url = process.env.SERVER_URL;
+
+  const router = useRouter();
 
   const handleCredentials = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -60,7 +63,7 @@ const Login = () => {
       });
 
       if (authenticated?.ok) {
-        console.log("logged in");
+        router.push("/codesync");
       }
     } catch (error) {
       console.log(error);
