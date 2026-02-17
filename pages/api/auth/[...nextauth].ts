@@ -53,6 +53,10 @@ export const authOptions: AuthOptions = {
     error: "/auth/login",
   },
 
+  session: {
+    strategy: "jwt",
+  },
+
   secret: process.env.AUTH_SECRET,
 };
 
