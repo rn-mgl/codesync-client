@@ -2,9 +2,12 @@ import Link from "next/link";
 import React from "react";
 import Logo from "@/components/global/Logo";
 
-const Nav = () => {
+const Nav: React.FC<{ hide?: boolean }> = (props) => {
   return (
-    <div className="w-full fixed top-0 p-4 backdrop-blur-lg z-50 flex flex-col items-center justify-center bg-primary/50 t:p-8">
+    <div
+      className={`w-full fixed top-0 p-4 backdrop-blur-lg z-50 flex flex-col items-center justify-center bg-primary/50 
+                t:p-6 transition-all ${props.hide ? "-translate-y-full" : "translate-y-0"} `}
+    >
       <div className="w-full flex flex-row items-center max-w-(--breakpoint-l-s) gap-4 text-xs t:text-sm *:text-secondary">
         <Link className="p-1 max-w-8 t:max-w-10" href="#hero">
           <Logo type="dark" />
