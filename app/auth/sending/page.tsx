@@ -16,6 +16,7 @@ const Sending = ({
 
   const TYPE_MESSAGE = {
     verification: "We are currently sending your verification mail.",
+    reset: "We are currently sending your password reset mail.",
     default: "We are currently sending your mail.",
   };
 

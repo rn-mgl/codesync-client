@@ -1,19 +1,24 @@
 "use client";
 
+import forgot from "@/public/auth/forgot.svg";
 import Input from "@/src/components/field/Input";
 import Logo from "@/src/components/global/Logo";
+import { ForgotInterface } from "@/src/interface/AuthInterface";
+import axios from "axios";
+import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { FaRegEnvelope } from "react-icons/fa6";
-import forgot from "@/public/auth/forgot.svg";
-import Image from "next/image";
-import { ForgotInterface } from "@/src/interface/AuthInterface";
 
 const Forgot = () => {
   const [credentials, setCredentials] = React.useState<ForgotInterface>({
     username: "",
     email: "",
   });
+
+  const url = process.env.SERVER_URL;
+  const router = useRouter();
 
   const handleCredentials = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -24,6 +29,21 @@ const Forgot = () => {
         [name]: value,
       };
     });
+  };
+
+  const handleForgot = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const { data } = await axios.post(`${url}/auth/forgot`, { credentials });
+
+      if (!data || !data.success) {
+        return;
+      }
+
+      router.push("/auth/sending?type=reset");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -50,7 +70,10 @@ const Forgot = () => {
               </p>
             </div>
 
-            <form className="w-full flex flex-col items-center justify-center gap-2">
+            <form
+              onSubmit={(e) => handleForgot(e)}
+              className="w-full flex flex-col items-center justify-center gap-2"
+            >
               <Input
                 id="username"
                 name="username"
