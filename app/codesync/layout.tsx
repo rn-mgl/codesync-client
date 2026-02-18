@@ -1,3 +1,4 @@
+import Navigation from "@/src/components/global/navigation/Navigation";
 import { Metadata } from "next";
 import React from "react";
 
@@ -10,5 +11,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return (
+    <Navigation>
+      <div className="w-full h-full bg-secondary rounded-md p-2 border border-neutral-300">
+        {children}
+      </div>
+    </Navigation>
+  );
 }

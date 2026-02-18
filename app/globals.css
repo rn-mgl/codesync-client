@@ -15,7 +15,7 @@
 }
 
 @theme {
-  --animate-fade: fade 500ms ease-in;
+  --animate-fade: fade 50ms ease-in;
   --animate-float: float 2s ease-in-out infinite alternate;
 
   @keyframes fade {

@@ -21,7 +21,7 @@ export default function RootLayout({
     <SessionProvider refetchOnWindowFocus={false}>
       <html lang="en">
         <body
-          className={`${onest.className} scroll-smooth min-h-screen h-screen overflow-y-auto`}
+          className={`${onest.className} scroll-smooth min-h-screen h-screen overflow-y-auto text-primary`}
         >
           {children}
         </body>
