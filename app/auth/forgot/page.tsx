@@ -3,7 +3,7 @@
 import forgot from "@/public/auth/forgot.svg";
 import Input from "@/src/components/field/Input";
 import Logo from "@/src/components/global/Logo";
-import { ForgotInterface } from "@/src/interfaces/AuthInterface";
+import { ForgotInterface } from "@/src/interfaces/auth.interface";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";

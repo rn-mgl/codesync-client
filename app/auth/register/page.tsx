@@ -3,7 +3,7 @@
 import register from "@/public/auth/register.svg";
 import Input from "@/src/components/field/Input";
 import Logo from "@/src/components/global/Logo";
-import { RegisterInterface } from "@/src/interfaces/AuthInterface";
+import { RegisterInterface } from "@/src/interfaces/auth.interface";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";

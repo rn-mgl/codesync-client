@@ -3,7 +3,7 @@
 import login from "@/public/auth/login.svg";
 import Input from "@/src/components/field/Input";
 import Logo from "@/src/components/global/Logo";
-import { LoginInterface } from "@/src/interfaces/AuthInterface";
+import { LoginInterface } from "@/src/interfaces/auth.interface";
 import axios from "axios";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
