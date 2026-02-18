@@ -1,4 +1,4 @@
-import { InputFieldInterface } from "@/src/interface/FieldInterface";
+import { InputFieldInterface } from "@/src/interfaces/FieldInterface";
 import React from "react";
 
 const Input: React.FC<InputFieldInterface> = (props) => {

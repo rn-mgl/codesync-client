@@ -3,7 +3,7 @@
 import reset from "@/public/auth/reset.svg";
 import Input from "@/src/components/field/Input";
 import Logo from "@/src/components/global/Logo";
-import { ResetInterface } from "@/src/interface/AuthInterface";
+import { ResetInterface } from "@/src/interfaces/AuthInterface";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
