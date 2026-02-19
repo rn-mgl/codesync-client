@@ -7,8 +7,14 @@ import SideNav from "./SideNav";
 const Navigation = ({ children }: { children: React.ReactNode }) => {
   const [showSideNav, setShowSideNav] = React.useState(false);
 
-  const handleShowSideNav = () => {
-    setShowSideNav((prev) => !prev);
+  const handleShowSideNav = (source?: "link" | "button") => {
+    setShowSideNav((prev) => {
+      if (source === "link") {
+        return window.innerWidth >= 1024 ? prev : !prev; // maintain current nav state on laptop view and above
+      } else {
+        return !prev;
+      }
+    });
   };
 
   return (
@@ -19,7 +25,7 @@ const Navigation = ({ children }: { children: React.ReactNode }) => {
       />
       <div className="w-full h-full flex flex-col items-start justify-start flex-1 z-0 p-1 l-s:pl-0 gap-1">
         <HeadNav
-          handleShowSideNav={handleShowSideNav}
+          handleShowSideNav={() => handleShowSideNav("button")}
           showSideNav={showSideNav}
         />
         {children}

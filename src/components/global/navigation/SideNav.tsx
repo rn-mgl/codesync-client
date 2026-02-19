@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 
 const SideNav: React.FC<{
   showSideNav: boolean;
-  handleShowSideNav: () => void;
+  handleShowSideNav: (source?: "link" | "button") => void;
 }> = (props) => {
   const path = usePathname();
 
@@ -19,6 +19,7 @@ const SideNav: React.FC<{
       <Link
         key={nav.name}
         href={nav.url}
+        onClick={() => props.handleShowSideNav("link")}
         className={`w-full p-4 rounded-md hover:bg-neutral-800 min-w-14 min-h-14
                     transition-all flex flex-row items-center gap-4 
                     ${props.showSideNav ? "justify-start" : "justify-center"} 
@@ -44,7 +45,7 @@ const SideNav: React.FC<{
           className={`w-full flex flex-row items-center transition-all p-4 bg-primary rounded-md ${props.showSideNav ? "justify-between" : "justify-center"}`}
         >
           <button
-            onClick={props.handleShowSideNav}
+            onClick={() => props.handleShowSideNav("button")}
             className="p-2 rounded-full bg-inherit transition-all"
           >
             <FaXmark className="text-secondary l-s:hidden" />
