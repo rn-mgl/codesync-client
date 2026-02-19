@@ -1,20 +1,48 @@
+"use client";
 import { FaBars, FaXmark } from "react-icons/fa6";
 import Logo from "../Logo";
 import React from "react";
 import Link from "next/link";
+import { BASE_NAVIGATIONS } from "@/src/configs/navigation.config";
+import { usePathname } from "next/navigation";
 
 const SideNav: React.FC<{
   showSideNav: boolean;
   handleShowSideNav: () => void;
 }> = (props) => {
+  const path = usePathname();
+
+  const mappedNavigations = BASE_NAVIGATIONS.map((nav) => {
+    const isSelected = path === nav.url;
+
+    return (
+      <Link
+        key={nav.name}
+        href={nav.url}
+        className={`w-full p-4 rounded-md hover:bg-neutral-800 min-w-14 min-h-14
+                    transition-all flex flex-row items-center gap-4 
+                    ${props.showSideNav ? "justify-start" : "justify-center"} 
+                    ${isSelected ? "bg-secondary text-primary font-bold" : "text-secondary bg-primary"}`}
+      >
+        <nav.icon />
+
+        {props.showSideNav ? (
+          <span className="animate-fade">{nav.name}</span>
+        ) : null}
+      </Link>
+    );
+  });
+
   return (
     <div
       className={`h-full flex-row items-start justify-start fixed top-0 left-0 overflow-hidden
-               l-s:max-w-(--breakpoint-m-s) l-s:static transition-all animate-fade z-50 p-1  gap-1
-               ${props.showSideNav ? "flex w-full t:backdrop-blur-md l-s:backdrop-blur-[0px]" : "hidden l-s:flex l-s:w-18"}`}
+               l-s:max-w-(--breakpoint-m-s) l-s:static animate-fade z-50 p-1  gap-1
+               ${props.showSideNav ? "flex w-full t:backdrop-blur-md l-s:backdrop-blur-[0px]" : "hidden l-s:flex l-s:w-20"}`}
     >
       <div className="w-full h-full flex flex-col items-start justify-start t:w-1/2 l-s:w-full gap-1">
-        <div className="w-full flex flex-row items-center justify-between p-4 bg-primary rounded-md">
+        <div
+          className={`w-full flex flex-row items-center transition-all p-4 bg-primary rounded-md ${props.showSideNav ? "justify-between" : "justify-center"}`}
+        >
           <button
             onClick={props.handleShowSideNav}
             className="p-2 rounded-full bg-inherit transition-all"
@@ -23,14 +51,19 @@ const SideNav: React.FC<{
             <FaBars className="text-secondary hidden l-s:flex" />
           </button>
 
-          <Link
-            href="/codesync"
-            className={`w-8 min-w-8 transition-all ${props.showSideNav ? "flex" : "hidden"}`}
-          >
-            <Logo type="light" isTransparent={true} />
-          </Link>
+          {props.showSideNav ? (
+            <Link
+              href="/codesync"
+              className="w-8 min-w-8 transition-all flex animate-fade"
+            >
+              <Logo type="light" isTransparent={true} />
+            </Link>
+          ) : null}
         </div>
-        <div className="w-full h-full bg-primary rounded-md"></div>
+
+        <div className="w-full h-full bg-primary rounded-md flex flex-col items-start justify-start p-2 gap-2">
+          {mappedNavigations}
+        </div>
       </div>
 
       {/* tablet cover */}
