@@ -4,6 +4,7 @@ import login from "@/public/auth/login.svg";
 import Input from "@/src/components/field/Input";
 import Logo from "@/src/components/global/Logo";
 import { LoginInterface } from "@/src/interfaces/auth.interface";
+import { LoginSchema } from "@/src/schemas/auth.schema";
 import axios from "axios";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
@@ -11,6 +12,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { FaRegEnvelope, FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
+import z from "zod";
 
 const Login = () => {
   const [credentials, setCredentials] = React.useState<LoginInterface>({
@@ -43,6 +45,14 @@ const Login = () => {
     e.preventDefault();
 
     try {
+      const parser = LoginSchema.safeParse(credentials);
+
+      if (parser.error) {
+        const prettifyError = z.prettifyError(parser.error);
+        console.log(prettifyError);
+        return;
+      }
+
       const { data } = await axios.post<{
         token: string;
         user: { id: number; is_verified: boolean };

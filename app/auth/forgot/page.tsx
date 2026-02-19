@@ -4,12 +4,14 @@ import forgot from "@/public/auth/forgot.svg";
 import Input from "@/src/components/field/Input";
 import Logo from "@/src/components/global/Logo";
 import { ForgotInterface } from "@/src/interfaces/auth.interface";
+import { ForgotSchema } from "@/src/schemas/auth.schema";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { FaRegEnvelope } from "react-icons/fa6";
+import z from "zod";
 
 const Forgot = () => {
   const [credentials, setCredentials] = React.useState<ForgotInterface>({
@@ -34,6 +36,14 @@ const Forgot = () => {
   const handleForgot = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      const parser = ForgotSchema.safeParse(credentials);
+
+      if (parser.error) {
+        const prettifyError = z.prettifyError(parser.error);
+        console.log(prettifyError);
+        return;
+      }
+
       const { data } = await axios.post(`${url}/auth/forgot`, { credentials });
 
       if (!data || !data.success) {

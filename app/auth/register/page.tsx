@@ -4,6 +4,7 @@ import register from "@/public/auth/register.svg";
 import Input from "@/src/components/field/Input";
 import Logo from "@/src/components/global/Logo";
 import { RegisterInterface } from "@/src/interfaces/auth.interface";
+import { RegisterSchema } from "@/src/schemas/auth.schema";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
@@ -15,6 +16,7 @@ import {
   FaRegEyeSlash,
   FaRegUser,
 } from "react-icons/fa6";
+import z from "zod";
 
 const Register = () => {
   const [credentials, setCredentials] = React.useState<RegisterInterface>({
@@ -49,6 +51,14 @@ const Register = () => {
     e.preventDefault();
 
     try {
+      const parser = RegisterSchema.safeParse(credentials);
+
+      if (parser.error) {
+        const errors = z.prettifyError(parser.error);
+        console.log(errors);
+        return;
+      }
+
       const { data } = await axios.post(`${url}/auth/register`, {
         credentials,
       });

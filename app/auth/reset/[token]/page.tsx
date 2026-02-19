@@ -4,12 +4,14 @@ import reset from "@/public/auth/reset.svg";
 import Input from "@/src/components/field/Input";
 import Logo from "@/src/components/global/Logo";
 import { ResetInterface } from "@/src/interfaces/auth.interface";
+import { ResetSchema } from "@/src/schemas/auth.schema";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
+import z from "zod";
 
 const Reset = () => {
   const [credentials, setCredentials] = React.useState<ResetInterface>({
@@ -50,7 +52,11 @@ const Reset = () => {
   const handleReset = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      if (credentials.password !== credentials.confirm_password) {
+      const parser = ResetSchema.safeParse(credentials);
+
+      if (parser.error) {
+        const prettifyError = z.prettifyError(parser.error);
+        console.log(prettifyError);
         return;
       }
 
