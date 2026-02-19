@@ -16,8 +16,8 @@ import z from "zod";
 
 const Login = () => {
   const [credentials, setCredentials] = React.useState<LoginInterface>({
-    candidateEmail: "",
-    candidatePassword: "",
+    email: "",
+    password: "",
   });
 
   const [showPassword, setShowPassword] = React.useState(false);
@@ -45,7 +45,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const parser = LoginSchema.safeParse(credentials);
+      const parser = LoginSchema.safeParse({ ...credentials });
 
       if (parser.error) {
         const prettifyError = z.prettifyError(parser.error);
@@ -109,22 +109,22 @@ const Login = () => {
               className="w-full flex flex-col items-center justify-center gap-2"
             >
               <Input
-                id="candidateEmail"
-                name="candidateEmail"
+                id="email"
+                name="email"
                 onChange={handleCredentials}
                 type="email"
-                value={credentials.candidateEmail}
+                value={credentials.email}
                 icon={<FaRegEnvelope />}
                 label="Email"
                 required={true}
               />
 
               <Input
-                id="candidatePassword"
-                name="candidatePassword"
+                id="password"
+                name="password"
                 onChange={handleCredentials}
                 type={showPassword ? "text" : "password"}
-                value={credentials.candidatePassword}
+                value={credentials.password}
                 label="Password"
                 required={true}
                 icon={

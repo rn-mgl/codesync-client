@@ -1,6 +1,6 @@
 export interface LoginInterface {
-  candidateEmail: string;
-  candidatePassword: string;
+  email: string;
+  password: string;
 }
 
 export interface ForgotInterface {
