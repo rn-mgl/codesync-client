@@ -1,7 +1,5 @@
-"use client";
-
-const Dashboard = () => {
-  return <div>Dashboard</div>;
+const Page = () => {
+  return <div></div>;
 };
 
-export default Dashboard;
+export default Page;

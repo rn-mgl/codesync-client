@@ -3,7 +3,7 @@
 import register from "@/public/auth/register.svg";
 import Input from "@/src/components/field/Input";
 import Logo from "@/src/components/global/Logo";
-import { RegisterInterface } from "@/src/interfaces/auth.interface";
+import { RegisterPayload } from "@/src/interfaces/auth.interface";
 import { RegisterSchema } from "@/src/schemas/auth.schema";
 import axios from "axios";
 import Image from "next/image";
@@ -18,8 +18,8 @@ import {
 } from "react-icons/fa6";
 import z from "zod";
 
-const Register = () => {
-  const [credentials, setCredentials] = React.useState<RegisterInterface>({
+const Page = () => {
+  const [credentials, setCredentials] = React.useState<RegisterPayload>({
     first_name: "",
     last_name: "",
     username: "",
@@ -205,4 +205,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Page;

@@ -20,10 +20,14 @@ const SideNav: React.FC<{
         key={nav.name}
         href={nav.url}
         onClick={() => props.handleShowSideNav("link")}
-        className={`w-full p-4 rounded-md hover:bg-neutral-800 min-w-14 min-h-14
+        className={`w-full p-4 rounded-md min-w-14 min-h-14
                     transition-all flex flex-row items-center gap-4 
                     ${props.showSideNav ? "justify-start" : "justify-center"} 
-                    ${isSelected ? "bg-secondary text-primary font-bold" : "text-secondary bg-primary"}`}
+                    ${
+                      isSelected
+                        ? "bg-secondary text-primary font-bold hover:brightness-125"
+                        : "text-secondary bg-primary hover:bg-neutral-800"
+                    }`}
       >
         <nav.icon />
 

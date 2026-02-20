@@ -11,7 +11,7 @@ import { useParams } from "next/navigation";
 import React from "react";
 import { FaArrowRight } from "react-icons/fa6";
 
-const Verify = () => {
+const Page = () => {
   const [status, setStatus] = React.useState<
     "verifying" | "verified" | "unverified"
   >("verifying");
@@ -102,4 +102,4 @@ const Verify = () => {
   );
 };
 
-export default Verify;
+export default Page;

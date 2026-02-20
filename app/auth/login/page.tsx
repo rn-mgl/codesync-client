@@ -3,19 +3,16 @@
 import login from "@/public/auth/login.svg";
 import Input from "@/src/components/field/Input";
 import Logo from "@/src/components/global/Logo";
-import { LoginInterface } from "@/src/interfaces/auth.interface";
-import { LoginSchema } from "@/src/schemas/auth.schema";
-import axios from "axios";
+import { LoginPayload, LoginResponse } from "@/src/interfaces/auth.interface";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { FaRegEnvelope, FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
-import z from "zod";
 
-const Login = () => {
-  const [credentials, setCredentials] = React.useState<LoginInterface>({
+const Page = () => {
+  const [credentials, setCredentials] = React.useState<LoginPayload>({
     email: "",
     password: "",
   });
@@ -45,38 +42,36 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const parser = LoginSchema.safeParse({ ...credentials });
-
-      if (parser.error) {
-        const prettifyError = z.prettifyError(parser.error);
-        console.log(prettifyError);
-        return;
-      }
-
-      const { data } = await axios.post<{
-        token: string;
-        user: { id: number; is_verified: boolean };
-      }>(`${url}/auth/login`, {
-        credentials,
+      const response = await fetch("/api/auth/login/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ credentials }),
       });
 
-      if (!data || !data.user.is_verified) {
-        return;
+      const apiResponse: LoginResponse = await response.json();
+
+      if (!apiResponse.success) {
+        throw new Error(apiResponse.message);
       }
 
+      const loginData = apiResponse.data;
+
+      // register login data to session
       const authenticated = await signIn("credentials", {
         redirect: false,
         credentials: JSON.stringify({
-          token: data.token,
-          id: data.user.id,
+          token: loginData.token,
+          id: loginData.user.id,
         }),
       });
 
       if (authenticated?.ok) {
         router.push("/codesync");
       }
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -186,4 +181,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Page;

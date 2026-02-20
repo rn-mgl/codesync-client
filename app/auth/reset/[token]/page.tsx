@@ -3,7 +3,7 @@
 import reset from "@/public/auth/reset.svg";
 import Input from "@/src/components/field/Input";
 import Logo from "@/src/components/global/Logo";
-import { ResetInterface } from "@/src/interfaces/auth.interface";
+import { ResetPayload } from "@/src/interfaces/auth.interface";
 import { ResetSchema } from "@/src/schemas/auth.schema";
 import axios from "axios";
 import Image from "next/image";
@@ -13,8 +13,8 @@ import React from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import z from "zod";
 
-const Reset = () => {
-  const [credentials, setCredentials] = React.useState<ResetInterface>({
+const Page = () => {
+  const [credentials, setCredentials] = React.useState<ResetPayload>({
     password: "",
     confirm_password: "",
   });
@@ -171,4 +171,4 @@ const Reset = () => {
   );
 };
 
-export default Reset;
+export default Page;

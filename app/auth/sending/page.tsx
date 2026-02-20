@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-const Sending = ({
+const Page = ({
   searchParams,
 }: {
   searchParams: Promise<{ type?: string }>;
@@ -46,4 +46,4 @@ const Sending = ({
   );
 };
 
-export default Sending;
+export default Page;

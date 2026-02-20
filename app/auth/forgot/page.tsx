@@ -3,7 +3,7 @@
 import forgot from "@/public/auth/forgot.svg";
 import Input from "@/src/components/field/Input";
 import Logo from "@/src/components/global/Logo";
-import { ForgotInterface } from "@/src/interfaces/auth.interface";
+import { ForgotPayload } from "@/src/interfaces/auth.interface";
 import { ForgotSchema } from "@/src/schemas/auth.schema";
 import axios from "axios";
 import Image from "next/image";
@@ -13,8 +13,8 @@ import React from "react";
 import { FaRegEnvelope } from "react-icons/fa6";
 import z from "zod";
 
-const Forgot = () => {
-  const [credentials, setCredentials] = React.useState<ForgotInterface>({
+const Page = () => {
+  const [credentials, setCredentials] = React.useState<ForgotPayload>({
     username: "",
     email: "",
   });
@@ -130,4 +130,4 @@ const Forgot = () => {
   );
 };
 
-export default Forgot;
+export default Page;

@@ -21,7 +21,11 @@
     "paths": {
       "@/public/*": ["./public/*"],
       "@/src/*": ["./src/*"],
-      "@/components/*": ["./src/components/*"]
+      "@/components/*": ["./src/components/*"],
+      "@/configs/*": ["./src/configs/*"],
+      "@/helpers/*": ["./src/helpers/*"],
+      "@/interfaces/*": ["./src/interfaces/*"],
+      "@/lib/*": ["./src/lib/*"]
     }
   },
   "include": [
