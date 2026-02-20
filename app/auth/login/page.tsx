@@ -19,8 +19,6 @@ const Page = () => {
 
   const [showPassword, setShowPassword] = React.useState(false);
 
-  const url = process.env.SERVER_URL;
-
   const router = useRouter();
 
   const handleCredentials = (e: React.ChangeEvent<HTMLInputElement>) => {
