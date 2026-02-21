@@ -1,7 +1,7 @@
 "use client";
 
 import forgot from "@/public/auth/forgot.svg";
-import Input from "@/src/components/field/Input";
+import Input from "@/src/components/ui/fields/Input";
 import Logo from "@/src/components/global/Logo";
 import { ForgotPayload } from "@/src/interfaces/auth.interface";
 import { ForgotSchema } from "@/src/schemas/auth.schema";

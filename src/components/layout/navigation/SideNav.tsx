@@ -1,6 +1,6 @@
 "use client";
 import { FaBars, FaXmark } from "react-icons/fa6";
-import Logo from "../Logo";
+import Logo from "@/components/global/Logo";
 import React from "react";
 import Link from "next/link";
 import { BASE_NAVIGATIONS } from "@/src/configs/navigation.config";

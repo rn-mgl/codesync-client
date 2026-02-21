@@ -1,4 +1,4 @@
-import Navigation from "@/src/components/global/navigation/Navigation";
+import Navigation from "@/src/components/layout/navigation/Navigation";
 import { Metadata } from "next";
 import React from "react";
 

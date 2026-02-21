@@ -1,8 +1,7 @@
-"use client";
-
-import { SessionProvider } from "next-auth/react";
 import { Onest } from "next/font/google";
 import "./globals.css";
+import SessionProviderShell from "@/src/providers/SessionProviderShell";
+import { Metadata } from "next";
 
 const onest = Onest({
   display: "block",
@@ -12,13 +11,17 @@ const onest = Onest({
   subsets: ["latin"],
 });
 
+export const metadata: Metadata = {
+  title: "CodeSync",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <SessionProvider refetchOnWindowFocus={false}>
+    <SessionProviderShell>
       <html lang="en">
         <body
           className={`${onest.className} scroll-smooth min-h-screen h-screen overflow-y-auto text-primary`}
@@ -26,6 +29,6 @@ export default function RootLayout({
           {children}
         </body>
       </html>
-    </SessionProvider>
+    </SessionProviderShell>
   );
 }

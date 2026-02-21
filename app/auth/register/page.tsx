@@ -1,7 +1,7 @@
 "use client";
 
 import register from "@/public/auth/register.svg";
-import Input from "@/src/components/field/Input";
+import Input from "@/src/components/ui/fields/Input";
 import Logo from "@/src/components/global/Logo";
 import { RegisterPayload } from "@/src/interfaces/auth.interface";
 import { RegisterSchema } from "@/src/schemas/auth.schema";

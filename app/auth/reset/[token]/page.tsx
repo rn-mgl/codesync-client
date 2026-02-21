@@ -1,7 +1,7 @@
 "use client";
 
 import reset from "@/public/auth/reset.svg";
-import Input from "@/src/components/field/Input";
+import Input from "@/src/components/ui/fields/Input";
 import Logo from "@/src/components/global/Logo";
 import { ResetPayload } from "@/src/interfaces/auth.interface";
 import { ResetSchema } from "@/src/schemas/auth.schema";
