@@ -30,3 +30,8 @@ export type LoginResponse = ApiResponse<{
     is_verified: boolean;
   };
 }>;
+
+export type RegisterResponse = ApiResponse<{
+  success: boolean;
+  token: string;
+}>;

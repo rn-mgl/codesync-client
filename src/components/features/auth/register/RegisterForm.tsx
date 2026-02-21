@@ -1,18 +1,27 @@
 "use client";
 
 import Input from "@/src/components/ui/fields/Input";
-import { LoginPayload, LoginResponse } from "@/src/interfaces/auth.interface";
-import { signIn } from "next-auth/react";
-import Link from "next/link";
+import {
+  RegisterPayload,
+  RegisterResponse,
+} from "@/src/interfaces/auth.interface";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { FaRegEnvelope, FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
-const LoginForm = () => {
-  const [credentials, setCredentials] = React.useState<LoginPayload>({
+import {
+  FaRegEnvelope,
+  FaRegEye,
+  FaRegEyeSlash,
+  FaRegUser,
+} from "react-icons/fa6";
+
+const RegisterForm = () => {
+  const [credentials, setCredentials] = React.useState<RegisterPayload>({
+    first_name: "",
+    last_name: "",
+    username: "",
     email: "",
     password: "",
   });
-
   const [showPassword, setShowPassword] = React.useState(false);
 
   const router = useRouter();
@@ -32,11 +41,11 @@ const LoginForm = () => {
     setShowPassword((prev) => !prev);
   };
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      const response = await fetch("/api/auth/login/", {
+      const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -44,7 +53,7 @@ const LoginForm = () => {
         body: JSON.stringify({ credentials }),
       });
 
-      const resolve: LoginResponse = await response.json();
+      const resolve: RegisterResponse = await response.json();
 
       if (!resolve.success) {
         throw new Error(resolve.message);
@@ -52,28 +61,54 @@ const LoginForm = () => {
 
       const data = resolve.data;
 
-      // register login data to session
-      const authenticated = await signIn("credentials", {
-        redirect: false,
-        credentials: JSON.stringify({
-          token: data.token,
-          id: data.user.id,
-        }),
-      });
-
-      if (authenticated?.ok) {
-        router.push("/codesync");
+      if (!data.success || !data.token) {
+        throw new Error(`An error occurred during registration.`);
       }
-    } catch (err) {
-      console.error(err);
+
+      router.push("/auth/sending?type=verification");
+    } catch (error) {
+      console.log(error);
     }
   };
 
   return (
     <form
-      onSubmit={(e) => handleLogin(e)}
+      onSubmit={(e) => handleRegister(e)}
       className="w-full flex flex-col items-center justify-center gap-2"
     >
+      <Input
+        id="first_name"
+        name="first_name"
+        onChange={handleCredentials}
+        type="text"
+        value={credentials.first_name}
+        icon={<FaRegUser />}
+        label="First Name"
+        required={true}
+      />
+
+      <Input
+        id="last_name"
+        name="last_name"
+        onChange={handleCredentials}
+        type="text"
+        value={credentials.last_name}
+        icon={<FaRegUser />}
+        label="Last Name"
+        required={true}
+      />
+
+      <Input
+        id="username"
+        name="username"
+        onChange={handleCredentials}
+        type="text"
+        value={credentials.username}
+        icon={<FaRegUser />}
+        label="Username"
+        required={true}
+      />
+
       <Input
         id="email"
         name="email"
@@ -105,23 +140,14 @@ const LoginForm = () => {
         }
       />
 
-      <div className="w-full flex flex-row text-xs gap-1">
-        <Link
-          href="/auth/forgot"
-          className="font-bold text-blue-500 hover:underline transition-all"
-        >
-          Forgot Password?
-        </Link>
-      </div>
-
       <button
         type="submit"
         className="mt-4 bg-primary text-secondary font-bold w-full p-2 rounded-md"
       >
-        Log In
+        Sign Up
       </button>
     </form>
   );
 };
 
-export default LoginForm;
+export default RegisterForm;
