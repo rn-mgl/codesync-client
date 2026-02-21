@@ -1,17 +1,16 @@
-"use client";
+// "use client";
 
 import sending from "@/public/auth/sending.svg";
 import Logo from "@/src/components/global/Logo";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 
-const Page = ({
+const Page = async ({
   searchParams,
 }: {
   searchParams: Promise<{ type?: string }>;
 }) => {
-  const params = React.use(searchParams);
+  const params = await searchParams;
   const type = params.type;
 
   const TYPE_MESSAGE = {
