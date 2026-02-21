@@ -52,6 +52,11 @@ const LoginForm = () => {
 
       const data = resolve.data;
 
+      if (!data.user.is_verified || !data.token) {
+        router.push("/auth/sending?type=verification");
+        return;
+      }
+
       // register login data to session
       const authenticated = await signIn("credentials", {
         redirect: false,

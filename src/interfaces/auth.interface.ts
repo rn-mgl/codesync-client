@@ -24,7 +24,7 @@ export interface RegisterPayload {
 }
 
 export type LoginResponse = ApiResponse<{
-  token: string;
+  token: string | null;
   user: {
     id: number;
     is_verified: boolean;
