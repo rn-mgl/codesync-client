@@ -30,8 +30,6 @@ export async function POST(req: NextRequest) {
 
     const resolve: ServerResponse = await response.json();
 
-    console.log(resolve);
-
     if (!resolve.success) {
       throw new ApiError(resolve.message, resolve.status);
     }
