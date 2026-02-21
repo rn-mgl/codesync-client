@@ -4,7 +4,7 @@ import unverified from "@/public/auth/unverified.svg";
 import verified from "@/public/auth/verified.svg";
 import verifying from "@/public/auth/verifying.svg";
 import Logo from "@/src/components/global/Logo";
-import axios from "axios";
+import { VerifyResponse } from "@/src/interfaces/auth.interface";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -17,8 +17,6 @@ const Page = () => {
   >("verifying");
 
   const params = useParams();
-
-  const url = process.env.SERVER_URL;
 
   const STATUS_DISPLAY = {
     verifying: {
@@ -53,11 +51,21 @@ const Page = () => {
 
   const handleVerification = React.useCallback(async () => {
     try {
-      if (!params || !("token" in params)) return;
-
-      const { data } = await axios.patch(`${url}/auth/verify`, {
-        token: params.token,
+      const response = await fetch(`/api/auth/verify`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token: params?.token ?? null }),
       });
+
+      const resolve: VerifyResponse = await response.json();
+
+      if (!resolve.success) {
+        throw new Error(resolve.message);
+      }
+
+      const data = resolve.data;
 
       if (!data) {
         setStatus("unverified");
@@ -65,11 +73,11 @@ const Page = () => {
 
       setStatus(data.verified ? "verified" : "unverified");
     } catch (error) {
-      console.log(error);
+      console.error(error);
 
       setStatus("unverified");
     }
-  }, [url, params]);
+  }, [params]);
 
   React.useEffect(() => {
     handleVerification();

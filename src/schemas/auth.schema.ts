@@ -31,3 +31,7 @@ export const ResetSchema = z
     error: "Passwords do not match.",
     path: ["confirm_password"],
   });
+
+export const VerifySchema = z.object({
+  token: z.jwt(),
+});

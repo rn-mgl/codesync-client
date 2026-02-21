@@ -59,8 +59,8 @@ const ResetForm = () => {
 
       const data = resolve.data;
 
-      if (!data.success) {
-        throw new Error(`An error occurred during password reset.`);
+      if (!data.message) {
+        throw new Error(`The request did not process completely.`);
       }
 
       router.push("/auth/login");

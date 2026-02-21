@@ -1,4 +1,4 @@
-import { ApiResponse } from "@/src/interfaces/api.interface";
+import { ApiResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import ApiError from "@/src/lib/ApiError";
 import { ResetSchema } from "@/src/schemas/auth.schema";
 import { StatusCodes } from "http-status-codes";
@@ -28,10 +28,14 @@ export async function PATCH(req: NextRequest) {
       body: JSON.stringify(body),
     });
 
-    const resolve = await response.json();
+    const resolve: ServerResponse = await response.json();
 
-    const apiResponse: ApiResponse<typeof resolve> = {
-      data: resolve,
+    if (!resolve.success) {
+      throw new ApiError(resolve.message, resolve.status);
+    }
+
+    const apiResponse: ApiResponse<typeof resolve.data> = {
+      data: resolve.data,
       success: true,
       status: StatusCodes.OK,
     };

@@ -1,4 +1,4 @@
-import { ApiResponse } from "@/src/interfaces/api.interface";
+import { ApiResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import ApiError from "@/src/lib/ApiError";
 import { RegisterSchema } from "@/src/schemas/auth.schema";
 import { StatusCodes } from "http-status-codes";
@@ -28,11 +28,15 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify(body),
     });
 
-    const resolve = await response.json();
+    const resolve: ServerResponse = await response.json();
 
-    const apiResponse: ApiResponse<typeof resolve> = {
+    if (!resolve.success) {
+      throw new ApiError(resolve.message, resolve.status);
+    }
+
+    const apiResponse: ApiResponse<typeof resolve.data> = {
       success: true,
-      data: resolve,
+      data: resolve.data,
       status: StatusCodes.OK,
     };
 

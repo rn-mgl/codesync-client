@@ -15,3 +15,4 @@ interface Error extends BaseResponse {
 }
 
 export type ApiResponse<T = unknown> = Success<T> | Error;
+export type ServerResponse<T = unknown> = Success<T> | Error;

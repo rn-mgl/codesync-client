@@ -44,10 +44,8 @@ const ForgotForm = () => {
 
       const data = resolve.data;
 
-      if (!data.success) {
-        throw new Error(
-          "Your request to reset password was not processed successfully.",
-        );
+      if (!data.message) {
+        throw new Error(`The request did not process completely.`);
       }
 
       router.push("/auth/sending?type=reset");

@@ -23,27 +23,21 @@ export interface RegisterPayload {
   password: string;
 }
 
-interface BaseResponse {
-  success: true;
-}
+export type LoginResponse = ApiResponse<{
+  token: string;
+  user: {
+    id: number;
+    is_verified: boolean;
+  };
+}>;
 
-export type LoginResponse = ApiResponse<
-  {
-    token: string;
-    user: {
-      id: number;
-      is_verified: boolean;
-    };
-  } & BaseResponse
->;
+export type RegisterResponse = ApiResponse<{
+  success: boolean;
+  token: string;
+}>;
 
-export type RegisterResponse = ApiResponse<
-  {
-    success: boolean;
-    token: string;
-  } & BaseResponse
->;
+export type ForgotResponse = ApiResponse<{ message: string }>;
 
-export type ForgotResponse = ApiResponse<BaseResponse>;
+export type ResetResponse = ApiResponse<{ message: string }>;
 
-export type ResetResponse = ApiResponse<BaseResponse>;
+export type VerifyResponse = ApiResponse<{ verified: boolean }>;
