@@ -1,80 +1,10 @@
-"use client";
-
 import reset from "@/public/auth/reset.svg";
-import Input from "@/src/components/ui/fields/Input";
+import ResetForm from "@/src/components/features/auth/reset/ResetForm";
 import Logo from "@/src/components/global/Logo";
-import { ResetPayload } from "@/src/interfaces/auth.interface";
-import { ResetSchema } from "@/src/schemas/auth.schema";
-import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
-import React from "react";
-import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
-import z from "zod";
 
 const Page = () => {
-  const [credentials, setCredentials] = React.useState<ResetPayload>({
-    password: "",
-    confirm_password: "",
-  });
-  const [showPassword, setShowPassword] = React.useState({
-    password: false,
-    confirm_password: false,
-  });
-
-  const params = useParams();
-
-  const url = process.env.SERVER_URL;
-
-  const router = useRouter();
-
-  const handleCredentials = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    setCredentials((prev) => {
-      return {
-        ...prev,
-        [name]: value,
-      };
-    });
-  };
-
-  const handleShowPassword = (name: string) => {
-    setShowPassword((prev) => {
-      return {
-        ...prev,
-        [name]: !prev[name as keyof object],
-      };
-    });
-  };
-
-  const handleReset = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
-      const parser = ResetSchema.safeParse(credentials);
-
-      if (parser.error) {
-        const prettifyError = z.prettifyError(parser.error);
-        console.log(prettifyError);
-        return;
-      }
-
-      const { data } = await axios.patch(`${url}/auth/reset`, {
-        credentials,
-        token: params?.token ?? null,
-      });
-
-      if (!data || !data.success) {
-        return;
-      }
-
-      router.push("/auth/login");
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <div className="w-full h-screen flex flex-col items-center justify-center bg-primary p-4 t:p-8">
       <div className="w-full max-w-(--breakpoint-l-s) bg-secondary h-full rounded-2xl grid grid-cols-1 l-s:grid-cols-2 p-2 gap-10">
@@ -97,63 +27,7 @@ const Page = () => {
               </p>
             </div>
 
-            <form
-              onSubmit={(e) => handleReset(e)}
-              className="w-full flex flex-col items-center justify-center gap-2"
-            >
-              <Input
-                id="password"
-                name="password"
-                onChange={handleCredentials}
-                type={showPassword.password ? "text" : "password"}
-                value={credentials.password}
-                icon={
-                  showPassword.password ? (
-                    <FaRegEyeSlash
-                      className="cursor-pointer"
-                      onClick={() => handleShowPassword("password")}
-                    />
-                  ) : (
-                    <FaRegEye
-                      className="cursor-pointer"
-                      onClick={() => handleShowPassword("password")}
-                    />
-                  )
-                }
-                label="Password"
-                required={true}
-              />
-
-              <Input
-                id="confirm_password"
-                name="confirm_password"
-                onChange={handleCredentials}
-                type={showPassword.confirm_password ? "text" : "password"}
-                value={credentials.confirm_password}
-                icon={
-                  showPassword.confirm_password ? (
-                    <FaRegEyeSlash
-                      className="cursor-pointer"
-                      onClick={() => handleShowPassword("confirm_password")}
-                    />
-                  ) : (
-                    <FaRegEye
-                      className="cursor-pointer"
-                      onClick={() => handleShowPassword("confirm_password")}
-                    />
-                  )
-                }
-                label="Confirm Password"
-                required={true}
-              />
-
-              <button
-                type="submit"
-                className="mt-4 bg-primary text-secondary font-bold w-full p-2 rounded-md"
-              >
-                Submit
-              </button>
-            </form>
+            <ResetForm />
           </div>
         </div>
 
