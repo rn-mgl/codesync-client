@@ -1,4 +1,4 @@
-import { FaBars, FaXmark } from "react-icons/fa6";
+import { FaBars } from "react-icons/fa6";
 
 const HeadNav: React.FC<{
   showSideNav: boolean;
@@ -11,11 +11,7 @@ const HeadNav: React.FC<{
           onClick={props.handleShowSideNav}
           className="p-2 rounded-full bg-inherit transition-all l-s:hidden"
         >
-          {props.showSideNav ? (
-            <FaXmark className="text-secondary" />
-          ) : (
-            <FaBars className="text-secondary" />
-          )}
+          <FaBars className="text-secondary" />
         </button>
         <p className="text-sm font-medium text-secondary">
           First Name Last Name

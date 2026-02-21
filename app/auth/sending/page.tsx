@@ -1,5 +1,3 @@
-// "use client";
-
 import sending from "@/public/auth/sending.svg";
 import Logo from "@/src/components/global/Logo";
 import Image from "next/image";

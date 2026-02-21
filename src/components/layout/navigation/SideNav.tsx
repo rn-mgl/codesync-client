@@ -1,7 +1,7 @@
 "use client";
 import { FaBars, FaXmark } from "react-icons/fa6";
 import Logo from "@/components/global/Logo";
-import React from "react";
+import React, { Activity } from "react";
 import Link from "next/link";
 import { BASE_NAVIGATIONS } from "@/src/configs/navigation.config";
 import { usePathname } from "next/navigation";
@@ -31,9 +31,9 @@ const SideNav: React.FC<{
       >
         <nav.icon />
 
-        {props.showSideNav ? (
+        <Activity mode={props.showSideNav ? "visible" : "hidden"}>
           <span className="animate-fade">{nav.name}</span>
-        ) : null}
+        </Activity>
       </Link>
     );
   });
@@ -56,14 +56,14 @@ const SideNav: React.FC<{
             <FaBars className="text-secondary hidden l-s:flex" />
           </button>
 
-          {props.showSideNav ? (
+          <Activity mode={props.showSideNav ? "visible" : "hidden"}>
             <Link
               href="/codesync"
               className="w-8 min-w-8 transition-all flex animate-fade"
             >
               <Logo type="light" isTransparent={true} />
             </Link>
-          ) : null}
+          </Activity>
         </div>
 
         <div className="w-full h-full bg-primary rounded-md flex flex-col items-start justify-start p-2 gap-2">
@@ -72,12 +72,12 @@ const SideNav: React.FC<{
       </div>
 
       {/* tablet cover */}
-      {props.showSideNav ? (
+      <Activity mode={props.showSideNav ? "visible" : "hidden"}>
         <div
           className="hidden t:flex l-s:hidden w-1/2 bg-linear-to-b from-primary/80 to-primary h-full 
                     z-50 rounded-md transition-all animate-fade"
         />
-      ) : null}
+      </Activity>
     </div>
   );
 };
