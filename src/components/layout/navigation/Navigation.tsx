@@ -23,7 +23,7 @@ const Navigation = ({ children }: { children: React.ReactNode }) => {
         handleShowSideNav={handleShowSideNav}
         showSideNav={showSideNav}
       />
-      <div className="w-full h-full flex flex-col items-start justify-start flex-1 z-0 p-1 l-s:pl-0 gap-1">
+      <div className="w-full h-full flex flex-col items-start justify-start flex-1 p-1 l-s:pl-0 gap-1">
         <HeadNav
           handleShowSideNav={() => handleShowSideNav("button")}
           showSideNav={showSideNav}

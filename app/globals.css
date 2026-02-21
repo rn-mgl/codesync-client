@@ -15,7 +15,7 @@
 }
 
 @theme {
-  --animate-fade: fade 50ms ease-in;
+  --animate-fade: fade 120ms ease-in;
   --animate-float: float 2s ease-in-out infinite alternate;
 
   @keyframes fade {
@@ -39,12 +39,14 @@
 
 @layer base {
   button {
+    transition: all;
     cursor: pointer;
     /* animation:; */
   }
 
   button:hover {
     filter: brightness(105%);
+    box-shadow: 0rem 4px 4px rgba(13, 13, 13, 0.2);
   }
 
   button:disabled {
