@@ -1,61 +1,10 @@
-"use client";
-
 import forgot from "@/public/auth/forgot.svg";
-import Input from "@/src/components/ui/fields/Input";
+import ForgotForm from "@/src/components/features/auth/forgot/ForgotForm";
 import Logo from "@/src/components/global/Logo";
-import { ForgotPayload } from "@/src/interfaces/auth.interface";
-import { ForgotSchema } from "@/src/schemas/auth.schema";
-import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import React from "react";
-import { FaRegEnvelope } from "react-icons/fa6";
-import z from "zod";
 
 const Page = () => {
-  const [credentials, setCredentials] = React.useState<ForgotPayload>({
-    username: "",
-    email: "",
-  });
-
-  const url = process.env.SERVER_URL;
-  const router = useRouter();
-
-  const handleCredentials = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    setCredentials((prev) => {
-      return {
-        ...prev,
-        [name]: value,
-      };
-    });
-  };
-
-  const handleForgot = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
-      const parser = ForgotSchema.safeParse(credentials);
-
-      if (parser.error) {
-        const prettifyError = z.prettifyError(parser.error);
-        console.log(prettifyError);
-        return;
-      }
-
-      const { data } = await axios.post(`${url}/auth/forgot`, { credentials });
-
-      if (!data || !data.success) {
-        return;
-      }
-
-      router.push("/auth/sending?type=reset");
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <div className="w-full h-screen flex flex-col items-center justify-center bg-primary p-4 t:p-8">
       <div className="w-full max-w-(--breakpoint-l-s) bg-secondary h-full rounded-2xl grid grid-cols-1 l-s:grid-cols-2 p-2 gap-10">
@@ -79,40 +28,7 @@ const Page = () => {
                 Enter credentials
               </p>
             </div>
-
-            <form
-              onSubmit={(e) => handleForgot(e)}
-              className="w-full flex flex-col items-center justify-center gap-2"
-            >
-              <Input
-                id="username"
-                name="username"
-                onChange={handleCredentials}
-                type="username"
-                value={credentials.username}
-                icon={<FaRegEnvelope />}
-                label="Username"
-                required={true}
-              />
-
-              <Input
-                id="email"
-                name="email"
-                onChange={handleCredentials}
-                type="email"
-                value={credentials.email}
-                icon={<FaRegEnvelope />}
-                label="Email"
-                required={true}
-              />
-
-              <button
-                type="submit"
-                className="mt-4 bg-primary text-secondary font-bold w-full p-2 rounded-md"
-              >
-                Submit
-              </button>
-            </form>
+            <ForgotForm />
           </div>
         </div>
 

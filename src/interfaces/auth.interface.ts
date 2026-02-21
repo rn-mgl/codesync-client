@@ -35,3 +35,5 @@ export type RegisterResponse = ApiResponse<{
   success: boolean;
   token: string;
 }>;
+
+export type ForgotResponse = ApiResponse<{ success: boolean }>;
