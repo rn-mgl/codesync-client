@@ -3,7 +3,7 @@ import { FaPlus } from "react-icons/fa6";
 
 const Page = () => {
   return (
-    <div className="w-full flex flex-col items-start justify-start min-h-full h-auto">
+    <div className="w-full flex flex-col items-center justify-start min-h-full h-auto">
       <div className="w-full flex flex-col items-start justify-start max-w-(--breakpoint-l-l)">
         <Link
           href="/codesync/problems/create"

@@ -35,7 +35,7 @@ const Page = () => {
   };
 
   return (
-    <div className="w-full flex flex-col items-start justify-start min-h-full h-auto">
+    <div className="w-full flex flex-col items-center justify-start min-h-full h-auto">
       <div className="w-full flex flex-col items-start justify-start max-w-(--breakpoint-l-l) gap-8">
         <Link
           href="/codesync/problems"
@@ -46,7 +46,7 @@ const Page = () => {
           All Problems
         </Link>
 
-        <div className="w-full grid grid-cols-1 items-start justify-start gap-4">
+        <div className="w-full flex flex-col items-center justify-center gap-4">
           <div className="w-full p-4 t:p-6 rounded-md bg-primary text-secondary font-bold t:text-lg">
             Create Problem
           </div>
