@@ -18,3 +18,8 @@ export interface SelectField extends BaseFieldProperties {
   activeLabel: string;
   onChange: (label: string, value: string | number, target: string) => void;
 }
+
+export interface TextAreaField extends BaseFieldProperties {
+  columns?: number;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+}

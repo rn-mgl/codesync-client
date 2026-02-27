@@ -22,7 +22,7 @@ const Select: React.FC<SelectField> = (props) => {
           handleIsVisibleOptions();
         }}
         className={`p-2 rounded-md hover:bg-primary/50 hover:text-secondary w-full text-left transition-all
-                    ${option.value === props.value ? "bg-primary text-secondary" : "bg-neutral-300"}`}
+                    ${option.value === props.value ? "bg-primary text-secondary font-medium" : "bg-neutral-300"}`}
       >
         {option.label}
       </button>
@@ -38,15 +38,6 @@ const Select: React.FC<SelectField> = (props) => {
       ) : null}
 
       <div className="w-full flex flex-col items-center justify-center relative">
-        <input
-          type="text"
-          name={props.name}
-          id={props.id}
-          value={props.value}
-          required={true}
-          className="w-full p-2 px-3 rounded-md text-primary border-2 border-neutral-400 outline-none hidden"
-        />
-
         <div className="w-full relative">
           <button
             onClick={handleIsVisibleOptions}
@@ -58,8 +49,8 @@ const Select: React.FC<SelectField> = (props) => {
 
           <Activity mode={isVisibleOptions ? "visible" : "hidden"}>
             <div
-              className="w-full absolute top-0 flex flex-col items-start justify-center bg-neutral-300 rounded-md z-20 translate-y-14 p-2
-                        animate-fade"
+              className="w-full absolute top-0 flex flex-col items-start justify-center bg-neutral-200 rounded-md z-20 translate-y-14 p-2
+                        animate-fade shadow-md gap-2"
             >
               {mappedOptions}
             </div>

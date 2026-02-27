@@ -2,17 +2,24 @@
 
 import Input from "@/src/components/ui/fields/Input";
 import Select from "@/src/components/ui/fields/Select";
+import TextArea from "@/src/components/ui/fields/TextArea";
 import useSelect from "@/src/hooks/useSelect";
 import { FormProblem } from "@/src/interfaces/problem.interface";
 import Link from "next/link";
 import React from "react";
-import { FaArrowLeft, FaLink, FaPuzzlePiece } from "react-icons/fa6";
+import {
+  FaArrowLeft,
+  FaLink,
+  FaPen,
+  FaPuzzlePiece,
+  FaRegNoteSticky,
+} from "react-icons/fa6";
 
 const Page = () => {
   const [problem, setProblem] = React.useState<FormProblem>({
     title: "",
     constraints: "",
-    desription: "",
+    description: "",
     difficulty: "easy",
     editorial: "",
     input_format: "",
@@ -23,7 +30,9 @@ const Page = () => {
   const { select: difficulty, handleSelect: handleDifficulty } =
     useSelect<FormProblem>({ label: "Easy", value: "easy" }, setProblem);
 
-  const handleProblem = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleProblem = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
 
     setProblem((prev) => {
@@ -92,6 +101,36 @@ const Page = () => {
                     { label: "Hard", value: "hard" },
                   ]}
                   value={difficulty.value}
+                />
+              </div>
+            </div>
+
+            <div className="w-full flex flex-col items-start justify-start">
+              <div className="p-4 bg-primary/80 w-full rounded-t-md font-medium text-secondary">
+                Problem Content
+              </div>
+
+              <div className="w-full flex flex-col items-start justify-start gap-4 p-2 border-primary/50 border rounded-b-md t:p-4">
+                <TextArea
+                  id="description"
+                  name="description"
+                  onChange={handleProblem}
+                  value={problem.description}
+                  label="Description"
+                  columns={6}
+                  required={true}
+                  icon={<FaRegNoteSticky />}
+                />
+
+                <TextArea
+                  id="editorial"
+                  name="editorial"
+                  onChange={handleProblem}
+                  value={problem.editorial}
+                  label="Editorial"
+                  columns={6}
+                  required={true}
+                  icon={<FaPen />}
                 />
               </div>
             </div>

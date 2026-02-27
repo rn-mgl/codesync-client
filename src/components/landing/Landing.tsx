@@ -30,7 +30,7 @@ const Landing = () => {
   return (
     <div
       ref={homeRef}
-      className="h-screen overflow-y-auto flex flex-col items-start justify-start relative scroll-smooth"
+      className="h-full overflow-y-auto flex flex-col items-start justify-start relative scroll-smooth"
     >
       <Nav hide={hideNav} />
       <Hero />

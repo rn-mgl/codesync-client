@@ -13,7 +13,7 @@ export default function RootLayout({
 }) {
   return (
     <Navigation>
-      <div className="w-full h-full bg-secondary rounded-md p-4 border border-neutral-300 t:p-8">
+      <div className="w-full h-full bg-secondary rounded-md p-4 border border-neutral-300 t:p-8 overflow-y-auto">
         {children}
       </div>
     </Navigation>

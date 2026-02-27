@@ -24,7 +24,7 @@ export default function RootLayout({
     <SessionProviderShell>
       <html lang="en">
         <body
-          className={`${onest.className} scroll-smooth min-h-screen h-screen overflow-y-auto text-primary`}
+          className={`${onest.className} scroll-smooth min-h-screen h-screen overflow-y-hidden text-primary`}
         >
           {children}
         </body>
