@@ -13,7 +13,8 @@ const SideNav: React.FC<{
   const path = usePathname();
 
   const mappedNavigations = BASE_NAVIGATIONS.map((nav) => {
-    const isSelected = path === nav.url;
+    const isSelected =
+      nav.url === "/codesync" ? path === nav.url : path?.startsWith(nav.url);
 
     return (
       <Link
@@ -41,7 +42,7 @@ const SideNav: React.FC<{
   return (
     <div
       className={`h-full flex-row items-start justify-start fixed top-0 left-0 overflow-hidden
-               l-s:max-w-(--breakpoint-m-s) l-s:static animate-fade p-1 gap-1
+               l-s:max-w-(--breakpoint-m-s) l-s:static animate-fade p-1 gap-1 z-30
                ${props.showSideNav ? "flex w-full t:backdrop-blur-md l-s:backdrop-blur-[0px]" : "hidden l-s:flex l-s:w-20"}`}
     >
       <div className="w-full h-full flex flex-col items-start justify-start t:w-1/2 l-s:w-full gap-1">
