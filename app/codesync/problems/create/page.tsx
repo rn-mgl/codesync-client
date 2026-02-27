@@ -9,6 +9,7 @@ import Link from "next/link";
 import React from "react";
 import {
   FaArrowLeft,
+  FaCode,
   FaLink,
   FaPen,
   FaPuzzlePiece,
@@ -63,7 +64,7 @@ const Page = () => {
           <form className="flex flex-col items-center justify-center w-full gap-8">
             <div className="w-full flex flex-col items-start justify-start">
               <div className="p-4 bg-primary/80 w-full rounded-t-md font-medium text-secondary">
-                Basic Info
+                Basic Information
               </div>
 
               <div className="w-full flex flex-col items-start justify-start gap-4 p-2 border-primary/50 border rounded-b-md t:p-4">
@@ -134,6 +135,43 @@ const Page = () => {
                 />
               </div>
             </div>
+
+            <div className="w-full flex flex-col items-start justify-start">
+              <div className="p-4 bg-primary/80 w-full rounded-t-md font-medium text-secondary">
+                Function Contract
+              </div>
+
+              <div className="w-full flex flex-col items-start justify-start gap-4 p-2 border-primary/50 border rounded-b-md t:p-4">
+                <TextArea
+                  id="input_format"
+                  name="input_format"
+                  onChange={handleProblem}
+                  value={problem.input_format}
+                  label="Input Format"
+                  columns={6}
+                  required={true}
+                  icon={<FaCode />}
+                />
+
+                <TextArea
+                  id="output_format"
+                  name="output_format"
+                  onChange={handleProblem}
+                  value={problem.output_format}
+                  label="Output Format"
+                  columns={6}
+                  required={true}
+                  icon={<FaCode />}
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full p-2 rounded-md bg-primary font-black text-secondary"
+            >
+              Create
+            </button>
           </form>
         </div>
       </div>
