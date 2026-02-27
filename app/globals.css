@@ -70,11 +70,11 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: var(--color-primary);
+    background: var(--color-secondary);
   }
 
   ::-webkit-scrollbar-thumb {
-    background: var(--color-secondary);
+    background: var(--color-primary);
     border-radius: 999rem;
   }
 }
