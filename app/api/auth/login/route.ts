@@ -31,13 +31,13 @@ export async function POST(req: NextRequest) {
     const resolve: ServerResponse = await response.json();
 
     if (!resolve.success) {
-      throw new ApiError(resolve.message, resolve.status);
+      throw new ApiError(resolve.message, response.status);
     }
 
     const apiResponse: ApiResponse<typeof resolve.data> = {
-      success: true,
+      success: resolve.success,
       data: resolve.data,
-      status: StatusCodes.OK,
+      status: response.status,
     };
 
     return NextResponse.json(apiResponse);

@@ -31,13 +31,13 @@ export async function PATCH(req: NextRequest) {
     const resolve: ServerResponse = await response.json();
 
     if (!resolve.success) {
-      throw new ApiError(resolve.message, resolve.status);
+      throw new ApiError(resolve.message, response.status);
     }
 
     const apiResponse: ApiResponse<typeof resolve.data> = {
       data: resolve.data,
-      success: true,
-      status: StatusCodes.OK,
+      success: resolve.success,
+      status: response.status,
     };
 
     return NextResponse.json(apiResponse);
