@@ -8,6 +8,7 @@ interface BaseFieldProperties {
   required?: boolean;
   icon?: ReactElement;
 }
+
 export interface InputField extends BaseFieldProperties {
   type: HTMLInputTypeAttribute;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -16,7 +17,11 @@ export interface InputField extends BaseFieldProperties {
 export interface SelectField extends BaseFieldProperties {
   options: Array<{ label: string; value: string | number }>;
   activeLabel: string;
-  onChange: (label: string, value: string | number, target: string) => void;
+  onChange: (option: {
+    label: string;
+    value: string | number;
+    target: string;
+  }) => void;
 }
 
 export interface TextAreaField extends BaseFieldProperties {

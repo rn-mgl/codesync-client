@@ -13,12 +13,18 @@ const Select: React.FC<SelectField> = (props) => {
   };
 
   const mappedOptions = props.options.map((option) => {
+    const optionValue = {
+      label: option.label,
+      value: option.value,
+      target: props.id ?? props.name,
+    };
+
     return (
       <button
         type="button"
         key={option.label}
         onClick={() => {
-          props.onChange(option.label, option.value, props.id ?? props.name);
+          props.onChange(optionValue);
           handleIsVisibleOptions();
         }}
         className={`p-2 rounded-md hover:bg-primary/50 hover:text-secondary w-full text-left transition-all
