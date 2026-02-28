@@ -4,6 +4,7 @@ import { ProblemSchema } from "@/src/schemas/problem.schema";
 import { StatusCodes } from "http-status-codes";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
+import { getToken } from "next-auth/jwt";
 
 export async function POST(req: NextRequest) {
   try {
@@ -23,16 +24,31 @@ export async function POST(req: NextRequest) {
     }
 
     const url = process.env.SERVER_URL;
+    const cookies = await getToken({ req });
+
+    if (!cookies || !cookies.user.token) {
+      throw new ApiError(
+        `You are unauthorized to proceed.`,
+        StatusCodes.UNAUTHORIZED,
+      );
+    }
+
+    if (!process.env.APP_URL) {
+      throw new ApiError(
+        `Missing dependency. App URL`,
+        StatusCodes.FAILED_DEPENDENCY,
+      );
+    }
 
     const response = await fetch(`${url}/problem`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${cookies.user.token}`,
+        Origin: process.env.APP_URL,
       },
       body: JSON.stringify(body),
     });
-
-    console.log(response);
 
     const resolve: ServerResponse = await response.json();
 
