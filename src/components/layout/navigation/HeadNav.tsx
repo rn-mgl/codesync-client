@@ -1,9 +1,9 @@
 import { FaBars } from "react-icons/fa6";
 
-const HeadNav: React.FC<{
+const HeadNav = (props: {
   showSideNav: boolean;
   handleShowSideNav: () => void;
-}> = (props) => {
+}) => {
   return (
     <div className="w-full flex flex-row items-center justify-between p-4 bg-neutral-800 rounded-md">
       <div className="flex flex-row items-center justify-start gap-2 bg-inherit">

@@ -7,10 +7,10 @@ import { BASE_NAVIGATIONS } from "@/src/configs/navigation.config";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 
-const SideNav: React.FC<{
+const SideNav = (props: {
   showSideNav: boolean;
   handleShowSideNav: (source?: "link" | "button") => void;
-}> = (props) => {
+}) => {
   const path = usePathname();
 
   const mappedNavigations = BASE_NAVIGATIONS.map((nav) => {

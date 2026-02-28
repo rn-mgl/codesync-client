@@ -1,8 +1,7 @@
-import Link from "next/link";
-import React from "react";
 import Logo from "@/components/global/Logo";
+import Link from "next/link";
 
-const Nav: React.FC<{ hide?: boolean }> = (props) => {
+const Nav = (props: { hide?: boolean }) => {
   return (
     <div
       className={`w-full fixed top-0 p-4 backdrop-blur-lg z-50 flex flex-col items-center justify-center bg-primary/50 

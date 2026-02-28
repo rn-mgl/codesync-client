@@ -1,7 +1,7 @@
 import { TextAreaField } from "@/src/interfaces/field.interface";
 import React from "react";
 
-const TextArea: React.FC<TextAreaField> = (props) => {
+const TextArea = (props: TextAreaField) => {
   return (
     <div className="w-full flex flex-col items-start justify-center bg-secondary gap-1">
       {props.label ? (

@@ -3,9 +3,7 @@ import logoDark from "@/public/global/logoDark.svg";
 import logoLight from "@/public/global/logoLight.svg";
 import Image from "next/image";
 
-const Logo: React.FC<{ type?: "light" | "dark"; isTransparent?: boolean }> = (
-  props,
-) => {
+const Logo = (props: { type?: "light" | "dark"; isTransparent?: boolean }) => {
   return (
     <div
       className={`p-1 rounded-sm flex flex-col items-center w-full justify-center aspect-square max-w-10
