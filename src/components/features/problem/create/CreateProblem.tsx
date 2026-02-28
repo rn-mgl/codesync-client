@@ -6,7 +6,7 @@ import TextArea from "@/src/components/ui/fields/TextArea";
 import useSelect from "@/src/hooks/useSelect";
 import {
   ProblemForm,
-  ProblemResponse,
+  CreateProblemResponse,
 } from "@/src/interfaces/problem.interface";
 import { useSession } from "next-auth/react";
 import React from "react";
@@ -59,7 +59,7 @@ const CreateProblem = () => {
         body: JSON.stringify({ problem }),
       });
 
-      const resolve: ProblemResponse = await response.json();
+      const resolve: CreateProblemResponse = await response.json();
 
       if (!resolve.success) {
         throw new Error(resolve.message);

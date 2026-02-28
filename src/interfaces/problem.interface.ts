@@ -1,6 +1,5 @@
 import { ApiResponse } from "./api.interface";
-
-interface BaseProblem {
+export interface BaseProblem {
   id: number;
   title: string;
   slug: string;
@@ -10,8 +9,19 @@ interface BaseProblem {
   constraints: string;
   editorial: string;
   difficulty: "easy" | "medium" | "hard";
+  acceptance_rate: number;
+  total_submissions: number;
 }
 
-export type ProblemForm = Omit<BaseProblem, "id">;
+export type ProblemForm = Omit<
+  BaseProblem,
+  "id" | "acceptance_rate" | "total_submissions"
+>;
 
-export type ProblemResponse = ApiResponse<{ message: string }>;
+export type ProblemList = Pick<
+  BaseProblem,
+  "id" | "title" | "slug" | "difficulty" | "acceptance_rate"
+>;
+
+export type CreateProblemResponse = ApiResponse<{ message: string }>;
+export type GetAllProblemsResponse = ApiResponse<{ problems: ProblemList[] }>;
