@@ -1,5 +1,6 @@
 import React from "react";
 import { SelectHook } from "@/interfaces/hook.interface";
+import { OptionValue } from "../interfaces/field.interface";
 
 export default function useSelect<T>(
   initialValue: SelectHook,
@@ -10,11 +11,7 @@ export default function useSelect<T>(
     value: initialValue.value,
   });
 
-  const handleSelect = (option: {
-    label: string;
-    value: string | number;
-    target: string;
-  }) => {
+  const handleSelect = (option: OptionValue) => {
     setSelect({ label: option.label, value: option.value });
     parentState((prev) => {
       return {

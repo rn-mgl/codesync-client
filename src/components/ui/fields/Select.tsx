@@ -1,6 +1,6 @@
 "use client";
 
-import { SelectField } from "@/src/interfaces/field.interface";
+import { OptionValue, SelectField } from "@/src/interfaces/field.interface";
 import React, { Activity } from "react";
 import { FaChevronUp } from "react-icons/fa";
 import { FaChevronDown } from "react-icons/fa6";
@@ -13,7 +13,7 @@ const Select: React.FC<SelectField> = (props) => {
   };
 
   const mappedOptions = props.options.map((option) => {
-    const optionValue = {
+    const optionValue: OptionValue = {
       label: option.label,
       value: option.value,
       target: props.id ?? props.name,

@@ -14,14 +14,16 @@ export interface InputField extends BaseFieldProperties {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
+export interface OptionValue {
+  label: string;
+  value: string | number;
+  target: string;
+}
+
 export interface SelectField extends BaseFieldProperties {
   options: Array<{ label: string; value: string | number }>;
   activeLabel: string;
-  onChange: (option: {
-    label: string;
-    value: string | number;
-    target: string;
-  }) => void;
+  onChange: (option: OptionValue) => void;
 }
 
 export interface TextAreaField extends BaseFieldProperties {
