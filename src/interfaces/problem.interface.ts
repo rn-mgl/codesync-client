@@ -1,4 +1,6 @@
-interface FullProblem {
+import { ApiResponse } from "./api.interface";
+
+interface BaseProblem {
   id: number;
   title: string;
   slug: string;
@@ -10,4 +12,6 @@ interface FullProblem {
   difficulty: "easy" | "medium" | "hard";
 }
 
-export type FormProblem = Omit<FullProblem, "id">;
+export type ProblemForm = Omit<BaseProblem, "id">;
+
+export type ProblemResponse = ApiResponse<{ message: string }>;

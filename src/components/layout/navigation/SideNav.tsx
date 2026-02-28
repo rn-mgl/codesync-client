@@ -1,10 +1,11 @@
 "use client";
-import { FaBars, FaXmark } from "react-icons/fa6";
+import { FaBars, FaRightFromBracket, FaXmark } from "react-icons/fa6";
 import Logo from "@/components/global/Logo";
 import React, { Activity } from "react";
 import Link from "next/link";
 import { BASE_NAVIGATIONS } from "@/src/configs/navigation.config";
 import { usePathname } from "next/navigation";
+import { signOut } from "next-auth/react";
 
 const SideNav: React.FC<{
   showSideNav: boolean;
@@ -39,6 +40,13 @@ const SideNav: React.FC<{
     );
   });
 
+  const handleLogout = () => {
+    signOut({
+      redirect: true,
+      callbackUrl: "/",
+    });
+  };
+
   return (
     <div
       className={`h-full flex-row items-start justify-start fixed top-0 left-0 overflow-hidden
@@ -69,6 +77,19 @@ const SideNav: React.FC<{
 
         <div className="w-full h-full bg-primary rounded-md flex flex-col items-start justify-start p-2 gap-2">
           {mappedNavigations}
+
+          <button
+            onClick={handleLogout}
+            className={`w-full p-4 rounded-md min-w-14 min-h-14 transition-all flex flex-row 
+                       gap-4 text-secondary mt-auto hover:bg-neutral-800 items-center
+                      ${props.showSideNav ? "justify-start" : "justify-center"}`}
+          >
+            <FaRightFromBracket />
+
+            <Activity mode={props.showSideNav ? "visible" : "hidden"}>
+              <span>Log Out</span>
+            </Activity>
+          </button>
         </div>
       </div>
 

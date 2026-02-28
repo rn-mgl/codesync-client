@@ -38,7 +38,7 @@ const Select: React.FC<SelectField> = (props) => {
       ) : null}
 
       <div className="w-full flex flex-col items-center justify-center relative">
-        <div className="w-full relative">
+        <div className="w-full z-10">
           <button
             onClick={handleIsVisibleOptions}
             type="button"
@@ -49,7 +49,7 @@ const Select: React.FC<SelectField> = (props) => {
 
           <Activity mode={isVisibleOptions ? "visible" : "hidden"}>
             <div
-              className="w-full absolute top-0 flex flex-col items-start justify-center bg-neutral-200 rounded-md z-20 translate-y-14 p-2
+              className="w-full absolute top-0 flex flex-col items-start justify-center bg-neutral-200 rounded-md z-20 translate-y-11 p-2
                         animate-fade shadow-md gap-2"
             >
               {mappedOptions}
@@ -57,7 +57,7 @@ const Select: React.FC<SelectField> = (props) => {
           </Activity>
         </div>
 
-        <div className="absolute right-0.5 rounded-sm bg-inherit p-2.5 py-3 text-neutral-500 top-0.5">
+        <div className="absolute right-0.5 rounded-sm bg-inherit p-2.5 py-3 text-neutral-500 top-0.5 z-0">
           <Activity mode={isVisibleOptions ? "hidden" : "visible"}>
             <FaChevronDown />
           </Activity>
