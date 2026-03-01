@@ -1,32 +1,36 @@
 import { env } from "@/src/configs/env.config";
+import { isJWTCookie } from "@/src/helpers/api.helper";
 import { ApiResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import ApiError from "@/src/lib/ApiError";
-import { ResetSchema } from "@/src/schemas/auth.schema";
 import { StatusCodes } from "http-status-codes";
+import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
-import z from "zod";
 
-export async function PATCH(req: NextRequest) {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ slug: string }> },
+) {
   try {
-    const url = env.SERVER_URL;
+    const cookies = await getToken({ req });
 
-    const body = await req.json();
-
-    const { credentials } = body;
-
-    const parser = ResetSchema.safeParse(credentials);
-
-    if (parser.error) {
-      const prettifyError = z.prettifyError(parser.error);
-      throw new ApiError(prettifyError, StatusCodes.BAD_REQUEST);
+    if (!isJWTCookie(cookies)) {
+      throw new ApiError(
+        `You are unauthorized to proceed.`,
+        StatusCodes.UNAUTHORIZED,
+      );
     }
 
-    const response = await fetch(`${url}/auth/reset`, {
-      method: "PATCH",
+    const token = cookies.user.token;
+    const url = env.SERVER_URL;
+    const slug = (await params).slug;
+
+    const response = await fetch(`${url}/problem/${slug}`, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        Origin: env.APP_URL ?? "",
       },
-      body: JSON.stringify(body),
     });
 
     const resolve: ServerResponse = await response.json();
@@ -36,8 +40,8 @@ export async function PATCH(req: NextRequest) {
     }
 
     const apiResponse: ApiResponse<typeof resolve.data> = {
+      success: true,
       data: resolve.data,
-      success: resolve.success,
       status: response.status,
     };
 

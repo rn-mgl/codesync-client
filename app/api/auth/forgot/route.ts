@@ -1,3 +1,4 @@
+import { env } from "@/src/configs/env.config";
 import { ApiResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import ApiError from "@/src/lib/ApiError";
 import { ForgotSchema } from "@/src/schemas/auth.schema";
@@ -7,7 +8,7 @@ import z from "zod";
 
 export async function POST(req: NextRequest) {
   try {
-    const url = process.env.SERVER_URL;
+    const url = env.SERVER_URL;
 
     const body = await req.json();
 

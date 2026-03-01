@@ -5,6 +5,8 @@ import { StatusCodes } from "http-status-codes";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
 import { getToken } from "next-auth/jwt";
+import { isJWTCookie } from "@/src/helpers/api.helper";
+import { env } from "@/src/configs/env.config";
 
 export async function POST(req: NextRequest) {
   try {
@@ -23,20 +25,13 @@ export async function POST(req: NextRequest) {
       throw new ApiError(prettifyError, StatusCodes.BAD_REQUEST);
     }
 
-    const url = process.env.SERVER_URL;
+    const url = env.SERVER_URL;
     const cookies = await getToken({ req });
 
-    if (!cookies || !cookies.user.token) {
+    if (!isJWTCookie(cookies)) {
       throw new ApiError(
         `You are unauthorized to proceed.`,
         StatusCodes.UNAUTHORIZED,
-      );
-    }
-
-    if (!process.env.APP_URL) {
-      throw new ApiError(
-        `Missing dependency. App URL`,
-        StatusCodes.FAILED_DEPENDENCY,
       );
     }
 
@@ -45,7 +40,7 @@ export async function POST(req: NextRequest) {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${cookies.user.token}`,
-        Origin: process.env.APP_URL,
+        Origin: env.APP_URL,
       },
       body: JSON.stringify(body),
     });
@@ -82,30 +77,21 @@ export async function GET(req: NextRequest) {
   try {
     const cookies = await getToken({ req });
 
-    console.log(cookies ? cookies : "none");
-
-    if (!cookies || !cookies.user.token) {
+    if (!isJWTCookie(cookies)) {
       throw new ApiError(
         `You are not allowed to proceed with this request.`,
         StatusCodes.UNAUTHORIZED,
       );
     }
 
-    if (!process.env.APP_URL) {
-      throw new ApiError(
-        `Missing dependency. App URL`,
-        StatusCodes.FAILED_DEPENDENCY,
-      );
-    }
-
-    const url = process.env.SERVER_URL;
+    const url = env.SERVER_URL;
 
     const response = await fetch(`${url}/problem`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${cookies.user.token}`,
-        Origin: process.env.APP_URL,
+        Origin: env.APP_URL,
       },
     });
 

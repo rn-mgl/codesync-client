@@ -5,10 +5,11 @@ import { ServerResponse } from "@/interfaces/api.interface";
 import { StatusCodes } from "http-status-codes";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
+import { env } from "@/src/configs/env.config";
 
 export async function PATCH(req: NextRequest) {
   try {
-    const url = process.env.SERVER_URL;
+    const url = env.SERVER_URL;
 
     const body = await req.json();
 
