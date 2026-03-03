@@ -24,7 +24,13 @@ export async function GET(
     const url = env.SERVER_URL;
     const slug = (await params).slug;
 
-    const response = await fetch(`${url}/problem/${slug}`, {
+    const searchParams = {
+      lookup: "slug",
+    };
+
+    const query = new URLSearchParams(searchParams).toString();
+
+    const response = await fetch(`${url}/problem/${slug}?${query}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

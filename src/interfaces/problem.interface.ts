@@ -25,3 +25,4 @@ export type ProblemList = Pick<
 
 export type CreateProblemResponse = ApiResponse<{ message: string }>;
 export type GetAllProblemsResponse = ApiResponse<{ problems: ProblemList[] }>;
+export type GetProblemResponse = ApiResponse<{ problem: BaseProblem }>;
