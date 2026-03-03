@@ -1,4 +1,4 @@
-import Problems from "@/src/components/features/problem/read/Problems";
+import AllProblems from "@/src/components/features/problem/read/AllProblems";
 import Link from "next/link";
 import { FaPlus } from "react-icons/fa6";
 
@@ -15,7 +15,7 @@ const Page = async () => {
           <FaPlus />
         </Link>
 
-        <Problems />
+        <AllProblems />
       </div>
     </div>
   );

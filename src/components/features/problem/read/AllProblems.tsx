@@ -8,7 +8,7 @@ import {
 import Link from "next/link";
 import React from "react";
 
-const Problems = () => {
+const AllProblems = () => {
   const [problems, setProblems] = React.useState<ProblemList[]>([]);
 
   const getProblems = React.useCallback(async () => {
@@ -65,4 +65,4 @@ const Problems = () => {
   );
 };
 
-export default Problems;
+export default AllProblems;
