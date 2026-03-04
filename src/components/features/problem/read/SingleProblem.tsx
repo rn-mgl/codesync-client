@@ -54,24 +54,36 @@ const SingleProblem = () => {
   }, [getProblem]);
 
   return (
-    <div className="w-full grid grid-cols-1 items-start justify-start gap-4 l-s:grid-cols-2 l-s:h-full ">
-      <div className="w-full flex flex-col items-start justify-start gap-8 l-s:h-full l-s:overflow-y-auto p-2">
+    <div className="w-full grid grid-cols-1 items-start justify-start gap-4 l-s:grid-cols-2 l-s:h-full">
+      <div className="w-full flex flex-col items-start justify-start gap-8 l-s:h-full l-s:overflow-y-auto p-2 border rounded-md border-neutral-400">
         <div className="w-full flex flex-col items-start justify-start gap-4">
           <h1 className="text-xl font-bold text-pretty t:text-2xl">
             {problem.id}. {problem.title}
           </h1>
 
-          <p className="text-sm">{problem.description}</p>
+          <p className="text-sm whitespace-pre-wrap">{problem.description}</p>
         </div>
 
-        <p className="text-sm">{problem.constraints} constraints here</p>
+        <div className="text-sm">
+          <p>Constraints: </p>
+          <p className="whitespace-pre">{problem.constraints}</p>
+        </div>
       </div>
 
-      <div className="w-full flex flex-col items-start justify-start gap-4 h-full l-s:overflow-y-hidden">
-        <Editor />
+      <div className="w-full grid grid-cols-1 grid-rows-3 items-start justify-start gap-4 h-screen l-s:h-full l-s:overflow-y-hidden">
+        <div className="w-full h-full p-2 rounded-md bg-primary row-span-2">
+          <Editor />
+        </div>
 
-        <div className="w-full p-2 text-secondary rounded-md min-h-90 l-s:h-full l-s:min-h-auto overflow-y-hidden bg-neutral-600">
-          Tests here
+        <div className="w-full p-2 rounded-md h-full row-span-1 overflow-y-auto gap-2 border border-neutral-400 flex flex-col">
+          <div className="w-full rounded-sm bg-neutral-200 p-8"></div>
+          <div className="w-full rounded-sm bg-neutral-200 p-8"></div>
+          <div className="w-full rounded-sm bg-neutral-200 p-8"></div>
+          <div className="w-full rounded-sm bg-neutral-200 p-8"></div>
+          <div className="w-full rounded-sm bg-neutral-200 p-8"></div>
+          <div className="w-full rounded-sm bg-neutral-200 p-8"></div>
+          <div className="w-full rounded-sm bg-neutral-200 p-8"></div>
+          <div className="w-full rounded-sm bg-neutral-200 p-8"></div>
         </div>
       </div>
     </div>

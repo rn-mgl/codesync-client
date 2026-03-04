@@ -37,11 +37,7 @@ const Editor = () => {
     };
   }, []);
 
-  return (
-    <div className="w-full h-full p-2 rounded-md bg-primary">
-      <div ref={editorRef} className="w-full h-full rounded-md" />
-    </div>
-  );
+  return <div ref={editorRef} className="w-full h-full rounded-md" />;
 };
 
 export default Editor;
