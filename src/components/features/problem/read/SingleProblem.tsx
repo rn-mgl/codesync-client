@@ -66,24 +66,36 @@ const SingleProblem = () => {
 
         <div className="text-sm">
           <p>Constraints: </p>
-          <p className="whitespace-pre">{problem.constraints}</p>
+          <p className="whitespace-pre">formatted constraint here</p>
         </div>
       </div>
 
-      <div className="w-full grid grid-cols-1 grid-rows-3 items-start justify-start gap-4 h-screen l-s:h-full l-s:overflow-y-hidden">
-        <div className="w-full h-full p-2 rounded-md bg-primary row-span-2">
-          <Editor />
+      <div className="w-full grid grid-cols-1 grid-rows-1 items-start justify-start gap-4 l-s:h-full l-s:overflow-y-hidden">
+        <div className="w-full grid grid-cols-1 grid-rows-3 items-start justify-start gap-4 h-screen l-s:h-full">
+          <div className="w-full h-full p-2 rounded-md bg-primary row-span-2">
+            <Editor />
+          </div>
+
+          <div className="w-full p-2 rounded-md h-full row-span-1 overflow-y-auto gap-2 border border-neutral-400 flex flex-col">
+            <div className="w-full rounded-sm bg-neutral-200 p-8"></div>
+            <div className="w-full rounded-sm bg-neutral-200 p-8"></div>
+            <div className="w-full rounded-sm bg-neutral-200 p-8"></div>
+          </div>
         </div>
 
-        <div className="w-full p-2 rounded-md h-full row-span-1 overflow-y-auto gap-2 border border-neutral-400 flex flex-col">
-          <div className="w-full rounded-sm bg-neutral-200 p-8"></div>
-          <div className="w-full rounded-sm bg-neutral-200 p-8"></div>
-          <div className="w-full rounded-sm bg-neutral-200 p-8"></div>
-          <div className="w-full rounded-sm bg-neutral-200 p-8"></div>
-          <div className="w-full rounded-sm bg-neutral-200 p-8"></div>
-          <div className="w-full rounded-sm bg-neutral-200 p-8"></div>
-          <div className="w-full rounded-sm bg-neutral-200 p-8"></div>
-          <div className="w-full rounded-sm bg-neutral-200 p-8"></div>
+        <div className="w-full flex flex-col items-center justify-center gap-2 t:flex-row t:justify-between">
+          <button
+            type="button"
+            className="w-full p-2 rounded-md font-bold bg-neutral-200 t:max-w-30 t:px-4"
+          >
+            Test
+          </button>
+          <button
+            type="button"
+            className="w-full p-2 rounded-md font-bold bg-primary text-secondary t:max-w-30 t:px-4"
+          >
+            Submit
+          </button>
         </div>
       </div>
     </div>
