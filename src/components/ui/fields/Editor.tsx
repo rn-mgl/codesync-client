@@ -17,7 +17,6 @@ const Editor = (props: IEditor) => {
 
   return (
     <MonacoEditor
-      height="100%"
       onMount={handleEditorDidMount}
       theme="vs-dark"
       defaultValue="//comment"

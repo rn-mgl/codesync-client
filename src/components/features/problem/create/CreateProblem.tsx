@@ -48,7 +48,7 @@ const CreateProblem = () => {
     });
   };
 
-  const handleCreate = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleCreate = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const response = await fetch(`/api/problem`, {

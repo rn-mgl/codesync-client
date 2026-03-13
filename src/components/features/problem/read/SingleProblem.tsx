@@ -53,6 +53,33 @@ const SingleProblem = () => {
     }
   }, [params]);
 
+  const handleSubmission = async (type: "run" | "test") => {
+    try {
+      if (!params?.slug) return;
+
+      if (!editorRef.current) return;
+
+      const submission = {
+        type,
+        code: editorRef.current.getValue(),
+      };
+
+      const response = await fetch(`/api/submission/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ submission }),
+      });
+
+      const resolve = await response.json();
+
+      console.log(resolve);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   React.useEffect(() => {
     getProblem();
   }, [getProblem]);
@@ -89,12 +116,14 @@ const SingleProblem = () => {
 
         <div className="w-full flex flex-col items-center justify-center gap-2 t:flex-row t:justify-between">
           <button
+            onClick={() => handleSubmission("test")}
             type="button"
             className="w-full p-2 rounded-md font-bold bg-neutral-200 t:max-w-20 t:px-4"
           >
             Test
           </button>
           <button
+            onClick={() => handleSubmission("run")}
             type="button"
             className="w-full p-2 rounded-md font-bold bg-primary text-secondary t:max-w-20 t:px-4"
           >
