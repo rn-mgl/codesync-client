@@ -86,15 +86,15 @@ const SingleProblem = () => {
         <div className="w-full flex flex-col items-center justify-center gap-2 t:flex-row t:justify-between">
           <button
             type="button"
-            className="w-full p-2 rounded-md font-bold bg-neutral-200 t:max-w-30 t:px-4"
+            className="w-full p-2 rounded-md font-bold bg-neutral-200 t:max-w-20 t:px-4"
           >
             Test
           </button>
           <button
             type="button"
-            className="w-full p-2 rounded-md font-bold bg-primary text-secondary t:max-w-30 t:px-4"
+            className="w-full p-2 rounded-md font-bold bg-primary text-secondary t:max-w-20 t:px-4"
           >
-            Submit
+            Run
           </button>
         </div>
       </div>
