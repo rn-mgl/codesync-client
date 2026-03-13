@@ -1,43 +1,35 @@
 "use client";
 
 import React from "react";
-import type * as Monaco from "monaco-editor";
+import { Editor as MonacoEditor } from "@monaco-editor/react";
+import * as Monaco from "monaco-editor";
 
-const Editor = () => {
-  const editorRef = React.useRef<HTMLDivElement | null>(null);
+interface IEditor {
+  ref: React.RefObject<Monaco.editor.IStandaloneCodeEditor | null>;
+}
 
-  React.useLayoutEffect(() => {
-    const currentEditor = editorRef.current;
+const Editor = (props: IEditor) => {
+  const editorRef = props.ref;
 
-    if (!currentEditor) return;
+  function handleEditorDidMount(editor: Monaco.editor.IStandaloneCodeEditor) {
+    editorRef.current = editor;
+  }
 
-    let monacoEditor: Monaco.editor.IStandaloneCodeEditor;
-    let cancelled = false;
-
-    // monaco-editor expects it to be client on the dot
-    import("monaco-editor").then((monaco) => {
-      if (cancelled) return;
-
-      monacoEditor = monaco.editor.create(currentEditor, {
-        value: "code here...",
+  return (
+    <MonacoEditor
+      height="100%"
+      onMount={handleEditorDidMount}
+      theme="vs-dark"
+      defaultValue="//comment"
+      options={{
         automaticLayout: true,
         codeLens: false,
         colorDecorators: true,
         fontFamily: "Fira Code",
-        theme: "vs-dark",
         minimap: { enabled: false },
-      });
-    });
-
-    return () => {
-      cancelled = true;
-      if (monacoEditor) {
-        monacoEditor.dispose();
-      }
-    };
-  }, []);
-
-  return <div ref={editorRef} className="w-full h-full rounded-md" />;
+      }}
+    />
+  );
 };
 
 export default Editor;

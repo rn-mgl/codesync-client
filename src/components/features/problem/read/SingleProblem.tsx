@@ -7,6 +7,7 @@ import {
 } from "@/src/interfaces/problem.interface";
 import { useParams } from "next/navigation";
 import React from "react";
+import * as Monaco from "monaco-editor";
 
 const SingleProblem = () => {
   const [problem, setProblem] = React.useState<BaseProblem>({
@@ -23,6 +24,9 @@ const SingleProblem = () => {
     total_submissions: 0,
   });
   const params = useParams();
+  const editorRef = React.useRef<Monaco.editor.IStandaloneCodeEditor | null>(
+    null,
+  );
 
   const getProblem = React.useCallback(async () => {
     try {
@@ -73,7 +77,7 @@ const SingleProblem = () => {
       <div className="w-full grid grid-cols-1 grid-rows-1 items-start justify-start gap-4 l-s:h-full l-s:overflow-y-hidden">
         <div className="w-full grid grid-cols-1 grid-rows-3 items-start justify-start gap-4 h-screen l-s:h-full">
           <div className="w-full h-full p-2 rounded-md bg-primary row-span-2">
-            <Editor />
+            <Editor ref={editorRef} />
           </div>
 
           <div className="w-full p-2 rounded-md h-full row-span-1 overflow-y-auto gap-2 border border-neutral-400 flex flex-col">
