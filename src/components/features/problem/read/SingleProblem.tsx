@@ -62,6 +62,8 @@ const SingleProblem = () => {
       const submission = {
         type,
         code: editorRef.current.getValue(),
+        language: "javascript",
+        problem_id: params.slug,
       };
 
       const response = await fetch(`/api/submission/`, {
