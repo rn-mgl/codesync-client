@@ -19,13 +19,15 @@ const Editor = (props: IEditor) => {
     <MonacoEditor
       onMount={handleEditorDidMount}
       theme="vs-dark"
-      defaultValue="//comment"
+      language="javascript"
+      defaultValue=""
       options={{
         automaticLayout: true,
         codeLens: false,
         colorDecorators: true,
         fontFamily: "Fira Code",
         minimap: { enabled: false },
+        "semanticHighlighting.enabled": true,
       }}
     />
   );
