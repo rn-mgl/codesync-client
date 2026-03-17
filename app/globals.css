@@ -39,14 +39,13 @@
 
 @layer base {
   button {
-    transition: all;
+    transition: all 100ms;
     cursor: pointer;
-    /* animation:; */
   }
 
   button:hover {
     filter: brightness(105%);
-    box-shadow: 0rem 4px 4px rgba(13, 13, 13, 0.2);
+    box-shadow: 0px 4px 4px rgba(13, 13, 13, 0.2);
   }
 
   button:disabled {

@@ -21,6 +21,7 @@ const Editor = (props: IEditor) => {
       theme="vs-dark"
       language="javascript"
       defaultValue=""
+      height="93%"
       options={{
         automaticLayout: true,
         codeLens: false,

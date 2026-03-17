@@ -5,9 +5,12 @@ import {
   BaseProblem,
   GetProblemResponse,
 } from "@/src/interfaces/problem.interface";
+import * as Monaco from "monaco-editor";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import React from "react";
-import * as Monaco from "monaco-editor";
+import { FaRegEdit } from "react-icons/fa";
+import { FaArrowLeft, FaRegTrashCan } from "react-icons/fa6";
 
 const SingleProblem = () => {
   const [problem, setProblem] = React.useState<BaseProblem>({
@@ -87,26 +90,73 @@ const SingleProblem = () => {
   }, [getProblem]);
 
   return (
-    <div className="w-full grid grid-cols-1 items-start justify-start gap-4 l-s:grid-cols-2 l-s:h-full">
-      <div className="w-full flex flex-col items-start justify-start gap-8 l-s:h-full l-s:overflow-y-auto p-2 border rounded-md border-neutral-400">
-        <div className="w-full flex flex-col items-start justify-start gap-4">
-          <h1 className="text-xl font-bold text-pretty t:text-2xl">
-            {problem.id}. {problem.title}
-          </h1>
+    <div className="w-full grid grid-cols-1 gap-4 l-s:grid-cols-2 l-s:h-full">
+      <div className="w-full h-full flex flex-col l-s:overflow-hidden gap-4">
+        <Link
+          href="/codesync/problems"
+          className="text-primary font-bold flex flex-row items-center 
+                    justify-center gap-2 hover:border-b px-1 w-fit"
+        >
+          <FaArrowLeft />
+          All Problems
+        </Link>
 
-          <p className="text-sm whitespace-pre-wrap">{problem.description}</p>
-        </div>
+        <div className="w-full h-full max-h-screen flex flex-col l-s:overflow-hidden border rounded-md border-neutral-400 bg-secondary">
+          <div className="w-full h-full flex flex-col gap-8 p-2 overflow-y-auto l-s:max-h-full">
+            <div className="w-full flex flex-col gap-4">
+              <h1 className="text-xl font-bold text-pretty t:text-2xl">
+                {problem.id}. {problem.title}
+              </h1>
 
-        <div className="text-sm">
-          <p>Constraints: </p>
-          <p className="whitespace-pre">formatted constraint here</p>
+              <p className="text-sm whitespace-pre-wrap">
+                {problem.description}
+                {problem.description}
+              </p>
+            </div>
+
+            <div className="text-sm">
+              <p>Constraints: </p>
+              <p className="whitespace-pre">formatted constraint here</p>
+            </div>
+          </div>
+
+          <div className="w-full flex flex-row items-center justify-end gap-2 bg-inherit p-2">
+            <Link
+              href={`/codesync/problems/${params?.slug}/edit`}
+              target="_blank"
+              className="p-2 rounded-full bg-inherit hover:text-blue-800 flex flex-col items-center justify-center"
+            >
+              <FaRegEdit />
+            </Link>
+
+            <button className="p-2 rounded-full bg-inherit hover:text-red-800 flex flex-col items-center justify-center">
+              <FaRegTrashCan />
+            </button>
+          </div>
         </div>
       </div>
 
       <div className="w-full grid grid-cols-1 grid-rows-1 items-start justify-start gap-4 l-s:h-full l-s:overflow-y-hidden">
         <div className="w-full grid grid-cols-1 grid-rows-3 items-start justify-start gap-4 h-screen l-s:h-full">
-          <div className="w-full h-full p-2 rounded-md bg-primary row-span-2">
+          <div className="w-full h-full p-2 rounded-md bg-[#1e1e1e] row-span-2 flex flex-col items-center justify-center">
             <Editor ref={editorRef} />
+            <div className="w-full flex flex-row items-center justify-center gap-2 t:justify-end mt-2">
+              <button
+                onClick={() => handleSubmission("test")}
+                type="button"
+                className="w-full p-1 rounded-md font-bold bg-neutral-200 t:max-w-16 t:px-4 text-sm"
+              >
+                Test
+              </button>
+
+              <button
+                onClick={() => handleSubmission("run")}
+                type="button"
+                className="w-full p-1 rounded-md font-bold bg-green-600 text-secondary t:max-w-16 t:px-4 text-sm"
+              >
+                Run
+              </button>
+            </div>
           </div>
 
           <div className="w-full p-2 rounded-md h-full row-span-1 overflow-y-auto gap-2 border border-neutral-400 flex flex-col">
@@ -114,23 +164,6 @@ const SingleProblem = () => {
             <div className="w-full rounded-sm bg-neutral-200 p-8"></div>
             <div className="w-full rounded-sm bg-neutral-200 p-8"></div>
           </div>
-        </div>
-
-        <div className="w-full flex flex-col items-center justify-center gap-2 t:flex-row t:justify-between">
-          <button
-            onClick={() => handleSubmission("test")}
-            type="button"
-            className="w-full p-2 rounded-md font-bold bg-neutral-200 t:max-w-20 t:px-4"
-          >
-            Test
-          </button>
-          <button
-            onClick={() => handleSubmission("run")}
-            type="button"
-            className="w-full p-2 rounded-md font-bold bg-primary text-secondary t:max-w-20 t:px-4"
-          >
-            Run
-          </button>
         </div>
       </div>
     </div>
