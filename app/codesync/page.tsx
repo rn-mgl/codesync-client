@@ -1,5 +1,11 @@
+import { Toaster } from "sonner";
+
 const Page = () => {
-  return <div></div>;
+  return (
+    <div>
+      <Toaster />
+    </div>
+  );
 };
 
 export default Page;
