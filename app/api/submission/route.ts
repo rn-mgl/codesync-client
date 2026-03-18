@@ -2,9 +2,11 @@ import { env } from "@/src/configs/env.config";
 import { isJWTCookie } from "@/src/helpers/api.helper";
 import { ApiResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import ApiError from "@/src/lib/ApiError";
+import { SubmissionSchema } from "@/src/schemas/submission.schema";
 import { StatusCodes } from "http-status-codes";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
+import z from "zod";
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,6 +14,16 @@ export async function POST(req: NextRequest) {
 
     if (!("submission" in body)) {
       throw new ApiError(`Invalid data passed.`, StatusCodes.BAD_REQUEST);
+    }
+
+    const { submission } = body;
+
+    const parser = SubmissionSchema.safeParse(submission);
+
+    if (parser.error) {
+      const prettifyError = z.prettifyError(parser.error);
+
+      throw new ApiError(prettifyError, StatusCodes.BAD_REQUEST);
     }
 
     const url = env.SERVER_URL;
