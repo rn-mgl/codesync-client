@@ -1,4 +1,6 @@
 import { JWT } from "next-auth/jwt";
+import ApiError from "../lib/ApiError";
+import { ApiResponse } from "../interfaces/api.interface";
 
 export const isJWTCookie = (cookie: unknown): cookie is JWT => {
   return (
@@ -19,4 +21,16 @@ export const validateDependencies = () => {
       process.env[dependency] !== undefined &&
       typeof process.env[dependency] === "string",
   );
+};
+
+export const handleErrorResponse = (error: unknown): ApiResponse => {
+  const isApiError = error instanceof ApiError;
+
+  const errorResponse: ApiResponse = {
+    success: false,
+    message: isApiError ? error.message : "An unexpected error occurred.",
+    status: isApiError ? error.statusCode : 500,
+  };
+
+  return errorResponse;
 };
