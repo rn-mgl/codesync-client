@@ -1,6 +1,6 @@
 "use client";
 
-import Table from "@/src/components/ui/container/Table";
+import Table from "@/src/components/ui/containers/Table";
 import {
   GetAllProblemsResponse,
   ProblemList,

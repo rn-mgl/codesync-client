@@ -1,13 +1,14 @@
 "use client";
 
 import Editor from "@/src/components/ui/fields/Editor";
+import Delete from "@/src/components/ui/forms/Delete";
 import {
   BaseProblem,
   GetProblemResponse,
 } from "@/src/interfaces/problem.interface";
 import * as Monaco from "monaco-editor";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import { FaRegEdit } from "react-icons/fa";
 import { FaArrowLeft, FaRegTrashCan } from "react-icons/fa6";
@@ -26,7 +27,11 @@ const SingleProblem = () => {
     acceptance_rate: 0,
     total_submissions: 0,
   });
+
+  const [canDelete, setCanDelete] = React.useState(false);
+
   const params = useParams();
+  const router = useRouter();
   const editorRef = React.useRef<Monaco.editor.IStandaloneCodeEditor | null>(
     null,
   );
@@ -85,12 +90,26 @@ const SingleProblem = () => {
     }
   };
 
+  const handleCanDelete = () => {
+    setCanDelete((prev) => !prev);
+  };
+
   React.useEffect(() => {
     getProblem();
   }, [getProblem]);
 
   return (
     <div className="w-full grid grid-cols-1 gap-4 l-s:grid-cols-2 l-s:h-full">
+      {canDelete && (
+        <Delete
+          label="Problem"
+          endpoint={`/problem/${params?.slug}`}
+          postDeleteAction={() => {
+            router.push("/codesync/problems");
+          }}
+          closeForm={handleCanDelete}
+        />
+      )}
       <div className="w-full h-full flex flex-col l-s:overflow-hidden gap-4">
         <Link
           href="/codesync/problems"
@@ -129,7 +148,10 @@ const SingleProblem = () => {
               <FaRegEdit />
             </Link>
 
-            <button className="p-2 rounded-full bg-inherit hover:text-red-800 flex flex-col items-center justify-center">
+            <button
+              onClick={handleCanDelete}
+              className="p-2 rounded-full bg-inherit hover:text-red-800 flex flex-col items-center justify-center"
+            >
               <FaRegTrashCan />
             </button>
           </div>

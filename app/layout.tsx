@@ -2,6 +2,7 @@ import { Onest } from "next/font/google";
 import "./globals.css";
 import SessionProviderShell from "@/src/providers/SessionProviderShell";
 import { Metadata } from "next";
+import { Toaster } from "sonner";
 
 const onest = Onest({
   display: "block",

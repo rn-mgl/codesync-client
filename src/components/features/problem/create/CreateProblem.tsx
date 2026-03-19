@@ -17,6 +17,7 @@ import {
   FaPuzzlePiece,
   FaRegNoteSticky,
 } from "react-icons/fa6";
+import { toast } from "sonner";
 
 const CreateProblem = () => {
   const [problem, setProblem] = React.useState<ProblemForm>({
@@ -67,7 +68,7 @@ const CreateProblem = () => {
 
       const data = resolve.data;
 
-      console.log(data);
+      toast(data.message);
     } catch (err) {
       console.error(err);
     }

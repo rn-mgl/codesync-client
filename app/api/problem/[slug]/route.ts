@@ -145,3 +145,58 @@ export async function PATCH(
     return NextResponse.json(apiResponse);
   }
 }
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ slug?: string }> },
+) {
+  try {
+    const cookies = await getToken({ req });
+
+    if (!isJWTCookie(cookies)) {
+      throw new ApiError(
+        `You are unauthenticated to proceed.`,
+        StatusCodes.UNAUTHORIZED,
+      );
+    }
+
+    const url = env.SERVER_URL;
+    const slug = (await params).slug;
+    const token = cookies.user.token;
+
+    const searchParams = {
+      lookup: "slug",
+    };
+
+    const query = new URLSearchParams(searchParams).toString();
+
+    const response = await fetch(`${url}/problem/${slug}?${query}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        Origin: env.APP_URL,
+      },
+    });
+
+    const resolve: ServerResponse = await response.json();
+
+    if (!resolve.success) {
+      throw new ApiError(resolve.message, response.status);
+    }
+
+    const apiResponse: ApiResponse<typeof resolve.data> = {
+      success: true,
+      data: resolve.data,
+      status: response.status,
+    };
+
+    return NextResponse.json(apiResponse);
+  } catch (error) {
+    console.log(error);
+
+    const apiResponse: ApiResponse = handleErrorResponse(error);
+
+    return NextResponse.json(apiResponse);
+  }
+}
