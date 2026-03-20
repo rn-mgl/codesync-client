@@ -1,4 +1,5 @@
 import { ApiResponse } from "./api.interface";
+import { BaseProblem } from "./problem.interface";
 
 export interface BaseTestCase {
   id: number;
@@ -14,4 +15,11 @@ export interface TestCaseForm extends Omit<BaseTestCase, "id" | "problem_id"> {
   problem: string;
 }
 
+export type TestCaseList = Pick<BaseTestCase, "id" | "problem_id"> &
+  Pick<BaseProblem, "slug" | "title">;
+
 export type CreateTestCaseResponse = ApiResponse<{ message: string }>;
+
+export type GetAllTestCaseResponse = ApiResponse<{
+  test_cases: TestCaseList[];
+}>;
