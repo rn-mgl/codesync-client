@@ -129,7 +129,6 @@ const SingleProblem = () => {
 
               <p className="text-sm whitespace-pre-wrap">
                 {problem.description}
-                {problem.description}
               </p>
             </div>
 
