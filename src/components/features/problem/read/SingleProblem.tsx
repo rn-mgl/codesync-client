@@ -7,11 +7,12 @@ import {
   GetProblemResponse,
 } from "@/src/interfaces/problem.interface";
 import * as Monaco from "monaco-editor";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import { FaRegEdit } from "react-icons/fa";
-import { FaArrowLeft, FaRegTrashCan } from "react-icons/fa6";
+import { FaArrowLeft, FaRegFileCode, FaRegTrashCan } from "react-icons/fa6";
 
 const SingleProblem = () => {
   const [problem, setProblem] = React.useState<BaseProblem>({
@@ -29,6 +30,8 @@ const SingleProblem = () => {
   });
 
   const [canDelete, setCanDelete] = React.useState(false);
+
+  useSession({ required: true });
 
   const params = useParams();
   const router = useRouter();
@@ -137,17 +140,33 @@ const SingleProblem = () => {
               <p className="whitespace-pre">formatted constraint here</p>
             </div>
           </div>
+        </div>
+      </div>
 
-          <div className="w-full flex flex-row items-center justify-end gap-2 bg-inherit p-2">
+      <div className="w-full flex flex-col items-start justify-start gap-2 l-s:h-full l-s:overflow-y-hidden">
+        <div className="w-full flex flex-row items-center justify-between gap-2">
+          <div className="flex gap-4">
             <Link
+              href={`/codesync/test-cases?problem=${params?.slug}`}
+              title="Test Case"
+              onClick={handleCanDelete}
+              className="p-2 rounded-full bg-inherit hover:text-green-800 flex flex-col items-center justify-center"
+            >
+              <FaRegFileCode />
+            </Link>
+          </div>
+
+          <div className="flex gap-4">
+            <Link
+              title="Edit"
               href={`/codesync/problems/${params?.slug}/edit`}
-              target="_blank"
               className="p-2 rounded-full bg-inherit hover:text-blue-800 flex flex-col items-center justify-center"
             >
               <FaRegEdit />
             </Link>
 
             <button
+              title="Delete"
               onClick={handleCanDelete}
               className="p-2 rounded-full bg-inherit hover:text-red-800 flex flex-col items-center justify-center"
             >
@@ -155,9 +174,7 @@ const SingleProblem = () => {
             </button>
           </div>
         </div>
-      </div>
 
-      <div className="w-full grid grid-cols-1 grid-rows-1 items-start justify-start gap-4 l-s:h-full l-s:overflow-y-hidden">
         <div className="w-full grid grid-cols-1 grid-rows-3 items-start justify-start gap-4 h-screen l-s:h-full">
           <div className="w-full h-full p-2 rounded-md bg-[#1e1e1e] row-span-2 flex flex-col items-center justify-center">
             <Editor ref={editorRef} />

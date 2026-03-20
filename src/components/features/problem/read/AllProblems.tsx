@@ -5,11 +5,14 @@ import {
   GetAllProblemsResponse,
   ProblemList,
 } from "@/src/interfaces/problem.interface";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
 
 const AllProblems = () => {
   const [problems, setProblems] = React.useState<ProblemList[]>([]);
+
+  useSession({ required: true });
 
   const getProblems = React.useCallback(async () => {
     try {
@@ -39,7 +42,6 @@ const AllProblems = () => {
       <Link
         key={problem.id}
         href={`/codesync/problems/${problem.slug}`}
-        target="_blank"
         className="w-full not-last:border-b-2 border-neutral-400 transition-all
                   hover:bg-neutral-200 first:rounded-t-md last:rounded-b-md"
       >
