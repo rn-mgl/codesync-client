@@ -149,7 +149,6 @@ const SingleProblem = () => {
             <Link
               href={`/codesync/test-cases?problem=${params?.slug}`}
               title="Test Case"
-              onClick={handleCanDelete}
               className="p-2 rounded-full bg-inherit hover:text-green-800 flex flex-col items-center justify-center"
             >
               <FaRegFileCode />
