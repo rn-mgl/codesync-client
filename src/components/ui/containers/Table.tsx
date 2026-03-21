@@ -1,9 +1,9 @@
 import { normalizeString } from "@/src/helpers/normalizer.helper";
-import { ITable } from "@/src/interfaces/container.interface";
+import { TableProps } from "@/src/interfaces/container.interface";
 import React from "react";
 
 const Table = <T extends Record<string, unknown>>(
-  props: ITable<T>,
+  props: TableProps<T>,
 ): React.ReactElement => {
   const columns = React.useMemo(() => props.headers.length, [props]);
 

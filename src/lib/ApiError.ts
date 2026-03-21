@@ -1,6 +1,6 @@
-import { IApiError } from "@/interfaces/error.interface";
+import { ApiErrorDetails } from "@/interfaces/error.interface";
 
-class ApiError extends Error implements IApiError {
+class ApiError extends Error implements ApiErrorDetails {
   statusCode: number;
 
   constructor(message: string, statusCode: number) {

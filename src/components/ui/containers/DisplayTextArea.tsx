@@ -1,6 +1,6 @@
-import { IDisplayTextArea } from "@/src/interfaces/container.interface";
+import { DisplayTextAreaProps } from "@/src/interfaces/container.interface";
 
-const DisplayTextArea = (props: IDisplayTextArea) => {
+const DisplayTextArea = (props: DisplayTextAreaProps) => {
   return (
     <div className="w-full flex flex-col items-start justify-center bg-secondary gap-1">
       {props.label ? (

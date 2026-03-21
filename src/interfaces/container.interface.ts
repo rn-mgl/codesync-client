@@ -1,6 +1,6 @@
 import { JSX } from "react";
 
-export interface ITable<T extends Record<string, unknown>> {
+export interface TableProps<T extends Record<string, unknown>> {
   headers: (keyof T & string)[];
   data: JSX.Element[];
 }
@@ -11,6 +11,6 @@ interface BaseDisplayField {
   icon?: React.ReactElement;
 }
 
-export type IDisplayInputField = BaseDisplayField;
+export type DisplayInputFieldProps = BaseDisplayField;
 
-export type IDisplayTextArea = BaseDisplayField;
+export type DisplayTextAreaProps = BaseDisplayField;

@@ -1,6 +1,6 @@
 import { JWT } from "next-auth/jwt";
 import ApiError from "../lib/ApiError";
-import { ApiResponse, IError } from "../interfaces/api.interface";
+import { ApiResponse, ErrorResponse } from "../interfaces/api.interface";
 
 export const isJWTCookie = (cookie: unknown): cookie is JWT => {
   return (
@@ -23,7 +23,7 @@ export const validateDependencies = () => {
   );
 };
 
-export const handleErrorResponse = (error: unknown): IError => {
+export const handleErrorResponse = (error: unknown): ErrorResponse => {
   const isApiError = error instanceof ApiError;
 
   const errorResponse: ApiResponse = {

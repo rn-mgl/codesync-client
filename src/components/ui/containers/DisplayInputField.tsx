@@ -1,6 +1,6 @@
-import { IDisplayInputField } from "@/src/interfaces/container.interface";
+import { DisplayInputFieldProps } from "@/src/interfaces/container.interface";
 
-const DisplayInputField = (props: IDisplayInputField) => {
+const DisplayInputField = (props: DisplayInputFieldProps) => {
   return (
     <div className="w-full flex flex-col items-start justify-center bg-secondary gap-1">
       {props.label ? (
