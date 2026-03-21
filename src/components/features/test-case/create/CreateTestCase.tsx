@@ -10,7 +10,7 @@ import {
 import { useSearchParams } from "next/navigation";
 import React from "react";
 import { FaCode, FaLink } from "react-icons/fa";
-import { FaChartLine, FaRegClock } from "react-icons/fa6";
+import { FaChartLine, FaMemory, FaRegClock } from "react-icons/fa6";
 import { toast } from "sonner";
 
 const CreateTestCase = () => {
@@ -151,7 +151,7 @@ const CreateTestCase = () => {
             type="text"
             value={testCase.memory_limit_mb}
             label="Memory Limit (mb)"
-            icon={<FaChartLine />}
+            icon={<FaMemory />}
             required={true}
           />
         </div>

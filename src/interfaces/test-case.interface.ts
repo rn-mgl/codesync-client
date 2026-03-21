@@ -15,6 +15,9 @@ export interface TestCaseForm extends Omit<BaseTestCase, "id" | "problem_id"> {
   problem: string;
 }
 
+export type TestCaseDetails = BaseTestCase &
+  Pick<BaseProblem, "slug" | "title">;
+
 export type ProblemTestCaseList = Record<
   string,
   (Omit<BaseTestCase, "order_index" | "problem_id"> &
@@ -25,4 +28,8 @@ export type CreateTestCaseResponse = ApiResponse<{ message: string }>;
 
 export type GetAllTestCaseResponse = ApiResponse<{
   test_cases: ProblemTestCaseList;
+}>;
+
+export type GetTestCaseResponse = ApiResponse<{
+  test_case: BaseTestCase & Pick<BaseProblem, "slug" | "title">;
 }>;

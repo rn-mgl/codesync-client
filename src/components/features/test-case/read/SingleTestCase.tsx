@@ -1,9 +1,29 @@
 "use client";
 
+import DisplayInputField from "@/src/components/ui/containers/DisplayInputField";
+import DisplayTextArea from "@/src/components/ui/containers/DisplayTextArea";
+import {
+  GetTestCaseResponse,
+  TestCaseDetails,
+} from "@/src/interfaces/test-case.interface";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import React from "react";
+import { FaArrowLeft, FaChartLine, FaCode, FaRegClock } from "react-icons/fa";
+import { FaLink, FaMemory } from "react-icons/fa6";
 
 const SingleTestCase = () => {
+  const [testCase, setTestCase] = React.useState<TestCaseDetails>({
+    expected_output: "",
+    id: 0,
+    input: "",
+    memory_limit_mb: 0,
+    order_index: 0,
+    problem_id: 0,
+    time_limit_ms: 0,
+    slug: "",
+    title: "",
+  });
   const params = useParams();
 
   const getTestCase = React.useCallback(async () => {
@@ -17,15 +37,81 @@ const SingleTestCase = () => {
         },
       });
 
-      const resolve = await response.json();
+      const resolve: GetTestCaseResponse = await response.json();
 
-      console.log(resolve);
+      if (!resolve.success) {
+        throw new Error(resolve.message);
+      }
+
+      const { test_case } = resolve.data;
+
+      setTestCase(test_case);
     } catch (error) {
       console.log(error);
     }
   }, [params]);
 
-  return <div>SingleTestCase</div>;
+  React.useEffect(() => {
+    getTestCase();
+  }, [getTestCase]);
+
+  return (
+    <div className="flex flex-col items-start justify-start w-full gap-8">
+      <Link
+        href="/codesync/test-cases"
+        className="text-primary font-bold flex flex-row items-center 
+                    justify-center gap-2 hover:border-b px-1 w-fit"
+      >
+        <FaArrowLeft />
+        All Test Cases
+      </Link>
+
+      <div className="w-full flex flex-col items-start justify-start">
+        <div className="p-4 bg-primary/80 w-full rounded-t-md font-medium text-secondary">
+          Related Problem
+        </div>
+
+        <div className="w-full flex flex-col items-start justify-start gap-4 p-2 border-primary/50 border rounded-b-md t:p-4">
+          <DisplayInputField
+            value={`${testCase.title} (${testCase.slug})`}
+            icon={<FaLink />}
+          />
+        </div>
+      </div>
+
+      <div className="w-full flex flex-col items-start justify-start">
+        <div className="p-4 bg-primary/80 w-full rounded-t-md font-medium text-secondary">
+          Function Contract
+        </div>
+
+        <div className="w-full flex flex-col items-start justify-start gap-4 p-2 border-primary/50 border rounded-b-md t:p-4">
+          <DisplayTextArea
+            label="Input"
+            value={JSON.stringify(testCase.input, null, 2)}
+            icon={<FaCode />}
+          />
+
+          <DisplayTextArea
+            label="Expected Output"
+            value={JSON.stringify(testCase.expected_output, null, 2)}
+            icon={<FaCode />}
+          />
+
+          <DisplayInputField
+            label="Time Limit (ms)"
+            value={`${testCase.time_limit_ms}`}
+            icon={<FaRegClock />}
+          />
+
+          <DisplayInputField
+            label="Memory Limit (mb)"
+            value={`${testCase.memory_limit_mb}`}
+            icon={<FaMemory />}
+          />
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default SingleTestCase;
