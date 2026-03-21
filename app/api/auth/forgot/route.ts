@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
       status: StatusCodes.OK,
     };
 
-    return NextResponse.json(apiResponse);
+    return NextResponse.json(apiResponse, { status: response.status });
   } catch (err) {
     console.log(err);
 
@@ -53,6 +53,6 @@ export async function POST(req: NextRequest) {
       status: isApiError ? err.statusCode : StatusCodes.INTERNAL_SERVER_ERROR,
     };
 
-    return NextResponse.json(apiResponse);
+    return NextResponse.json(apiResponse, { status: response.status });
   }
 }

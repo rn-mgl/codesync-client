@@ -6,6 +6,7 @@ import { StatusCodes } from "http-status-codes";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
 import { env } from "@/src/configs/env.config";
+import { handleErrorResponse } from "@/src/helpers/api.helper";
 
 export async function PATCH(req: NextRequest) {
   try {
@@ -44,21 +45,14 @@ export async function PATCH(req: NextRequest) {
     const apiResponse: ApiResponse<typeof resolve.data> = {
       success: resolve.success,
       data: resolve.data,
-      status: response.status,
     };
 
-    return NextResponse.json(apiResponse);
-  } catch (err) {
-    console.log(err);
+    return NextResponse.json(apiResponse, { status: response.status });
+  } catch (error) {
+    console.log(error);
 
-    const isApiError = err instanceof ApiError;
+    const apiResponse: ApiResponse = handleErrorResponse(error);
 
-    const apiResponse: ApiResponse = {
-      success: false,
-      message: isApiError ? err.message : "An unexpected error occurred.",
-      status: isApiError ? err.statusCode : StatusCodes.INTERNAL_SERVER_ERROR,
-    };
-
-    return NextResponse.json(apiResponse);
+    return NextResponse.json(apiResponse, { status: apiResponse.status });
   }
 }

@@ -59,16 +59,15 @@ export async function GET(
     const apiResponse: ApiResponse<typeof resolve.data> = {
       success: true,
       data: resolve.data,
-      status: response.status,
     };
 
-    return NextResponse.json(apiResponse);
+    return NextResponse.json(apiResponse, { status: response.status });
   } catch (err) {
     console.log(err);
 
     const apiResponse = handleErrorResponse(err);
 
-    return NextResponse.json(apiResponse);
+    return NextResponse.json(apiResponse, { status: apiResponse.status });
   }
 }
 
@@ -133,16 +132,15 @@ export async function PATCH(
     const apiResponse: ApiResponse<typeof resolve.data> = {
       success: true,
       data: resolve.data,
-      status: response.status,
     };
 
-    return NextResponse.json(apiResponse);
+    return NextResponse.json(apiResponse, { status: response.status });
   } catch (err) {
     console.error(err);
 
     const apiResponse = handleErrorResponse(err);
 
-    return NextResponse.json(apiResponse);
+    return NextResponse.json(apiResponse, { status: apiResponse.status });
   }
 }
 
@@ -188,15 +186,14 @@ export async function DELETE(
     const apiResponse: ApiResponse<typeof resolve.data> = {
       success: true,
       data: resolve.data,
-      status: response.status,
     };
 
-    return NextResponse.json(apiResponse);
+    return NextResponse.json(apiResponse, { status: response.status });
   } catch (error) {
     console.log(error);
 
     const apiResponse: ApiResponse = handleErrorResponse(error);
 
-    return NextResponse.json(apiResponse);
+    return NextResponse.json(apiResponse, { status: apiResponse.status });
   }
 }

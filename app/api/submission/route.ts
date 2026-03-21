@@ -1,5 +1,5 @@
 import { env } from "@/src/configs/env.config";
-import { isJWTCookie } from "@/src/helpers/api.helper";
+import { handleErrorResponse, isJWTCookie } from "@/src/helpers/api.helper";
 import { ApiResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import ApiError from "@/src/lib/ApiError";
 import { SubmissionSchema } from "@/src/schemas/submission.schema";
@@ -56,21 +56,14 @@ export async function POST(req: NextRequest) {
     const apiResponse: ApiResponse<typeof resolve.data> = {
       success: true,
       data: resolve.data,
-      status: response.status,
     };
 
-    return NextResponse.json(apiResponse);
-  } catch (err) {
-    console.log(err);
+    return NextResponse.json(apiResponse, { status: response.status });
+  } catch (error) {
+    console.log(error);
 
-    const isApiError = err instanceof ApiError;
+    const apiResponse: ApiResponse = handleErrorResponse(error);
 
-    const apiResonse: ApiResponse = {
-      success: false,
-      status: isApiError ? err.statusCode : StatusCodes.INTERNAL_SERVER_ERROR,
-      message: isApiError ? err.message : "An unexpected error occurred.",
-    };
-
-    return NextResponse.json(apiResonse);
+    return NextResponse.json(apiResponse, { status: apiResponse.status });
   }
 }

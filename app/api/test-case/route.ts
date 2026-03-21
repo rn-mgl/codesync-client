@@ -44,16 +44,15 @@ export async function POST(req: NextRequest) {
     const apiResponse: ApiResponse<typeof resolve.data> = {
       success: true,
       data: resolve.data,
-      status: response.status,
     };
 
-    return NextResponse.json(apiResponse);
+    return NextResponse.json(apiResponse, { status: response.status });
   } catch (error) {
     console.log(error);
 
     const apiResponse = handleErrorResponse(error);
 
-    return NextResponse.json(apiResponse);
+    return NextResponse.json(apiResponse, { status: apiResponse.status });
   }
 }
 
@@ -96,15 +95,14 @@ export async function GET(req: NextRequest) {
     const apiResponse: ApiResponse<typeof resolve.data> = {
       success: true,
       data: resolve.data,
-      status: response.status,
     };
 
-    return NextResponse.json(apiResponse);
+    return NextResponse.json(apiResponse, { status: response.status });
   } catch (error) {
     console.log(error);
 
     const apiResponse = handleErrorResponse(error);
 
-    return NextResponse.json(apiResponse);
+    return NextResponse.json(apiResponse, { status: apiResponse.status });
   }
 }

@@ -5,7 +5,7 @@ import { StatusCodes } from "http-status-codes";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
 import { getToken } from "next-auth/jwt";
-import { isJWTCookie } from "@/src/helpers/api.helper";
+import { handleErrorResponse, isJWTCookie } from "@/src/helpers/api.helper";
 import { env } from "@/src/configs/env.config";
 
 export async function POST(req: NextRequest) {
@@ -54,22 +54,15 @@ export async function POST(req: NextRequest) {
     const apiResponse: ApiResponse<typeof resolve.data> = {
       success: resolve.success,
       data: resolve.data,
-      status: response.status,
     };
 
-    return NextResponse.json(apiResponse);
-  } catch (err) {
-    console.error(err);
+    return NextResponse.json(apiResponse, { status: response.status });
+  } catch (error) {
+    console.log(error);
 
-    const isApiError = err instanceof ApiError;
+    const apiResponse: ApiResponse = handleErrorResponse(error);
 
-    const apiResponse: ApiResponse = {
-      success: false,
-      message: isApiError ? err.message : "An unexpected error occurred.",
-      status: isApiError ? err.statusCode : StatusCodes.INTERNAL_SERVER_ERROR,
-    };
-
-    return NextResponse.json(apiResponse);
+    return NextResponse.json(apiResponse, { status: apiResponse.status });
   }
 }
 
@@ -104,21 +97,14 @@ export async function GET(req: NextRequest) {
     const apiResponse: ApiResponse<typeof resolve.data> = {
       success: resolve.success,
       data: resolve.data,
-      status: response.status,
     };
 
-    return NextResponse.json(apiResponse);
-  } catch (err) {
-    console.log(err);
+    return NextResponse.json(apiResponse, { status: response.status });
+  } catch (error) {
+    console.log(error);
 
-    const isApiError = err instanceof ApiError;
+    const apiResponse: ApiResponse = handleErrorResponse(error);
 
-    const apiResponse: ApiResponse = {
-      success: false,
-      message: isApiError ? err.message : "An unexpected error occurred.",
-      status: isApiError ? err.statusCode : StatusCodes.INTERNAL_SERVER_ERROR,
-    };
-
-    return NextResponse.json(apiResponse);
+    return NextResponse.json(apiResponse, { status: apiResponse.status });
   }
 }

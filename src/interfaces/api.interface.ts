@@ -4,17 +4,18 @@ interface BaseResponse {
   status: StatusCodes;
 }
 
-interface Success<T> extends BaseResponse {
+interface ISuccess<T> {
   success: true;
   data: T;
 }
 
-interface Error extends BaseResponse {
+export interface IError extends BaseResponse {
   success: false;
   message: string;
 }
 
-export type ApiResponse<T = unknown> = Success<T> | Error;
+export type ApiResponse<T = unknown> = ISuccess<T> | IError;
+
 export type ServerResponse<T = unknown> =
-  | Omit<Success<T>, "status">
-  | Omit<Error, "status">;
+  | Omit<ISuccess<T>, "status">
+  | Omit<IError, "status">;

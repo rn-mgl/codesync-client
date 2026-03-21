@@ -1,4 +1,5 @@
 import { env } from "@/src/configs/env.config";
+import { handleErrorResponse } from "@/src/helpers/api.helper";
 import { ApiResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import ApiError from "@/src/lib/ApiError";
 import { RegisterSchema } from "@/src/schemas/auth.schema";
@@ -38,21 +39,14 @@ export async function POST(req: NextRequest) {
     const apiResponse: ApiResponse<typeof resolve.data> = {
       success: resolve.success,
       data: resolve.data,
-      status: response.status,
     };
 
-    return NextResponse.json(apiResponse);
+    return NextResponse.json(apiResponse, { status: response.status });
   } catch (err) {
     console.log(err);
 
-    const isApiError = err instanceof ApiError;
+    const apiResponse: ApiResponse = handleErrorResponse(err);
 
-    const apiResponse: ApiResponse = {
-      success: false,
-      message: isApiError ? err.message : "An unexpected error occurred",
-      status: isApiError ? err.statusCode : StatusCodes.INTERNAL_SERVER_ERROR,
-    };
-
-    return NextResponse.json(apiResponse);
+    return NextResponse.json(apiResponse, { status: apiResponse.status });
   }
 }
