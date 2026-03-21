@@ -2,12 +2,13 @@
 
 import DisplayInputField from "@/src/components/ui/containers/DisplayInputField";
 import DisplayTextArea from "@/src/components/ui/containers/DisplayTextArea";
+import Delete from "@/src/components/ui/forms/Delete";
 import {
   GetTestCaseResponse,
   TestCaseDetails,
 } from "@/src/interfaces/test-case.interface";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import { FaArrowLeft, FaCode, FaRegClock, FaRegEdit } from "react-icons/fa";
 import { FaLink, FaMemory, FaRegTrashCan } from "react-icons/fa6";
@@ -24,7 +25,12 @@ const SingleTestCase = () => {
     slug: "",
     title: "",
   });
+
+  const [canDelete, setCanDelete] = React.useState(false);
+
   const params: { id?: string } | null = useParams();
+
+  const router = useRouter();
 
   const getTestCase = React.useCallback(async () => {
     try {
@@ -51,12 +57,24 @@ const SingleTestCase = () => {
     }
   }, [params]);
 
+  const handleCanDelete = () => {
+    setCanDelete((prev) => !prev);
+  };
+
   React.useEffect(() => {
     getTestCase();
   }, [getTestCase]);
 
   return (
     <div className="flex flex-col items-start justify-start w-full gap-8">
+      {canDelete && (
+        <Delete
+          closeForm={handleCanDelete}
+          endpoint={`/test-case/${params?.id}`}
+          label="Test Case"
+          postDeleteAction={() => router.push("/codesync/test-cases")}
+        />
+      )}
       <div className="w-full flex justify-between">
         <Link
           href="/codesync/test-cases"
@@ -79,7 +97,7 @@ const SingleTestCase = () => {
 
             <button
               title="Delete"
-              // onClick={handleCanDelete}
+              onClick={handleCanDelete}
               className="p-2 rounded-full bg-inherit hover:text-red-800 flex flex-col items-center justify-center"
             >
               <FaRegTrashCan />

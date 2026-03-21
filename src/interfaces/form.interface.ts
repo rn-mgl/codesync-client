@@ -1,7 +1,10 @@
 import { ApiResponse } from "./api.interface";
 
+type endpoints = "problem" | "submission" | "test-case";
+type identifier = string;
+
 export interface DeleteForm {
-  endpoint: string;
+  endpoint: `/${endpoints}/${identifier}`;
   closeForm: () => void;
   label?: string;
   postDeleteAction?: () => void;
