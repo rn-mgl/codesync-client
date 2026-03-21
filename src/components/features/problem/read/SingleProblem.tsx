@@ -145,7 +145,7 @@ const SingleProblem = () => {
 
       <div className="w-full flex flex-col items-start justify-start gap-2 l-s:h-full l-s:overflow-y-hidden">
         <div className="w-full flex flex-row items-center justify-between gap-2">
-          <div className="flex gap-4">
+          <div className="flex gap-2">
             <Link
               href={`/codesync/test-cases?problem=${params?.slug}`}
               title="Test Case"
@@ -155,7 +155,7 @@ const SingleProblem = () => {
             </Link>
           </div>
 
-          <div className="flex gap-4">
+          <div className="flex gap-2">
             <Link
               title="Edit"
               href={`/codesync/problems/${params?.slug}/edit`}

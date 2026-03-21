@@ -9,8 +9,8 @@ import {
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import React from "react";
-import { FaArrowLeft, FaChartLine, FaCode, FaRegClock } from "react-icons/fa";
-import { FaLink, FaMemory } from "react-icons/fa6";
+import { FaArrowLeft, FaCode, FaRegClock, FaRegEdit } from "react-icons/fa";
+import { FaLink, FaMemory, FaRegTrashCan } from "react-icons/fa6";
 
 const SingleTestCase = () => {
   const [testCase, setTestCase] = React.useState<TestCaseDetails>({
@@ -24,7 +24,7 @@ const SingleTestCase = () => {
     slug: "",
     title: "",
   });
-  const params = useParams();
+  const params: { id?: string } | null = useParams();
 
   const getTestCase = React.useCallback(async () => {
     try {
@@ -57,14 +57,36 @@ const SingleTestCase = () => {
 
   return (
     <div className="flex flex-col items-start justify-start w-full gap-8">
-      <Link
-        href="/codesync/test-cases"
-        className="text-primary font-bold flex flex-row items-center 
+      <div className="w-full flex justify-between">
+        <Link
+          href="/codesync/test-cases"
+          className="text-primary font-bold flex flex-row items-center 
                     justify-center gap-2 hover:border-b px-1 w-fit"
-      >
-        <FaArrowLeft />
-        All Test Cases
-      </Link>
+        >
+          <FaArrowLeft />
+          All Test Cases
+        </Link>
+
+        <div>
+          <div className="flex gap-2">
+            <Link
+              title="Edit"
+              href={`/codesync/test-cases/${params?.id}/edit`}
+              className="p-2 rounded-full bg-inherit hover:text-blue-800 flex flex-col items-center justify-center"
+            >
+              <FaRegEdit />
+            </Link>
+
+            <button
+              title="Delete"
+              // onClick={handleCanDelete}
+              className="p-2 rounded-full bg-inherit hover:text-red-800 flex flex-col items-center justify-center"
+            >
+              <FaRegTrashCan />
+            </button>
+          </div>
+        </div>
+      </div>
 
       <div className="w-full flex flex-col items-start justify-start">
         <div className="p-4 bg-primary/80 w-full rounded-t-md font-medium text-secondary">

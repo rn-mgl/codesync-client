@@ -33,3 +33,5 @@ export type GetAllTestCaseResponse = ApiResponse<{
 export type GetTestCaseResponse = ApiResponse<{
   test_case: BaseTestCase & Pick<BaseProblem, "slug" | "title">;
 }>;
+
+export type UpdateTestCaseResponse = ApiResponse<{ message: string }>;
