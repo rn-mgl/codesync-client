@@ -5,7 +5,10 @@ const TextArea = (props: TextAreaField) => {
   return (
     <div className="w-full flex flex-col items-start justify-center bg-secondary gap-1">
       {props.label ? (
-        <label htmlFor="email" className="text-xs text-primary/80 font-medium">
+        <label
+          htmlFor={props.id}
+          className="text-xs text-primary/80 font-medium"
+        >
           {props.label}
         </label>
       ) : null}

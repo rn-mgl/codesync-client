@@ -30,3 +30,11 @@ export interface TextAreaField extends BaseFieldProperties {
   columns?: number;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
+
+export interface ToggleField extends Omit<
+  BaseFieldProperties,
+  "icon" | "value"
+> {
+  checked: boolean;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}

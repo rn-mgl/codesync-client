@@ -9,9 +9,24 @@ export interface BaseTestCase {
   time_limit_ms: number;
   memory_limit_mb: number;
   order_index: number;
+  is_sample: boolean;
+  is_hidden: boolean;
 }
 
-export interface TestCaseForm extends Omit<BaseTestCase, "id" | "problem_id"> {
+export interface TestCaseForm extends Omit<
+  BaseTestCase,
+  "id" | "problem_id" | "time_limit_ms" | "memory_limit_mb" | "order_index"
+> {
+  problem: string;
+  time_limit_ms: string;
+  memory_limit_mb: string;
+  order_index: string;
+}
+
+export interface TestCasePayload extends Omit<
+  BaseTestCase,
+  "id" | "problem_id"
+> {
   problem: string;
 }
 
