@@ -2,13 +2,15 @@
 
 import Input from "@/src/components/ui/fields/Input";
 import TextArea from "@/src/components/ui/fields/TextArea";
+import Toggle from "@/src/components/ui/fields/Toggle";
 import { handleToastErrorMessage } from "@/src/helpers/util.helper";
 import {
   GetTestCaseResponse,
   TestCaseForm,
+  TestCasePayload,
   UpdateTestCaseResponse,
 } from "@/src/interfaces/test-case.interface";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import React from "react";
 import { FaCode, FaLink } from "react-icons/fa";
 import { FaMemory, FaRegClock } from "react-icons/fa6";
@@ -19,9 +21,11 @@ const UpdateTestCase = () => {
     expected_output: "",
     input: "",
     problem: "",
-    memory_limit_mb: 0,
-    order_index: 0,
-    time_limit_ms: 0,
+    memory_limit_mb: "",
+    order_index: "",
+    time_limit_ms: "",
+    is_sample: true,
+    is_hidden: false,
   });
 
   const params: { id?: string } | null = useParams();
@@ -29,7 +33,11 @@ const UpdateTestCase = () => {
   const handleTestCase = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    const { name, value } = e.target;
+    const { name } = e.target;
+    const value =
+      e.target instanceof HTMLInputElement && e.target.type === "checkbox"
+        ? e.target.checked
+        : e.target.value;
 
     setTestCase((prev) => {
       return {
@@ -45,12 +53,19 @@ const UpdateTestCase = () => {
     try {
       if (!params || !params.id) return;
 
+      const payload: TestCasePayload = {
+        ...testCase,
+        memory_limit_mb: Number(testCase.memory_limit_mb),
+        order_index: Number(testCase.order_index),
+        time_limit_ms: Number(testCase.time_limit_ms),
+      };
+
       const response = await fetch(`/api/test-case/${params.id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ testCase }),
+        body: JSON.stringify({ testCase: payload }),
       });
 
       const resolve: UpdateTestCaseResponse = await response.json();
@@ -92,9 +107,11 @@ const UpdateTestCase = () => {
         problem: test_case.slug,
         expected_output: JSON.stringify(test_case.expected_output, null, 2),
         input: JSON.stringify(test_case.input, null, 2),
-        memory_limit_mb: test_case.memory_limit_mb,
-        order_index: test_case.order_index,
-        time_limit_ms: test_case.time_limit_ms,
+        memory_limit_mb: String(test_case.memory_limit_mb),
+        order_index: String(test_case.order_index),
+        time_limit_ms: String(test_case.time_limit_ms),
+        is_sample: test_case.is_sample,
+        is_hidden: test_case.is_hidden,
       });
     } catch (error) {
       console.log(error);
@@ -177,6 +194,22 @@ const UpdateTestCase = () => {
             label="Memory Limit (mb)"
             icon={<FaMemory />}
             required={true}
+          />
+
+          <Toggle
+            id="is_sample"
+            name="is_sample"
+            label="Display as Sample"
+            checked={testCase.is_sample}
+            onChange={handleTestCase}
+          />
+
+          <Toggle
+            id="is_hidden"
+            name="is_hidden"
+            label="Use as Test"
+            checked={testCase.is_hidden}
+            onChange={handleTestCase}
           />
         </div>
       </div>

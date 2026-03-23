@@ -2,6 +2,7 @@
 
 import DisplayInputField from "@/src/components/ui/containers/DisplayInputField";
 import DisplayTextArea from "@/src/components/ui/containers/DisplayTextArea";
+import DisplayToggle from "@/src/components/ui/containers/DisplayToggle";
 import Delete from "@/src/components/ui/forms/Delete";
 import {
   GetTestCaseResponse,
@@ -24,6 +25,8 @@ const SingleTestCase = () => {
     time_limit_ms: 0,
     slug: "",
     title: "",
+    is_sample: true,
+    is_hidden: false,
   });
 
   const [canDelete, setCanDelete] = React.useState(false);
@@ -121,7 +124,7 @@ const SingleTestCase = () => {
 
       <div className="w-full flex flex-col items-start justify-start">
         <div className="p-4 bg-primary/80 w-full rounded-t-md font-medium text-secondary">
-          Function Contract
+          Test Case Contract
         </div>
 
         <div className="w-full flex flex-col items-start justify-start gap-4 p-2 border-primary/50 border rounded-b-md t:p-4">
@@ -148,6 +151,13 @@ const SingleTestCase = () => {
             value={`${testCase.memory_limit_mb}`}
             icon={<FaMemory />}
           />
+
+          <DisplayToggle
+            label="Display as Sample"
+            checked={testCase.is_sample}
+          />
+
+          <DisplayToggle label="Use as Test" checked={testCase.is_hidden} />
         </div>
       </div>
     </div>

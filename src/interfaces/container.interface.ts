@@ -14,3 +14,7 @@ interface BaseDisplayField {
 export type DisplayInputFieldProps = BaseDisplayField;
 
 export type DisplayTextAreaProps = BaseDisplayField;
+
+export interface DisplayToggleProps extends Omit<BaseDisplayField, "value"> {
+  checked: boolean;
+}
