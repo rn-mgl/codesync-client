@@ -160,6 +160,20 @@ const SingleTestCase = () => {
           <DisplayToggle label="Use as Test" checked={testCase.is_hidden} />
         </div>
       </div>
+
+      <div className="w-full flex flex-col items-start justify-start">
+        <div className="p-4 bg-primary/80 w-full rounded-t-md font-medium text-secondary">
+          Additional Information
+        </div>
+
+        <div className="w-full flex flex-col items-start justify-start gap-4 p-2 border-primary/50 border rounded-b-md t:p-4">
+          <DisplayInputField
+            label="Order Index"
+            value={testCase.order_index}
+            icon={<FaLink />}
+          />
+        </div>
+      </div>
     </div>
   );
 };
