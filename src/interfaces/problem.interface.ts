@@ -1,12 +1,25 @@
 import { ApiResponse } from "./api.interface";
 import { BaseTestCase } from "./test-case.interface";
+
+export interface InputFormat {
+  style: "function" | "class";
+  version: number;
+  name: string;
+  params: { name: string; type: string }[];
+}
+
+export interface OutputFormat {
+  version: number;
+  type: string;
+}
+
 export interface BaseProblem {
   id: number;
   title: string;
   slug: string;
   description: string;
-  input_format: Record<string, unknown> | unknown[];
-  output_format: Record<string, unknown> | unknown[];
+  input_format: InputFormat;
+  output_format: OutputFormat;
   constraints: string;
   editorial: string;
   difficulty: "easy" | "medium" | "hard";

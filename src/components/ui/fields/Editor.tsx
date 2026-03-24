@@ -6,10 +6,11 @@ import * as Monaco from "monaco-editor";
 
 interface EditorProps {
   ref: React.RefObject<Monaco.editor.IStandaloneCodeEditor | null>;
+  boilerPlate: string;
 }
 
-const Editor = (props: EditorProps) => {
-  const editorRef = props.ref;
+const Editor = ({ ref, boilerPlate }: EditorProps) => {
+  const editorRef = ref;
 
   function handleEditorDidMount(editor: Monaco.editor.IStandaloneCodeEditor) {
     editorRef.current = editor;
@@ -22,6 +23,7 @@ const Editor = (props: EditorProps) => {
       language="javascript"
       defaultValue=""
       height="93%"
+      value={boilerPlate}
       options={{
         automaticLayout: true,
         codeLens: false,

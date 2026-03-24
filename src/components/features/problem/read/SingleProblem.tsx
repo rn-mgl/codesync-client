@@ -3,6 +3,7 @@
 import TabbedSection from "@/src/components/ui/containers/TabbedSection";
 import Editor from "@/src/components/ui/fields/Editor";
 import Delete from "@/src/components/ui/forms/Delete";
+import { generateBoilerPlate } from "@/src/helpers/problem.helper";
 import {
   BaseProblem,
   GetProblemResponse,
@@ -22,8 +23,16 @@ const SingleProblem = () => {
     title: "",
     slug: "",
     description: "",
-    input_format: [],
-    output_format: [],
+    input_format: {
+      name: "",
+      params: [],
+      style: "function",
+      version: 1,
+    },
+    output_format: {
+      type: "",
+      version: 1,
+    },
     constraints: "",
     editorial: "",
     difficulty: "easy",
@@ -199,7 +208,10 @@ const SingleProblem = () => {
 
         <div className="w-full flex flex-col items-start justify-start gap-4 h-screen l-s:h-full rounded-md overflow-hidden">
           <div className="w-full h-1/2 p-2 rounded-md bg-[#1e1e1e] flex flex-col items-center justify-center">
-            <Editor ref={editorRef} />
+            <Editor
+              boilerPlate={generateBoilerPlate(problem.input_format)}
+              ref={editorRef}
+            />
             <div className="w-full flex flex-row items-center justify-center gap-2 t:justify-end mt-2">
               <button
                 onClick={() => handleSubmission("test")}
