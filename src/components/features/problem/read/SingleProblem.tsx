@@ -6,6 +6,7 @@ import {
   BaseProblem,
   GetProblemResponse,
 } from "@/src/interfaces/problem.interface";
+import { BaseTestCase } from "@/src/interfaces/test-case.interface";
 import * as Monaco from "monaco-editor";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -28,6 +29,7 @@ const SingleProblem = () => {
     acceptance_rate: 0,
     total_submissions: 0,
   });
+  const [testCases, setTestCases] = React.useState<BaseTestCase[]>([]);
 
   const [canDelete, setCanDelete] = React.useState(false);
 
@@ -59,6 +61,7 @@ const SingleProblem = () => {
       const data = resolve.data;
 
       setProblem(data.problem);
+      setTestCases(data.testCases);
     } catch (err) {
       console.error(err);
     }
@@ -96,6 +99,25 @@ const SingleProblem = () => {
   const handleCanDelete = () => {
     setCanDelete((prev) => !prev);
   };
+
+  const mappedTestCases = testCases.map((tc) => {
+    return (
+      <div
+        key={tc.id}
+        className="w-full flex flex-col items-start justify-center gap-2 p-2 rounded-md bg-neutral-200"
+      >
+        <p className="text-xs">Input</p>
+        <div className="p-2 rounded-md bg-neutral-300 w-full">
+          <p>{JSON.stringify(tc.input)}</p>
+        </div>
+
+        <p className="text-xs">Expected Output</p>
+        <div className="p-2 rounded-md bg-neutral-300 w-full">
+          <p>{JSON.stringify(tc.expected_output)}</p>
+        </div>
+      </div>
+    );
+  });
 
   React.useEffect(() => {
     getProblem();
@@ -144,7 +166,7 @@ const SingleProblem = () => {
       </div>
 
       <div className="w-full flex flex-col items-start justify-start gap-2 l-s:h-full l-s:overflow-y-hidden">
-        <div className="w-full flex flex-row items-center justify-between gap-2">
+        <div className="w-full flex flex-row items-center justify-between gap-2 h-fit">
           <div className="flex gap-2">
             <Link
               href={`/codesync/test-cases?problem=${params?.slug}`}
@@ -174,8 +196,8 @@ const SingleProblem = () => {
           </div>
         </div>
 
-        <div className="w-full grid grid-cols-1 grid-rows-3 items-start justify-start gap-4 h-screen l-s:h-full">
-          <div className="w-full h-full p-2 rounded-md bg-[#1e1e1e] row-span-2 flex flex-col items-center justify-center">
+        <div className="w-full flex flex-col items-start justify-start gap-4 h-screen l-s:h-full rounded-md overflow-hidden">
+          <div className="w-full h-3/4 p-2 rounded-md bg-[#1e1e1e] flex flex-col items-center justify-center">
             <Editor ref={editorRef} />
             <div className="w-full flex flex-row items-center justify-center gap-2 t:justify-end mt-2">
               <button
@@ -196,10 +218,8 @@ const SingleProblem = () => {
             </div>
           </div>
 
-          <div className="w-full p-2 rounded-md h-full row-span-1 overflow-y-auto gap-2 border border-neutral-400 flex flex-col">
-            <div className="w-full rounded-sm bg-neutral-200 p-8"></div>
-            <div className="w-full rounded-sm bg-neutral-200 p-8"></div>
-            <div className="w-full rounded-sm bg-neutral-200 p-8"></div>
+          <div className="w-full p-2 rounded-md h-1/4 row-span-1 gap-2 border border-neutral-400 flex flex-col overflow-y-auto">
+            {mappedTestCases}
           </div>
         </div>
       </div>

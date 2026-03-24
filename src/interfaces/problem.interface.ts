@@ -1,4 +1,5 @@
 import { ApiResponse } from "./api.interface";
+import { BaseTestCase } from "./test-case.interface";
 export interface BaseProblem {
   id: number;
   title: string;
@@ -27,6 +28,9 @@ export type CreateProblemResponse = ApiResponse<{ message: string }>;
 
 export type GetAllProblemsResponse = ApiResponse<{ problems: ProblemList[] }>;
 
-export type GetProblemResponse = ApiResponse<{ problem: BaseProblem }>;
+export type GetProblemResponse = ApiResponse<{
+  problem: BaseProblem;
+  testCases: BaseTestCase[];
+}>;
 
 export type UpdateProblemResponse = ApiResponse<{ message: string }>;
