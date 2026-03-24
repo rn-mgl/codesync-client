@@ -18,3 +18,8 @@ export type DisplayTextAreaProps = BaseDisplayField;
 export interface DisplayToggleProps extends Omit<BaseDisplayField, "value"> {
   checked: boolean;
 }
+
+export interface TabbedSectionProps {
+  content: JSX.Element[];
+  label: string;
+}

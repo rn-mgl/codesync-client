@@ -1,5 +1,6 @@
 "use client";
 
+import TabbedSection from "@/src/components/ui/containers/TabbedSection";
 import Editor from "@/src/components/ui/fields/Editor";
 import Delete from "@/src/components/ui/forms/Delete";
 import {
@@ -104,15 +105,15 @@ const SingleProblem = () => {
     return (
       <div
         key={tc.id}
-        className="w-full flex flex-col items-start justify-center gap-2 p-2 rounded-md bg-neutral-200"
+        className="w-full h-full flex flex-col items-start justify-start gap-2 p-2 rounded-md bg-neutral-200"
       >
         <p className="text-xs">Input</p>
-        <div className="p-2 rounded-md bg-neutral-300 w-full">
+        <div className="p-4 rounded-md bg-neutral-300 w-full">
           <p>{JSON.stringify(tc.input)}</p>
         </div>
 
         <p className="text-xs">Expected Output</p>
-        <div className="p-2 rounded-md bg-neutral-300 w-full">
+        <div className="p-4 rounded-md bg-neutral-300 w-full">
           <p>{JSON.stringify(tc.expected_output)}</p>
         </div>
       </div>
@@ -197,7 +198,7 @@ const SingleProblem = () => {
         </div>
 
         <div className="w-full flex flex-col items-start justify-start gap-4 h-screen l-s:h-full rounded-md overflow-hidden">
-          <div className="w-full h-3/4 p-2 rounded-md bg-[#1e1e1e] flex flex-col items-center justify-center">
+          <div className="w-full h-1/2 p-2 rounded-md bg-[#1e1e1e] flex flex-col items-center justify-center">
             <Editor ref={editorRef} />
             <div className="w-full flex flex-row items-center justify-center gap-2 t:justify-end mt-2">
               <button
@@ -218,8 +219,8 @@ const SingleProblem = () => {
             </div>
           </div>
 
-          <div className="w-full p-2 rounded-md h-1/4 row-span-1 gap-2 border border-neutral-400 flex flex-col overflow-y-auto">
-            {mappedTestCases}
+          <div className="w-full rounded-md h-1/2 flex flex-col overflow-y-auto">
+            <TabbedSection label="Test Case" content={mappedTestCases} />
           </div>
         </div>
       </div>
