@@ -5,8 +5,8 @@ export interface BaseProblem {
   title: string;
   slug: string;
   description: string;
-  input_format: string;
-  output_format: string;
+  input_format: Record<string, unknown> | unknown[];
+  output_format: Record<string, unknown> | unknown[];
   constraints: string;
   editorial: string;
   difficulty: "easy" | "medium" | "hard";
@@ -14,10 +14,17 @@ export interface BaseProblem {
   total_submissions: number;
 }
 
-export type ProblemForm = Omit<
+export interface ProblemForm extends Omit<
   BaseProblem,
-  "id" | "acceptance_rate" | "total_submissions"
->;
+  | "id"
+  | "acceptance_rate"
+  | "total_submissions"
+  | "input_format"
+  | "output_format"
+> {
+  input_format: string;
+  output_format: string;
+}
 
 export type ProblemList = Pick<
   BaseProblem,
