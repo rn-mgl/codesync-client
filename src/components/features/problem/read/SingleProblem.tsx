@@ -3,7 +3,7 @@
 import TabbedSection from "@/src/components/ui/containers/TabbedSection";
 import Editor from "@/src/components/ui/fields/Editor";
 import Delete from "@/src/components/ui/forms/Delete";
-import { generateBoilerPlate } from "@/src/helpers/problem.helper";
+import { generateBoilerPlate } from "@/src/utils/problem.util";
 import {
   BaseProblem,
   GetProblemResponse,
@@ -115,7 +115,10 @@ const SingleProblem = () => {
       const parsedValue: string | number = JSON.stringify(value);
 
       return (
-        <div key={param} className="p-4 rounded-md bg-neutral-300  w-full">
+        <div
+          key={param}
+          className="p-4 rounded-md bg-neutral-300 text-sm w-full"
+        >
           <span className="font-medium">{param}: </span>
           <span>{parsedValue}</span>
         </div>
@@ -133,7 +136,7 @@ const SingleProblem = () => {
         </div>
 
         <p className="text-xs">Expected Output</p>
-        <div className="p-4 rounded-md bg-neutral-300 w-full">
+        <div className="p-4 rounded-md bg-neutral-300 w-full text-sm">
           <p>{JSON.stringify(tc.expected_output)}</p>
         </div>
       </div>

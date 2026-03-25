@@ -6,7 +6,7 @@ import { StatusCodes } from "http-status-codes";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
 import { env } from "@/src/configs/env.config";
-import { handleErrorResponse } from "@/src/helpers/api.helper";
+import { handleErrorResponse } from "@/src/utils/api.util";
 
 export async function PATCH(req: NextRequest) {
   try {

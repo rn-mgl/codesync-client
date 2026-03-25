@@ -3,7 +3,7 @@
 import Input from "@/src/components/ui/fields/Input";
 import TextArea from "@/src/components/ui/fields/TextArea";
 import Toggle from "@/src/components/ui/fields/Toggle";
-import { handleToastErrorMessage } from "@/src/helpers/util.helper";
+import { handleToastErrorMessage } from "@/src/utils/util.util";
 import {
   GetTestCaseResponse,
   TestCaseForm,

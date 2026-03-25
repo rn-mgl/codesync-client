@@ -1,5 +1,5 @@
 import { env } from "@/src/configs/env.config";
-import { handleErrorResponse, isJWTCookie } from "@/src/helpers/api.helper";
+import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
 import { ApiResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import ApiError from "@/src/lib/ApiError";
 import { StatusCodes } from "http-status-codes";

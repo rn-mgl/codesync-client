@@ -1,4 +1,4 @@
-import { normalizeString } from "@/src/helpers/normalizer.helper";
+import { normalizeString } from "@/src/utils/normalizer.util";
 import { TableProps } from "@/src/interfaces/container.interface";
 import React from "react";
 

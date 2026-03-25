@@ -23,7 +23,7 @@
       "@/src/*": ["./src/*"],
       "@/components/*": ["./src/components/*"],
       "@/configs/*": ["./src/configs/*"],
-      "@/helpers/*": ["./src/helpers/*"],
+      "@/utils/*": ["./src/utils/*"],
       "@/interfaces/*": ["./src/interfaces/*"],
       "@/lib/*": ["./src/lib/*"]
     }

@@ -5,7 +5,7 @@ import { StatusCodes } from "http-status-codes";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
 import { getToken } from "next-auth/jwt";
-import { handleErrorResponse, isJWTCookie } from "@/src/helpers/api.helper";
+import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
 import { env } from "@/src/configs/env.config";
 
 export async function POST(req: NextRequest) {

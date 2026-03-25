@@ -1,5 +1,5 @@
 import { env } from "@/src/configs/env.config";
-import { handleErrorResponse } from "@/src/helpers/api.helper";
+import { handleErrorResponse } from "@/src/utils/api.util";
 import { ApiResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import ApiError from "@/src/lib/ApiError";
 import { ResetSchema } from "@/src/schemas/auth.schema";

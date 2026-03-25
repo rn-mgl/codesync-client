@@ -38,7 +38,6 @@ export async function POST(req: NextRequest) {
     const apiResponse: ApiResponse<typeof resolve.data> = {
       success: resolve.success,
       data: resolve.data,
-      status: StatusCodes.OK,
     };
 
     return NextResponse.json(apiResponse, { status: response.status });
@@ -53,6 +52,6 @@ export async function POST(req: NextRequest) {
       status: isApiError ? err.statusCode : StatusCodes.INTERNAL_SERVER_ERROR,
     };
 
-    return NextResponse.json(apiResponse, { status: response.status });
+    return NextResponse.json(apiResponse, { status: apiResponse.status });
   }
 }
