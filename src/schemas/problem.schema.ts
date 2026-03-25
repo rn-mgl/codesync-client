@@ -1,4 +1,5 @@
 import * as z from "zod";
+import { InputFormat, OutputFormat } from "../interfaces/problem.interface";
 
 export const ProblemSchema = z.object({
   title: z.string().min(1, { error: "Required" }),
@@ -7,35 +8,62 @@ export const ProblemSchema = z.object({
   input_format: z
     .string()
     .min(1, { error: "Required" })
-    .refine(
-      (string) => {
-        try {
-          JSON.parse(string);
-          return true;
-        } catch (error) {
-          return false;
+    .superRefine((val, ctx) => {
+      try {
+        const inputFormat = JSON.parse(val);
+
+        const requiredKeys: (keyof InputFormat)[] = [
+          "name",
+          "params",
+          "style",
+          "version",
+        ];
+
+        for (const key of requiredKeys) {
+          if (inputFormat[key] === undefined) {
+            ctx.addIssue({
+              code: "custom",
+              message: `'${key}' key should exist.`,
+            });
+          }
         }
-      },
-      {
-        error: "Invalid JSON format",
-      },
-    ),
+      } catch (error) {
+        console.error(error);
+
+        ctx.addIssue({
+          code: "invalid_format",
+          message: "Invalid JSON format.",
+          format: "json_string",
+        });
+      }
+    }),
   output_format: z
     .string()
     .min(1, { error: "Required" })
-    .refine(
-      (string) => {
-        try {
-          JSON.parse(string);
-          return true;
-        } catch (error) {
-          return false;
+    .superRefine((val, ctx) => {
+      try {
+        const outputFormat = JSON.parse(val);
+
+        const requiredKeys: (keyof OutputFormat)[] = ["type", "version"];
+
+        for (const key of requiredKeys) {
+          if (outputFormat[key] === undefined) {
+            ctx.addIssue({
+              code: "custom",
+              message: `'${key}' should exist.`,
+            });
+          }
         }
-      },
-      {
-        error: "Invalid JSON format",
-      },
-    ),
+      } catch (error) {
+        console.error(error);
+
+        ctx.addIssue({
+          code: "invalid_format",
+          message: "Invalid JSON format.",
+          format: "json_string",
+        });
+      }
+    }),
   constraints: z
     .string()
     .min(1, { error: "Required" })
@@ -45,6 +73,8 @@ export const ProblemSchema = z.object({
           JSON.parse(string);
           return true;
         } catch (error) {
+          console.error(error);
+
           return false;
         }
       },

@@ -3,6 +3,7 @@
 import Input from "@/src/components/ui/fields/Input";
 import Select from "@/src/components/ui/fields/Select";
 import TextArea from "@/src/components/ui/fields/TextArea";
+import { handleToastErrorMessage } from "@/src/helpers/util.helper";
 import useSelect from "@/src/hooks/useSelect";
 import {
   ProblemForm,
@@ -70,7 +71,7 @@ const CreateProblem = () => {
 
       toast(data.message);
     } catch (err) {
-      console.error(err);
+      toast(handleToastErrorMessage(err));
     }
   };
 
