@@ -111,14 +111,25 @@ const SingleProblem = () => {
   };
 
   const mappedTestCases = testCases.map((tc) => {
+    const mappedInput = Object.entries(tc.input).map(([param, value]) => {
+      const parsedValue: string | number = JSON.stringify(value);
+
+      return (
+        <div key={param} className="p-4 rounded-md bg-neutral-300  w-full">
+          <span className="font-medium">{param}: </span>
+          <span>{parsedValue}</span>
+        </div>
+      );
+    });
+
     return (
       <div
         key={tc.id}
         className="w-full h-full flex flex-col items-start justify-start gap-2 p-2 rounded-md bg-neutral-200"
       >
         <p className="text-xs">Input</p>
-        <div className="p-4 rounded-md bg-neutral-300 w-full">
-          <p>{JSON.stringify(tc.input)}</p>
+        <div className="w-full flex flex-col items-center justify-start gap-2">
+          {mappedInput}
         </div>
 
         <p className="text-xs">Expected Output</p>
