@@ -16,6 +16,7 @@ import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import { FaRegEdit } from "react-icons/fa";
 import { FaArrowLeft, FaRegFileCode, FaRegTrashCan } from "react-icons/fa6";
+import { CreateSubmissionResponse } from "@/src/interfaces/submission.interface";
 
 const SingleProblem = () => {
   const [problem, setProblem] = React.useState<BaseProblem>({
@@ -98,9 +99,15 @@ const SingleProblem = () => {
         body: JSON.stringify({ submission }),
       });
 
-      const resolve = await response.json();
+      const resolve: CreateSubmissionResponse = await response.json();
 
-      console.log(resolve);
+      if (!resolve.success) {
+        throw new Error(resolve.message);
+      }
+
+      const data = resolve.data;
+
+      console.log(data.validation);
     } catch (err) {
       console.log(err);
     }
