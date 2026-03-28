@@ -1,5 +1,5 @@
 import { ApiResponse } from "./api.interface";
 
 export type CreateSubmissionResponse = ApiResponse<{
-  validation: Record<number, boolean>;
+  judge: Record<number, boolean>;
 }>;

@@ -107,7 +107,7 @@ const SingleProblem = () => {
 
       const data = resolve.data;
 
-      console.log(data.validation);
+      console.log(data.judge);
     } catch (err) {
       console.log(err);
     }
