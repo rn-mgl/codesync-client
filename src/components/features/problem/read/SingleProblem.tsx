@@ -33,6 +33,7 @@ const SingleProblem = () => {
     output_format: {
       type: "",
       version: 1,
+      comparison: {},
     },
     constraints: "",
     editorial: "",

@@ -44,7 +44,11 @@ export const ProblemSchema = z.object({
       try {
         const outputFormat = JSON.parse(val);
 
-        const requiredKeys: (keyof OutputFormat)[] = ["type", "version"];
+        const requiredKeys: (keyof OutputFormat)[] = [
+          "type",
+          "version",
+          "comparison",
+        ];
 
         for (const key of requiredKeys) {
           if (outputFormat[key] === undefined) {
