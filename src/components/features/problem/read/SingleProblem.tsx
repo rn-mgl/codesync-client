@@ -185,13 +185,6 @@ const SingleProblem = () => {
         />
       )}
 
-      {canSelectLanguage && (
-        <Languages
-          currentLanguage={currentLanguage}
-          closeModal={handleCanSelectLanguage}
-          selectLanguage={handleCurrentLanguage}
-        />
-      )}
       <div className="w-full h-full flex flex-col l-s:overflow-hidden gap-4">
         <Link
           href="/codesync/problems"
@@ -223,8 +216,8 @@ const SingleProblem = () => {
       </div>
 
       <div className="w-full flex flex-col items-start justify-start gap-2 l-s:h-full l-s:overflow-y-hidden">
-        <div className="w-full flex flex-row items-center justify-between gap-2 h-fit">
-          <div className="flex gap-2">
+        <div className="w-full flex flex-row items-center justify-between gap-2 h-fit relative">
+          <div className="flex gap-2 relative">
             <Link
               href={`/codesync/test-cases?problem=${params?.slug}`}
               title="Test Case"
@@ -235,7 +228,8 @@ const SingleProblem = () => {
             <button
               title="Language"
               onClick={handleCanSelectLanguage}
-              className="p-2 rounded-full bg-inherit justify-center flex flex-row items-center gap-1"
+              className={`p-2 rounded-full bg-inherit justify-center flex flex-row items-center 
+                          gap-1 transition-all ${canSelectLanguage ? "bg-primary text-secondary" : "bg-secondary text-primary"}`}
             >
               <FaCode />
               <span className="text-xs capitalize">{currentLanguage}</span>
@@ -259,6 +253,14 @@ const SingleProblem = () => {
               <FaRegTrashCan />
             </button>
           </div>
+
+          {canSelectLanguage && (
+            <Languages
+              currentLanguage={currentLanguage}
+              closeModal={handleCanSelectLanguage}
+              selectLanguage={handleCurrentLanguage}
+            />
+          )}
         </div>
 
         <div className="w-full flex flex-col items-start justify-start gap-4 h-screen l-s:h-full rounded-md overflow-hidden">
