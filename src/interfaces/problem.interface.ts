@@ -1,5 +1,7 @@
+import * as Monaco from "monaco-editor";
 import { ApiResponse } from "./api.interface";
 import { BaseTestCase } from "./test-case.interface";
+import { SupportedLanguages } from "./language.interface";
 
 export interface InputFormat {
   style: "function" | "class";
@@ -55,3 +57,9 @@ export type GetProblemResponse = ApiResponse<{
 }>;
 
 export type UpdateProblemResponse = ApiResponse<{ message: string }>;
+
+export interface EditorProps {
+  ref: React.RefObject<Monaco.editor.IStandaloneCodeEditor | null>;
+  boilerPlate: string;
+  currentLanguage: SupportedLanguages;
+}

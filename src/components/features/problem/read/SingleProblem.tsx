@@ -15,8 +15,15 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import { FaRegEdit } from "react-icons/fa";
-import { FaArrowLeft, FaRegFileCode, FaRegTrashCan } from "react-icons/fa6";
+import {
+  FaArrowLeft,
+  FaCode,
+  FaRegFileCode,
+  FaRegTrashCan,
+} from "react-icons/fa6";
 import { CreateSubmissionResponse } from "@/src/interfaces/submission.interface";
+import Languages from "./Languages";
+import { SupportedLanguages } from "@/src/interfaces/language.interface";
 
 const SingleProblem = () => {
   const [problem, setProblem] = React.useState<BaseProblem>({
@@ -41,8 +48,10 @@ const SingleProblem = () => {
     acceptance_rate: 0,
     total_submissions: 0,
   });
+  const [currentLanguage, setCurrentLanguage] =
+    React.useState<SupportedLanguages>("javascript");
+  const [canSelectLanguage, setCanSelectLanguage] = React.useState(false);
   const [testCases, setTestCases] = React.useState<BaseTestCase[]>([]);
-
   const [canDelete, setCanDelete] = React.useState(false);
 
   useSession({ required: true });
@@ -88,7 +97,7 @@ const SingleProblem = () => {
       const submission = {
         type,
         code: editorRef.current.getValue(),
-        language: "javascript",
+        language: currentLanguage,
         problem: params.slug,
       };
 
@@ -116,6 +125,14 @@ const SingleProblem = () => {
 
   const handleCanDelete = () => {
     setCanDelete((prev) => !prev);
+  };
+
+  const handleCurrentLanguage = (language: SupportedLanguages) => {
+    setCurrentLanguage(language);
+  };
+
+  const handleCanSelectLanguage = () => {
+    setCanSelectLanguage((prev) => !prev);
   };
 
   const mappedTestCases = testCases.map((tc) => {
@@ -167,6 +184,14 @@ const SingleProblem = () => {
           closeForm={handleCanDelete}
         />
       )}
+
+      {canSelectLanguage && (
+        <Languages
+          currentLanguage={currentLanguage}
+          closeModal={handleCanSelectLanguage}
+          selectLanguage={handleCurrentLanguage}
+        />
+      )}
       <div className="w-full h-full flex flex-col l-s:overflow-hidden gap-4">
         <Link
           href="/codesync/problems"
@@ -207,6 +232,14 @@ const SingleProblem = () => {
             >
               <FaRegFileCode />
             </Link>
+            <button
+              title="Language"
+              onClick={handleCanSelectLanguage}
+              className="p-2 rounded-full bg-inherit justify-center flex flex-row items-center gap-1"
+            >
+              <FaCode />
+              <span className="text-xs capitalize">{currentLanguage}</span>
+            </button>
           </div>
 
           <div className="flex gap-2">
@@ -231,7 +264,11 @@ const SingleProblem = () => {
         <div className="w-full flex flex-col items-start justify-start gap-4 h-screen l-s:h-full rounded-md overflow-hidden">
           <div className="w-full h-1/2 p-2 rounded-md bg-[#1e1e1e] flex flex-col items-center justify-center">
             <Editor
-              boilerPlate={generateBoilerPlate(problem.input_format)}
+              currentLanguage={currentLanguage}
+              boilerPlate={generateBoilerPlate(
+                problem.input_format,
+                currentLanguage,
+              )}
               ref={editorRef}
             />
             <div className="w-full flex flex-row items-center justify-center gap-2 t:justify-end mt-2">
