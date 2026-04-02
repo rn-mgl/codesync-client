@@ -27,7 +27,7 @@ const TabbedSection = (props: TabbedSectionProps) => {
         {mappedTabs}
       </div>
 
-      <div className="w-full h-full flex flex-col items-start justify-start gap-2">
+      <div className="w-full h-auto flex flex-col items-start justify-start gap-2 overflow-y-auto">
         {props.content[tabIndex]}
       </div>
     </div>

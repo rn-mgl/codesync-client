@@ -6,6 +6,7 @@ type SubmissionResponse = Record<
     result: unknown;
     memory: number;
     runtime: number;
+    matched: boolean;
   }
 >;
 

@@ -58,9 +58,10 @@ const SingleProblem = () => {
   const [canSelectLanguage, setCanSelectLanguage] = React.useState(false);
   const [testCases, setTestCases] = React.useState<BaseTestCase[]>([]);
   const [canDelete, setCanDelete] = React.useState(false);
-  const [submissionOutput, setSubmissionOutput] = React.useState<
-    SuccessSubmission | ErrorSubmission | null
-  >(null);
+  const [submissionOutput, setSubmissionOutput] = React.useState<{
+    type: "run" | "test";
+    judge: SuccessSubmission | ErrorSubmission;
+  } | null>(null);
 
   useSession({ required: true });
 
@@ -125,20 +126,24 @@ const SingleProblem = () => {
 
       const data = resolve.data;
 
-      console.log(data);
-
       if (!data.judge) {
         throw new Error(`An error occurred during validation.`);
       }
 
       setSubmissionOutput({
-        success: true,
-        output: data.judge,
+        type,
+        judge: {
+          success: true,
+          output: data.judge,
+        },
       });
     } catch (err) {
       setSubmissionOutput({
-        success: false,
-        message: getErrorMessage(err),
+        type,
+        judge: {
+          success: false,
+          message: getErrorMessage(err),
+        },
       });
       console.error(err);
     }
@@ -156,17 +161,73 @@ const SingleProblem = () => {
     setCanSelectLanguage((prev) => !prev);
   };
 
+  const mappedSubmissionOutput =
+    submissionOutput?.judge.success &&
+    Object.entries(submissionOutput.judge.output).map(
+      ([testCaseId, result]) => {
+        const matchingInput = testCases.find(
+          (tc) => tc.id === Number(testCaseId),
+        )?.input;
+
+        const matchingOutput = testCases.find(
+          (tc) => tc.id === Number(testCaseId),
+        )?.expected_output;
+
+        const mappedInput =
+          matchingInput &&
+          Object.entries(matchingInput).map(([param, value]) => {
+            const parsedValue: string | number = JSON.stringify(value, null, 2);
+
+            return (
+              <div
+                key={param}
+                className="p-4 rounded-md bg-neutral-300 text-sm w-full"
+              >
+                <p className="font-medium text-xs opacity-80">{param}= </p>
+                <p className="font-medium mt-1">{parsedValue}</p>
+              </div>
+            );
+          });
+
+        return (
+          <div
+            key={testCaseId}
+            className="w-full h-auto flex flex-col items-start justify-start gap-2 p-2 rounded-md bg-neutral-200"
+          >
+            <p className="text-xs">Input</p>
+            <div className="w-full flex flex-col items-center justify-start gap-2">
+              {mappedInput}
+            </div>
+
+            <p className="text-xs mt-2">Expected Output</p>
+            <div className="p-4 rounded-md bg-neutral-300 w-full text-sm">
+              <p className="font-medium">
+                {JSON.stringify(matchingOutput, null, 2)}
+              </p>
+            </div>
+
+            <p className="text-xs mt-2">Submission Output</p>
+            <div className="p-4 rounded-md bg-neutral-300 w-full text-sm">
+              <p className="font-medium">
+                {JSON.stringify(result.result, null, 2)}
+              </p>
+            </div>
+          </div>
+        );
+      },
+    );
+
   const mappedTestCases = testCases.map((tc) => {
     const mappedInput = Object.entries(tc.input).map(([param, value]) => {
-      const parsedValue: string | number = JSON.stringify(value);
+      const parsedValue: string | number = JSON.stringify(value, null, 2);
 
       return (
         <div
           key={param}
           className="p-4 rounded-md bg-neutral-300 text-sm w-full"
         >
-          <span className="font-medium">{param}: </span>
-          <span>{parsedValue}</span>
+          <p className="font-medium text-xs opacity-80">{param}= </p>
+          <p className="font-medium mt-1">{parsedValue}</p>
         </div>
       );
     });
@@ -174,16 +235,18 @@ const SingleProblem = () => {
     return (
       <div
         key={tc.id}
-        className="w-full h-full flex flex-col items-start justify-start gap-2 p-2 rounded-md bg-neutral-200"
+        className="w-full h-auto flex flex-col items-start justify-start gap-2 p-2 rounded-md bg-neutral-200 overflow-y-auto"
       >
         <p className="text-xs">Input</p>
         <div className="w-full flex flex-col items-center justify-start gap-2">
           {mappedInput}
         </div>
 
-        <p className="text-xs">Expected Output</p>
+        <p className="text-xs mt-2">Expected Output</p>
         <div className="p-4 rounded-md bg-neutral-300 w-full text-sm">
-          <p>{JSON.stringify(tc.expected_output)}</p>
+          <p className="font-medium">
+            {JSON.stringify(tc.expected_output, null, 2)}
+          </p>
         </div>
       </div>
     );
@@ -313,8 +376,17 @@ const SingleProblem = () => {
             </div>
           </div>
 
-          <div className="w-full rounded-md h-1/2 flex flex-col overflow-y-auto">
-            <TabbedSection label="Test Case" content={mappedTestCases} />
+          <div className="w-full rounded-md h-1/2 flex flex-col items-start justify-start overflow-y-hidden">
+            {mappedSubmissionOutput &&
+            submissionOutput &&
+            submissionOutput.type === "test" ? (
+              <TabbedSection
+                label="Submitted Test"
+                content={mappedSubmissionOutput}
+              />
+            ) : (
+              <TabbedSection label="Test Case" content={mappedTestCases} />
+            )}
           </div>
         </div>
       </div>
