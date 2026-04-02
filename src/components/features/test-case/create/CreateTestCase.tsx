@@ -3,7 +3,7 @@
 import Input from "@/src/components/ui/fields/Input";
 import TextArea from "@/src/components/ui/fields/TextArea";
 import Toggle from "@/src/components/ui/fields/Toggle";
-import { handleToastErrorMessage } from "@/src/utils/general.util";
+import { getErrorMessage } from "@/src/utils/general.util";
 import {
   CreateTestCaseResponse,
   TestCaseForm,
@@ -76,7 +76,7 @@ const CreateTestCase = () => {
 
       toast(data.message);
     } catch (error: unknown) {
-      const message = handleToastErrorMessage(error);
+      const message = getErrorMessage(error);
       toast(message);
       console.error(error);
     }

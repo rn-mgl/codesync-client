@@ -3,12 +3,19 @@
 import TabbedSection from "@/src/components/ui/containers/TabbedSection";
 import Editor from "@/src/components/ui/fields/Editor";
 import Delete from "@/src/components/ui/forms/Delete";
-import { generateBoilerPlate } from "@/src/utils/problem.util";
+import { SupportedLanguages } from "@/src/interfaces/language.interface";
 import {
   BaseProblem,
   GetProblemResponse,
 } from "@/src/interfaces/problem.interface";
+import {
+  CreateSubmissionResponse,
+  ErrorSubmission,
+  SuccessSubmission,
+} from "@/src/interfaces/submission.interface";
 import { BaseTestCase } from "@/src/interfaces/test-case.interface";
+import { getErrorMessage } from "@/src/utils/general.util";
+import { generateBoilerPlate } from "@/src/utils/problem.util";
 import * as Monaco from "monaco-editor";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -21,9 +28,7 @@ import {
   FaRegFileCode,
   FaRegTrashCan,
 } from "react-icons/fa6";
-import { CreateSubmissionResponse } from "@/src/interfaces/submission.interface";
 import Languages from "./Languages";
-import { SupportedLanguages } from "@/src/interfaces/language.interface";
 
 const SingleProblem = () => {
   const [problem, setProblem] = React.useState<BaseProblem>({
@@ -53,6 +58,9 @@ const SingleProblem = () => {
   const [canSelectLanguage, setCanSelectLanguage] = React.useState(false);
   const [testCases, setTestCases] = React.useState<BaseTestCase[]>([]);
   const [canDelete, setCanDelete] = React.useState(false);
+  const [submissionOutput, setSubmissionOutput] = React.useState<
+    SuccessSubmission | ErrorSubmission | null
+  >(null);
 
   useSession({ required: true });
 
@@ -117,9 +125,22 @@ const SingleProblem = () => {
 
       const data = resolve.data;
 
-      console.log(data.judge);
+      console.log(data);
+
+      if (!data.judge) {
+        throw new Error(`An error occurred during validation.`);
+      }
+
+      setSubmissionOutput({
+        success: true,
+        output: data.judge,
+      });
     } catch (err) {
-      console.log(err);
+      setSubmissionOutput({
+        success: false,
+        message: getErrorMessage(err),
+      });
+      console.error(err);
     }
   };
 

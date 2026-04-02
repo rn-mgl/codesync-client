@@ -1,4 +1,4 @@
-export const handleToastErrorMessage = (error: unknown): string => {
+export const getErrorMessage = (error: unknown): string => {
   const message =
     (typeof error === "object" &&
       error !== null &&
