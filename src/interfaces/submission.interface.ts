@@ -1,6 +1,6 @@
 import { ApiResponse } from "./api.interface";
 
-type SubmissionResponse = Record<
+export type SubmissionResponse = Record<
   number,
   {
     result: unknown;
@@ -10,16 +10,25 @@ type SubmissionResponse = Record<
   }
 >;
 
-export interface SuccessSubmission {
-  success: true;
-  output: SubmissionResponse;
-}
-
-export interface ErrorSubmission {
-  success: false;
-  message: string;
-}
-
 export type CreateSubmissionResponse = ApiResponse<{
   judge: SubmissionResponse;
 }>;
+
+export type SubmissionState = {
+  output?: SubmissionResponse;
+  type: SubmissionType;
+  message?: string;
+  success: boolean;
+} | null;
+
+export type SubmissionType = "run" | "test";
+
+export type SubmissionAction =
+  | {
+      type: `submit_${SubmissionType}_success`;
+      output: SubmissionResponse;
+    }
+  | {
+      type: `submit_${SubmissionType}_error`;
+      output: string;
+    };

@@ -10,8 +10,9 @@ import {
 } from "@/src/interfaces/problem.interface";
 import {
   CreateSubmissionResponse,
-  ErrorSubmission,
-  SuccessSubmission,
+  SubmissionAction,
+  SubmissionState,
+  SubmissionType,
 } from "@/src/interfaces/submission.interface";
 import { BaseTestCase } from "@/src/interfaces/test-case.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
@@ -29,6 +30,34 @@ import {
   FaRegTrashCan,
 } from "react-icons/fa6";
 import Languages from "./Languages";
+
+const submissionReducer = (
+  state: SubmissionState,
+  action: SubmissionAction,
+) => {
+  const submissionType: SubmissionType = action.type.includes("run")
+    ? "run"
+    : "test";
+
+  switch (action.type) {
+    case "submit_test_success":
+    case "submit_run_success":
+      return {
+        ...state,
+        type: submissionType,
+        output: action.output,
+        success: true,
+      };
+    case "submit_test_error":
+    case "submit_run_error":
+      return {
+        ...state,
+        type: submissionType,
+        message: action.output,
+        success: false,
+      };
+  }
+};
 
 const SingleProblem = () => {
   const [problem, setProblem] = React.useState<BaseProblem>({
@@ -58,10 +87,11 @@ const SingleProblem = () => {
   const [canSelectLanguage, setCanSelectLanguage] = React.useState(false);
   const [testCases, setTestCases] = React.useState<BaseTestCase[]>([]);
   const [canDelete, setCanDelete] = React.useState(false);
-  const [submissionOutput, setSubmissionOutput] = React.useState<{
-    type: "run" | "test";
-    judge: SuccessSubmission | ErrorSubmission;
-  } | null>(null);
+
+  const [submissionState, submissionDispatch] = React.useReducer(
+    submissionReducer,
+    null,
+  );
 
   useSession({ required: true });
 
@@ -97,7 +127,7 @@ const SingleProblem = () => {
     }
   }, [params]);
 
-  const handleSubmission = async (type: "run" | "test") => {
+  const handleSubmission = async (type: SubmissionType) => {
     try {
       if (!params?.slug) return;
 
@@ -130,20 +160,14 @@ const SingleProblem = () => {
         throw new Error(`An error occurred during validation.`);
       }
 
-      setSubmissionOutput({
-        type,
-        judge: {
-          success: true,
-          output: data.judge,
-        },
+      submissionDispatch({
+        type: `submit_${type}_success`,
+        output: data.judge,
       });
     } catch (err) {
-      setSubmissionOutput({
-        type,
-        judge: {
-          success: false,
-          message: getErrorMessage(err),
-        },
+      submissionDispatch({
+        type: `submit_${type}_error`,
+        output: getErrorMessage(err),
       });
       console.error(err);
     }
@@ -161,29 +185,32 @@ const SingleProblem = () => {
     setCanSelectLanguage((prev) => !prev);
   };
 
-  const didSubmitTest = submissionOutput && submissionOutput.type === "test";
+  const didSubmitTest = submissionState && submissionState.type === "test";
 
   const successTestOutput =
-    didSubmitTest &&
-    submissionOutput.judge.success &&
-    submissionOutput.judge.output;
+    didSubmitTest && submissionState.success && submissionState.output;
 
   const errorTestOutput =
-    didSubmitTest &&
-    !submissionOutput.judge.success &&
-    submissionOutput.judge.message;
+    didSubmitTest && !submissionState.success && submissionState.message;
 
-  const didSubmitRun = submissionOutput && submissionOutput.type === "run";
+  const didSubmitRun = submissionState && submissionState.type === "run";
 
   const successRunOutput =
-    didSubmitRun &&
-    submissionOutput.judge.success &&
-    submissionOutput.judge.output;
+    didSubmitRun && submissionState.success && submissionState.output;
 
   const errorRunOutput =
-    didSubmitRun &&
-    !submissionOutput.judge.success &&
-    submissionOutput.judge.message;
+    didSubmitRun && !submissionState.success && submissionState.message;
+
+  const totalTestCases =
+    successRunOutput && Object.values(successRunOutput).length;
+
+  const passedTestCasesCount =
+    successRunOutput &&
+    Object.values(successRunOutput).reduce((count, output) => {
+      return output.matched ? count + 1 : count;
+    }, 0);
+
+  const passedTestCasesLabel = `${passedTestCasesCount} / ${totalTestCases} Test Cases Passed`;
 
   const mappedTestCases = testCases.map((tc) => {
     const mappedInput = Object.entries(tc.input).map(([param, value]) => {
@@ -203,6 +230,8 @@ const SingleProblem = () => {
     const matchingSubmission = successTestOutput
       ? JSON.stringify(successTestOutput[tc.id].result, null, 2)
       : errorTestOutput;
+
+    const matchedOutput = successTestOutput && successTestOutput[tc.id].matched;
 
     return (
       <div
@@ -226,12 +255,11 @@ const SingleProblem = () => {
             <p className="text-xs mt-2">Submission Output</p>
             <div
               className={`p-4 rounded-md w-full text-sm 
-                        ${!didSubmitTest && "bg-neutral-300"}
-                        ${successTestOutput && "bg-green-300 text-green-900"}
-                        ${errorTestOutput && "bg-red-300 text-red-900"}`}
+                        ${matchedOutput && "bg-green-300 text-green-900"}
+                        ${(errorTestOutput || !matchedOutput) && "bg-red-300 text-red-900"}`}
             >
               <p
-                className={`font-medium ${errorTestOutput && "whitespace-pre"}`}
+                className={`font-medium ${errorTestOutput && "whitespace-pre-line"}`}
               >
                 {matchingSubmission}
               </p>
@@ -271,20 +299,37 @@ const SingleProblem = () => {
 
         <div className="w-full h-full max-h-screen flex flex-col l-s:overflow-hidden border rounded-md border-neutral-400 bg-secondary">
           <div className="w-full h-full flex flex-col gap-8 p-2 overflow-y-auto l-s:max-h-full">
-            <div className="w-full flex flex-col gap-4">
-              <h1 className="text-xl font-bold text-pretty t:text-2xl">
-                {problem.id}. {problem.title}
-              </h1>
+            {didSubmitRun ? (
+              successRunOutput ? (
+                <div className="p-2 rounded-md bg-neutral-red-300 flex flex-col items-start justify-start gap-2">
+                  <p className="p-2 rounded-md bg-neutral-300 text-xs font-semibold">
+                    {passedTestCasesLabel}
+                  </p>
+                </div>
+              ) : (
+                <div className="p-2 rounded-md bg-red-300">
+                  <p className="text-red-900 whitespace-pre-line text-sm">
+                    {errorRunOutput}
+                  </p>
+                </div>
+              )
+            ) : (
+              <>
+                <div className="w-full flex flex-col gap-4">
+                  <h1 className="text-xl font-bold text-pretty t:text-2xl">
+                    {problem.id}. {problem.title}
+                  </h1>
 
-              <p className="text-sm whitespace-pre-wrap">
-                {problem.description}
-              </p>
-            </div>
-
-            <div className="text-sm">
-              <p>Constraints: </p>
-              <p className="whitespace-pre">formatted constraint here</p>
-            </div>
+                  <p className="text-sm whitespace-pre-line">
+                    {problem.description}
+                  </p>
+                </div>
+                <div className="text-sm">
+                  <p>Constraints: </p>
+                  <p className="whitespace-pre">formatted constraint here</p>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -368,11 +413,7 @@ const SingleProblem = () => {
 
           <div className="w-full rounded-md h-1/2 flex flex-col items-start justify-start overflow-y-hidden">
             <TabbedSection
-              label={
-                submissionOutput && submissionOutput.type === "test"
-                  ? "Submitted Test"
-                  : "Test Case"
-              }
+              label={didSubmitTest ? "Submitted Test" : "Test Case"}
               content={mappedTestCases}
             />
           </div>
