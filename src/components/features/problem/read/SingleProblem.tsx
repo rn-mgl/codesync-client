@@ -11,6 +11,7 @@ import {
 import {
   CreateSubmissionResponse,
   SubmissionAction,
+  SubmissionResponse,
   SubmissionState,
   SubmissionType,
 } from "@/src/interfaces/submission.interface";
@@ -35,24 +36,36 @@ const submissionReducer = (
   state: SubmissionState,
   action: SubmissionAction,
 ) => {
-  const submissionType: SubmissionType = action.type.includes("run")
+  const submissiontype: SubmissionType = action.type.includes("run")
     ? "run"
     : "test";
 
   switch (action.type) {
     case "submit_test_success":
+      return {
+        ...state,
+        type: submissiontype,
+        test: action.output,
+        success: true,
+      };
     case "submit_run_success":
       return {
         ...state,
-        type: submissionType,
-        output: action.output,
+        type: submissiontype,
+        run: action.output,
         success: true,
       };
     case "submit_test_error":
+      return {
+        ...state,
+        type: submissiontype,
+        message: action.output,
+        success: false,
+      };
     case "submit_run_error":
       return {
         ...state,
-        type: submissionType,
+        type: submissiontype,
         message: action.output,
         success: false,
       };
@@ -185,36 +198,80 @@ const SingleProblem = () => {
     setCanSelectLanguage((prev) => !prev);
   };
 
-  const didSubmitTest = submissionState && submissionState.type === "test";
+  // check type to handle errors
+  const didSubmitTest =
+    submissionState &&
+    (!!submissionState.test || submissionState.type === "test");
 
-  const successTestOutput =
-    didSubmitTest && submissionState.success && submissionState.output;
+  const didSubmitRun =
+    submissionState &&
+    (!!submissionState.run || submissionState.type === "run");
 
-  const errorTestOutput =
-    didSubmitTest && !submissionState.success && submissionState.message;
+  let submittedTestOutput: {
+    success: boolean;
+    message: string;
+    output: SubmissionResponse;
+  } | null = null;
 
-  const didSubmitRun = submissionState && submissionState.type === "run";
+  let submittedRunOutput: {
+    success: boolean;
+    message: string;
+    output: SubmissionResponse;
+  } | null = null;
 
-  const successRunOutput =
-    didSubmitRun && submissionState.success && submissionState.output;
+  let totalCheckedTestCases: number = 0;
 
-  const errorRunOutput =
-    didSubmitRun && !submissionState.success && submissionState.message;
+  let passedTestCasesCount: number = 0;
 
-  const totalTestCases =
-    successRunOutput && Object.values(successRunOutput).length;
+  let failedTestCaseId: number | null = null;
 
-  const passedTestCasesCount =
-    successRunOutput &&
-    Object.values(successRunOutput).reduce((count, output) => {
-      return output.matched ? count + 1 : count;
-    }, 0);
+  let failedTestCaseDetails: BaseTestCase | undefined | null = null;
 
-  const passedTestCasesLabel = `${passedTestCasesCount} / ${totalTestCases} Test Cases Passed`;
+  let passedTestCasesLabel: string | null = null;
+
+  if (didSubmitTest) {
+    submittedTestOutput = {
+      success: submissionState.success,
+      message: submissionState.message || "",
+      output: submissionState.test || {},
+    };
+  }
+
+  if (didSubmitRun) {
+    submittedRunOutput = {
+      success: submissionState.success,
+      message: submissionState.message || "",
+      output: submissionState.run || {},
+    };
+
+    if (submittedRunOutput.success) {
+      const runOutput = submittedRunOutput.output;
+
+      totalCheckedTestCases = Object.values(runOutput).length;
+
+      failedTestCaseId =
+        Number(
+          Object.entries(runOutput).find((output) => !output[1]?.matched)?.[0],
+        ) ?? null;
+
+      failedTestCaseDetails = failedTestCaseId
+        ? testCases.find((tc) => tc.id === failedTestCaseId)
+        : null;
+
+      passedTestCasesCount = Object.values(runOutput).reduce(
+        (count, output) => {
+          return output?.matched ? count + 1 : count;
+        },
+        0,
+      );
+    }
+
+    passedTestCasesLabel = `${passedTestCasesCount} / ${totalCheckedTestCases} Test Cases Passed`;
+  }
 
   const mappedTestCases = testCases.map((tc) => {
     const mappedInput = Object.entries(tc.input).map(([param, value]) => {
-      const parsedValue: string | number = JSON.stringify(value, null, 2);
+      const parsedValue: string = JSON.stringify(value, null, 2);
 
       return (
         <div
@@ -227,11 +284,20 @@ const SingleProblem = () => {
       );
     });
 
-    const matchingSubmission = successTestOutput
-      ? JSON.stringify(successTestOutput[tc.id].result, null, 2)
-      : errorTestOutput;
+    const matchingSubmissionOutput =
+      submittedTestOutput &&
+      submittedTestOutput.success &&
+      JSON.stringify(submittedTestOutput.output[tc.id].result, null, 2);
 
-    const matchedOutput = successTestOutput && successTestOutput[tc.id].matched;
+    const isCorrectSubmissionOutput =
+      submittedTestOutput &&
+      submittedTestOutput.success &&
+      submittedTestOutput.output[tc.id].matched;
+
+    const matchingSubmissionError =
+      submittedTestOutput &&
+      !submittedTestOutput.success &&
+      submittedTestOutput.message;
 
     return (
       <div
@@ -250,18 +316,26 @@ const SingleProblem = () => {
           </p>
         </div>
 
-        {matchingSubmission && (
+        {matchingSubmissionOutput && (
           <>
             <p className="text-xs mt-2">Submission Output</p>
             <div
               className={`p-4 rounded-md w-full text-sm 
-                        ${matchedOutput && "bg-green-300 text-green-900"}
-                        ${(errorTestOutput || !matchedOutput) && "bg-red-300 text-red-900"}`}
+                        ${isCorrectSubmissionOutput ? "bg-green-300 text-green-900" : "bg-red-300 text-red-900"}`}
             >
+              <p className="font-medium">{matchingSubmissionOutput}</p>
+            </div>
+          </>
+        )}
+
+        {matchingSubmissionError && (
+          <>
+            <p className="text-xs mt-2">Submission Output</p>
+            <div className="p-4 rounded-md w-full text-sm bg-red-300 text-red-900">
               <p
-                className={`font-medium ${errorTestOutput && "whitespace-pre-line"}`}
+                className={`font-medium ${matchingSubmissionError && "whitespace-pre-line"}`}
               >
-                {matchingSubmission}
+                {matchingSubmissionError}
               </p>
             </div>
           </>
@@ -299,17 +373,72 @@ const SingleProblem = () => {
 
         <div className="w-full h-full max-h-screen flex flex-col l-s:overflow-hidden border rounded-md border-neutral-400 bg-secondary">
           <div className="w-full h-full flex flex-col gap-8 p-2 overflow-y-auto l-s:max-h-full">
-            {didSubmitRun ? (
-              successRunOutput ? (
+            {submittedRunOutput ? (
+              submittedRunOutput.success ? (
                 <div className="p-2 rounded-md bg-neutral-red-300 flex flex-col items-start justify-start gap-2">
-                  <p className="p-2 rounded-md bg-neutral-300 text-xs font-semibold">
-                    {passedTestCasesLabel}
-                  </p>
+                  <div className="w-full flex items-center justify-end">
+                    <p
+                      className={`p-2 rounded-md text-xs font-semibold ${passedTestCasesCount === totalCheckedTestCases ? "bg-green-300" : "bg-red-300"}`}
+                    >
+                      {passedTestCasesLabel}
+                    </p>
+                  </div>
+
+                  {failedTestCaseDetails ? (
+                    <div className="w-full flex flex-col items-start justify-start gap-2">
+                      <p className="text-xs mt-2">Input</p>
+                      <div className="w-full flex flex-col items-start justify-start gap-2">
+                        {Object.entries(failedTestCaseDetails.input).map(
+                          ([param, value]) => {
+                            const parsedValue = JSON.stringify(value, null, 2);
+
+                            return (
+                              <div
+                                key={param}
+                                className="p-4 rounded-md bg-neutral-300 text-sm w-full"
+                              >
+                                <p className="font-medium text-xs opacity-80">
+                                  {param}=
+                                </p>
+                                <p className="font-medium mt-1">
+                                  {parsedValue}
+                                </p>
+                              </div>
+                            );
+                          },
+                        )}
+                      </div>
+
+                      <p className="text-xs mt-2">Expected Output</p>
+                      <div className="p-4 rounded-md bg-neutral-300 text-sm w-full">
+                        <p className="font-medium ">
+                          {JSON.stringify(
+                            failedTestCaseDetails.expected_output,
+                            null,
+                            2,
+                          )}
+                        </p>
+                      </div>
+
+                      <p className="text-xs mt-2">Submission Output</p>
+                      <div className="p-4 rounded-md bg-red-300 text-red-900 text-sm w-full">
+                        <p className="font-medium">
+                          {failedTestCaseId &&
+                            JSON.stringify(
+                              submittedRunOutput.output[failedTestCaseId]
+                                .result,
+                              null,
+                              2,
+                            )}
+                        </p>
+                      </div>
+                    </div>
+                  ) : null}
                 </div>
               ) : (
                 <div className="p-2 rounded-md bg-red-300">
                   <p className="text-red-900 whitespace-pre-line text-sm">
-                    {errorRunOutput}
+                    {submittedRunOutput.message}
                   </p>
                 </div>
               )

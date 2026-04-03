@@ -15,7 +15,8 @@ export type CreateSubmissionResponse = ApiResponse<{
 }>;
 
 export type SubmissionState = {
-  output?: SubmissionResponse;
+  run?: SubmissionResponse;
+  test?: SubmissionResponse;
   type: SubmissionType;
   message?: string;
   success: boolean;
