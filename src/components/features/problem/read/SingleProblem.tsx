@@ -161,61 +161,29 @@ const SingleProblem = () => {
     setCanSelectLanguage((prev) => !prev);
   };
 
-  const mappedSubmissionOutput =
-    submissionOutput?.judge.success &&
-    Object.entries(submissionOutput.judge.output).map(
-      ([testCaseId, result]) => {
-        const matchingInput = testCases.find(
-          (tc) => tc.id === Number(testCaseId),
-        )?.input;
+  const didSubmitTest = submissionOutput && submissionOutput.type === "test";
 
-        const matchingOutput = testCases.find(
-          (tc) => tc.id === Number(testCaseId),
-        )?.expected_output;
+  const successTestOutput =
+    didSubmitTest &&
+    submissionOutput.judge.success &&
+    submissionOutput.judge.output;
 
-        const mappedInput =
-          matchingInput &&
-          Object.entries(matchingInput).map(([param, value]) => {
-            const parsedValue: string | number = JSON.stringify(value, null, 2);
+  const errorTestOutput =
+    didSubmitTest &&
+    !submissionOutput.judge.success &&
+    submissionOutput.judge.message;
 
-            return (
-              <div
-                key={param}
-                className="p-4 rounded-md bg-neutral-300 text-sm w-full"
-              >
-                <p className="font-medium text-xs opacity-80">{param}= </p>
-                <p className="font-medium mt-1">{parsedValue}</p>
-              </div>
-            );
-          });
+  const didSubmitRun = submissionOutput && submissionOutput.type === "run";
 
-        return (
-          <div
-            key={testCaseId}
-            className="w-full h-auto flex flex-col items-start justify-start gap-2 p-2 rounded-md bg-neutral-200"
-          >
-            <p className="text-xs">Input</p>
-            <div className="w-full flex flex-col items-center justify-start gap-2">
-              {mappedInput}
-            </div>
+  const successRunOutput =
+    didSubmitRun &&
+    submissionOutput.judge.success &&
+    submissionOutput.judge.output;
 
-            <p className="text-xs mt-2">Expected Output</p>
-            <div className="p-4 rounded-md bg-neutral-300 w-full text-sm">
-              <p className="font-medium">
-                {JSON.stringify(matchingOutput, null, 2)}
-              </p>
-            </div>
-
-            <p className="text-xs mt-2">Submission Output</p>
-            <div className="p-4 rounded-md bg-neutral-300 w-full text-sm">
-              <p className="font-medium">
-                {JSON.stringify(result.result, null, 2)}
-              </p>
-            </div>
-          </div>
-        );
-      },
-    );
+  const errorRunOutput =
+    didSubmitRun &&
+    !submissionOutput.judge.success &&
+    submissionOutput.judge.message;
 
   const mappedTestCases = testCases.map((tc) => {
     const mappedInput = Object.entries(tc.input).map(([param, value]) => {
@@ -231,6 +199,10 @@ const SingleProblem = () => {
         </div>
       );
     });
+
+    const matchingSubmission = successTestOutput
+      ? JSON.stringify(successTestOutput[tc.id].result, null, 2)
+      : errorTestOutput;
 
     return (
       <div
@@ -248,6 +220,24 @@ const SingleProblem = () => {
             {JSON.stringify(tc.expected_output, null, 2)}
           </p>
         </div>
+
+        {matchingSubmission && (
+          <>
+            <p className="text-xs mt-2">Submission Output</p>
+            <div
+              className={`p-4 rounded-md w-full text-sm 
+                        ${!didSubmitTest && "bg-neutral-300"}
+                        ${successTestOutput && "bg-green-300 text-green-900"}
+                        ${errorTestOutput && "bg-red-300 text-red-900"}`}
+            >
+              <p
+                className={`font-medium ${errorTestOutput && "whitespace-pre"}`}
+              >
+                {matchingSubmission}
+              </p>
+            </div>
+          </>
+        )}
       </div>
     );
   });
@@ -377,16 +367,14 @@ const SingleProblem = () => {
           </div>
 
           <div className="w-full rounded-md h-1/2 flex flex-col items-start justify-start overflow-y-hidden">
-            {mappedSubmissionOutput &&
-            submissionOutput &&
-            submissionOutput.type === "test" ? (
-              <TabbedSection
-                label="Submitted Test"
-                content={mappedSubmissionOutput}
-              />
-            ) : (
-              <TabbedSection label="Test Case" content={mappedTestCases} />
-            )}
+            <TabbedSection
+              label={
+                submissionOutput && submissionOutput.type === "test"
+                  ? "Submitted Test"
+                  : "Test Case"
+              }
+              content={mappedTestCases}
+            />
           </div>
         </div>
       </div>
