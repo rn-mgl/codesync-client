@@ -36,38 +36,26 @@ const submissionReducer = (
   state: SubmissionState,
   action: SubmissionAction,
 ) => {
-  const submissiontype: SubmissionType = action.type.includes("run")
-    ? "run"
-    : "test";
-
   switch (action.type) {
     case "submit_test_success":
       return {
         ...state,
-        type: submissiontype,
         test: action.output,
-        success: true,
       };
     case "submit_run_success":
       return {
         ...state,
-        type: submissiontype,
         run: action.output,
-        success: true,
       };
     case "submit_test_error":
       return {
         ...state,
-        type: submissiontype,
-        message: action.output,
-        success: false,
+        test: action.output,
       };
     case "submit_run_error":
       return {
         ...state,
-        type: submissiontype,
-        message: action.output,
-        success: false,
+        run: action.output,
       };
   }
 };
@@ -199,23 +187,19 @@ const SingleProblem = () => {
   };
 
   // check type to handle errors
-  const didSubmitTest =
-    submissionState &&
-    (!!submissionState.test || submissionState.type === "test");
+  const didSubmitTest = submissionState && !!submissionState.test;
 
-  const didSubmitRun =
-    submissionState &&
-    (!!submissionState.run || submissionState.type === "run");
+  const didSubmitRun = submissionState && !!submissionState.run;
 
   let submittedTestOutput: {
     success: boolean;
-    message: string;
+    error: string;
     output: SubmissionResponse;
   } | null = null;
 
   let submittedRunOutput: {
     success: boolean;
-    message: string;
+    error: string;
     output: SubmissionResponse;
   } | null = null;
 
@@ -230,18 +214,23 @@ const SingleProblem = () => {
   let passedTestCasesLabel: string | null = null;
 
   if (didSubmitTest) {
+    // it's an error if the test value is string
     submittedTestOutput = {
-      success: submissionState.success,
-      message: submissionState.message || "",
-      output: submissionState.test || {},
+      success: typeof submissionState.test === "object",
+      error:
+        typeof submissionState.test === "string" ? submissionState.test : "",
+      output:
+        typeof submissionState.test === "object" ? submissionState.test : {},
     };
   }
 
   if (didSubmitRun) {
+    // it's an error if the run value is string
     submittedRunOutput = {
-      success: submissionState.success,
-      message: submissionState.message || "",
-      output: submissionState.run || {},
+      success: typeof submissionState.run === "object",
+      error: typeof submissionState.run === "string" ? submissionState.run : "",
+      output:
+        typeof submissionState.run === "object" ? submissionState.run : {},
     };
 
     if (submittedRunOutput.success) {
@@ -297,7 +286,7 @@ const SingleProblem = () => {
     const matchingSubmissionError =
       submittedTestOutput &&
       !submittedTestOutput.success &&
-      submittedTestOutput.message;
+      submittedTestOutput.error;
 
     return (
       <div
@@ -438,7 +427,7 @@ const SingleProblem = () => {
               ) : (
                 <div className="p-2 rounded-md bg-red-300">
                   <p className="text-red-900 whitespace-pre-line text-sm">
-                    {submittedRunOutput.message}
+                    {submittedRunOutput.error}
                   </p>
                 </div>
               )
