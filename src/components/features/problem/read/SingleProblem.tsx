@@ -10,6 +10,7 @@ import {
 } from "@/src/interfaces/problem.interface";
 import {
   CreateSubmissionResponse,
+  RunSummary,
   SubmissionAction,
   SubmissionResponse,
   SubmissionState,
@@ -158,7 +159,8 @@ const SingleProblem = () => {
         body: JSON.stringify({ submission }),
       });
 
-      const resolve: CreateSubmissionResponse = await response.json();
+      const resolve: CreateSubmissionResponse<typeof type> =
+        await response.json();
 
       if (!resolve.success) {
         throw new Error(resolve.message);
@@ -170,10 +172,17 @@ const SingleProblem = () => {
         throw new Error(`An error occurred during validation.`);
       }
 
-      submissionDispatch({
-        type: `submit_${type}_success`,
-        output: data.judge,
-      });
+      if (type === "run" && "summary" in data) {
+        submissionDispatch({
+          type: `submit_run_success`,
+          output: { ...data.judge, summary: data.summary },
+        });
+      } else {
+        submissionDispatch({
+          type: `submit_test_success`,
+          output: data.judge,
+        });
+      }
     } catch (err) {
       submissionDispatch({
         type: `submit_${type}_error`,
@@ -216,17 +225,8 @@ const SingleProblem = () => {
     success: boolean;
     error: string;
     output: SubmissionResponse;
+    summary: RunSummary | null;
   } | null = null;
-
-  let totalCheckedTestCases: number = 0;
-
-  let passedTestCasesCount: number = 0;
-
-  let failedTestCaseId: number | null = null;
-
-  let failedTestCaseDetails: BaseTestCase | undefined | null = null;
-
-  let passedTestCasesLabel: string | null = null;
 
   if (didSubmitTest) {
     // it's an error if the test value is string
@@ -244,33 +244,13 @@ const SingleProblem = () => {
     submittedRunOutput = {
       success: typeof submissionState.run === "object",
       error: typeof submissionState.run === "string" ? submissionState.run : "",
+      summary:
+        typeof submissionState.run === "object"
+          ? submissionState.run?.summary
+          : null,
       output:
         typeof submissionState.run === "object" ? submissionState.run : {},
     };
-
-    if (submittedRunOutput.success) {
-      const runOutput = submittedRunOutput.output;
-
-      totalCheckedTestCases = Object.values(runOutput).length;
-
-      failedTestCaseId =
-        Number(
-          Object.entries(runOutput).find((output) => !output[1]?.matched)?.[0],
-        ) ?? null;
-
-      failedTestCaseDetails = failedTestCaseId
-        ? testCases.find((tc) => tc.id === failedTestCaseId)
-        : null;
-
-      passedTestCasesCount = Object.values(runOutput).reduce(
-        (count, output) => {
-          return output?.matched ? count + 1 : count;
-        },
-        0,
-      );
-    }
-
-    passedTestCasesLabel = `${passedTestCasesCount} / ${totalCheckedTestCases} Test Cases Passed`;
   }
 
   const mappedTestCases = testCases.map((tc) => {
@@ -391,46 +371,44 @@ const SingleProblem = () => {
                   <div className="p-2 rounded-md bg-neutral-red-300 flex flex-col items-start justify-start gap-2 w-full">
                     <div className="w-full flex items-center justify-end">
                       <p
-                        className={`p-2 rounded-md text-xs font-semibold ${passedTestCasesCount === totalCheckedTestCases ? "bg-green-300" : "bg-red-300"}`}
+                        className={`p-2 rounded-md text-xs font-semibold ${submittedRunOutput.summary?.passed === submittedRunOutput.summary?.total ? "bg-green-300" : "bg-red-300"}`}
                       >
-                        {passedTestCasesLabel}
+                        {submittedRunOutput.summary?.passed} /{" "}
+                        {submittedRunOutput.summary?.total} Test Cases Passed
                       </p>
                     </div>
 
-                    {failedTestCaseDetails ? (
+                    {submittedRunOutput.summary?.failed ? (
                       <div className="w-full flex flex-col items-start justify-start gap-2">
                         <p className="text-xs mt-2">Input</p>
                         <div className="w-full flex flex-col items-start justify-start gap-2">
-                          {Object.entries(failedTestCaseDetails.input).map(
-                            ([param, value]) => {
-                              const parsedValue = JSON.stringify(
-                                value,
-                                null,
-                                2,
-                              );
+                          {Object.entries(
+                            submittedRunOutput.summary.failed.testCase.input,
+                          ).map(([param, value]) => {
+                            const parsedValue = JSON.stringify(value, null, 2);
 
-                              return (
-                                <div
-                                  key={param}
-                                  className="p-4 rounded-md bg-neutral-300 text-sm w-full"
-                                >
-                                  <p className="font-medium text-xs opacity-80">
-                                    {param}=
-                                  </p>
-                                  <p className="font-medium mt-1">
-                                    {parsedValue}
-                                  </p>
-                                </div>
-                              );
-                            },
-                          )}
+                            return (
+                              <div
+                                key={param}
+                                className="p-4 rounded-md bg-neutral-300 text-sm w-full"
+                              >
+                                <p className="font-medium text-xs opacity-80">
+                                  {param}=
+                                </p>
+                                <p className="font-medium mt-1">
+                                  {parsedValue}
+                                </p>
+                              </div>
+                            );
+                          })}
                         </div>
 
                         <p className="text-xs mt-2">Expected Output</p>
                         <div className="p-4 rounded-md bg-neutral-300 text-sm w-full">
                           <p className="font-medium ">
                             {JSON.stringify(
-                              failedTestCaseDetails.expected_output,
+                              submittedRunOutput.summary.failed.testCase
+                                .expected_output,
                               null,
                               2,
                             )}
@@ -440,13 +418,11 @@ const SingleProblem = () => {
                         <p className="text-xs mt-2">Submission Output</p>
                         <div className="p-4 rounded-md bg-red-300 text-red-900 text-sm w-full">
                           <p className="font-medium">
-                            {failedTestCaseId &&
-                              JSON.stringify(
-                                submittedRunOutput.output[failedTestCaseId]
-                                  .result,
-                                null,
-                                2,
-                              )}
+                            {JSON.stringify(
+                              submittedRunOutput.summary.failed.output,
+                              null,
+                              2,
+                            )}
                           </p>
                         </div>
                       </div>
