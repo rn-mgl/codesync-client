@@ -29,6 +29,7 @@ import {
   FaCode,
   FaRegFileCode,
   FaRegTrashCan,
+  FaXmark,
 } from "react-icons/fa6";
 import Languages from "./Languages";
 
@@ -57,6 +58,14 @@ const submissionReducer = (
         ...state,
         run: action.output,
       };
+    case "clear_run":
+      const removedRun = { ...state };
+      delete removedRun.run;
+      return removedRun;
+    case "clear_test":
+      const removedTest = { ...state };
+      delete removedTest.test;
+      return removedTest;
   }
 };
 
@@ -186,6 +195,12 @@ const SingleProblem = () => {
     setCanSelectLanguage((prev) => !prev);
   };
 
+  const handleClearSubmissionState = (type: SubmissionType) => {
+    submissionDispatch({
+      type: `clear_${type}`,
+    });
+  };
+
   // check type to handle errors
   const didSubmitTest = submissionState && !!submissionState.test;
 
@@ -291,7 +306,7 @@ const SingleProblem = () => {
     return (
       <div
         key={tc.id}
-        className="w-full h-auto flex flex-col items-start justify-start gap-2 p-2 rounded-md bg-neutral-200 overflow-y-auto"
+        className="w-full min-h-full h-auto flex flex-col items-start justify-start gap-2 p-2 rounded-md bg-neutral-200"
       >
         <p className="text-xs">Input</p>
         <div className="w-full flex flex-col items-center justify-start gap-2">
@@ -309,7 +324,7 @@ const SingleProblem = () => {
           <>
             <p className="text-xs mt-2">Submission Output</p>
             <div
-              className={`p-4 rounded-md w-full text-sm 
+              className={`p-4 rounded-md min-w-fit w-full text-sm 
                         ${isCorrectSubmissionOutput ? "bg-green-300 text-green-900" : "bg-red-300 text-red-900"}`}
             >
               <p className="font-medium">{matchingSubmissionOutput}</p>
@@ -320,7 +335,7 @@ const SingleProblem = () => {
         {matchingSubmissionError && (
           <>
             <p className="text-xs mt-2">Submission Output</p>
-            <div className="p-4 rounded-md w-full text-sm bg-red-300 text-red-900">
+            <div className="p-4 rounded-md min-w-fit w-full text-sm bg-red-300 text-red-900">
               <p
                 className={`font-medium ${matchingSubmissionError && "whitespace-pre-line"}`}
               >
@@ -363,74 +378,90 @@ const SingleProblem = () => {
         <div className="w-full h-full max-h-screen flex flex-col l-s:overflow-hidden border rounded-md border-neutral-400 bg-secondary">
           <div className="w-full h-full flex flex-col gap-8 p-2 overflow-y-auto l-s:max-h-full">
             {submittedRunOutput ? (
-              submittedRunOutput.success ? (
-                <div className="p-2 rounded-md bg-neutral-red-300 flex flex-col items-start justify-start gap-2">
-                  <div className="w-full flex items-center justify-end">
-                    <p
-                      className={`p-2 rounded-md text-xs font-semibold ${passedTestCasesCount === totalCheckedTestCases ? "bg-green-300" : "bg-red-300"}`}
-                    >
-                      {passedTestCasesLabel}
-                    </p>
-                  </div>
+              <div className="flex flex-col items-end justify-start gap-2 w-full">
+                <button
+                  title="Clear Run Result"
+                  onClick={() => handleClearSubmissionState("run")}
+                  className="p-2 rounded-full hover:text-red-800 bg-secondary animate-fade flex flex-row items-center justify-center text-sm"
+                >
+                  <FaXmark />
+                </button>
 
-                  {failedTestCaseDetails ? (
-                    <div className="w-full flex flex-col items-start justify-start gap-2">
-                      <p className="text-xs mt-2">Input</p>
+                {submittedRunOutput.success ? (
+                  <div className="p-2 rounded-md bg-neutral-red-300 flex flex-col items-start justify-start gap-2 w-full">
+                    <div className="w-full flex items-center justify-end">
+                      <p
+                        className={`p-2 rounded-md text-xs font-semibold ${passedTestCasesCount === totalCheckedTestCases ? "bg-green-300" : "bg-red-300"}`}
+                      >
+                        {passedTestCasesLabel}
+                      </p>
+                    </div>
+
+                    {failedTestCaseDetails ? (
                       <div className="w-full flex flex-col items-start justify-start gap-2">
-                        {Object.entries(failedTestCaseDetails.input).map(
-                          ([param, value]) => {
-                            const parsedValue = JSON.stringify(value, null, 2);
+                        <p className="text-xs mt-2">Input</p>
+                        <div className="w-full flex flex-col items-start justify-start gap-2">
+                          {Object.entries(failedTestCaseDetails.input).map(
+                            ([param, value]) => {
+                              const parsedValue = JSON.stringify(
+                                value,
+                                null,
+                                2,
+                              );
 
-                            return (
-                              <div
-                                key={param}
-                                className="p-4 rounded-md bg-neutral-300 text-sm w-full"
-                              >
-                                <p className="font-medium text-xs opacity-80">
-                                  {param}=
-                                </p>
-                                <p className="font-medium mt-1">
-                                  {parsedValue}
-                                </p>
-                              </div>
-                            );
-                          },
-                        )}
-                      </div>
-
-                      <p className="text-xs mt-2">Expected Output</p>
-                      <div className="p-4 rounded-md bg-neutral-300 text-sm w-full">
-                        <p className="font-medium ">
-                          {JSON.stringify(
-                            failedTestCaseDetails.expected_output,
-                            null,
-                            2,
+                              return (
+                                <div
+                                  key={param}
+                                  className="p-4 rounded-md bg-neutral-300 text-sm w-full"
+                                >
+                                  <p className="font-medium text-xs opacity-80">
+                                    {param}=
+                                  </p>
+                                  <p className="font-medium mt-1">
+                                    {parsedValue}
+                                  </p>
+                                </div>
+                              );
+                            },
                           )}
-                        </p>
-                      </div>
+                        </div>
 
-                      <p className="text-xs mt-2">Submission Output</p>
-                      <div className="p-4 rounded-md bg-red-300 text-red-900 text-sm w-full">
-                        <p className="font-medium">
-                          {failedTestCaseId &&
-                            JSON.stringify(
-                              submittedRunOutput.output[failedTestCaseId]
-                                .result,
+                        <p className="text-xs mt-2">Expected Output</p>
+                        <div className="p-4 rounded-md bg-neutral-300 text-sm w-full">
+                          <p className="font-medium ">
+                            {JSON.stringify(
+                              failedTestCaseDetails.expected_output,
                               null,
                               2,
                             )}
-                        </p>
+                          </p>
+                        </div>
+
+                        <p className="text-xs mt-2">Submission Output</p>
+                        <div className="p-4 rounded-md bg-red-300 text-red-900 text-sm w-full">
+                          <p className="font-medium">
+                            {failedTestCaseId &&
+                              JSON.stringify(
+                                submittedRunOutput.output[failedTestCaseId]
+                                  .result,
+                                null,
+                                2,
+                              )}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  ) : null}
-                </div>
-              ) : (
-                <div className="p-2 rounded-md bg-red-300">
-                  <p className="text-red-900 whitespace-pre-line text-sm">
-                    {submittedRunOutput.error}
-                  </p>
-                </div>
-              )
+                    ) : (
+                      <div className="w-full p-2 rounded-md bg-primary h-fit"></div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="p-2 rounded-md bg-red-300 min-w-fit">
+                    <p className="text-red-900 whitespace-pre-line text-sm">
+                      {submittedRunOutput.error}
+                    </p>
+                  </div>
+                )}
+              </div>
             ) : (
               <>
                 <div className="w-full flex flex-col gap-4">
@@ -500,8 +531,8 @@ const SingleProblem = () => {
           )}
         </div>
 
-        <div className="w-full flex flex-col items-start justify-start gap-4 h-screen l-s:h-full rounded-md overflow-hidden">
-          <div className="w-full h-1/2 p-2 rounded-md bg-[#1e1e1e] flex flex-col items-center justify-center">
+        <div className="w-full grid grid-cols-1 grid-rows-2 items-start justify-start gap-4 h-screen l-s:h-full rounded-md overflow-hidden">
+          <div className="w-full h-full grid-rows-1 p-2 rounded-md bg-[#1e1e1e] flex flex-col items-center justify-center">
             <Editor
               currentLanguage={currentLanguage}
               boilerPlate={generateBoilerPlate(
@@ -529,11 +560,23 @@ const SingleProblem = () => {
             </div>
           </div>
 
-          <div className="w-full rounded-md h-1/2 flex flex-col items-start justify-start overflow-y-hidden">
-            <TabbedSection
-              label={didSubmitTest ? "Submitted Test" : "Test Case"}
-              content={mappedTestCases}
-            />
+          <div className="w-full flex flex-col items-end justify-start grid-rows-1 h-full overflow-y-hidden">
+            {didSubmitTest && (
+              <button
+                title="Clear Test Result"
+                onClick={() => handleClearSubmissionState("test")}
+                className="p-2 rounded-full hover:text-red-800 bg-secondary animate-fade"
+              >
+                <FaXmark />
+              </button>
+            )}
+
+            <div className="w-full h-full rounded-md flex flex-col items-start justify-start overflow-y-hidden">
+              <TabbedSection
+                label={didSubmitTest ? "Submitted Test" : "Test Case"}
+                content={mappedTestCases}
+              />
+            </div>
           </div>
         </div>
       </div>

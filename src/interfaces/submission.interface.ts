@@ -29,4 +29,5 @@ export type SubmissionAction =
   | {
       type: `submit_${SubmissionType}_error`;
       output: string;
-    };
+    }
+  | { type: `clear_${SubmissionType}` };
