@@ -378,7 +378,7 @@ const SingleProblem = () => {
                       </p>
                     </div>
 
-                    {submittedRunOutput.summary?.failed ? (
+                    {submittedRunOutput.summary?.failed.testCase ? (
                       <div className="w-full flex flex-col items-start justify-start gap-2">
                         <p className="text-xs mt-2">Input</p>
                         <div className="w-full flex flex-col items-start justify-start gap-2">

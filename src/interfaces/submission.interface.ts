@@ -16,7 +16,7 @@ export type RunSummary = {
   passed: number;
   memory: number;
   runtime: number;
-  failed: null | { testCase: BaseTestCase; output: unknown };
+  failed: { testCase: BaseTestCase | null; output: unknown };
 };
 
 export type CreateSubmissionResponse<T extends SubmissionType> = T extends "run"
