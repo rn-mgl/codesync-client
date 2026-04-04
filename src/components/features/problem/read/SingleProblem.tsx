@@ -427,7 +427,27 @@ const SingleProblem = () => {
                         </div>
                       </div>
                     ) : (
-                      <div className="w-full p-2 rounded-md bg-primary h-fit"></div>
+                      <div className="w-full flex flex-col items-start justify-start gap-2">
+                        <div className="w-full grid grid-cols-1 gap-2 t:grid-cols-2">
+                          <div className="w-full p-2 rounded-md bg-primary flex flex-col t:p-4">
+                            <p className="text-xs text-secondary font-light">
+                              Average Memory Used
+                            </p>
+                            <p className="text-2xl text-green-300 font-bold mt-auto">
+                              {submittedRunOutput.summary?.memory} MB
+                            </p>
+                          </div>
+
+                          <div className="w-full p-2 rounded-md bg-primary flex flex-col t:p-4">
+                            <p className="text-xs text-secondary font-light">
+                              Average Run Time
+                            </p>
+                            <p className="text-2xl text-blue-300 font-bold mt-auto">
+                              {submittedRunOutput.summary?.runtime} ms
+                            </p>
+                          </div>
+                        </div>
+                      </div>
                     )}
                   </div>
                 ) : (
