@@ -451,7 +451,7 @@ const SingleProblem = () => {
                     )}
                   </div>
                 ) : (
-                  <div className="p-2 rounded-md bg-red-300 min-w-fit">
+                  <div className="p-2 rounded-md bg-red-300 min-w-fit w-full">
                     <p className="text-red-900 whitespace-pre-line text-sm">
                       {submittedRunOutput.error}
                     </p>
