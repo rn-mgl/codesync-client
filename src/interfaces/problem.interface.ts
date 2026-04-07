@@ -61,5 +61,6 @@ export type UpdateProblemResponse = ApiResponse<{ message: string }>;
 export interface EditorProps {
   ref: React.RefObject<Monaco.editor.IStandaloneCodeEditor | null>;
   boilerPlate: string;
-  currentLanguage: SupportedLanguages;
+  language: SupportedLanguages;
+  readOnly?: boolean;
 }

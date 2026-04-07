@@ -3,6 +3,8 @@
 import TabbedSection from "@/src/components/ui/containers/TabbedSection";
 import Editor from "@/src/components/ui/fields/Editor";
 import Delete from "@/src/components/ui/forms/Delete";
+import { Bar } from "react-chartjs-2";
+import { Chart, registerables } from "chart.js";
 import { SupportedLanguages } from "@/src/interfaces/language.interface";
 import {
   BaseProblem,
@@ -24,10 +26,11 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import React from "react";
-import { FaRegEdit } from "react-icons/fa";
+import { FaMemory, FaRegEdit } from "react-icons/fa";
 import {
   FaArrowLeft,
   FaCode,
+  FaRegClock,
   FaRegFileCode,
   FaRegTrashCan,
   FaXmark,
@@ -98,6 +101,9 @@ const SingleProblem = () => {
   const [canSelectLanguage, setCanSelectLanguage] = React.useState(false);
   const [testCases, setTestCases] = React.useState<BaseTestCase[]>([]);
   const [canDelete, setCanDelete] = React.useState(false);
+  const [activeChart, setActiveChart] = React.useState<"runtime" | "memory">(
+    "runtime",
+  );
 
   const [submissionState, submissionDispatch] = React.useReducer(
     submissionReducer,
@@ -111,6 +117,8 @@ const SingleProblem = () => {
   const editorRef = React.useRef<Monaco.editor.IStandaloneCodeEditor | null>(
     null,
   );
+  const readonlyEditor =
+    React.useRef<Monaco.editor.IStandaloneCodeEditor | null>(null);
 
   const getProblem = React.useCallback(async () => {
     try {
@@ -208,6 +216,10 @@ const SingleProblem = () => {
     submissionDispatch({
       type: `clear_${type}`,
     });
+  };
+
+  const handleActiveChart = (chart: "runtime" | "memory") => {
+    setActiveChart(chart);
   };
 
   // check type to handle errors
@@ -329,6 +341,10 @@ const SingleProblem = () => {
   });
 
   React.useEffect(() => {
+    Chart.register(...registerables);
+  }, []);
+
+  React.useEffect(() => {
     getProblem();
   }, [getProblem]);
 
@@ -429,23 +445,105 @@ const SingleProblem = () => {
                     ) : (
                       <div className="w-full flex flex-col items-start justify-start gap-2">
                         <div className="w-full grid grid-cols-1 gap-2 t:grid-cols-2">
-                          <div className="w-full p-2 rounded-md bg-primary flex flex-col t:p-4">
-                            <p className="text-xs text-secondary font-light">
-                              Average Memory Used
+                          <button
+                            onClick={() => handleActiveChart("runtime")}
+                            className={`w-full p-4 rounded-md flex flex-row justify-between items-center text-left transition-all bg-cyan-500
+                                       ${activeChart === "runtime" ? "opacity-100" : "opacity-50"}`}
+                          >
+                            <p className="flex flex-col">
+                              <span className="text-xs text-secondary font-light">
+                                Average Run Time
+                              </span>
+                              <span className="text-2xl text-primary-300 font-black mt-auto">
+                                {submittedRunOutput.summary?.runtime} ms
+                              </span>
                             </p>
-                            <p className="text-2xl text-green-300 font-bold mt-auto">
-                              {submittedRunOutput.summary?.memory} MB
+                            <p>
+                              <FaRegClock className="text-secondary text-2xl" />
                             </p>
-                          </div>
+                          </button>
 
-                          <div className="w-full p-2 rounded-md bg-primary flex flex-col t:p-4">
-                            <p className="text-xs text-secondary font-light">
-                              Average Run Time
+                          <button
+                            onClick={() => handleActiveChart("memory")}
+                            className={`w-full p-4 rounded-md flex flex-row justify-between items-center text-left transition-all bg-emerald-500
+                                       ${activeChart === "memory" ? "opacity-100" : "opacity-50"}`}
+                          >
+                            <p className="flex flex-col">
+                              <span className="text-xs text-secondary font-light">
+                                Average Memory Used
+                              </span>
+                              <span className="text-2xl text-primary-300 font-black mt-auto">
+                                {submittedRunOutput.summary?.memory} MB
+                              </span>
                             </p>
-                            <p className="text-2xl text-blue-300 font-bold mt-auto">
-                              {submittedRunOutput.summary?.runtime} ms
+                            <p>
+                              <FaMemory className="text-secondary text-2xl" />
                             </p>
-                          </div>
+                          </button>
+                        </div>
+
+                        <div className="w-full aspect-video p-2 rounded-md bg-primary">
+                          <Bar
+                            data={{
+                              labels:
+                                activeChart === "runtime"
+                                  ? submittedRunOutput.summary?.statistics?.runtime
+                                      .sort((a, b) => a.ms - b.ms)
+                                      .map((stat) => stat.ms)
+                                  : submittedRunOutput.summary?.statistics?.memory
+                                      .sort((a, b) => a.mb - b.mb)
+                                      .map((stat) => stat.mb),
+                              datasets: [
+                                {
+                                  label: "Memory",
+                                  data:
+                                    activeChart === "runtime"
+                                      ? submittedRunOutput.summary?.statistics?.runtime
+                                          .sort(
+                                            (a, b) =>
+                                              a.percentage - b.percentage,
+                                          )
+                                          .map((stat) => stat.percentage)
+                                      : submittedRunOutput.summary?.statistics?.memory
+                                          .sort(
+                                            (a, b) =>
+                                              a.percentage - b.percentage,
+                                          )
+                                          .map((stat) => stat.percentage),
+                                  backgroundColor: [
+                                    activeChart === "runtime"
+                                      ? "oklch(78.9% 0.154 211.53)"
+                                      : "oklch(76.5% 0.177 163.223)",
+                                  ],
+                                },
+                              ],
+                            }}
+                            options={{
+                              scales: {
+                                y: {
+                                  beginAtZero: true,
+                                },
+                                x: {
+                                  beginAtZero: true,
+                                },
+                              },
+                              responsive: true,
+                              maintainAspectRatio: true,
+                              resizeDelay: 1,
+                            }}
+                          />
+                        </div>
+
+                        <div className="w-full p-2 rounded-md bg-[#1e1e1e] text-secondary max-h-80 resize-y h-full min-h-72">
+                          <Editor
+                            ref={readonlyEditor}
+                            boilerPlate={submittedRunOutput.summary?.code ?? ""}
+                            language={
+                              submittedRunOutput.summary?.language ??
+                              currentLanguage
+                            }
+                            readOnly={true}
+                          />
                         </div>
                       </div>
                     )}
@@ -530,7 +628,7 @@ const SingleProblem = () => {
         <div className="w-full grid grid-cols-1 grid-rows-2 items-start justify-start gap-4 h-screen l-s:h-full rounded-md overflow-hidden">
           <div className="w-full h-full grid-rows-1 p-2 rounded-md bg-[#1e1e1e] flex flex-col items-center justify-center">
             <Editor
-              currentLanguage={currentLanguage}
+              language={currentLanguage}
               boilerPlate={generateBoilerPlate(
                 problem.input_format,
                 currentLanguage,

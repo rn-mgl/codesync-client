@@ -19,7 +19,7 @@ const Editor = ({ ref, boilerPlate, ...props }: EditorProps) => {
       defaultValue="/* processing code... */"
       height="93%"
       value={boilerPlate}
-      language={props.currentLanguage}
+      language={props.language}
       options={{
         automaticLayout: true,
         codeLens: false,
@@ -27,6 +27,7 @@ const Editor = ({ ref, boilerPlate, ...props }: EditorProps) => {
         fontFamily: "Fira Code",
         minimap: { enabled: false },
         "semanticHighlighting.enabled": true,
+        readOnly: props.readOnly ?? false,
       }}
     />
   );

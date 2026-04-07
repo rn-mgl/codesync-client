@@ -1,6 +1,31 @@
 import { ApiResponse } from "./api.interface";
 import { BaseTestCase } from "./test-case.interface";
 
+interface BaseSubmission {
+  id: number;
+  user_id: number;
+  problem_id: number;
+  code: string;
+  language: SupportedLanguages;
+  status: SubmissionStatus;
+  execution_time_ms: number;
+  memory_used_mb: number;
+  test_results: string | null;
+  error_message: string | null;
+  deleted_at: string | null;
+}
+
+export type SupportedLanguages = "javascript" | "php";
+
+export type SubmissionStatus =
+  | "processing"
+  | "accepted"
+  | "wrong_answer"
+  | "runtime_error"
+  | "time_limit_exceeded"
+  | "memory_limit_exceeded"
+  | "compilation_error";
+
 export type SubmissionResponse = Record<
   number,
   {
@@ -17,6 +42,12 @@ export type RunSummary = {
   memory: number;
   runtime: number;
   failed: { testCase: BaseTestCase | null; output: unknown };
+  statistics: {
+    memory: { mb: number; percentage: number }[];
+    runtime: { ms: number; percentage: number }[];
+  } | null;
+  code: string;
+  language: SupportedLanguages;
 };
 
 export type CreateSubmissionResponse<T extends SubmissionType> = T extends "run"
