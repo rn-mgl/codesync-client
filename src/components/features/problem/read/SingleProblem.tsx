@@ -16,6 +16,7 @@ import {
   SubmissionAction,
   SubmissionResponse,
   SubmissionState,
+  SubmissionStatistics,
   SubmissionType,
 } from "@/src/interfaces/submission.interface";
 import { BaseTestCase } from "@/src/interfaces/test-case.interface";
@@ -190,7 +191,11 @@ const SingleProblem = () => {
       if (type === "run" && "summary" in data) {
         submissionDispatch({
           type: `submit_run_success`,
-          output: { ...data.judge, summary: data.summary },
+          output: {
+            ...data.judge,
+            summary: data.summary,
+            statistics: data.statistics,
+          },
         });
       } else {
         submissionDispatch({
@@ -245,6 +250,7 @@ const SingleProblem = () => {
     error: string;
     output: SubmissionResponse;
     summary: RunSummary | null;
+    statistics: SubmissionStatistics | null;
   } | null = null;
 
   if (didSubmitTest) {
@@ -263,6 +269,10 @@ const SingleProblem = () => {
     submittedRunOutput = {
       success: typeof submissionState.run === "object",
       error: typeof submissionState.run === "string" ? submissionState.run : "",
+      statistics:
+        typeof submissionState.run === "object"
+          ? submissionState.run?.statistics
+          : null,
       summary:
         typeof submissionState.run === "object"
           ? submissionState.run?.summary
@@ -529,10 +539,10 @@ const SingleProblem = () => {
                             data={{
                               labels:
                                 activeChart === "runtime"
-                                  ? submittedRunOutput.summary?.statistics?.runtime
+                                  ? submittedRunOutput.statistics?.runtime
                                       .sort((a, b) => a.ms - b.ms)
                                       .map((stat) => stat.ms)
-                                  : submittedRunOutput.summary?.statistics?.memory
+                                  : submittedRunOutput.statistics?.memory
                                       .sort((a, b) => a.mb - b.mb)
                                       .map((stat) => stat.mb),
                               datasets: [
@@ -540,13 +550,13 @@ const SingleProblem = () => {
                                   label: "Memory",
                                   data:
                                     activeChart === "runtime"
-                                      ? submittedRunOutput.summary?.statistics?.runtime
+                                      ? submittedRunOutput.statistics?.runtime
                                           .sort(
                                             (a, b) =>
                                               a.percentage - b.percentage,
                                           )
                                           .map((stat) => stat.percentage)
-                                      : submittedRunOutput.summary?.statistics?.memory
+                                      : submittedRunOutput.statistics?.memory
                                           .sort(
                                             (a, b) =>
                                               a.percentage - b.percentage,

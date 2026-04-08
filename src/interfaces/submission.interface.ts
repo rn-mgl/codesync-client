@@ -42,25 +42,32 @@ export type RunSummary = {
   memory: number;
   runtime: number;
   failed: { testCase: BaseTestCase | null; output: unknown };
-  statistics: {
-    memory: { mb: number; percentage: number }[];
-    runtime: { ms: number; percentage: number }[];
-  } | null;
   code: string;
   language: SupportedLanguages;
+};
+
+export type SubmissionStatistics = {
+  memory: { mb: number; percentage: number }[];
+  runtime: { ms: number; percentage: number }[];
 };
 
 export type CreateSubmissionResponse<T extends SubmissionType> = T extends "run"
   ? ApiResponse<{
       judge: SubmissionResponse;
       summary: RunSummary;
+      statistics: SubmissionStatistics | null;
     }>
   : ApiResponse<{
       judge: SubmissionResponse;
     }>;
 
 export type SubmissionState = {
-  run?: (SubmissionResponse & { summary: RunSummary }) | string;
+  run?:
+    | (SubmissionResponse & {
+        summary: RunSummary;
+        statistics: SubmissionStatistics | null;
+      })
+    | string;
   test?: SubmissionResponse | string;
 } | null;
 
@@ -73,7 +80,10 @@ export type SubmissionAction =
     }
   | {
       type: `submit_run_success`;
-      output: SubmissionResponse & { summary: RunSummary };
+      output: SubmissionResponse & {
+        summary: RunSummary;
+        statistics: SubmissionStatistics | null;
+      };
     }
   | {
       type: `submit_${SubmissionType}_error`;
