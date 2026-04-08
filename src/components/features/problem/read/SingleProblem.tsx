@@ -155,9 +155,13 @@ const SingleProblem = () => {
 
       if (!editorRef.current) return;
 
+      const code = editorRef.current.getValue();
+
+      localStorage.setItem(`${params.slug}_${currentLanguage}`, code);
+
       const submission = {
         type,
-        code: editorRef.current.getValue(),
+        code: code,
         language: currentLanguage,
         problem: params.slug,
       };
