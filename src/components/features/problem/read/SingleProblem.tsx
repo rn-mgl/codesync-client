@@ -29,6 +29,7 @@ import React from "react";
 import { FaMemory, FaRegEdit } from "react-icons/fa";
 import {
   FaArrowLeft,
+  FaCheck,
   FaCode,
   FaRegClock,
   FaRegFileCode,
@@ -36,6 +37,7 @@ import {
   FaXmark,
 } from "react-icons/fa6";
 import Languages from "./Languages";
+import { toast } from "sonner";
 
 const submissionReducer = (
   state: SubmissionState,
@@ -104,6 +106,7 @@ const SingleProblem = () => {
   const [activeChart, setActiveChart] = React.useState<"runtime" | "memory">(
     "runtime",
   );
+  const [startingCode, setStartingCode] = React.useState("");
 
   const [submissionState, submissionDispatch] = React.useReducer(
     submissionReducer,
@@ -112,7 +115,7 @@ const SingleProblem = () => {
 
   useSession({ required: true });
 
-  const params = useParams();
+  const params: { slug?: string } | null = useParams();
   const router = useRouter();
   const editorRef = React.useRef<Monaco.editor.IStandaloneCodeEditor | null>(
     null,
@@ -343,6 +346,41 @@ const SingleProblem = () => {
   React.useEffect(() => {
     Chart.register(...registerables);
   }, []);
+
+  React.useEffect(() => {
+    const storedCode = localStorage.getItem(
+      `${params?.slug}_${currentLanguage}`,
+    );
+
+    setStartingCode(
+      storedCode || generateBoilerPlate(problem.input_format, currentLanguage),
+    );
+  }, [params?.slug, problem.input_format, currentLanguage]);
+
+  React.useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.key === "s" && params?.slug) {
+        e.preventDefault();
+
+        localStorage.setItem(
+          `${params?.slug}_${currentLanguage}`,
+          editorRef.current?.getValue() ?? "",
+        );
+
+        toast(
+          <span className="flex gap-1 items-center justify-center">
+            Code Saved <FaCheck />
+          </span>,
+        );
+      }
+    };
+
+    window.addEventListener("keydown", handler);
+
+    return () => {
+      window.removeEventListener("keydown", handler);
+    };
+  }, [params?.slug, currentLanguage]);
 
   React.useEffect(() => {
     getProblem();
@@ -629,10 +667,7 @@ const SingleProblem = () => {
           <div className="w-full h-full grid-rows-1 p-2 rounded-md bg-[#1e1e1e] flex flex-col items-center justify-center">
             <Editor
               language={currentLanguage}
-              boilerPlate={generateBoilerPlate(
-                problem.input_format,
-                currentLanguage,
-              )}
+              boilerPlate={startingCode}
               ref={editorRef}
             />
             <div className="w-full flex flex-row items-center justify-center gap-2 t:justify-end mt-2">
