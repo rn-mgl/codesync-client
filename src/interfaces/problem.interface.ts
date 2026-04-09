@@ -1,9 +1,8 @@
 import * as Monaco from "monaco-editor";
 import { ApiResponse } from "./api.interface";
-import { BaseTestCase } from "./test-case.interface";
 import { SupportedLanguages } from "./language.interface";
-import { JSX } from "react";
 import { SubmissionResponse } from "./submission.interface";
+import { BaseTestCase } from "./test-case.interface";
 
 export interface InputFormat {
   style: "function" | "class";
