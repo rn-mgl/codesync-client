@@ -19,7 +19,6 @@ import {
 import { BaseTestCase } from "@/src/interfaces/test-case.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
 import { generateBoilerPlate } from "@/src/utils/problem.util";
-import { Chart, registerables } from "chart.js";
 import * as Monaco from "monaco-editor";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -269,85 +268,16 @@ const SingleProblem = () => {
       error: typeof submissionState.run === "string" ? submissionState.run : "",
       statistics:
         typeof submissionState.run === "object"
-          ? submissionState.run?.statistics
+          ? submissionState.run.statistics
           : null,
       summary:
         typeof submissionState.run === "object"
-          ? submissionState.run?.summary
+          ? submissionState.run.summary
           : null,
       output:
         typeof submissionState.run === "object" ? submissionState.run : {},
     };
   }
-
-  const mappedTestCases = testCases.map((tc) => {
-    const mappedInput = Object.entries(tc.input).map(([param, value]) => {
-      const parsedValue: string = JSON.stringify(value, null, 2);
-
-      return (
-        <div
-          key={param}
-          className="p-4 rounded-md bg-neutral-300 text-sm w-full"
-        >
-          <p className="font-medium text-xs opacity-80">{param}= </p>
-          <p className="font-medium mt-1">{parsedValue}</p>
-        </div>
-      );
-    });
-
-    const matchingSubmissionOutput =
-      submittedTestOutput &&
-      submittedTestOutput.success &&
-      JSON.stringify(submittedTestOutput.output[tc.id].result, null, 2);
-
-    const isCorrectSubmissionOutput =
-      submittedTestOutput &&
-      submittedTestOutput.success &&
-      submittedTestOutput.output[tc.id].matched;
-
-    const matchingSubmissionError =
-      submittedTestOutput &&
-      !submittedTestOutput.success &&
-      submittedTestOutput.error;
-
-    return (
-      <div
-        key={tc.id}
-        className="w-full h-auto flex flex-col items-start justify-start gap-2 p-2 rounded-md bg-neutral-200"
-      >
-        <p className="text-xs">Input</p>
-        <div className="w-full flex flex-col items-center justify-start gap-2">
-          {mappedInput}
-        </div>
-
-        <p className="text-xs mt-2">Expected Output</p>
-        <div className="p-4 rounded-md bg-neutral-300 w-full text-sm">
-          <p className="font-medium">
-            {JSON.stringify(tc.expected_output, null, 2)}
-          </p>
-        </div>
-
-        {(matchingSubmissionOutput || matchingSubmissionError) && (
-          <>
-            <p className="text-xs mt-2">Submission Output</p>
-            <div
-              className={`p-4 rounded-md min-w-fit w-full text-sm 
-                        ${isCorrectSubmissionOutput ? "bg-green-300 text-green-900" : "bg-red-300 text-red-900"}
-                        ${matchingSubmissionError ? "bg-red-300 text-red-900" : ""}`}
-            >
-              <p className="font-medium">
-                {matchingSubmissionOutput || matchingSubmissionError}
-              </p>
-            </div>
-          </>
-        )}
-      </div>
-    );
-  });
-
-  React.useEffect(() => {
-    Chart.register(...registerables);
-  }, []);
 
   React.useEffect(() => {
     const storedCode = localStorage.getItem(
@@ -515,8 +445,8 @@ const SingleProblem = () => {
 
             <div className="w-full h-full rounded-md flex flex-col items-start justify-start overflow-y-hidden">
               <ProblemTestCases
-                label={didSubmitTest ? "Submitted Test" : "Test Case"}
-                content={mappedTestCases}
+                testCases={testCases}
+                submittedTestOutput={submittedTestOutput}
               />
             </div>
           </div>

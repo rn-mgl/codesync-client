@@ -3,6 +3,7 @@ import { ApiResponse } from "./api.interface";
 import { BaseTestCase } from "./test-case.interface";
 import { SupportedLanguages } from "./language.interface";
 import { JSX } from "react";
+import { SubmissionResponse } from "./submission.interface";
 
 export interface InputFormat {
   style: "function" | "class";
@@ -67,6 +68,10 @@ export interface EditorProps {
 }
 
 export interface TestCaseSectionProps {
-  content: JSX.Element[];
-  label: string;
+  testCases: BaseTestCase[];
+  submittedTestOutput: {
+    success: boolean;
+    error: string;
+    output: SubmissionResponse;
+  } | null;
 }

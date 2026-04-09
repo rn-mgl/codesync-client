@@ -1,4 +1,5 @@
 import { ApiResponse } from "./api.interface";
+import { SupportedLanguages } from "./language.interface";
 import { BaseTestCase } from "./test-case.interface";
 
 interface BaseSubmission {
@@ -14,8 +15,6 @@ interface BaseSubmission {
   error_message: string | null;
   deleted_at: string | null;
 }
-
-export type SupportedLanguages = "javascript" | "php";
 
 export type SubmissionStatus =
   | "processing"
