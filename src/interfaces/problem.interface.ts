@@ -2,6 +2,7 @@ import * as Monaco from "monaco-editor";
 import { ApiResponse } from "./api.interface";
 import { BaseTestCase } from "./test-case.interface";
 import { SupportedLanguages } from "./language.interface";
+import { JSX } from "react";
 
 export interface InputFormat {
   style: "function" | "class";
@@ -63,4 +64,9 @@ export interface EditorProps {
   boilerPlate: string;
   language: SupportedLanguages;
   readOnly?: boolean;
+}
+
+export interface TestCaseSectionProps {
+  content: JSX.Element[];
+  label: string;
 }

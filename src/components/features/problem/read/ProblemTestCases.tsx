@@ -1,7 +1,7 @@
-import { TabbedSectionProps } from "@/src/interfaces/container.interface";
+import { TestCaseSectionProps } from "@/src/interfaces/problem.interface";
 import React from "react";
 
-const TabbedSection = (props: TabbedSectionProps) => {
+const ProblemTestCases = (props: TestCaseSectionProps) => {
   const [tabIndex, setTabIndex] = React.useState(0);
 
   const handleTabIndex = (index: number) => {
@@ -34,4 +34,4 @@ const TabbedSection = (props: TabbedSectionProps) => {
   );
 };
 
-export default TabbedSection;
+export default ProblemTestCases;

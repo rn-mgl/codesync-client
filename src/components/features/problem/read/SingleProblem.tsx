@@ -1,10 +1,7 @@
 "use client";
 
-import TabbedSection from "@/src/components/ui/containers/TabbedSection";
 import Editor from "@/src/components/ui/fields/Editor";
 import Delete from "@/src/components/ui/forms/Delete";
-import { Bar } from "react-chartjs-2";
-import { Chart, registerables } from "chart.js";
 import { SupportedLanguages } from "@/src/interfaces/language.interface";
 import {
   BaseProblem,
@@ -22,23 +19,26 @@ import {
 import { BaseTestCase } from "@/src/interfaces/test-case.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
 import { generateBoilerPlate } from "@/src/utils/problem.util";
+import { Chart, registerables } from "chart.js";
 import * as Monaco from "monaco-editor";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import React from "react";
-import { FaMemory, FaRegEdit } from "react-icons/fa";
+import { FaRegEdit } from "react-icons/fa";
 import {
   FaArrowLeft,
   FaCheck,
   FaCode,
-  FaRegClock,
   FaRegFileCode,
   FaRegTrashCan,
   FaXmark,
 } from "react-icons/fa6";
-import Languages from "./Languages";
 import { toast } from "sonner";
+import Languages from "./Languages";
+import ProblemDetails from "./ProblemDetails";
+import ProblemTestCases from "./ProblemTestCases";
+import RunResults from "./RunResults";
 
 const submissionReducer = (
   state: SubmissionState,
@@ -121,8 +121,6 @@ const SingleProblem = () => {
   const editorRef = React.useRef<Monaco.editor.IStandaloneCodeEditor | null>(
     null,
   );
-  const readonlyEditor =
-    React.useRef<Monaco.editor.IStandaloneCodeEditor | null>(null);
 
   const getProblem = React.useCallback(async () => {
     try {
@@ -315,7 +313,7 @@ const SingleProblem = () => {
     return (
       <div
         key={tc.id}
-        className="w-full min-h-full h-auto flex flex-col items-start justify-start gap-2 p-2 rounded-md bg-neutral-200"
+        className="w-full h-auto flex flex-col items-start justify-start gap-2 p-2 rounded-md bg-neutral-200"
       >
         <p className="text-xs">Input</p>
         <div className="w-full flex flex-col items-center justify-start gap-2">
@@ -329,26 +327,16 @@ const SingleProblem = () => {
           </p>
         </div>
 
-        {matchingSubmissionOutput && (
+        {(matchingSubmissionOutput || matchingSubmissionError) && (
           <>
             <p className="text-xs mt-2">Submission Output</p>
             <div
               className={`p-4 rounded-md min-w-fit w-full text-sm 
-                        ${isCorrectSubmissionOutput ? "bg-green-300 text-green-900" : "bg-red-300 text-red-900"}`}
+                        ${isCorrectSubmissionOutput ? "bg-green-300 text-green-900" : "bg-red-300 text-red-900"}
+                        ${matchingSubmissionError ? "bg-red-300 text-red-900" : ""}`}
             >
-              <p className="font-medium">{matchingSubmissionOutput}</p>
-            </div>
-          </>
-        )}
-
-        {matchingSubmissionError && (
-          <>
-            <p className="text-xs mt-2">Submission Output</p>
-            <div className="p-4 rounded-md min-w-fit w-full text-sm bg-red-300 text-red-900">
-              <p
-                className={`font-medium ${matchingSubmissionError && "whitespace-pre-line"}`}
-              >
-                {matchingSubmissionError}
+              <p className="font-medium">
+                {matchingSubmissionOutput || matchingSubmissionError}
               </p>
             </div>
           </>
@@ -426,204 +414,15 @@ const SingleProblem = () => {
         <div className="w-full h-full max-h-screen flex flex-col l-s:overflow-hidden border rounded-md border-neutral-400 bg-secondary">
           <div className="w-full h-full flex flex-col gap-8 p-2 overflow-y-auto l-s:max-h-full">
             {submittedRunOutput ? (
-              <div className="flex flex-col items-end justify-start gap-2 w-full">
-                <button
-                  title="Clear Run Result"
-                  onClick={() => handleClearSubmissionState("run")}
-                  className="p-2 rounded-full hover:text-red-800 bg-secondary animate-fade flex flex-row items-center justify-center text-sm"
-                >
-                  <FaXmark />
-                </button>
-
-                {submittedRunOutput.success ? (
-                  <div className="p-2 rounded-md bg-neutral-red-300 flex flex-col items-start justify-start gap-2 w-full">
-                    <div className="w-full flex items-center justify-end">
-                      <p
-                        className={`p-2 rounded-md text-xs font-semibold ${submittedRunOutput.summary?.passed === submittedRunOutput.summary?.total ? "bg-green-300" : "bg-red-300"}`}
-                      >
-                        {submittedRunOutput.summary?.passed} /{" "}
-                        {submittedRunOutput.summary?.total} Test Cases Passed
-                      </p>
-                    </div>
-
-                    {submittedRunOutput.summary?.failed.testCase ? (
-                      <div className="w-full flex flex-col items-start justify-start gap-2">
-                        <p className="text-xs mt-2">Input</p>
-                        <div className="w-full flex flex-col items-start justify-start gap-2">
-                          {Object.entries(
-                            submittedRunOutput.summary.failed.testCase.input,
-                          ).map(([param, value]) => {
-                            const parsedValue = JSON.stringify(value, null, 2);
-
-                            return (
-                              <div
-                                key={param}
-                                className="p-4 rounded-md bg-neutral-300 text-sm w-full"
-                              >
-                                <p className="font-medium text-xs opacity-80">
-                                  {param}=
-                                </p>
-                                <p className="font-medium mt-1">
-                                  {parsedValue}
-                                </p>
-                              </div>
-                            );
-                          })}
-                        </div>
-
-                        <p className="text-xs mt-2">Expected Output</p>
-                        <div className="p-4 rounded-md bg-neutral-300 text-sm w-full">
-                          <p className="font-medium ">
-                            {JSON.stringify(
-                              submittedRunOutput.summary.failed.testCase
-                                .expected_output,
-                              null,
-                              2,
-                            )}
-                          </p>
-                        </div>
-
-                        <p className="text-xs mt-2">Submission Output</p>
-                        <div className="p-4 rounded-md bg-red-300 text-red-900 text-sm w-full">
-                          <p className="font-medium">
-                            {JSON.stringify(
-                              submittedRunOutput.summary.failed.output,
-                              null,
-                              2,
-                            )}
-                          </p>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="w-full flex flex-col items-start justify-start gap-2">
-                        <div className="w-full grid grid-cols-1 gap-2 t:grid-cols-2">
-                          <button
-                            onClick={() => handleActiveChart("runtime")}
-                            className={`w-full p-4 rounded-md flex flex-row justify-between items-center text-left transition-all bg-cyan-500
-                                       ${activeChart === "runtime" ? "opacity-100" : "opacity-50"}`}
-                          >
-                            <p className="flex flex-col">
-                              <span className="text-xs text-secondary font-light">
-                                Average Run Time
-                              </span>
-                              <span className="text-2xl text-primary-300 font-black mt-auto">
-                                {submittedRunOutput.summary?.runtime} ms
-                              </span>
-                            </p>
-                            <p>
-                              <FaRegClock className="text-secondary text-2xl" />
-                            </p>
-                          </button>
-
-                          <button
-                            onClick={() => handleActiveChart("memory")}
-                            className={`w-full p-4 rounded-md flex flex-row justify-between items-center text-left transition-all bg-emerald-500
-                                       ${activeChart === "memory" ? "opacity-100" : "opacity-50"}`}
-                          >
-                            <p className="flex flex-col">
-                              <span className="text-xs text-secondary font-light">
-                                Average Memory Used
-                              </span>
-                              <span className="text-2xl text-primary-300 font-black mt-auto">
-                                {submittedRunOutput.summary?.memory} MB
-                              </span>
-                            </p>
-                            <p>
-                              <FaMemory className="text-secondary text-2xl" />
-                            </p>
-                          </button>
-                        </div>
-
-                        <div className="w-full aspect-video p-2 rounded-md bg-primary">
-                          <Bar
-                            data={{
-                              labels:
-                                activeChart === "runtime"
-                                  ? submittedRunOutput.statistics?.runtime
-                                      .sort((a, b) => a.ms - b.ms)
-                                      .map((stat) => stat.ms)
-                                  : submittedRunOutput.statistics?.memory
-                                      .sort((a, b) => a.mb - b.mb)
-                                      .map((stat) => stat.mb),
-                              datasets: [
-                                {
-                                  label: "Memory",
-                                  data:
-                                    activeChart === "runtime"
-                                      ? submittedRunOutput.statistics?.runtime
-                                          .sort(
-                                            (a, b) =>
-                                              a.percentage - b.percentage,
-                                          )
-                                          .map((stat) => stat.percentage)
-                                      : submittedRunOutput.statistics?.memory
-                                          .sort(
-                                            (a, b) =>
-                                              a.percentage - b.percentage,
-                                          )
-                                          .map((stat) => stat.percentage),
-                                  backgroundColor: [
-                                    activeChart === "runtime"
-                                      ? "oklch(78.9% 0.154 211.53)"
-                                      : "oklch(76.5% 0.177 163.223)",
-                                  ],
-                                },
-                              ],
-                            }}
-                            options={{
-                              scales: {
-                                y: {
-                                  beginAtZero: true,
-                                },
-                                x: {
-                                  beginAtZero: true,
-                                },
-                              },
-                              responsive: true,
-                              maintainAspectRatio: true,
-                              resizeDelay: 1,
-                            }}
-                          />
-                        </div>
-
-                        <div className="w-full p-2 rounded-md bg-[#1e1e1e] text-secondary max-h-80 resize-y h-full min-h-72">
-                          <Editor
-                            ref={readonlyEditor}
-                            boilerPlate={submittedRunOutput.summary?.code ?? ""}
-                            language={
-                              submittedRunOutput.summary?.language ??
-                              currentLanguage
-                            }
-                            readOnly={true}
-                          />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div className="p-2 rounded-md bg-red-300 min-w-fit w-full">
-                    <p className="text-red-900 whitespace-pre-line text-sm">
-                      {submittedRunOutput.error}
-                    </p>
-                  </div>
-                )}
-              </div>
+              <RunResults
+                runOutput={submittedRunOutput}
+                language={currentLanguage}
+                activeChart={activeChart}
+                handleClearSubmissionState={handleClearSubmissionState}
+                handleActiveChart={handleActiveChart}
+              />
             ) : (
-              <>
-                <div className="w-full flex flex-col gap-4">
-                  <h1 className="text-xl font-bold text-pretty t:text-2xl">
-                    {problem.id}. {problem.title}
-                  </h1>
-
-                  <p className="text-sm whitespace-pre-line">
-                    {problem.description}
-                  </p>
-                </div>
-                <div className="text-sm">
-                  <p>Constraints: </p>
-                  <p className="whitespace-pre">formatted constraint here</p>
-                </div>
-              </>
+              <ProblemDetails problem={problem} />
             )}
           </div>
         </div>
@@ -715,7 +514,7 @@ const SingleProblem = () => {
             )}
 
             <div className="w-full h-full rounded-md flex flex-col items-start justify-start overflow-y-hidden">
-              <TabbedSection
+              <ProblemTestCases
                 label={didSubmitTest ? "Submitted Test" : "Test Case"}
                 content={mappedTestCases}
               />
