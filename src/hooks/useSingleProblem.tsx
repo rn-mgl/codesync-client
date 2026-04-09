@@ -54,6 +54,8 @@ const submissionReducer = (
       const removedTest = { ...state };
       delete removedTest.test;
       return removedTest;
+    default:
+      return state;
   }
 };
 
