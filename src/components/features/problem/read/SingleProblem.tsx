@@ -24,17 +24,10 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import React from "react";
-import { FaRegEdit } from "react-icons/fa";
-import {
-  FaArrowLeft,
-  FaCheck,
-  FaCode,
-  FaRegFileCode,
-  FaRegTrashCan,
-  FaXmark,
-} from "react-icons/fa6";
+import { FaArrowLeft, FaCheck, FaXmark } from "react-icons/fa6";
 import { toast } from "sonner";
-import Languages from "./Languages";
+import EditorActions from "./EditorActions";
+import ProblemActions from "./ProblemActions";
 import ProblemDetails from "./ProblemDetails";
 import ProblemTestCases from "./ProblemTestCases";
 import RunResults from "./RunResults";
@@ -100,7 +93,6 @@ const SingleProblem = () => {
   });
   const [currentLanguage, setCurrentLanguage] =
     React.useState<SupportedLanguages>("javascript");
-  const [canSelectLanguage, setCanSelectLanguage] = React.useState(false);
   const [testCases, setTestCases] = React.useState<BaseTestCase[]>([]);
   const [canDelete, setCanDelete] = React.useState(false);
   const [activeChart, setActiveChart] = React.useState<"runtime" | "memory">(
@@ -217,10 +209,6 @@ const SingleProblem = () => {
     setCurrentLanguage(language);
   };
 
-  const handleCanSelectLanguage = () => {
-    setCanSelectLanguage((prev) => !prev);
-  };
-
   const handleClearSubmissionState = (type: SubmissionType) => {
     submissionDispatch({
       type: `clear_${type}`,
@@ -236,48 +224,43 @@ const SingleProblem = () => {
 
   const didSubmitRun = submissionState && !!submissionState.run;
 
-  let submittedTestOutput: {
+  const submittedTestOutput: {
     success: boolean;
     error: string;
     output: SubmissionResponse;
-  } | null = null;
+  } | null = didSubmitTest
+    ? {
+        success: typeof submissionState.test === "object",
+        error:
+          typeof submissionState.test === "string" ? submissionState.test : "",
+        output:
+          typeof submissionState.test === "object" ? submissionState.test : {},
+      }
+    : null;
 
-  let submittedRunOutput: {
+  const submittedRunOutput: {
     success: boolean;
     error: string;
     output: SubmissionResponse;
     summary: RunSummary | null;
     statistics: SubmissionStatistics | null;
-  } | null = null;
-
-  if (didSubmitTest) {
-    // it's an error if the test value is string
-    submittedTestOutput = {
-      success: typeof submissionState.test === "object",
-      error:
-        typeof submissionState.test === "string" ? submissionState.test : "",
-      output:
-        typeof submissionState.test === "object" ? submissionState.test : {},
-    };
-  }
-
-  if (didSubmitRun) {
-    // it's an error if the run value is string
-    submittedRunOutput = {
-      success: typeof submissionState.run === "object",
-      error: typeof submissionState.run === "string" ? submissionState.run : "",
-      statistics:
-        typeof submissionState.run === "object"
-          ? submissionState.run.statistics
-          : null,
-      summary:
-        typeof submissionState.run === "object"
-          ? submissionState.run.summary
-          : null,
-      output:
-        typeof submissionState.run === "object" ? submissionState.run : {},
-    };
-  }
+  } | null = didSubmitRun
+    ? {
+        success: typeof submissionState.run === "object",
+        error:
+          typeof submissionState.run === "string" ? submissionState.run : "",
+        statistics:
+          typeof submissionState.run === "object"
+            ? submissionState.run.statistics
+            : null,
+        summary:
+          typeof submissionState.run === "object"
+            ? submissionState.run.summary
+            : null,
+        output:
+          typeof submissionState.run === "object" ? submissionState.run : {},
+      }
+    : null;
 
   React.useEffect(() => {
     const storedCode = localStorage.getItem(
@@ -359,52 +342,11 @@ const SingleProblem = () => {
       </div>
 
       <div className="w-full flex flex-col items-start justify-start gap-2 l-s:h-full l-s:overflow-y-hidden">
-        <div className="w-full flex flex-row items-center justify-between gap-2 h-fit relative">
-          <div className="flex gap-2 relative">
-            <Link
-              href={`/codesync/test-cases?problem=${params?.slug}`}
-              title="Test Case"
-              className="p-2 rounded-full bg-inherit hover:text-green-800 flex flex-col items-center justify-center"
-            >
-              <FaRegFileCode />
-            </Link>
-            <button
-              title="Language"
-              onClick={handleCanSelectLanguage}
-              className={`p-2 rounded-full bg-inherit justify-center flex flex-row items-center 
-                          gap-1 transition-all ${canSelectLanguage ? "bg-primary text-secondary" : "bg-secondary text-primary"}`}
-            >
-              <FaCode />
-              <span className="text-xs capitalize">{currentLanguage}</span>
-            </button>
-          </div>
-
-          <div className="flex gap-2">
-            <Link
-              title="Edit"
-              href={`/codesync/problems/${params?.slug}/edit`}
-              className="p-2 rounded-full bg-inherit hover:text-blue-800 flex flex-col items-center justify-center"
-            >
-              <FaRegEdit />
-            </Link>
-
-            <button
-              title="Delete"
-              onClick={handleCanDelete}
-              className="p-2 rounded-full bg-inherit hover:text-red-800 flex flex-col items-center justify-center"
-            >
-              <FaRegTrashCan />
-            </button>
-          </div>
-
-          {canSelectLanguage && (
-            <Languages
-              currentLanguage={currentLanguage}
-              closeModal={handleCanSelectLanguage}
-              selectLanguage={handleCurrentLanguage}
-            />
-          )}
-        </div>
+        <ProblemActions
+          language={currentLanguage}
+          handleCurrentLanguage={handleCurrentLanguage}
+          handleCanDelete={handleCanDelete}
+        />
 
         <div className="w-full grid grid-cols-1 grid-rows-2 items-start justify-start gap-4 h-screen l-s:h-full rounded-md overflow-hidden">
           <div className="w-full h-full grid-rows-1 p-2 rounded-md bg-[#1e1e1e] flex flex-col items-center justify-center">
@@ -413,23 +355,7 @@ const SingleProblem = () => {
               boilerPlate={startingCode}
               ref={editorRef}
             />
-            <div className="w-full flex flex-row items-center justify-center gap-2 t:justify-end mt-2">
-              <button
-                onClick={() => handleSubmission("test")}
-                type="button"
-                className="w-full p-1 rounded-md font-bold bg-neutral-200 t:max-w-16 t:px-4 text-sm"
-              >
-                Test
-              </button>
-
-              <button
-                onClick={() => handleSubmission("run")}
-                type="button"
-                className="w-full p-1 rounded-md font-bold bg-green-600 text-secondary t:max-w-16 t:px-4 text-sm"
-              >
-                Run
-              </button>
-            </div>
+            <EditorActions handleSubmission={handleSubmission} />
           </div>
 
           <div className="w-full flex flex-col items-end justify-start grid-rows-1 h-full overflow-y-hidden">
