@@ -68,9 +68,14 @@ export interface EditorProps {
 
 export interface TestCaseSectionProps {
   testCases: BaseTestCase[];
-  submittedTestOutput: {
-    success: boolean;
-    error: string;
-    output: SubmissionResponse;
-  } | null;
+  submittedTestOutput:
+    | {
+        success: false;
+        error: string;
+      }
+    | {
+        success: true;
+        output: SubmissionResponse;
+      }
+    | null;
 }

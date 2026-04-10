@@ -32,6 +32,7 @@ export type SubmissionResponse = Record<
     memory: number;
     runtime: number;
     matched: boolean;
+    logs: unknown[];
   }
 >;
 
