@@ -94,6 +94,9 @@ export default function useSingleProblem() {
     submissionReducer,
     null,
   );
+  const [activeDetailsPanel, setActiveDetailsPanel] = React.useState<
+    "description" | "editorial" | "submission"
+  >("description");
 
   const params: { slug?: string } | null = useParams();
   const editorRef = React.useRef<Monaco.editor.IStandaloneCodeEditor | null>(
@@ -209,6 +212,12 @@ export default function useSingleProblem() {
     setActiveChart(chart);
   };
 
+  const handleActiveDetailsPanel = (
+    panel: "description" | "editorial" | "submission",
+  ) => {
+    setActiveDetailsPanel(panel);
+  };
+
   // check type to handle errors
   const didSubmitTest = submissionState && !!submissionState.test;
 
@@ -275,11 +284,13 @@ export default function useSingleProblem() {
     submittedRunOutput,
     didSubmitTest,
     didSubmitRun,
+    activeDetailsPanel,
     getProblem,
     handleSubmission,
     handleCanDelete,
     handleCurrentLanguage,
     handleClearSubmissionState,
     handleActiveChart,
+    handleActiveDetailsPanel,
   };
 }

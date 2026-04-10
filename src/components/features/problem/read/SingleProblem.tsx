@@ -32,12 +32,14 @@ const SingleProblem = () => {
     submittedTestOutput,
     submittedRunOutput,
     didSubmitTest,
+    activeDetailsPanel,
     getProblem,
     handleSubmission,
     handleCanDelete,
     handleCurrentLanguage,
     handleClearSubmissionState,
     handleActiveChart,
+    handleActiveDetailsPanel,
   } = useSingleProblem();
 
   React.useEffect(() => {
@@ -96,19 +98,53 @@ const SingleProblem = () => {
           All Problems
         </Link>
 
-        <div className="w-full h-full max-h-screen flex flex-col l-s:overflow-hidden border rounded-md border-neutral-400 bg-secondary">
-          <div className="w-full h-full flex flex-col gap-8 p-2 overflow-y-auto l-s:max-h-full">
-            {submittedRunOutput ? (
-              <RunResults
-                runOutput={submittedRunOutput}
-                language={currentLanguage}
-                activeChart={activeChart}
-                handleClearSubmissionState={handleClearSubmissionState}
-                handleActiveChart={handleActiveChart}
-              />
-            ) : (
-              <ProblemDetails problem={problem} />
+        <div className="w-full h-full max-h-screen flex flex-col l-s:overflow-hidden gap-2">
+          <div className="w-full min-h-fit flex flex-row items-start justify-start gap-2 overflow-x-auto">
+            <button
+              onClick={() => handleActiveDetailsPanel("description")}
+              className={`text-sm px-2 py-1 border-2 border-neutral-400 rounded-sm ${activeDetailsPanel === "description" ? "bg-primary text-secondary" : "bg-neutral-200"}`}
+            >
+              Description
+            </button>
+            <button
+              onClick={() => handleActiveDetailsPanel("editorial")}
+              className={`text-sm px-2 py-1 border-2 border-neutral-400 rounded-sm ${activeDetailsPanel === "editorial" ? "bg-primary text-secondary" : "bg-neutral-200"}`}
+            >
+              Editorial
+            </button>
+
+            {submittedRunOutput && (
+              <div className="flex flex-row">
+                <button
+                  onClick={() => handleActiveDetailsPanel("submission")}
+                  className={`text-sm px-2 py-1 border-2 border-r rounded-r-none border-neutral-400 rounded-sm ${activeDetailsPanel === "submission" ? "bg-primary text-secondary" : "bg-neutral-200"}`}
+                >
+                  Submission
+                </button>
+
+                <button
+                  onClick={() => handleClearSubmissionState("run")}
+                  className="text-sm px-2 py-1 border-2 border-l rounded-l-none border-neutral-400 rounded-sm bg-neutral-200"
+                >
+                  <FaXmark />
+                </button>
+              </div>
             )}
+          </div>
+
+          <div className="w-full h-full flex flex-col l-s:overflow-hidden border rounded-md border-neutral-400 bg-secondary">
+            <div className="w-full h-full flex flex-col gap-8 p-2 overflow-y-auto l-s:max-h-full">
+              {submittedRunOutput && activeDetailsPanel === "submission" ? (
+                <RunResults
+                  runOutput={submittedRunOutput}
+                  language={currentLanguage}
+                  activeChart={activeChart}
+                  handleActiveChart={handleActiveChart}
+                />
+              ) : activeDetailsPanel === "description" ? (
+                <ProblemDetails problem={problem} />
+              ) : null}
+            </div>
           </div>
         </div>
       </div>

@@ -5,9 +5,7 @@ import {
   RunSummary,
   SubmissionResponse,
   SubmissionStatistics,
-  SubmissionType,
 } from "@/src/interfaces/submission.interface";
-import { FaXmark } from "react-icons/fa6";
 import FailedTestCase from "./FailedTestCase";
 import RunMetricsToggle from "./RunMetricsToggle";
 import RunStatistics from "./RunStatistics";
@@ -22,21 +20,12 @@ const RunResults = (props: {
     summary: RunSummary | null;
     statistics: SubmissionStatistics | null;
   };
-  handleClearSubmissionState: (type: SubmissionType) => void;
-  handleActiveChart: (chart: "runtime" | "memory") => void;
   activeChart: "runtime" | "memory";
   language: SupportedLanguages;
+  handleActiveChart: (chart: "runtime" | "memory") => void;
 }) => {
   return (
     <div className="flex flex-col items-end justify-start gap-2 w-full">
-      <button
-        title="Clear Run Result"
-        onClick={() => props.handleClearSubmissionState("run")}
-        className="p-2 rounded-full hover:text-red-800 bg-secondary animate-fade flex flex-row items-center justify-center text-sm"
-      >
-        <FaXmark />
-      </button>
-
       {props.runOutput.success ? (
         <div className="p-2 rounded-md bg-neutral-red-300 flex flex-col items-start justify-start gap-2 w-full">
           <RunStatusBadge
