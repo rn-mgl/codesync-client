@@ -66,8 +66,12 @@ const ProblemTestCases = (props: TestCaseSectionProps) => {
             <div className="p-4 rounded-md bg-neutral-300 w-full text-sm">
               <p className="font-medium whitespace-pre">
                 {matchingSubmissionLogs
-                  .map((log) => JSON.stringify(log, null, 2))
-                  .join("\n\n")}
+                  .map((log) =>
+                    typeof log === "object"
+                      ? JSON.stringify(log, null, 2)
+                      : log,
+                  )
+                  .join("\n")}
               </p>
             </div>
           </>
