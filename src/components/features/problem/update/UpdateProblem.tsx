@@ -1,6 +1,7 @@
 "use client";
 
 import Input from "@/src/components/ui/fields/Input";
+import RichTextEditor from "@/src/components/ui/fields/RichTextEditor";
 import Select from "@/src/components/ui/fields/Select";
 import TextArea from "@/src/components/ui/fields/TextArea";
 import useSelect from "@/src/hooks/useSelect";
@@ -9,13 +10,13 @@ import {
   ProblemForm,
   UpdateProblemResponse,
 } from "@/src/interfaces/problem.interface";
+import { Editor } from "@tiptap/react";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import React from "react";
 import {
   FaCode,
   FaLink,
-  FaPen,
   FaPuzzlePiece,
   FaRegNoteSticky,
 } from "react-icons/fa6";
@@ -35,6 +36,8 @@ const UpdateProblem = () => {
 
   const { select: difficulty, handleSelect: handleDifficulty } =
     useSelect<ProblemForm>({ label: "Easy", value: "easy" }, setProblem);
+
+  const editorialRef = React.useRef<Editor | null>(null);
 
   useSession({ required: true });
 
@@ -57,6 +60,8 @@ const UpdateProblem = () => {
     e.preventDefault();
     try {
       if (!params?.slug) return;
+
+      problem.editorial = editorialRef.current?.getHTML() ?? problem.editorial;
 
       const response = await fetch(`/api/problem/${params.slug}`, {
         method: "PATCH",
@@ -184,16 +189,18 @@ const UpdateProblem = () => {
             icon={<FaRegNoteSticky />}
           />
 
-          <TextArea
-            id="editorial"
-            name="editorial"
-            onChange={handleProblem}
-            value={problem.editorial}
-            label="Editorial"
-            columns={6}
-            required={true}
-            icon={<FaPen />}
-          />
+          <div className="w-full flex flex-col items-start justify-center bg-secondary gap-1">
+            <label className="text-xs text-primary/80 font-medium">
+              Editorial
+            </label>
+
+            {problem.editorial && (
+              <RichTextEditor
+                initialValue={problem.editorial}
+                ref={editorialRef}
+              />
+            )}
+          </div>
         </div>
       </div>
 

@@ -1,3 +1,5 @@
+"use client";
+
 import { RichTextEditorProps } from "@/src/interfaces/field.interface";
 import {
   Editor,
@@ -24,26 +26,26 @@ import {
 
 type HeaderType = 1 | 2 | 3 | 4 | 5 | 6;
 
-const RichTextEditor = (props: RichTextEditorProps) => {
+const RichTextEditor = ({ ref, ...props }: RichTextEditorProps) => {
   const [isActiveHeaderOptions, setIsActiveHeaderOptions] =
     React.useState(false);
   const [headerType, setHeaderType] = React.useState<HeaderType>(1);
 
-  const editorRef = props.ref;
+  const editorRef = ref;
 
   // editor instance
   const editor = useEditor({
     extensions: [StarterKit],
-    content: "<p>Hello</p>",
+    content: props.initialValue,
     immediatelyRender: false,
     editorProps: {
       attributes: {
         class:
-          "max-h-full min-h-60 h-full w-full bg-inherit p-2 rounded-md outline-none rounded-t-none border-2 border-t border-neutral-400 overflow-y-auto",
+          "max-h-full min-h-60 h-full w-full bg-inherit p-2 rounded-md outline-none rounded-t-none border-2 border-t border-neutral-400 overflow-y-auto resize-y",
       },
     },
-    onMount(props) {
-      editorRef.current = props.editor;
+    onMount({ editor }) {
+      editorRef.current = editor;
     },
   });
 

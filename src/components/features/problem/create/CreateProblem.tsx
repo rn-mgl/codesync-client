@@ -150,7 +150,10 @@ const CreateProblem = () => {
             <label className="text-xs text-primary/80 font-medium">
               Editorial
             </label>
-            <RichTextEditor ref={editorialRef} />
+            <RichTextEditor
+              initialValue="<i>Enter value</i>"
+              ref={editorialRef}
+            />
           </div>
         </div>
       </div>

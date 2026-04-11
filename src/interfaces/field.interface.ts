@@ -51,4 +51,5 @@ export interface CodeEditorProps {
 
 export interface RichTextEditorProps {
   ref: React.RefObject<Editor | null>;
+  initialValue: string;
 }
