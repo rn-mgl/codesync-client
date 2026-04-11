@@ -19,6 +19,7 @@ import {
   FaRegNoteSticky,
 } from "react-icons/fa6";
 import { toast } from "sonner";
+import RichTextEditor from "@/src/components/ui/fields/RichTextEditor";
 
 const CreateProblem = () => {
   const [problem, setProblem] = React.useState<ProblemForm>({
@@ -141,16 +142,12 @@ const CreateProblem = () => {
             icon={<FaRegNoteSticky />}
           />
 
-          <TextArea
-            id="editorial"
-            name="editorial"
-            onChange={handleProblem}
-            value={problem.editorial}
-            label="Editorial"
-            columns={6}
-            required={true}
-            icon={<FaPen />}
-          />
+          <div className="w-full flex flex-col items-start justify-center bg-secondary gap-1">
+            <label className="text-xs text-primary/80 font-medium">
+              Editorial
+            </label>
+            <RichTextEditor />
+          </div>
         </div>
       </div>
 

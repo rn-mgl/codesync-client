@@ -1,6 +1,6 @@
 "use client";
 
-import Editor from "@/src/components/ui/fields/Editor";
+import CodeEditor from "@/src/components/ui/fields/CodeEditor";
 import Delete from "@/src/components/ui/forms/Delete";
 import useSingleProblem from "@/src/hooks/useSingleProblem";
 import { useSession } from "next-auth/react";
@@ -15,6 +15,7 @@ import ProblemActions from "./ProblemActions";
 import ProblemDetails from "./ProblemDetails";
 import ProblemTestCases from "./ProblemTestCases";
 import RunResults from "./RunResults";
+import RichTextEditor from "@/src/components/ui/fields/RichTextEditor";
 
 const SingleProblem = () => {
   useSession({ required: true });
@@ -76,7 +77,7 @@ const SingleProblem = () => {
   }, [getProblem]);
 
   return (
-    <div className="w-full grid grid-cols-1 gap-4 l-s:grid-cols-2 l-s:h-full">
+    <div className="w-full grid grid-cols-1 gap-4 items-start justify-start l-s:grid-cols-2 l-s:h-full">
       {canDelete && (
         <Delete
           label="Problem"
@@ -98,7 +99,7 @@ const SingleProblem = () => {
           All Problems
         </Link>
 
-        <div className="w-full h-full max-h-screen flex flex-col l-s:overflow-hidden gap-2">
+        <div className="w-full h-full max-h-screen min-h-screen flex flex-col l-s:min-h-auto l-s:overflow-hidden gap-2">
           <DetailsAction
             activeDetailsPanel={activeDetailsPanel}
             didSubmitRun={!!submittedRunOutput}
@@ -106,7 +107,7 @@ const SingleProblem = () => {
             handleClearSubmissionState={handleClearSubmissionState}
           />
 
-          <div className="w-full h-full flex flex-col l-s:overflow-hidden border rounded-md border-neutral-400 bg-secondary">
+          <div className="w-full h-full flex overflow-y-auto flex-col l-s:overflow-hidden border rounded-md border-neutral-400 bg-secondary">
             <div className="w-full h-full flex flex-col gap-8 p-2 overflow-y-auto l-s:max-h-full">
               {submittedRunOutput && activeDetailsPanel === "submission" ? (
                 <RunResults
@@ -117,13 +118,15 @@ const SingleProblem = () => {
                 />
               ) : activeDetailsPanel === "description" ? (
                 <ProblemDetails problem={problem} />
+              ) : activeDetailsPanel === "editorial" ? (
+                <p className="prose max-w-none">{problem.editorial}</p>
               ) : null}
             </div>
           </div>
         </div>
       </div>
 
-      <div className="w-full flex flex-col items-start justify-start gap-2 l-s:h-full l-s:overflow-y-hidden">
+      <div className="w-full h-full flex flex-col items-start justify-start gap-2 l-s:h-full l-s:overflow-y-hidden">
         <ProblemActions
           language={currentLanguage}
           handleCurrentLanguage={handleCurrentLanguage}
@@ -132,7 +135,7 @@ const SingleProblem = () => {
 
         <div className="w-full grid grid-cols-1 grid-rows-2 items-start justify-start gap-4 h-screen l-s:h-full rounded-md overflow-hidden">
           <div className="w-full h-full grid-rows-1 p-2 rounded-md bg-[#1e1e1e] flex flex-col items-center justify-center">
-            <Editor
+            <CodeEditor
               language={currentLanguage}
               boilerPlate={startingCode}
               ref={editorRef}
