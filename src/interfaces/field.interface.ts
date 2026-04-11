@@ -1,4 +1,7 @@
+import * as Monaco from "monaco-editor";
 import { HTMLInputTypeAttribute, ReactElement } from "react";
+import { SupportedLanguages } from "./language.interface";
+import { Editor } from "@tiptap/react";
 
 interface BaseFieldProperties {
   name: string;
@@ -37,4 +40,15 @@ export interface ToggleField extends Omit<
 > {
   checked: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+export interface CodeEditorProps {
+  ref: React.RefObject<Monaco.editor.IStandaloneCodeEditor | null>;
+  boilerPlate: string;
+  language: SupportedLanguages;
+  readOnly?: boolean;
+}
+
+export interface RichTextEditorProps {
+  ref: React.RefObject<Editor | null>;
 }

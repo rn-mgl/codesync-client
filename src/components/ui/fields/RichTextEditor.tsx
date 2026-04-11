@@ -1,9 +1,10 @@
+import { RichTextEditorProps } from "@/src/interfaces/field.interface";
 import {
-  useEditor,
-  EditorContent,
-  useEditorState,
-  EditorStateSnapshot,
   Editor,
+  EditorContent,
+  EditorStateSnapshot,
+  useEditor,
+  useEditorState,
 } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import React, { Activity } from "react";
@@ -20,14 +21,15 @@ import {
   FaRegWindowMinimize,
   FaStrikethrough,
 } from "react-icons/fa6";
-import Select from "./Select";
 
 type HeaderType = 1 | 2 | 3 | 4 | 5 | 6;
 
-const RichTextEditor = () => {
+const RichTextEditor = (props: RichTextEditorProps) => {
   const [isActiveHeaderOptions, setIsActiveHeaderOptions] =
     React.useState(false);
   const [headerType, setHeaderType] = React.useState<HeaderType>(1);
+
+  const editorRef = props.ref;
 
   // editor instance
   const editor = useEditor({
@@ -39,6 +41,9 @@ const RichTextEditor = () => {
         class:
           "max-h-full min-h-60 h-full w-full bg-inherit p-2 rounded-md outline-none rounded-t-none border-2 border-t border-neutral-400 overflow-y-auto",
       },
+    },
+    onMount(props) {
+      editorRef.current = props.editor;
     },
   });
 

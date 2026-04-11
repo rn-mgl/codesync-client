@@ -59,13 +59,6 @@ export type GetProblemResponse = ApiResponse<{
 
 export type UpdateProblemResponse = ApiResponse<{ message: string }>;
 
-export interface EditorProps {
-  ref: React.RefObject<Monaco.editor.IStandaloneCodeEditor | null>;
-  boilerPlate: string;
-  language: SupportedLanguages;
-  readOnly?: boolean;
-}
-
 export interface TestCaseSectionProps {
   testCases: BaseTestCase[];
   handleClearSubmissionState: (type: SubmissionType) => void;

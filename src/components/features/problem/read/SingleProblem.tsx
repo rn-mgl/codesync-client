@@ -15,7 +15,6 @@ import ProblemActions from "./ProblemActions";
 import ProblemDetails from "./ProblemDetails";
 import ProblemTestCases from "./ProblemTestCases";
 import RunResults from "./RunResults";
-import RichTextEditor from "@/src/components/ui/fields/RichTextEditor";
 
 const SingleProblem = () => {
   useSession({ required: true });
@@ -119,7 +118,11 @@ const SingleProblem = () => {
               ) : activeDetailsPanel === "description" ? (
                 <ProblemDetails problem={problem} />
               ) : activeDetailsPanel === "editorial" ? (
-                <p className="prose max-w-none">{problem.editorial}</p>
+                <article className="prose max-w-none">
+                  <div
+                    dangerouslySetInnerHTML={{ __html: problem.editorial }}
+                  />
+                </article>
               ) : null}
             </div>
           </div>

@@ -1,10 +1,10 @@
 "use client";
 
-import { EditorProps } from "@/src/interfaces/problem.interface";
+import { CodeEditorProps } from "@/src/interfaces/field.interface";
 import { Editor as MonacoEditor } from "@monaco-editor/react";
 import * as Monaco from "monaco-editor";
 
-const CodeEditor = ({ ref, boilerPlate, ...props }: EditorProps) => {
+const CodeEditor = ({ ref, boilerPlate, ...props }: CodeEditorProps) => {
   const editorRef = ref;
 
   function handleEditorDidMount(editor: Monaco.editor.IStandaloneCodeEditor) {

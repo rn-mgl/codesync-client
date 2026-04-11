@@ -1,25 +1,25 @@
 "use client";
 
 import Input from "@/src/components/ui/fields/Input";
+import RichTextEditor from "@/src/components/ui/fields/RichTextEditor";
 import Select from "@/src/components/ui/fields/Select";
 import TextArea from "@/src/components/ui/fields/TextArea";
-import { getErrorMessage } from "@/src/utils/general.util";
 import useSelect from "@/src/hooks/useSelect";
 import {
-  ProblemForm,
   CreateProblemResponse,
+  ProblemForm,
 } from "@/src/interfaces/problem.interface";
+import { getErrorMessage } from "@/src/utils/general.util";
 import { useSession } from "next-auth/react";
 import React from "react";
 import {
   FaCode,
   FaLink,
-  FaPen,
   FaPuzzlePiece,
   FaRegNoteSticky,
 } from "react-icons/fa6";
+import { Editor } from "@tiptap/react";
 import { toast } from "sonner";
-import RichTextEditor from "@/src/components/ui/fields/RichTextEditor";
 
 const CreateProblem = () => {
   const [problem, setProblem] = React.useState<ProblemForm>({
@@ -35,6 +35,8 @@ const CreateProblem = () => {
 
   const { select: difficulty, handleSelect: handleDifficulty } =
     useSelect<ProblemForm>({ label: "Easy", value: "easy" }, setProblem);
+
+  const editorialRef = React.useRef<Editor | null>(null);
 
   useSession({ required: true });
 
@@ -54,6 +56,8 @@ const CreateProblem = () => {
   const handleCreate = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      problem.editorial = editorialRef.current?.getHTML() ?? "";
+
       const response = await fetch(`/api/problem`, {
         method: "POST",
         headers: {
@@ -146,7 +150,7 @@ const CreateProblem = () => {
             <label className="text-xs text-primary/80 font-medium">
               Editorial
             </label>
-            <RichTextEditor />
+            <RichTextEditor ref={editorialRef} />
           </div>
         </div>
       </div>
