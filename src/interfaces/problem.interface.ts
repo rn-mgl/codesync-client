@@ -1,6 +1,4 @@
-import * as Monaco from "monaco-editor";
 import { ApiResponse } from "./api.interface";
-import { SupportedLanguages } from "./language.interface";
 import { SubmissionResponse, SubmissionType } from "./submission.interface";
 import { BaseTestCase } from "./test-case.interface";
 

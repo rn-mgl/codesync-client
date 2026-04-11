@@ -10,15 +10,10 @@ import {
   ProblemForm,
 } from "@/src/interfaces/problem.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
+import { Editor } from "@tiptap/react";
 import { useSession } from "next-auth/react";
 import React from "react";
-import {
-  FaCode,
-  FaLink,
-  FaPuzzlePiece,
-  FaRegNoteSticky,
-} from "react-icons/fa6";
-import { Editor } from "@tiptap/react";
+import { FaCode, FaLink, FaPuzzlePiece } from "react-icons/fa6";
 import { toast } from "sonner";
 
 const CreateProblem = () => {
