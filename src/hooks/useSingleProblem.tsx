@@ -169,6 +169,8 @@ export default function useSingleProblem() {
         }
 
         if (type === "run" && "summary" in data) {
+          setActiveDetailsPanel("submission");
+
           submissionDispatch({
             type: `submit_run_success`,
             output: {
@@ -206,6 +208,10 @@ export default function useSingleProblem() {
     submissionDispatch({
       type: `clear_${type}`,
     });
+
+    if (type === "run") {
+      setActiveDetailsPanel("description");
+    }
   };
 
   const handleActiveChart = (chart: "runtime" | "memory") => {
@@ -278,12 +284,9 @@ export default function useSingleProblem() {
     canDelete,
     activeChart,
     startingCode,
-    submissionState,
     editorRef,
     submittedTestOutput,
     submittedRunOutput,
-    didSubmitTest,
-    didSubmitRun,
     activeDetailsPanel,
     getProblem,
     handleSubmission,

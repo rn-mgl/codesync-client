@@ -1,5 +1,6 @@
 import { TestCaseSectionProps } from "@/src/interfaces/problem.interface";
 import React from "react";
+import { FaXmark } from "react-icons/fa6";
 
 const ProblemTestCases = (props: TestCaseSectionProps) => {
   const [tabIndex, setTabIndex] = React.useState(0);
@@ -60,7 +61,7 @@ const ProblemTestCases = (props: TestCaseSectionProps) => {
           </p>
         </div>
 
-        {matchingSubmissionLogs && (
+        {matchingSubmissionLogs && matchingSubmissionLogs.length ? (
           <>
             <p className="text-xs mt-2">Log Output</p>
             <div className="p-4 rounded-md bg-neutral-300 w-full text-sm">
@@ -75,7 +76,7 @@ const ProblemTestCases = (props: TestCaseSectionProps) => {
               </p>
             </div>
           </>
-        )}
+        ) : null}
 
         {(matchingSubmissionOutput || matchingSubmissionError) && (
           <>
@@ -110,8 +111,20 @@ const ProblemTestCases = (props: TestCaseSectionProps) => {
 
   return (
     <div className="w-full h-full flex flex-col items-start justify-start gap-2 border p-2 rounded-md border-neutral-400">
-      <div className="w-full flex items-start justify-start gap-2 overflow-x-auto overflow-y-hidden min-h-fit">
-        {mappedTabs}
+      <div className="w-full flex items-start justify-start gap-2 overflow-hidden min-h-fit">
+        <div className="w-full flex items-start justify-start gap-2 overflow-x-auto">
+          {mappedTabs}
+        </div>
+
+        {props.submittedTestOutput && (
+          <button
+            title="Clear Test Result"
+            onClick={() => props.handleClearSubmissionState("test")}
+            className="p-2 rounded-md border-2 border-neutral-400 hover:text-red-800 bg-neutral-200 animate-fade ml-auto"
+          >
+            <FaXmark />
+          </button>
+        )}
       </div>
 
       <div className="w-full h-auto flex flex-col items-start justify-start gap-2 overflow-y-auto">

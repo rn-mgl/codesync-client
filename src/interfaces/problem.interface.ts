@@ -1,7 +1,7 @@
 import * as Monaco from "monaco-editor";
 import { ApiResponse } from "./api.interface";
 import { SupportedLanguages } from "./language.interface";
-import { SubmissionResponse } from "./submission.interface";
+import { SubmissionResponse, SubmissionType } from "./submission.interface";
 import { BaseTestCase } from "./test-case.interface";
 
 export interface InputFormat {
@@ -68,6 +68,7 @@ export interface EditorProps {
 
 export interface TestCaseSectionProps {
   testCases: BaseTestCase[];
+  handleClearSubmissionState: (type: SubmissionType) => void;
   submittedTestOutput:
     | {
         success: false;
