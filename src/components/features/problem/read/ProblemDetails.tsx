@@ -8,9 +8,12 @@ const ProblemDetails = (props: { problem: BaseProblem }) => {
           {props.problem.id}. {props.problem.title}
         </h1>
 
-        <p className="text-sm whitespace-pre-line">
-          {props.problem.description}
-        </p>
+        <article>
+          <div
+            className="prose max-w-none"
+            dangerouslySetInnerHTML={{ __html: props.problem.description }}
+          />
+        </article>
       </div>
 
       <div className="text-sm">

@@ -14,12 +14,7 @@ import { Editor } from "@tiptap/react";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import React from "react";
-import {
-  FaCode,
-  FaLink,
-  FaPuzzlePiece,
-  FaRegNoteSticky,
-} from "react-icons/fa6";
+import { FaCode, FaLink, FaPuzzlePiece } from "react-icons/fa6";
 import { toast } from "sonner";
 
 const UpdateProblem = () => {
@@ -38,6 +33,7 @@ const UpdateProblem = () => {
     useSelect<ProblemForm>({ label: "Easy", value: "easy" }, setProblem);
 
   const editorialRef = React.useRef<Editor | null>(null);
+  const descriptionRef = React.useRef<Editor | null>(null);
 
   useSession({ required: true });
 
@@ -61,14 +57,18 @@ const UpdateProblem = () => {
     try {
       if (!params?.slug) return;
 
-      problem.editorial = editorialRef.current?.getHTML() ?? problem.editorial;
+      const problemPayload = {
+        ...problem,
+        editorial: editorialRef.current?.getHTML() ?? problem.editorial,
+        description: descriptionRef.current?.getHTML() ?? problem.description,
+      };
 
       const response = await fetch(`/api/problem/${params.slug}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ problem }),
+        body: JSON.stringify({ problem: problemPayload }),
       });
 
       const resolve: UpdateProblemResponse = await response.json();
@@ -178,16 +178,18 @@ const UpdateProblem = () => {
         </div>
 
         <div className="w-full flex flex-col items-start justify-start gap-4 p-2 border-primary/50 border rounded-b-md t:p-4">
-          <TextArea
-            id="description"
-            name="description"
-            onChange={handleProblem}
-            value={problem.description}
-            label="Description"
-            columns={6}
-            required={true}
-            icon={<FaRegNoteSticky />}
-          />
+          <div className="w-full flex flex-col items-start justify-center bg-secondary gap-1">
+            <label className="text-xs text-primary/80 font-medium">
+              Description
+            </label>
+
+            {problem.description && (
+              <RichTextEditor
+                initialValue={problem.description}
+                ref={descriptionRef}
+              />
+            )}
+          </div>
 
           <div className="w-full flex flex-col items-start justify-center bg-secondary gap-1">
             <label className="text-xs text-primary/80 font-medium">
