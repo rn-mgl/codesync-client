@@ -118,7 +118,7 @@ const SingleProblem = () => {
               ) : activeDetailsPanel === "description" ? (
                 <ProblemDetails problem={problem} />
               ) : activeDetailsPanel === "editorial" ? (
-                <article className="prose max-w-none">
+                <article className="prose max-w-none text-primary">
                   <div
                     dangerouslySetInnerHTML={{ __html: problem.editorial }}
                   />
