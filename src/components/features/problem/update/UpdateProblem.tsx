@@ -8,6 +8,7 @@ import useSelect from "@/src/hooks/useSelect";
 import {
   GetProblemResponse,
   ProblemForm,
+  ProblemPayload,
   UpdateProblemResponse,
 } from "@/src/interfaces/problem.interface";
 import { Editor } from "@tiptap/react";
@@ -57,7 +58,7 @@ const UpdateProblem = () => {
     try {
       if (!params?.slug) return;
 
-      const problemPayload = {
+      const problemPayload: ProblemPayload = {
         ...problem,
         editorial: editorialRef.current?.getHTML() ?? problem.editorial,
         description: descriptionRef.current?.getHTML() ?? problem.description,

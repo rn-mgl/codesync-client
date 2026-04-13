@@ -15,6 +15,8 @@ export interface OutputFormat {
   comparison: Record<string, unknown>;
 }
 
+export type Constraints = Record<string, { min: number; max: number } | string>;
+
 export interface BaseProblem {
   id: number;
   title: string;
@@ -22,7 +24,7 @@ export interface BaseProblem {
   description: string;
   input_format: InputFormat;
   output_format: OutputFormat;
-  constraints: string;
+  constraints: Constraints;
   editorial: string;
   difficulty: "easy" | "medium" | "hard";
   acceptance_rate: number;
@@ -36,9 +38,25 @@ export interface ProblemForm extends Omit<
   | "total_submissions"
   | "input_format"
   | "output_format"
+  | "constraints"
 > {
   input_format: string;
   output_format: string;
+  constraints: string;
+}
+
+export interface ProblemPayload extends Omit<
+  BaseProblem,
+  | "id"
+  | "acceptance_rate"
+  | "total_submissions"
+  | "input_format"
+  | "output_format"
+  | "constraints"
+> {
+  input_format: string;
+  output_format: string;
+  constraints: string;
 }
 
 export type ProblemList = Pick<

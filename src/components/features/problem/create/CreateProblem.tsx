@@ -8,6 +8,7 @@ import useSelect from "@/src/hooks/useSelect";
 import {
   CreateProblemResponse,
   ProblemForm,
+  ProblemPayload,
 } from "@/src/interfaces/problem.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
 import { Editor } from "@tiptap/react";
@@ -52,7 +53,7 @@ const CreateProblem = () => {
   const handleCreate = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const problemPayload = {
+      const problemPayload: ProblemPayload = {
         ...problem,
         editorial: editorialRef.current?.getHTML() ?? "",
         description: descriptionRef.current?.getHTML() ?? "",
