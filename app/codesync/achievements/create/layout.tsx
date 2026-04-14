@@ -2,7 +2,7 @@ import React from "react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Achievement | CodeSync",
+  title: "Create | Achievement",
 };
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {

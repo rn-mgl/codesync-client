@@ -27,7 +27,7 @@ const Select = (props: SelectField) => {
           props.onChange(optionValue);
           handleIsVisibleOptions();
         }}
-        className={`p-2 rounded-md hover:bg-primary/50 hover:text-secondary w-full text-left transition-all
+        className={`p-2 rounded-md hover:bg-primary/50 hover:text-secondary w-full text-left transition-allz
                     ${option.value === props.value ? "bg-primary text-secondary font-medium" : "bg-neutral-300"}`}
       >
         {option.label}
@@ -44,7 +44,7 @@ const Select = (props: SelectField) => {
       ) : null}
 
       <div className="w-full flex flex-col items-center justify-center relative">
-        <div className="w-full z-10">
+        <div className="w-full">
           <button
             onClick={handleIsVisibleOptions}
             type="button"
@@ -55,7 +55,7 @@ const Select = (props: SelectField) => {
 
           <Activity mode={isVisibleOptions ? "visible" : "hidden"}>
             <div
-              className="w-full absolute top-0 flex flex-col items-start justify-center bg-neutral-200 rounded-md z-20 translate-y-11 p-2
+              className="w-full absolute top-0 flex flex-col items-start justify-center bg-neutral-200 rounded-md z-30 translate-y-11 p-2
                         animate-fade shadow-md gap-2"
             >
               {mappedOptions}
