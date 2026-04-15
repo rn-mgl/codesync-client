@@ -39,19 +39,23 @@ const AllProblems = () => {
 
   const mappedProblems = problems.map((problem) => {
     return (
-      <Link
+      <div
         key={problem.id}
-        href={`/codesync/problems/${problem.slug}`}
         className="w-full not-last:border-b-2 border-neutral-400 transition-all
                   hover:bg-neutral-200 first:rounded-t-md last:rounded-b-md"
       >
         <div className="grid grid-cols-4 w-full p-4 gap-4">
           <p>{problem.id}</p>
-          <p>{problem.title}</p>
+          <Link
+            href={`/codesync/problems/${problem.slug}`}
+            className="hover:underline underline-offset-2"
+          >
+            {problem.title}
+          </Link>
           <p>{problem.difficulty}</p>
           <p>{problem.acceptance_rate}</p>
         </div>
-      </Link>
+      </div>
     );
   });
 

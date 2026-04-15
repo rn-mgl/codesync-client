@@ -1,3 +1,5 @@
+import { ApiResponse } from "./api.interface";
+
 export interface BaseAchievement {
   id: number;
   name: string;
@@ -27,3 +29,7 @@ type ACHIEVEMENT_CATEGORIES =
   | "social"
   | "skill"
   | "special";
+
+export type GetAllAchievementResponse = ApiResponse<{
+  achievements: Omit<BaseAchievement, "unlock_criteria">[];
+}>;
