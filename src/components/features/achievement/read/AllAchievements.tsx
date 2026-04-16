@@ -4,6 +4,7 @@ import {
   BaseAchievement,
   GetAllAchievementResponse,
 } from "@/src/interfaces/achievement.interface";
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
@@ -55,14 +56,23 @@ const AllAchievements = () => {
     return (
       <div
         key={achievement.id}
-        className="w-full bg-neutral-200 rounded-lg p-2 flex flex-col gap-2"
+        className="w-full bg-neutral-200 rounded-lg p-2 flex flex-col gap-2 group"
       >
         <div
           style={{
             background: `linear-gradient(135deg, ${BADGE_PALETTE[achievement.badge_color].primary}, ${BADGE_PALETTE[achievement.badge_color].secondary}, ${BADGE_PALETTE[achievement.badge_color].primary})`,
           }}
-          className="w-full aspect-video rounded-sm"
-        ></div>
+          className="w-full aspect-video rounded-sm flex flex-col items-center justify-center overflow-hidden"
+        >
+          <Image
+            src={achievement.icon}
+            alt="icon"
+            width={200}
+            height={200}
+            draggable={false}
+            className="drop-shadow-lg group-hover:animate-float w-4/12"
+          />
+        </div>
 
         <div className="w-full flex flex-col gap-2 text-center text-sm">
           <div className="w-full flex flex-row items-center justify-between">

@@ -59,11 +59,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const body = await req.json();
-
-    if (!("achievement" in body)) {
-      throw new ApiError(`Invalid request.`, StatusCodes.BAD_REQUEST);
-    }
+    const formData = await req.formData();
 
     const url = env.SERVER_URL;
     const token = cookies.user.token;
@@ -71,11 +67,10 @@ export async function POST(req: NextRequest) {
     const response = await fetch(`${url}/achievement`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL,
       },
-      body: JSON.stringify(body),
+      body: formData,
     });
 
     const resolve: ServerResponse = await response.json();
@@ -93,6 +88,6 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     const apiResponse = handleErrorResponse(error);
 
-    return (NextResponse.json(apiResponse), { status: apiResponse.status });
+    return NextResponse.json(apiResponse, { status: apiResponse.status });
   }
 }

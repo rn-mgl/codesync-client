@@ -14,12 +14,18 @@ export interface BaseAchievement {
 
 export interface AchievementForm extends Omit<
   BaseAchievement,
-  "id" | "points"
+  "id" | "points" | "icon"
 > {
+  icon: File | null;
   points: string;
 }
 
-export type AchievementPayload = Omit<BaseAchievement, "id">;
+export interface AchievementPayload extends Omit<
+  BaseAchievement,
+  "id" | "icon"
+> {
+  icon: File | null;
+}
 
 type BADGE_COLORS = "diamond" | "gold" | "silver" | "bronze";
 
@@ -33,3 +39,5 @@ type ACHIEVEMENT_CATEGORIES =
 export type GetAllAchievementResponse = ApiResponse<{
   achievements: Omit<BaseAchievement, "unlock_criteria">[];
 }>;
+
+export type CreateAchievementResponsme = ApiResponse<{ message: string }>;

@@ -3,25 +3,31 @@
 import Input from "@/src/components/ui/fields/Input";
 import Select from "@/src/components/ui/fields/Select";
 import TextArea from "@/src/components/ui/fields/TextArea";
+import useFile from "@/src/hooks/useFile";
 import useSelect from "@/src/hooks/useSelect";
 import {
   AchievementForm,
-  AchievementPayload,
+  CreateAchievementResponsme,
 } from "@/src/interfaces/achievement.interface";
 import React from "react";
-import { FaCode, FaLink, FaPuzzlePiece } from "react-icons/fa";
+import { FaChartLine, FaLink, FaRegStickyNote } from "react-icons/fa";
+import { FaLockOpen, FaRegFileImage, FaTrash, FaTrophy } from "react-icons/fa6";
+import { toast } from "sonner";
 
 const CreateAchievement = () => {
   const [achievement, setAchievement] = React.useState<AchievementForm>({
     badge_color: "bronze",
     category: "problems",
     description: "",
-    icon: "",
+    icon: null,
     name: "",
     points: "",
     slug: "",
     unlock_criteria: "",
   });
+
+  const { localFile, fileRef, handleLocalFile, removeLocalFile } =
+    useFile(setAchievement);
 
   const { select: category, handleSelect: handleCategory } = useSelect(
     { label: "Problems", value: "problems" },
@@ -50,22 +56,33 @@ const CreateAchievement = () => {
     e.preventDefault();
 
     try {
-      const achievementPayload: AchievementPayload = {
-        ...achievement,
-        points: Number(achievement.points),
-      };
+      const formData = new FormData();
+
+      if (!achievement.icon) return;
+
+      formData.set("badge_color", achievement.badge_color);
+      formData.set("category", achievement.category);
+      formData.set("description", achievement.description);
+      formData.set("icon", achievement.icon);
+      formData.set("name", achievement.name);
+      formData.set("points", achievement.points);
+      formData.set("slug", achievement.slug);
+      formData.set("unlock_criteria", achievement.unlock_criteria);
 
       const response = await fetch(`/api/achievement`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ achievement: achievementPayload }),
+        body: formData,
       });
 
-      const resolve = await response.json();
+      const resolve: CreateAchievementResponsme = await response.json();
 
-      console.log(resolve);
+      if (!resolve.success) {
+        throw new Error(resolve.message);
+      }
+
+      const { message } = resolve.data;
+
+      toast(message);
     } catch (error) {
       console.log(error);
     }
@@ -89,7 +106,7 @@ const CreateAchievement = () => {
             type="text"
             value={achievement.name}
             label="Name"
-            icon={<FaPuzzlePiece />}
+            icon={<FaTrophy />}
             required={true}
           />
 
@@ -112,7 +129,7 @@ const CreateAchievement = () => {
             label="Description"
             columns={6}
             required={true}
-            icon={<FaCode />}
+            icon={<FaRegStickyNote />}
           />
         </div>
       </div>
@@ -123,16 +140,48 @@ const CreateAchievement = () => {
         </div>
 
         <div className="w-full flex flex-col items-start justify-start gap-4 p-2 border-primary/50 border rounded-b-md t:p-4">
-          <Input
-            id="icon"
-            name="icon"
-            onChange={handleAchievement}
-            value={achievement.icon}
-            label="Icon"
-            required={true}
-            icon={<FaCode />}
-            type="text"
-          />
+          <div className="w-full flex flex-col bg-neutral-200 p-2 rounded-lg items-center t:p-4">
+            <div className="w-full flex flex-col gap-2 items-center justify-center  t:max-w-(--breakpoint-m-l)">
+              <label htmlFor="icon" className="w-full flex h-full">
+                <div
+                  style={{ backgroundImage: `url(${localFile.url})` }}
+                  className="p-2 rounded-md aspect-video w-full border-neutral-400 bg-secondary border-2 flex flex-col 
+                          items-center justify-center bg-cover bg-center"
+                >
+                  {!localFile.file && (
+                    <FaRegFileImage className="opacity-50 text-2xl" />
+                  )}
+                </div>
+
+                <input
+                  onChange={(e) => handleLocalFile(e)}
+                  ref={fileRef}
+                  id="icon"
+                  name="icon"
+                  type="file"
+                  className="sr-only"
+                  accept="image/*"
+                />
+              </label>
+
+              <div className="w-full flex flex-row gap-4 text-sm items-center">
+                {localFile.file ? (
+                  <>
+                    <p className="truncate w-full">{localFile.file.name}</p>
+                    <button
+                      type="button"
+                      onClick={removeLocalFile}
+                      className="p-2 rounded-full hover:text-red-600 transition-all"
+                    >
+                      <FaTrash />
+                    </button>
+                  </>
+                ) : (
+                  <p className="italic text-neutral-600">Select a photo...</p>
+                )}
+              </div>
+            </div>
+          </div>
 
           <Select
             label="Badge Color"
@@ -179,7 +228,7 @@ const CreateAchievement = () => {
             value={achievement.points}
             label="Points"
             required={true}
-            icon={<FaCode />}
+            icon={<FaChartLine />}
             type="text"
           />
 
@@ -191,7 +240,7 @@ const CreateAchievement = () => {
             label="Unlock Criteria"
             columns={6}
             required={true}
-            icon={<FaCode />}
+            icon={<FaLockOpen />}
           />
         </div>
       </div>
