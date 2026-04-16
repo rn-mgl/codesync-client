@@ -80,7 +80,7 @@ const AllAchievements = () => {
         <div className="w-full flex flex-col gap-2 text-center text-sm">
           <div className="w-full flex flex-row items-center justify-between">
             <Link
-              href={`codesync/achievements/${achievement.slug}`}
+              href={`/codesync/achievements/${achievement.slug}`}
               className="font-bold truncate hover:underline underline-offset-2 transition-all"
             >
               {achievement.name}
