@@ -9,6 +9,7 @@ import {
   AchievementForm,
   CreateAchievementResponsme,
 } from "@/src/interfaces/achievement.interface";
+import { getErrorMessage } from "@/src/utils/general.util";
 import React from "react";
 import { FaChartLine, FaLink, FaRegStickyNote } from "react-icons/fa";
 import { FaLockOpen, FaRegFileImage, FaTrash, FaTrophy } from "react-icons/fa6";
@@ -85,6 +86,8 @@ const CreateAchievement = () => {
       toast(message);
     } catch (error) {
       console.log(error);
+      const message = getErrorMessage(error);
+      toast(message);
     }
   };
 

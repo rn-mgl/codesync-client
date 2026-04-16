@@ -4,9 +4,11 @@ import {
   BaseAchievement,
   GetAllAchievementResponse,
 } from "@/src/interfaces/achievement.interface";
+import { getErrorMessage } from "@/src/utils/general.util";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { toast } from "sonner";
 
 const AllAchievements = () => {
   const [achievements, setAchievements] = React.useState<
@@ -48,7 +50,8 @@ const AllAchievements = () => {
 
       setAchievements(achievements);
     } catch (error) {
-      console.log(error);
+      const message = getErrorMessage(error);
+      toast(message);
     }
   }, []);
 
