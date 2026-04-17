@@ -40,4 +40,8 @@ export type GetAllAchievementResponse = ApiResponse<{
   achievements: Omit<BaseAchievement, "unlock_criteria">[];
 }>;
 
-export type CreateAchievementResponsme = ApiResponse<{ message: string }>;
+export type CreateAchievementResponse = ApiResponse<{ message: string }>;
+
+export type GetAchievementResponse = ApiResponse<{
+  achievement: BaseAchievement;
+}>;

@@ -7,7 +7,7 @@ import useFile from "@/src/hooks/useFile";
 import useSelect from "@/src/hooks/useSelect";
 import {
   AchievementForm,
-  CreateAchievementResponsme,
+  CreateAchievementResponse,
 } from "@/src/interfaces/achievement.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
 import React from "react";
@@ -75,7 +75,7 @@ const CreateAchievement = () => {
         body: formData,
       });
 
-      const resolve: CreateAchievementResponsme = await response.json();
+      const resolve: CreateAchievementResponse = await response.json();
 
       if (!resolve.success) {
         throw new Error(resolve.message);
