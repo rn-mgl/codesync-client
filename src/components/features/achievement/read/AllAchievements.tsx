@@ -87,9 +87,6 @@ const AllAchievements = () => {
             </Link>
             <p className="font-medium">{achievement.points}</p>
           </div>
-          <div className="max-h-40 overflow-y-auto">
-            <p className="w-full text-left">{achievement.description}</p>
-          </div>
         </div>
       </div>
     );
