@@ -71,76 +71,120 @@ const SingleAchievement = () => {
     }
   }, [params]);
 
-  const mappedCriteria = Object.entries(achievement.unlock_criteria).map(
-    ([criteriaKey, criteriaValue]) => {
-      const mappedFilters =
-        criteriaKey === "filters" &&
-        Object.entries(criteriaValue as UnlockCriteria).map(
-          ([filterKey, filterValue]) => {
-            return (
-              <div
-                key={filterKey}
-                className="flex flex-row gap-1 items-start justify-start text-sm"
-              >
-                <span className="text-secondary bg-primary/80 p-1 rounded-sm capitalize">
-                  {normalizeString(filterKey)}
-                </span>
+  const renderJson = (criteria: object): React.ReactNode => {
+    const rendered = Object.entries(criteria).map(([key, value]) => {
+      if (typeof value === "object" && value !== null) {
+        if (Array.isArray(value)) {
+          return (
+            <div
+              key={key}
+              className="flex flex-row gap-1 items-start justify-start text-sm"
+            >
+              <span className="text-secondary bg-primary p-1 rounded-sm capitalize">
+                {normalizeString(key)}
+              </span>
 
-                <span className="p-1 rounded-sm bg-secondary">
-                  {Array.isArray(filterValue)
-                    ? filterValue.join(", ")
-                    : filterValue}
-                </span>
+              <div className="p-1 rounded-sm bg-secondary capitalize flex flex-col gap-2">
+                {value.map((data, index) => {
+                  if (Array.isArray(data)) {
+                    return (
+                      <div
+                        key={index}
+                        className="p-1 rounded-sm bg-secondary capitalize flex flex-col gap-2"
+                      >
+                        {data.join(", ")}
+                      </div>
+                    );
+                  } else if (typeof data === "object" && data !== null) {
+                    return renderJson(data);
+                  } else {
+                    return (
+                      <div
+                        key={index}
+                        className=" p-1 rounded-sm bg-secondary capitalize flex flex-col gap-2"
+                      >
+                        {typeof value !== "string"
+                          ? JSON.stringify(value)
+                          : normalizeString(value)}
+                      </div>
+                    );
+                  }
+                })}
               </div>
-            );
-          },
-        );
+            </div>
+          );
+        } else {
+          return (
+            <div
+              key={key}
+              className="flex flex-row gap-1 items-start justify-start text-sm"
+            >
+              <span className="text-secondary bg-primary p-1 rounded-sm capitalize">
+                {normalizeString(key)}
+              </span>
 
-      const mappedConditions =
-        criteriaKey === "conditions" &&
-        [criteriaValue as UnlockCriteria[]].map((nestedConditions) => {
-          return nestedConditions.map((nestedCriteria) => {
-            return Object.entries(nestedCriteria).map(
-              ([nestedKey, nestedValue]) => {
-                return (
-                  <div
-                    key={nestedKey}
-                    className="flex flex-row gap-1 items-start justify-start text-sm"
-                  >
-                    <span className="text-secondary bg-primary p-1 rounded-sm capitalize">
-                      {normalizeString(nestedKey)}
-                    </span>
+              <div className="p-1 rounded-sm bg-secondary capitalize flex flex-col gap-2">
+                {Object.entries(value).map(([nestedKey, nestedValue]) => {
+                  if (typeof nestedValue === "object" && nestedValue !== null) {
+                    return (
+                      <div
+                        key={nestedKey}
+                        className="flex flex-row gap-1 items-start justify-start text-sm"
+                      >
+                        <span className="text-secondary bg-primary p-1 rounded-sm capitalize">
+                          {normalizeString(nestedKey)}
+                        </span>
 
-                    <div className="p-1 rounded-sm bg-secondary capitalize flex flex-col gap-2">
-                      {normalizeString(String(nestedValue))}
-                    </div>
-                  </div>
-                );
-              },
-            );
-          });
-        });
+                        <div className="p-1 rounded-sm bg-secondary capitalize flex flex-col gap-2">
+                          {Array.isArray(nestedValue)
+                            ? nestedValue.join(" | ")
+                            : renderJson(nestedValue)}
+                        </div>
+                      </div>
+                    );
+                  } else {
+                    <div
+                      key={nestedKey}
+                      className="flex flex-row gap-1 items-start justify-start text-sm"
+                    >
+                      <span className="text-secondary bg-primary p-1 rounded-sm capitalize">
+                        {normalizeString(nestedKey)}
+                      </span>
+
+                      <div className="p-1 rounded-sm bg-secondary capitalize flex flex-col gap-2">
+                        {JSON.stringify(nestedValue)}
+                      </div>
+                    </div>;
+                  }
+                })}
+              </div>
+            </div>
+          );
+        }
+      }
 
       return (
         <div
-          key={criteriaKey}
+          key={key}
           className="flex flex-row gap-1 items-start justify-start text-sm"
         >
           <span className="text-secondary bg-primary p-1 rounded-sm capitalize">
-            {normalizeString(criteriaKey)}
+            {normalizeString(key)}
           </span>
 
           <div className="p-1 rounded-sm bg-secondary capitalize flex flex-col gap-2">
-            {criteriaKey === "filters"
-              ? mappedFilters
-              : criteriaKey === "conditions"
-                ? mappedConditions
-                : normalizeString(String(criteriaValue))}
+            {typeof value !== "string"
+              ? JSON.stringify(value)
+              : normalizeString(value)}
           </div>
         </div>
       );
-    },
-  );
+    });
+
+    return rendered;
+  };
+
+  const mappedCriteria = renderJson(achievement.unlock_criteria);
 
   React.useEffect(() => {
     getAchievement();
@@ -170,6 +214,7 @@ const SingleAchievement = () => {
                 {achievement.icon && (
                   <Image
                     src={achievement.icon}
+                    loading="eager"
                     width={400}
                     height={400}
                     alt="Icon"
