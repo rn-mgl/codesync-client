@@ -13,7 +13,7 @@ import { getErrorMessage } from "@/src/utils/general.util";
 import Image from "next/image";
 import React from "react";
 import { FaChartLine, FaLink, FaRegStickyNote } from "react-icons/fa";
-import { FaLockOpen, FaRegFileImage, FaTrash, FaTrophy } from "react-icons/fa6";
+import { FaLockOpen, FaTrash, FaTrophy } from "react-icons/fa6";
 import { toast } from "sonner";
 
 const CreateAchievement = () => {
