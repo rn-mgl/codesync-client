@@ -3,7 +3,6 @@
 import {
   BaseAchievement,
   GetAchievementResponse,
-  UnlockCriteria,
 } from "@/src/interfaces/achievement.interface";
 import { normalizeString } from "@/src/utils/normalizer.util";
 import Image from "next/image";
