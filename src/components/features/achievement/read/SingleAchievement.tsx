@@ -1,5 +1,6 @@
 "use client";
 
+import Delete from "@/src/components/ui/forms/Delete";
 import {
   BaseAchievement,
   GetAchievementResponse,
@@ -7,7 +8,7 @@ import {
 import { renderJSON } from "@/src/utils/renderer.util";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import { FaArrowLeft, FaRegEdit } from "react-icons/fa";
 import { FaRegTrashCan } from "react-icons/fa6";
@@ -27,6 +28,9 @@ const SingleAchievement = () => {
       version: 1,
     },
   });
+  const [canDelete, setCanDelete] = React.useState(false);
+
+  const router = useRouter();
 
   const BADGE_PALETTE: Record<string, { primary: string; secondary: string }> =
     {
@@ -71,6 +75,10 @@ const SingleAchievement = () => {
     }
   }, [params]);
 
+  const handleCanDelete = () => {
+    setCanDelete((prev) => !prev);
+  };
+
   const mappedCriteria = renderJSON(achievement.unlock_criteria);
 
   React.useEffect(() => {
@@ -79,6 +87,17 @@ const SingleAchievement = () => {
 
   return (
     <div className="flex flex-col items-start justify-start w-full gap-4 h-full l-l:overflow-hidden">
+      {canDelete ? (
+        <Delete
+          closeForm={handleCanDelete}
+          endpoint={`achievement/${params?.slug}`}
+          label="achievement"
+          postDeleteAction={() => {
+            router.push("/codesync/achievement");
+          }}
+        />
+      ) : null}
+
       <Link
         href="/codesync/achievements"
         className="text-primary font-bold flex flex-row items-center 
@@ -97,6 +116,7 @@ const SingleAchievement = () => {
           <FaRegEdit />
         </Link>
         <button
+          onClick={handleCanDelete}
           type="button"
           className="p-2 rounded-full hover:text-red-600 transition-all"
         >

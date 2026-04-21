@@ -39,7 +39,7 @@ const Delete = (props: DeleteForm) => {
                 left-0 z-30 backdrop-blur-md bg-linear-to-b from-primary/20 to-red-500/20 animate-fade"
     >
       <div className="w-full h-full flex flex-col items-center justify-center max-w-(--breakpoint-t) p-4 gap-2">
-        <div className="w-full rounded-lg bg-primary text-secondary font-bold flex items-center justify-between p-4">
+        <div className="w-full rounded-lg capitalize bg-primary text-secondary font-bold flex items-center justify-between p-4">
           <h1>Delete {props.label || "Record"}</h1>
 
           <button

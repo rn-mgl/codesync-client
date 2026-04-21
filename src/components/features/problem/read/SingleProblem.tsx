@@ -80,7 +80,7 @@ const SingleProblem = () => {
       {canDelete && (
         <Delete
           label="Problem"
-          endpoint={`/problem/${params?.slug}`}
+          endpoint={`problem/${params?.slug}`}
           postDeleteAction={() => {
             router.push("/codesync/problems");
           }}

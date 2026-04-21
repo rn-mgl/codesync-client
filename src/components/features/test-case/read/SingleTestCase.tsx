@@ -73,7 +73,7 @@ const SingleTestCase = () => {
       {canDelete && (
         <Delete
           closeForm={handleCanDelete}
-          endpoint={`/test-case/${params?.id}`}
+          endpoint={`test-case/${params?.id}`}
           label="Test Case"
           postDeleteAction={() => router.push("/codesync/test-cases")}
         />

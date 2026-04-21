@@ -119,3 +119,56 @@ export async function PATCH(
     return NextResponse.json(apiResponse, { status: apiResponse.status });
   }
 }
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ slug?: string }> },
+) {
+  try {
+    const cookies = await getToken({ req });
+
+    if (!isJWTCookie(cookies)) {
+      throw new ApiError(
+        `You are unauthorized to proceed.`,
+        StatusCodes.UNAUTHORIZED,
+      );
+    }
+
+    const token = cookies.user.token;
+    const url = env.SERVER_URL;
+
+    const slug = (await params).slug;
+
+    if (!slug) {
+      throw new ApiError(`Invalid request.`, StatusCodes.BAD_REQUEST);
+    }
+
+    const response = await fetch(`${url}/achievement/${slug}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        Origin: env.APP_URL,
+      },
+    });
+
+    const resolve: ServerResponse = await response.json();
+
+    if (!resolve.success) {
+      throw new ApiError(resolve.message, response.status);
+    }
+
+    const apiResponse: ApiResponse<typeof resolve.data> = {
+      success: true,
+      data: resolve.data,
+    };
+
+    return NextResponse.json(apiResponse, { status: response.status });
+  } catch (error) {
+    console.log(error);
+
+    const apiResponse = handleErrorResponse(error);
+
+    return NextResponse.json(apiResponse, { status: apiResponse.status });
+  }
+}
