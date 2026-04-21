@@ -9,7 +9,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import React from "react";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaRegEdit } from "react-icons/fa";
+import { FaRegTrashCan } from "react-icons/fa6";
 
 const SingleAchievement = () => {
   const [achievement, setAchievement] = React.useState<BaseAchievement>({
@@ -77,7 +78,7 @@ const SingleAchievement = () => {
   }, [getAchievement]);
 
   return (
-    <div className="flex flex-col items-start justify-start w-full gap-8 h-full l-l:overflow-hidden">
+    <div className="flex flex-col items-start justify-start w-full gap-4 h-full l-l:overflow-hidden">
       <Link
         href="/codesync/achievements"
         className="text-primary font-bold flex flex-row items-center 
@@ -86,6 +87,19 @@ const SingleAchievement = () => {
         <FaArrowLeft />
         All Achievements
       </Link>
+
+      <div className="w-full flex flex-row gap-2 justify-end">
+        <button type="button" className="p-2">
+          <FaRegEdit />
+        </button>
+        <button type="button" className="p-2">
+          <FaRegTrashCan />
+        </button>
+      </div>
+
+      <div className="p-4 rounded-md bg-primary text-secondary t:p-6 w-full">
+        <h1 className="font-bold text-center">{achievement.name}</h1>
+      </div>
 
       <div className="grid grid-cols-1 h-full gap-4 items-center justify-center l-l:grid-cols-2 w-full l-l:overflow-hidden">
         <div className="w-full flex h-full flex-col aspect-square t:aspect-video">
@@ -112,25 +126,25 @@ const SingleAchievement = () => {
 
         <div className="w-full flex h-full flex-col l-l:overflow-hidden">
           <div className="w-full h-full grid grid-cols-1 grid-rows-3 gap-4 l-l:overflow-hidden">
-            <div className="flex flex-col h-full gap-2 overflow-hidden row-span-1">
-              <div className="p-4 rounded-lg bg-primary text-secondary">
-                <h1 className="font-bold text-center">{achievement.name}</h1>
+            <div className="flex flex-col h-full overflow-hidden row-span-1">
+              <div className="p-4 bg-primary/80 w-full rounded-t-md font-medium text-secondary text-center">
+                <p>Description</p>
               </div>
 
               <div
-                className="p-2 border border-neutral-400 rounded-lg bg-secondary overflow-y-auto text-sm 
+                className="p-2 border border-neutral-400 rounded-b-md bg-secondary overflow-y-auto text-sm 
                         min-h-40 max-h-96 l-l:min-h-auto l-l:max-h-none h-full t:p-4"
               >
                 <p>{achievement.description}</p>
               </div>
             </div>
 
-            <div className="w-full h-full flex flex-col gap-2 overflow-hidden row-span-2">
-              <div className="p-4 rounded-lg bg-primary text-secondary">
-                <h1 className="font-bold text-center">Unlock Criteria</h1>
+            <div className="w-full h-full flex flex-col overflow-hidden row-span-2">
+              <div className="p-4 bg-primary/80 w-full rounded-t-md font-medium text-secondary text-center">
+                <p>Unlock Criteria</p>
               </div>
 
-              <div className="p-2 rounded-lg border border-neutral-400 h-full overflow-y-auto text-sm t:text-base t:p-4 flex flex-col gap-2">
+              <div className="p-2 rounded-b-md border border-neutral-400 h-full overflow-y-auto text-sm t:text-base t:p-4 flex flex-col gap-2">
                 {mappedCriteria}
               </div>
             </div>
