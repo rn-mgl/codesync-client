@@ -93,7 +93,7 @@ const SingleAchievement = () => {
           endpoint={`achievement/${params?.slug}`}
           label="achievement"
           postDeleteAction={() => {
-            router.push("/codesync/achievement");
+            router.push("/codesync/achievements");
           }}
         />
       ) : null}

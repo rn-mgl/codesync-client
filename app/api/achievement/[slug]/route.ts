@@ -143,7 +143,13 @@ export async function DELETE(
       throw new ApiError(`Invalid request.`, StatusCodes.BAD_REQUEST);
     }
 
-    const response = await fetch(`${url}/achievement/${slug}`, {
+    const searchParams = {
+      lookup: "slug",
+    };
+
+    const query = new URLSearchParams(searchParams).toString();
+
+    const response = await fetch(`${url}/achievement/${slug}?${query}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
