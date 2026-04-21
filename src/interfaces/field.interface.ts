@@ -1,5 +1,11 @@
 import * as Monaco from "monaco-editor";
-import { HTMLInputTypeAttribute, ReactElement } from "react";
+import {
+  DetailedHTMLProps,
+  HTMLAttributes,
+  HTMLInputTypeAttribute,
+  InputHTMLAttributes,
+  ReactElement,
+} from "react";
 import { SupportedLanguages } from "./language.interface";
 import { Editor } from "@tiptap/react";
 
@@ -14,6 +20,10 @@ interface BaseFieldProperties {
 
 export interface InputField extends BaseFieldProperties {
   type: HTMLInputTypeAttribute;
+  inputMode?: DetailedHTMLProps<
+    InputHTMLAttributes<HTMLInputElement>,
+    HTMLInputElement
+  >;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 

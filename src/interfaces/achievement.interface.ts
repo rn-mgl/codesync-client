@@ -67,3 +67,5 @@ export type CreateAchievementResponse = ApiResponse<{ message: string }>;
 export type GetAchievementResponse = ApiResponse<{
   achievement: BaseAchievement;
 }>;
+
+export type UpdateAchievementResponse = ApiResponse<{ message: string }>;

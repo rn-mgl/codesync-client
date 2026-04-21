@@ -40,5 +40,20 @@ export default function useFile<T>(
     setLocalFile({ url: "", file: null });
   };
 
-  return { localFile, fileRef, handleLocalFile, removeLocalFile };
+  const removeUploadedFile = (name: string) => {
+    parentState((prev) => {
+      return {
+        ...prev,
+        [name]: "",
+      };
+    });
+  };
+
+  return {
+    localFile,
+    fileRef,
+    handleLocalFile,
+    removeLocalFile,
+    removeUploadedFile,
+  };
 }

@@ -16,9 +16,9 @@ import { FaLink, FaMemory, FaRegTrashCan } from "react-icons/fa6";
 
 const SingleTestCase = () => {
   const [testCase, setTestCase] = React.useState<TestCaseDetails>({
-    expected_output: "",
+    expected_output: {},
     id: 0,
-    input: "",
+    input: {},
     memory_limit_mb: 0,
     order_index: 0,
     problem_id: 0,

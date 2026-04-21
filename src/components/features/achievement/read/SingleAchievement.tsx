@@ -89,10 +89,17 @@ const SingleAchievement = () => {
       </Link>
 
       <div className="w-full flex flex-row gap-2 justify-end">
-        <button type="button" className="p-2">
+        <Link
+          href={`/codesync/achievements/${params?.slug}/edit`}
+          type="button"
+          className="hover:text-blue-600 transition-all p-2"
+        >
           <FaRegEdit />
-        </button>
-        <button type="button" className="p-2">
+        </Link>
+        <button
+          type="button"
+          className="p-2 rounded-full hover:text-red-600 transition-all"
+        >
           <FaRegTrashCan />
         </button>
       </div>

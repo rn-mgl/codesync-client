@@ -7,37 +7,48 @@ import useFile from "@/src/hooks/useFile";
 import useSelect from "@/src/hooks/useSelect";
 import {
   AchievementForm,
-  CreateAchievementResponse,
+  GetAchievementResponse,
+  UpdateAchievementResponse,
 } from "@/src/interfaces/achievement.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
 import Image from "next/image";
+import { useParams } from "next/navigation";
 import React from "react";
 import { FaChartLine, FaLink, FaRegStickyNote } from "react-icons/fa";
-import { FaLockOpen, FaTrash, FaTrophy } from "react-icons/fa6";
+import { FaLockOpen, FaRegFileImage, FaTrash, FaTrophy } from "react-icons/fa6";
 import { toast } from "sonner";
 
-const CreateAchievement = () => {
-  const [achievement, setAchievement] = React.useState<AchievementForm>({
+const UpdateAchievement = () => {
+  const [achievement, setAchievement] = React.useState<
+    Omit<AchievementForm, "icon"> & { icon: File | null | string }
+  >({
     badge_color: "bronze",
     category: "problems",
     description: "",
     icon: null,
     name: "",
-    points: "",
+    points: "0",
     slug: "",
     unlock_criteria: "",
   });
 
-  const { localFile, fileRef, handleLocalFile, removeLocalFile } =
-    useFile(setAchievement);
+  const params: { slug?: string } | null = useParams();
 
-  const { select: category, handleSelect: handleCategory } = useSelect(
-    { label: "Problems", value: "problems" },
-    setAchievement,
-  );
+  const {
+    fileRef,
+    localFile,
+    handleLocalFile,
+    removeLocalFile,
+    removeUploadedFile,
+  } = useFile(setAchievement);
 
   const { select: badgeColor, handleSelect: handleBadgeColor } = useSelect(
     { label: "Bronze", value: "bronze" },
+    setAchievement,
+  );
+
+  const { select: category, handleSelect: handleCategory } = useSelect(
+    { label: "Problems", value: "problems" },
     setAchievement,
   );
 
@@ -58,9 +69,9 @@ const CreateAchievement = () => {
     e.preventDefault();
 
     try {
-      const formData = new FormData();
+      if (!achievement.icon || !params?.slug) return;
 
-      if (!achievement.icon) return;
+      const formData = new FormData();
 
       formData.set("badge_color", achievement.badge_color);
       formData.set("category", achievement.category);
@@ -71,26 +82,63 @@ const CreateAchievement = () => {
       formData.set("slug", achievement.slug);
       formData.set("unlock_criteria", achievement.unlock_criteria);
 
-      const response = await fetch(`/api/achievement`, {
-        method: "POST",
+      const response = await fetch(`/api/achievement/${params.slug}`, {
+        method: "PATCH",
         body: formData,
       });
 
-      const resolve: CreateAchievementResponse = await response.json();
+      const resolve: UpdateAchievementResponse = await response.json();
+
+      if (!resolve.success) {
+        throw new Error(resolve.message);
+      }
+      const { message } = resolve.data;
+
+      toast(message);
+    } catch (error) {
+      console.error(error);
+      const message = getErrorMessage(error);
+      toast(message);
+    }
+  };
+
+  const getAchievement = React.useCallback(async () => {
+    try {
+      if (!params?.slug) return;
+
+      const response = await fetch(`/api/achievement/${params.slug}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const resolve: GetAchievementResponse = await response.json();
 
       if (!resolve.success) {
         throw new Error(resolve.message);
       }
 
-      const { message } = resolve.data;
+      const { achievement } = resolve.data;
 
-      toast(message);
+      setAchievement({
+        badge_color: achievement.badge_color,
+        category: achievement.category,
+        description: achievement.description,
+        icon: achievement.icon,
+        name: achievement.name,
+        points: String(achievement.points),
+        slug: achievement.slug,
+        unlock_criteria: JSON.stringify(achievement.unlock_criteria, null, 2),
+      });
     } catch (error) {
-      console.log(error);
-      const message = getErrorMessage(error);
-      toast(message);
+      console.error(error);
     }
-  };
+  }, [params]);
+
+  React.useEffect(() => {
+    getAchievement();
+  }, [getAchievement]);
 
   return (
     <form
@@ -159,7 +207,18 @@ const CreateAchievement = () => {
                       src={localFile.url}
                       className="w-6/12"
                     />
-                  ) : null}
+                  ) : typeof achievement.icon === "string" &&
+                    achievement.icon ? (
+                    <Image
+                      width={500}
+                      height={500}
+                      alt="File"
+                      src={achievement.icon}
+                      className="w-6/12"
+                    />
+                  ) : (
+                    <FaRegFileImage className="text-2xl opacity-50" />
+                  )}
                 </div>
 
                 <input
@@ -180,6 +239,17 @@ const CreateAchievement = () => {
                     <button
                       type="button"
                       onClick={removeLocalFile}
+                      className="p-2 rounded-full hover:text-red-600 transition-all"
+                    >
+                      <FaTrash />
+                    </button>
+                  </>
+                ) : typeof achievement.icon === "string" && achievement.icon ? (
+                  <>
+                    <p className="truncate w-full">{achievement.name} Reward</p>
+                    <button
+                      type="button"
+                      onClick={() => removeUploadedFile("icon")}
                       className="p-2 rounded-full hover:text-red-600 transition-all"
                     >
                       <FaTrash />
@@ -258,10 +328,10 @@ const CreateAchievement = () => {
         type="submit"
         className="w-full p-2 rounded-md bg-primary font-black text-secondary"
       >
-        Create
+        Update
       </button>
     </form>
   );
 };
 
-export default CreateAchievement;
+export default UpdateAchievement;
