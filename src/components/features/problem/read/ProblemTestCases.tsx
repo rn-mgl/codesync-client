@@ -56,9 +56,7 @@ const ProblemTestCases = (props: TestCaseSectionProps) => {
 
         <p className="text-xs mt-2">Expected Output</p>
         <div className="p-4 rounded-md bg-neutral-300 w-full text-sm">
-          <p className="font-medium">
-            {JSON.stringify(tc.expected_output, null, 2)}
-          </p>
+          <p className="font-medium">{tc.expected_output}</p>
         </div>
 
         {matchingSubmissionLogs && matchingSubmissionLogs.length ? (

@@ -93,7 +93,7 @@ const AllTestCases = () => {
                           <FaArrowLeft />
                         </div>
                         <span className="truncate bg-secondary p-1 px-2 rounded-md w-full">
-                          {JSON.stringify(tc.expected_output)}
+                          {tc.expected_output}
                         </span>
                       </div>
 

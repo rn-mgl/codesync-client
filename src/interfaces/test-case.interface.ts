@@ -5,7 +5,7 @@ export interface BaseTestCase {
   id: number;
   problem_id: number;
   input: Record<string, unknown>;
-  expected_output: unknown[] | Record<string, unknown>;
+  expected_output: string;
   time_limit_ms: number;
   memory_limit_mb: number;
   order_index: number;
@@ -21,10 +21,8 @@ export interface TestCaseForm extends Omit<
   | "memory_limit_mb"
   | "order_index"
   | "input"
-  | "expected_output"
 > {
   input: string;
-  expected_output: string;
   problem: string;
   time_limit_ms: string;
   memory_limit_mb: string;
@@ -33,11 +31,10 @@ export interface TestCaseForm extends Omit<
 
 export interface TestCasePayload extends Omit<
   BaseTestCase,
-  "id" | "problem_id" | "input" | "expected_output"
+  "id" | "problem_id" | "input"
 > {
   input: string;
   problem: string;
-  expected_output: string;
 }
 
 export type TestCaseDetails = BaseTestCase &
