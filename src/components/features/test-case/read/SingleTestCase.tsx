@@ -136,7 +136,7 @@ const SingleTestCase = () => {
 
           <DisplayTextArea
             label="Expected Output"
-            value={JSON.stringify(testCase.expected_output, null, 2)}
+            value={testCase.expected_output}
             icon={<FaCode />}
           />
 
