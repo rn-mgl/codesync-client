@@ -19,35 +19,6 @@ const AllTestCases = () => {
 
   const params = useSearchParams();
 
-  const getTestCases = React.useCallback(async () => {
-    try {
-      const searchParams = {
-        problem: params?.get("problem") ?? "",
-      };
-
-      const query = new URLSearchParams(searchParams).toString();
-
-      const response = await fetch(`/api/test-case?${query}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const resolve: GetAllTestCaseResponse = await response.json();
-
-      if (!resolve.success) {
-        throw new Error(resolve.message);
-      }
-
-      const { test_cases } = resolve.data;
-
-      setTestCases(test_cases);
-    } catch (error) {
-      console.log(error);
-    }
-  }, [params]);
-
   const mappedTestCases = Object.entries(testCases ?? {}).map(
     ([problem, testCase]) => {
       return (
@@ -128,8 +99,37 @@ const AllTestCases = () => {
   );
 
   React.useEffect(() => {
+    const getTestCases = async () => {
+      try {
+        const searchParams = {
+          problem: params?.get("problem") ?? "",
+        };
+
+        const query = new URLSearchParams(searchParams).toString();
+
+        const response = await fetch(`/api/test-case?${query}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        const resolve: GetAllTestCaseResponse = await response.json();
+
+        if (!resolve.success) {
+          throw new Error(resolve.message);
+        }
+
+        const { test_cases } = resolve.data;
+
+        setTestCases(test_cases);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     getTestCases();
-  }, [getTestCases]);
+  }, [params]);
 
   return mappedTestCases;
 };

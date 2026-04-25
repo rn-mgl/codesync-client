@@ -86,43 +86,43 @@ const UpdateProblem = () => {
     }
   };
 
-  const getProblem = React.useCallback(async () => {
-    try {
-      if (!params?.slug) return;
-
-      const response = await fetch(`/api/problem/${params.slug}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const resolve: GetProblemResponse = await response.json();
-
-      if (!resolve.success) {
-        throw new Error(resolve.message);
-      }
-
-      const { problem } = resolve.data;
-
-      setProblem({
-        title: problem.title,
-        constraints: JSON.stringify(problem.constraints, null, 2),
-        description: problem.description,
-        difficulty: problem.difficulty,
-        editorial: problem.editorial,
-        input_format: JSON.stringify(problem.input_format, null, 2),
-        output_format: JSON.stringify(problem.output_format, null, 2),
-        slug: problem.slug,
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  }, [params]);
-
   React.useEffect(() => {
+    const getProblem = async () => {
+      try {
+        if (!params?.slug) return;
+
+        const response = await fetch(`/api/problem/${params.slug}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        const resolve: GetProblemResponse = await response.json();
+
+        if (!resolve.success) {
+          throw new Error(resolve.message);
+        }
+
+        const { problem } = resolve.data;
+
+        setProblem({
+          title: problem.title,
+          constraints: JSON.stringify(problem.constraints, null, 2),
+          description: problem.description,
+          difficulty: problem.difficulty,
+          editorial: problem.editorial,
+          input_format: JSON.stringify(problem.input_format, null, 2),
+          output_format: JSON.stringify(problem.output_format, null, 2),
+          slug: problem.slug,
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
     getProblem();
-  }, [getProblem]);
+  }, [params?.slug]);
 
   return (
     <form

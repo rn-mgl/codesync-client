@@ -14,29 +14,6 @@ const AllProblems = () => {
 
   useSession({ required: true });
 
-  const getProblems = React.useCallback(async () => {
-    try {
-      const response = await fetch("/api/problem", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const resolve: GetAllProblemsResponse = await response.json();
-
-      if (!resolve.success) {
-        throw new Error(resolve.message);
-      }
-
-      setProblems(resolve.data.problems);
-    } catch (err) {
-      console.error(err);
-    }
-
-    return;
-  }, []);
-
   const mappedProblems = problems.map((problem) => {
     return (
       <div
@@ -60,8 +37,29 @@ const AllProblems = () => {
   });
 
   React.useEffect(() => {
+    const getProblems = async () => {
+      try {
+        const response = await fetch("/api/problem", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        const resolve: GetAllProblemsResponse = await response.json();
+
+        if (!resolve.success) {
+          throw new Error(resolve.message);
+        }
+
+        setProblems(resolve.data.problems);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
     getProblems();
-  }, [getProblems]);
+  }, []);
 
   return (
     <Table<ProblemList>

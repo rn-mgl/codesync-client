@@ -1,13 +1,12 @@
+import { Editor } from "@tiptap/react";
 import * as Monaco from "monaco-editor";
 import {
   DetailedHTMLProps,
-  HTMLAttributes,
   HTMLInputTypeAttribute,
   InputHTMLAttributes,
   ReactElement,
 } from "react";
 import { SupportedLanguages } from "./language.interface";
-import { Editor } from "@tiptap/react";
 
 interface BaseFieldProperties {
   name: string;

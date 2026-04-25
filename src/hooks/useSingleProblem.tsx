@@ -76,7 +76,7 @@ export default function useSingleProblem() {
       version: 1,
       comparison: {},
     },
-    constraints: "",
+    constraints: {},
     editorial: "",
     difficulty: "easy",
     acceptance_rate: 0,
@@ -89,7 +89,6 @@ export default function useSingleProblem() {
   const [activeChart, setActiveChart] = React.useState<"runtime" | "memory">(
     "runtime",
   );
-  const [startingCode, setStartingCode] = React.useState("");
   const [submissionState, submissionDispatch] = React.useReducer(
     submissionReducer,
     null,
@@ -267,15 +266,23 @@ export default function useSingleProblem() {
       }
     : null;
 
-  React.useEffect(() => {
-    const storedCode = localStorage.getItem(
-      `${params?.slug}_${currentLanguage}`,
-    );
+  const startingCodeKey = `${params?.slug ?? ""}_${currentLanguage}`;
 
-    setStartingCode(
-      storedCode || generateBoilerPlate(problem.input_format, currentLanguage),
-    );
-  }, [params?.slug, problem.input_format, currentLanguage]);
+  // use this hook to get localstorage without tripping lint and undefined localstorage
+  const storedCode = React.useSyncExternalStore(
+    () => () => {},
+    () => {
+      if (typeof window === undefined || !params?.slug) {
+        return "";
+      }
+
+      return localStorage.getItem(startingCodeKey);
+    },
+    () => "",
+  );
+
+  const startingCode =
+    storedCode || generateBoilerPlate(problem.input_format, currentLanguage);
 
   return {
     problem,

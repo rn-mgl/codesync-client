@@ -102,43 +102,43 @@ const UpdateAchievement = () => {
     }
   };
 
-  const getAchievement = React.useCallback(async () => {
-    try {
-      if (!params?.slug) return;
-
-      const response = await fetch(`/api/achievement/${params.slug}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const resolve: GetAchievementResponse = await response.json();
-
-      if (!resolve.success) {
-        throw new Error(resolve.message);
-      }
-
-      const { achievement } = resolve.data;
-
-      setAchievement({
-        badge_color: achievement.badge_color,
-        category: achievement.category,
-        description: achievement.description,
-        icon: achievement.icon,
-        name: achievement.name,
-        points: String(achievement.points),
-        slug: achievement.slug,
-        unlock_criteria: JSON.stringify(achievement.unlock_criteria, null, 2),
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  }, [params]);
-
   React.useEffect(() => {
+    const getAchievement = async () => {
+      try {
+        if (!params?.slug) return;
+
+        const response = await fetch(`/api/achievement/${params.slug}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        const resolve: GetAchievementResponse = await response.json();
+
+        if (!resolve.success) {
+          throw new Error(resolve.message);
+        }
+
+        const { achievement } = resolve.data;
+
+        setAchievement({
+          badge_color: achievement.badge_color,
+          category: achievement.category,
+          description: achievement.description,
+          icon: achievement.icon,
+          name: achievement.name,
+          points: String(achievement.points),
+          slug: achievement.slug,
+          unlock_criteria: JSON.stringify(achievement.unlock_criteria, null, 2),
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
     getAchievement();
-  }, [getAchievement]);
+  }, [params?.slug]);
 
   return (
     <form

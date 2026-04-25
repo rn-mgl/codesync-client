@@ -16,6 +16,8 @@ import { FaMemory, FaRegClock } from "react-icons/fa6";
 import { toast } from "sonner";
 
 const CreateTestCase = () => {
+  const params = useSearchParams();
+
   const [testCase, setTestCase] = React.useState<TestCaseForm>({
     expected_output: "",
     input: "",
@@ -27,7 +29,7 @@ const CreateTestCase = () => {
     is_sample: true,
   });
 
-  const params = useSearchParams();
+  const resolvedProblem = testCase.problem || params?.get("problem") || "";
 
   const handleTestCase = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -82,21 +84,6 @@ const CreateTestCase = () => {
     }
   };
 
-  React.useEffect(() => {
-    if (!params || !params.get("problem")) return;
-
-    const problem = params.get("problem");
-
-    if (!problem) return;
-
-    setTestCase((prev) => {
-      return {
-        ...prev,
-        problem: problem,
-      };
-    });
-  }, [params]);
-
   return (
     <form
       onSubmit={(e) => handleCreate(e)}
@@ -113,7 +100,7 @@ const CreateTestCase = () => {
             name="problem"
             onChange={handleTestCase}
             type="text"
-            value={testCase.problem}
+            value={resolvedProblem}
             label="Problem"
             icon={<FaLink />}
             required={true}

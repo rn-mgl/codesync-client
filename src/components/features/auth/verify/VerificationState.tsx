@@ -15,7 +15,7 @@ const VerificationState = () => {
     "verifying" | "verified" | "unverified"
   >("verifying");
 
-  const params = useParams();
+  const params: { token?: string } | null = useParams();
 
   const STATUS_DISPLAY = {
     verifying: {
@@ -48,39 +48,39 @@ const VerificationState = () => {
     },
   };
 
-  const handleVerification = React.useCallback(async () => {
-    try {
-      const response = await fetch(`/api/auth/verify`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ token: params?.token ?? null }),
-      });
+  React.useEffect(() => {
+    const handleVerification = async () => {
+      try {
+        const response = await fetch(`/api/auth/verify`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ token: params?.token ?? null }),
+        });
 
-      const resolve: VerifyResponse = await response.json();
+        const resolve: VerifyResponse = await response.json();
 
-      if (!resolve.success) {
-        throw new Error(resolve.message);
-      }
+        if (!resolve.success) {
+          throw new Error(resolve.message);
+        }
 
-      const data = resolve.data;
+        const data = resolve.data;
 
-      if (!data) {
+        if (!data) {
+          setStatus("unverified");
+        }
+
+        setStatus(data.verified ? "verified" : "unverified");
+      } catch (error) {
+        console.error(error);
+
         setStatus("unverified");
       }
+    };
 
-      setStatus(data.verified ? "verified" : "unverified");
-    } catch (error) {
-      console.error(error);
-
-      setStatus("unverified");
-    }
-  }, [params]);
-
-  React.useEffect(() => {
     handleVerification();
-  }, [handleVerification]);
+  }, [params?.token]);
 
   return (
     <div className="flex flex-col items-center justify-center gap-4 w-full h-full text-center text-secondary">

@@ -31,30 +31,6 @@ const AllAchievements = () => {
       },
     };
 
-  const getAchievements = React.useCallback(async () => {
-    try {
-      const response = await fetch(`/api/achievement`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const resolve: GetAllAchievementResponse = await response.json();
-
-      if (!resolve.success) {
-        throw new Error(resolve.message);
-      }
-
-      const { achievements } = resolve.data;
-
-      setAchievements(achievements);
-    } catch (error) {
-      const message = getErrorMessage(error);
-      toast(message);
-    }
-  }, []);
-
   const mappedAchievements = achievements.map((achievement) => {
     return (
       <div
@@ -93,8 +69,32 @@ const AllAchievements = () => {
   });
 
   React.useEffect(() => {
+    const getAchievements = async () => {
+      try {
+        const response = await fetch(`/api/achievement`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        const resolve: GetAllAchievementResponse = await response.json();
+
+        if (!resolve.success) {
+          throw new Error(resolve.message);
+        }
+
+        const { achievements } = resolve.data;
+
+        setAchievements(achievements);
+      } catch (error) {
+        const message = getErrorMessage(error);
+        toast(message);
+      }
+    };
+
     getAchievements();
-  }, [getAchievements]);
+  }, []);
 
   return (
     <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-3 l-l:grid-cols-4 gap-4">

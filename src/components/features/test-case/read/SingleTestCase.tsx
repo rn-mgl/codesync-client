@@ -35,38 +35,38 @@ const SingleTestCase = () => {
 
   const router = useRouter();
 
-  const getTestCase = React.useCallback(async () => {
-    try {
-      if (!params || !params.id) return;
-
-      const response = await fetch(`/api/test-case/${params.id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const resolve: GetTestCaseResponse = await response.json();
-
-      if (!resolve.success) {
-        throw new Error(resolve.message);
-      }
-
-      const { test_case } = resolve.data;
-
-      setTestCase(test_case);
-    } catch (error) {
-      console.log(error);
-    }
-  }, [params]);
-
   const handleCanDelete = () => {
     setCanDelete((prev) => !prev);
   };
 
   React.useEffect(() => {
+    const getTestCase = async () => {
+      try {
+        if (!params || !params.id) return;
+
+        const response = await fetch(`/api/test-case/${params.id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        const resolve: GetTestCaseResponse = await response.json();
+
+        if (!resolve.success) {
+          throw new Error(resolve.message);
+        }
+
+        const { test_case } = resolve.data;
+
+        setTestCase(test_case);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     getTestCase();
-  }, [getTestCase]);
+  }, [params]);
 
   return (
     <div className="flex flex-col items-start justify-start w-full gap-8">

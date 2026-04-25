@@ -84,43 +84,43 @@ const UpdateTestCase = () => {
     }
   };
 
-  const getTestCase = React.useCallback(async () => {
-    try {
-      if (!params || !params.id) return;
-
-      const response = await fetch(`/api/test-case/${params.id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const resolve: GetTestCaseResponse = await response.json();
-
-      if (!resolve.success) {
-        throw new Error(resolve.message);
-      }
-
-      const { test_case } = resolve.data;
-
-      setTestCase({
-        problem: test_case.slug,
-        expected_output: JSON.stringify(test_case.expected_output, null, 2),
-        input: JSON.stringify(test_case.input, null, 2),
-        memory_limit_mb: String(test_case.memory_limit_mb),
-        order_index: String(test_case.order_index),
-        time_limit_ms: String(test_case.time_limit_ms),
-        is_sample: test_case.is_sample,
-        is_hidden: test_case.is_hidden,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  }, [params]);
-
   React.useEffect(() => {
+    const getTestCase = async () => {
+      try {
+        if (!params || !params.id) return;
+
+        const response = await fetch(`/api/test-case/${params.id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        const resolve: GetTestCaseResponse = await response.json();
+
+        if (!resolve.success) {
+          throw new Error(resolve.message);
+        }
+
+        const { test_case } = resolve.data;
+
+        setTestCase({
+          problem: test_case.slug,
+          expected_output: JSON.stringify(test_case.expected_output, null, 2),
+          input: JSON.stringify(test_case.input, null, 2),
+          memory_limit_mb: String(test_case.memory_limit_mb),
+          order_index: String(test_case.order_index),
+          time_limit_ms: String(test_case.time_limit_ms),
+          is_sample: test_case.is_sample,
+          is_hidden: test_case.is_hidden,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     getTestCase();
-  }, [getTestCase]);
+  }, [params]);
 
   return (
     <form

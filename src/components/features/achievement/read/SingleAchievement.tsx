@@ -50,31 +50,6 @@ const SingleAchievement = () => {
 
   const params: { slug?: string } | null = useParams();
 
-  const getAchievement = React.useCallback(async () => {
-    try {
-      if (!params?.slug) return;
-
-      const response = await fetch(`/api/achievement/${params.slug}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const resolve: GetAchievementResponse = await response.json();
-
-      if (!resolve.success) {
-        throw new Error(resolve.message);
-      }
-
-      const { achievement } = resolve.data;
-
-      setAchievement(achievement);
-    } catch (error) {
-      console.log(error);
-    }
-  }, [params]);
-
   const handleCanDelete = () => {
     setCanDelete((prev) => !prev);
   };
@@ -82,8 +57,33 @@ const SingleAchievement = () => {
   const mappedCriteria = renderJSON(achievement.unlock_criteria);
 
   React.useEffect(() => {
+    const getAchievement = async () => {
+      try {
+        if (!params?.slug) return;
+
+        const response = await fetch(`/api/achievement/${params.slug}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        const resolve: GetAchievementResponse = await response.json();
+
+        if (!resolve.success) {
+          throw new Error(resolve.message);
+        }
+
+        const { achievement } = resolve.data;
+
+        setAchievement(achievement);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     getAchievement();
-  }, [getAchievement]);
+  }, [params?.slug]);
 
   return (
     <div className="flex flex-col items-start justify-start w-full gap-4 h-full l-l:overflow-hidden">
