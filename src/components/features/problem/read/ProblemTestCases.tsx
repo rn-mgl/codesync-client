@@ -27,17 +27,21 @@ const ProblemTestCases = (props: TestCaseSectionProps) => {
     const matchingSubmissionOutput =
       props.submittedTestOutput &&
       props.submittedTestOutput.success &&
-      JSON.stringify(props.submittedTestOutput.output[tc.id].result, null, 2);
+      JSON.stringify(
+        props.submittedTestOutput.output.judge[tc.id].result,
+        null,
+        2,
+      );
 
     const matchingSubmissionLogs =
       props.submittedTestOutput &&
       props.submittedTestOutput.success &&
-      props.submittedTestOutput.output[tc.id].logs;
+      props.submittedTestOutput.output.judge[tc.id].logs;
 
     const isCorrectSubmissionOutput =
       props.submittedTestOutput &&
       props.submittedTestOutput.success &&
-      props.submittedTestOutput.output[tc.id].matched;
+      props.submittedTestOutput.output.judge[tc.id].matched;
 
     const matchingSubmissionError =
       props.submittedTestOutput &&

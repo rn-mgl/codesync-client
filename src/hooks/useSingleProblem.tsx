@@ -173,7 +173,7 @@ export default function useSingleProblem() {
           submissionDispatch({
             type: `submit_run_success`,
             output: {
-              ...data.judge,
+              judge: { ...data.judge },
               summary: data.summary,
               statistics: data.statistics,
             },
@@ -181,7 +181,7 @@ export default function useSingleProblem() {
         } else {
           submissionDispatch({
             type: `submit_test_success`,
-            output: data.judge,
+            output: { judge: { ...data.judge } },
           });
         }
       } catch (err) {
@@ -238,7 +238,9 @@ export default function useSingleProblem() {
         error:
           typeof submissionState.test === "string" ? submissionState.test : "",
         output:
-          typeof submissionState.test === "object" ? submissionState.test : {},
+          typeof submissionState.test === "object"
+            ? { judge: submissionState.test.judge }
+            : { judge: {} },
       }
     : null;
 
@@ -262,7 +264,9 @@ export default function useSingleProblem() {
             ? submissionState.run.summary
             : null,
         output:
-          typeof submissionState.run === "object" ? submissionState.run : {},
+          typeof submissionState.run === "object"
+            ? { judge: submissionState.run.judge }
+            : { judge: {} },
       }
     : null;
 

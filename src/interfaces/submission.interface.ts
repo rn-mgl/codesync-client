@@ -25,16 +25,18 @@ export type SubmissionStatus =
   | "memory_limit_exceeded"
   | "compilation_error";
 
-export type SubmissionResponse = Record<
-  number,
-  {
-    result: unknown;
-    memory: number;
-    runtime: number;
-    matched: boolean;
-    logs: unknown[];
-  }
->;
+export interface SubmissionResponse {
+  judge: Record<
+    number,
+    {
+      result: unknown;
+      memory: number;
+      runtime: number;
+      matched: boolean;
+      logs: unknown[];
+    }
+  >;
+}
 
 export type RunSummary = {
   total: number;
@@ -52,14 +54,13 @@ export type SubmissionStatistics = {
 };
 
 export type CreateSubmissionResponse<T extends SubmissionType> = T extends "run"
-  ? ApiResponse<{
-      judge: SubmissionResponse;
-      summary: RunSummary;
-      statistics: SubmissionStatistics | null;
-    }>
-  : ApiResponse<{
-      judge: SubmissionResponse;
-    }>;
+  ? ApiResponse<
+      SubmissionResponse & {
+        summary: RunSummary;
+        statistics: SubmissionStatistics | null;
+      }
+    >
+  : ApiResponse<SubmissionResponse>;
 
 export type SubmissionState = {
   run?:
