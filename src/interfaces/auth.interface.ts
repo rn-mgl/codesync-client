@@ -32,7 +32,6 @@ export type LoginResponse = ApiResponse<{
 }>;
 
 export type RegisterResponse = ApiResponse<{
-  success: boolean;
   token: string;
 }>;
 
