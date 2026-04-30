@@ -27,7 +27,7 @@ export type SubmissionStatus =
 
 export interface SubmissionResponse {
   judge: Record<
-    number,
+    string,
     {
       result: unknown;
       memory: number;
