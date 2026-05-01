@@ -19,7 +19,7 @@ const ProblemSubmissions = () => {
         className="w-full not-last:border-b-2 border-neutral-400 transition-all
                   hover:bg-neutral-200 first:rounded-t-md last:rounded-b-md"
       >
-        <div className="w-full grid grid-cols-4 p-4 gap-4 text-sm">
+        <div className="w-full grid grid-cols-4 p-2 gap-4 text-sm *:p-2">
           <p>{submission.id}</p>
           <p className="capitalize">{submission.language}</p>
           <p>{submission.execution_time_ms}</p>
