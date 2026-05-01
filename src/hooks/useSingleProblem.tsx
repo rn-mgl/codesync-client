@@ -168,7 +168,7 @@ export default function useSingleProblem() {
         }
 
         if (type === "run" && "summary" in data) {
-          setActiveDetailsPanel("submission");
+          setActiveDetailsPanel("result");
 
           submissionDispatch({
             type: `submit_run_success`,
