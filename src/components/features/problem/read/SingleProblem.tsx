@@ -15,6 +15,7 @@ import ProblemActions from "./ProblemActions";
 import ProblemDetails from "./ProblemDetails";
 import ProblemTestCases from "./ProblemTestCases";
 import RunResults from "./RunResults";
+import ProblemSubmissions from "./ProblemSubmissions";
 
 const SingleProblem = () => {
   useSession({ required: true });
@@ -124,7 +125,7 @@ const SingleProblem = () => {
                   />
                 </article>
               ) : activeDetailsPanel === "submission" ? (
-                <p>submission</p>
+                <ProblemSubmissions />
               ) : null}
             </div>
           </div>

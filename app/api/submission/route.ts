@@ -67,3 +67,53 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(apiResponse, { status: apiResponse.status });
   }
 }
+
+export async function GET(req: NextRequest) {
+  try {
+    const cookies = await getToken({ req });
+
+    if (!isJWTCookie(cookies)) {
+      throw new ApiError(
+        `You are unauthorized to proceed.`,
+        StatusCodes.UNAUTHORIZED,
+      );
+    }
+
+    const request = new URL(req.url);
+    const token = cookies.user.token;
+    const url = env.SERVER_URL;
+    const searchParams = {
+      problem: request.searchParams.get("problem") ?? "",
+    };
+
+    const query = new URLSearchParams(searchParams).toString();
+
+    const response = await fetch(`${url}/submission?${query}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        Origin: env.APP_URL,
+      },
+    });
+
+    const resolve: ServerResponse = await response.json();
+
+    if (!resolve.success) {
+      throw new ApiError(resolve.message, response.status);
+    }
+
+    const apiResponse: ApiResponse<typeof resolve.data> = {
+      success: true,
+      data: resolve.data,
+    };
+
+    return NextResponse.json(apiResponse);
+  } catch (error) {
+    console.log(error);
+
+    const apiResponse: ApiResponse = handleErrorResponse(error);
+
+    return NextResponse.json(apiResponse, { status: apiResponse.status });
+  }
+}

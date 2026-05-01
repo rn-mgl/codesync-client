@@ -2,7 +2,7 @@ import { ApiResponse } from "./api.interface";
 import { SupportedLanguages } from "./language.interface";
 import { BaseTestCase } from "./test-case.interface";
 
-interface BaseSubmission {
+export interface BaseSubmission {
   id: number;
   user_id: number;
   problem_id: number;
@@ -61,6 +61,10 @@ export type CreateSubmissionResponse<T extends SubmissionType> = T extends "run"
       }
     >
   : ApiResponse<SubmissionResponse>;
+
+export type GetAllSubmissionsResponse = ApiResponse<{
+  submissions: BaseSubmission[];
+}>;
 
 export type SubmissionState = {
   run?:
