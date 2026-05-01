@@ -6,26 +6,49 @@ import {
 
 import { useParams } from "next/navigation";
 import React from "react";
+import { DateTime } from "luxon";
+import { normalizeString } from "@/src/utils/normalizer.util";
 
 const ProblemSubmissions = () => {
   const [submissions, setSubmissions] = React.useState<SubmissionList[]>([]);
 
   const params: { slug?: string } | null = useParams();
 
+  const getSubmission = async (id: number) => {
+    try {
+      const response = await fetch(`/api/submission/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const resolve = await response.json();
+
+      console.log(resolve);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const mappedSubmission = submissions.map((submission) => {
     return (
-      <div
+      <button
         key={submission.id}
+        onClick={() => getSubmission(submission.id)}
         className="w-full not-last:border-b-2 border-neutral-400 transition-all
-                  hover:bg-neutral-200 first:rounded-t-md last:rounded-b-md"
+                  hover:bg-neutral-200 first:rounded-t-md last:rounded-b-md text-left"
       >
-        <div className="w-full grid grid-cols-4 p-2 gap-4 text-sm *:p-2">
-          <p>{submission.id}</p>
-          <p className="capitalize">{submission.language}</p>
-          <p>{submission.execution_time_ms}</p>
-          <p>{submission.memory_used_mb}</p>
-        </div>
-      </div>
+        <p className="w-full grid grid-cols-5 p-2 gap-4 text-sm *:p-2">
+          <span className="capitalize">
+            {normalizeString(submission.status)}
+          </span>
+          <span className="capitalize">{submission.language}</span>
+          <span>{submission.execution_time_ms} ms</span>
+          <span>{submission.memory_used_mb} mb</span>
+          <span>{DateTime.fromISO(submission.created_at).toFormat("DDD")}</span>
+        </p>
+      </button>
     );
   });
 
@@ -66,7 +89,13 @@ const ProblemSubmissions = () => {
 
   return (
     <Table<SubmissionList>
-      headers={["id", "language", "execution_time_ms", "memory_used_mb"]}
+      headers={[
+        "status",
+        "language",
+        "execution_time_ms",
+        "memory_used_mb",
+        "created_at",
+      ]}
       data={mappedSubmission}
     />
   );

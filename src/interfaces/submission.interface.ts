@@ -13,6 +13,7 @@ export interface BaseSubmission {
   memory_used_mb: number;
   test_results: string | null;
   error_message: string | null;
+  created_at: string;
   deleted_at: string | null;
 }
 
@@ -98,5 +99,10 @@ export type SubmissionAction =
 
 export type SubmissionList = Pick<
   BaseSubmission,
-  "id" | "language" | "execution_time_ms" | "memory_used_mb"
+  | "id"
+  | "language"
+  | "execution_time_ms"
+  | "memory_used_mb"
+  | "created_at"
+  | "status"
 >;

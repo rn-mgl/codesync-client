@@ -221,6 +221,10 @@ export default function useSingleProblem() {
     setActiveDetailsPanel(panel);
   };
 
+  const handleSubmissionState = (action: SubmissionAction) => {
+    submissionDispatch(action);
+  };
+
   // check type to handle errors
   const didSubmitTest = submissionState && !!submissionState.test;
 
@@ -304,5 +308,6 @@ export default function useSingleProblem() {
     handleClearSubmissionState,
     handleActiveChart,
     handleActiveDetailsPanel,
+    handleSubmissionState,
   };
 }
