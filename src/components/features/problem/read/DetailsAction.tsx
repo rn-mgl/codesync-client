@@ -1,12 +1,11 @@
+import { DetailsPanel } from "@/src/interfaces/problem.interface";
 import { SubmissionType } from "@/src/interfaces/submission.interface";
 import { FaXmark } from "react-icons/fa6";
 
 const DetailsAction = (props: {
-  activeDetailsPanel: "description" | "editorial" | "submission";
+  activeDetailsPanel: DetailsPanel;
   didSubmitRun: boolean;
-  handleActiveDetailsPanel: (
-    panel: "description" | "editorial" | "submission",
-  ) => void;
+  handleActiveDetailsPanel: (panel: DetailsPanel) => void;
   handleClearSubmissionState: (type: SubmissionType) => void;
 }) => {
   return (
@@ -17,6 +16,7 @@ const DetailsAction = (props: {
       >
         Description
       </button>
+
       <button
         onClick={() => props.handleActiveDetailsPanel("editorial")}
         className={`text-sm px-2 py-1 border-2 border-neutral-400 rounded-sm ${props.activeDetailsPanel === "editorial" ? "bg-primary text-secondary" : "bg-neutral-200"}`}
@@ -24,13 +24,20 @@ const DetailsAction = (props: {
         Editorial
       </button>
 
+      <button
+        onClick={() => props.handleActiveDetailsPanel("submission")}
+        className={`text-sm px-2 py-1 border-2 border-neutral-400 rounded-sm ${props.activeDetailsPanel === "submission" ? "bg-primary text-secondary" : "bg-neutral-200"}`}
+      >
+        Submission
+      </button>
+
       {props.didSubmitRun && (
         <div className="flex flex-row">
           <button
-            onClick={() => props.handleActiveDetailsPanel("submission")}
-            className={`text-sm px-2 py-1 border-2 border-r rounded-r-none border-neutral-400 rounded-sm ${props.activeDetailsPanel === "submission" ? "bg-primary text-secondary" : "bg-neutral-200"}`}
+            onClick={() => props.handleActiveDetailsPanel("result")}
+            className={`text-sm px-2 py-1 border-2 border-r rounded-r-none border-neutral-400 rounded-sm ${props.activeDetailsPanel === "result" ? "bg-primary text-secondary" : "bg-neutral-200"}`}
           >
-            Submission
+            Result
           </button>
 
           <button

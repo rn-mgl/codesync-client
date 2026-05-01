@@ -3,6 +3,7 @@
 import { SupportedLanguages } from "@/src/interfaces/language.interface";
 import {
   BaseProblem,
+  DetailsPanel,
   GetProblemResponse,
 } from "@/src/interfaces/problem.interface";
 import {
@@ -93,9 +94,8 @@ export default function useSingleProblem() {
     submissionReducer,
     null,
   );
-  const [activeDetailsPanel, setActiveDetailsPanel] = React.useState<
-    "description" | "editorial" | "submission"
-  >("description");
+  const [activeDetailsPanel, setActiveDetailsPanel] =
+    React.useState<DetailsPanel>("description");
 
   const params: { slug?: string } | null = useParams();
   const editorRef = React.useRef<Monaco.editor.IStandaloneCodeEditor | null>(
@@ -217,9 +217,7 @@ export default function useSingleProblem() {
     setActiveChart(chart);
   };
 
-  const handleActiveDetailsPanel = (
-    panel: "description" | "editorial" | "submission",
-  ) => {
+  const handleActiveDetailsPanel = (panel: DetailsPanel) => {
     setActiveDetailsPanel(panel);
   };
 

@@ -89,3 +89,9 @@ export interface TestCaseSectionProps {
       }
     | null;
 }
+
+export type DetailsPanel =
+  | "description"
+  | "editorial"
+  | "submission"
+  | "result";

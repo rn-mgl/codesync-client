@@ -108,7 +108,7 @@ const SingleProblem = () => {
 
           <div className="w-full h-full flex overflow-y-auto flex-col l-s:overflow-hidden border rounded-md border-neutral-400 bg-secondary">
             <div className="w-full h-full flex flex-col gap-8 p-2 overflow-y-auto l-s:max-h-full">
-              {submittedRunOutput && activeDetailsPanel === "submission" ? (
+              {submittedRunOutput && activeDetailsPanel === "result" ? (
                 <RunResults
                   runOutput={submittedRunOutput}
                   language={currentLanguage}
@@ -123,6 +123,8 @@ const SingleProblem = () => {
                     dangerouslySetInnerHTML={{ __html: problem.editorial }}
                   />
                 </article>
+              ) : activeDetailsPanel === "submission" ? (
+                <p>submission</p>
               ) : null}
             </div>
           </div>
