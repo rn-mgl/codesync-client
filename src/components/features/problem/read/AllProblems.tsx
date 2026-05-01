@@ -21,7 +21,7 @@ const AllProblems = () => {
         className="w-full not-last:border-b-2 border-neutral-400 transition-all
                   hover:bg-neutral-200 first:rounded-t-md last:rounded-b-md"
       >
-        <div className="grid grid-cols-4 w-full p-4 gap-4">
+        <div className="grid grid-cols-4 w-full p-4 gap-4 text-sm">
           <p>{problem.id}</p>
           <Link
             href={`/codesync/problems/${problem.slug}`}

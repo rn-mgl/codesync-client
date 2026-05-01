@@ -22,7 +22,7 @@ const Table = <T extends Record<string, unknown>>(
           style={{
             gridTemplateColumns: `repeat(${columns}, minmax(0, ${columns}fr))`,
           }}
-          className="grid gap-4 p-4 w-full bg-primary text-secondary rounded-md"
+          className="grid gap-4 p-4 w-full bg-primary text-secondary rounded-md text-sm"
         >
           {mappedHeaders}
         </div>

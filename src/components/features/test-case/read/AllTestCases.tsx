@@ -26,7 +26,7 @@ const AllTestCases = () => {
           key={problem}
           className="w-full flex flex-col items-center justify-center gap-4"
         >
-          <div className="bg-primary text-secondary font-bold w-full p-4 rounded-md">
+          <div className="bg-primary text-secondary font-bold w-full p-4 rounded-md text-sm">
             {problem}
           </div>
 

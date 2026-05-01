@@ -125,7 +125,7 @@ const SingleAchievement = () => {
       </div>
 
       <div className="p-4 rounded-md bg-primary text-secondary t:p-6 w-full">
-        <h1 className="font-bold text-center">{achievement.name}</h1>
+        <h1 className="font-bold text-center text-sm">{achievement.name}</h1>
       </div>
 
       <div className="grid grid-cols-1 h-full gap-4 items-center justify-center l-l:grid-cols-2 w-full l-l:overflow-hidden">

@@ -19,9 +19,9 @@ const ProblemSubmissions = () => {
         className="w-full not-last:border-b-2 border-neutral-400 transition-all
                   hover:bg-neutral-200 first:rounded-t-md last:rounded-b-md"
       >
-        <div className="w-full grid grid-cols-4 p-4 gap-4">
+        <div className="w-full grid grid-cols-4 p-4 gap-4 text-sm">
           <p>{submission.id}</p>
-          <p>{submission.language}</p>
+          <p className="capitalize">{submission.language}</p>
           <p>{submission.execution_time_ms}</p>
           <p>{submission.memory_used_mb}</p>
         </div>
@@ -65,8 +65,8 @@ const ProblemSubmissions = () => {
   }, [params?.slug]);
 
   return (
-    <Table
-      headers={["ID", "Language", "Runtime", "Memory"]}
+    <Table<SubmissionList>
+      headers={["id", "language", "execution_time_ms", "memory_used_mb"]}
       data={mappedSubmission}
     />
   );
