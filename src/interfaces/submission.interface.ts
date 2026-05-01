@@ -95,3 +95,8 @@ export type SubmissionAction =
       output: string;
     }
   | { type: `clear_${SubmissionType}` };
+
+export type SubmissionList = Pick<
+  BaseSubmission,
+  "id" | "language" | "execution_time_ms" | "memory_used_mb"
+>;

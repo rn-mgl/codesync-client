@@ -1,15 +1,33 @@
+import Table from "@/src/components/ui/containers/Table";
 import {
-  BaseSubmission,
   GetAllSubmissionsResponse,
+  SubmissionList,
 } from "@/src/interfaces/submission.interface";
 
 import { useParams } from "next/navigation";
 import React from "react";
 
 const ProblemSubmissions = () => {
-  const [submission, setSubmissions] = React.useState<BaseSubmission[]>([]);
+  const [submissions, setSubmissions] = React.useState<SubmissionList[]>([]);
 
   const params: { slug?: string } | null = useParams();
+
+  const mappedSubmission = submissions.map((submission) => {
+    return (
+      <div
+        key={submission.id}
+        className="w-full not-last:border-b-2 border-neutral-400 transition-all
+                  hover:bg-neutral-200 first:rounded-t-md last:rounded-b-md"
+      >
+        <div className="w-full grid grid-cols-4 p-4 gap-4">
+          <p>{submission.id}</p>
+          <p>{submission.language}</p>
+          <p>{submission.execution_time_ms}</p>
+          <p>{submission.memory_used_mb}</p>
+        </div>
+      </div>
+    );
+  });
 
   React.useEffect(() => {
     const getSubmission = async () => {
@@ -46,9 +64,12 @@ const ProblemSubmissions = () => {
     getSubmission();
   }, [params?.slug]);
 
-  console.log(submission);
-
-  return <div>ProblemSubmissions</div>;
+  return (
+    <Table
+      headers={["ID", "Language", "Runtime", "Memory"]}
+      data={mappedSubmission}
+    />
+  );
 };
 
 export default ProblemSubmissions;
