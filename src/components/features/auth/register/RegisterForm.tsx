@@ -7,12 +7,7 @@ import {
 } from "@/src/interfaces/auth.interface";
 import { useRouter } from "next/navigation";
 import React from "react";
-import {
-  FaRegEnvelope,
-  FaRegEye,
-  FaRegEyeSlash,
-  FaRegUser,
-} from "react-icons/fa6";
+import { FaEnvelope, FaEye, FaEyeSlash, FaUser } from "react-icons/fa6";
 
 const RegisterForm = () => {
   const [credentials, setCredentials] = React.useState<RegisterPayload>({
@@ -82,7 +77,7 @@ const RegisterForm = () => {
         onChange={handleCredentials}
         type="text"
         value={credentials.first_name}
-        icon={<FaRegUser />}
+        icon={<FaUser />}
         label="First Name"
         required={true}
       />
@@ -93,7 +88,7 @@ const RegisterForm = () => {
         onChange={handleCredentials}
         type="text"
         value={credentials.last_name}
-        icon={<FaRegUser />}
+        icon={<FaUser />}
         label="Last Name"
         required={true}
       />
@@ -104,7 +99,7 @@ const RegisterForm = () => {
         onChange={handleCredentials}
         type="text"
         value={credentials.username}
-        icon={<FaRegUser />}
+        icon={<FaUser />}
         label="Username"
         required={true}
       />
@@ -115,7 +110,7 @@ const RegisterForm = () => {
         onChange={handleCredentials}
         type="email"
         value={credentials.email}
-        icon={<FaRegEnvelope />}
+        icon={<FaEnvelope />}
         label="Email"
         required={true}
       />
@@ -130,12 +125,12 @@ const RegisterForm = () => {
         required={true}
         icon={
           showPassword ? (
-            <FaRegEyeSlash
+            <FaEyeSlash
               onClick={handleShowPassword}
               className="cursor-pointer"
             />
           ) : (
-            <FaRegEye onClick={handleShowPassword} className="cursor-pointer" />
+            <FaEye onClick={handleShowPassword} className="cursor-pointer" />
           )
         }
       />

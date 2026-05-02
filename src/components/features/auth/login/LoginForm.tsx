@@ -6,7 +6,7 @@ import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { FaRegEnvelope, FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
+import { FaEnvelope, FaEye, FaEyeSlash } from "react-icons/fa6";
 const LoginForm = () => {
   const [credentials, setCredentials] = React.useState<LoginPayload>({
     email: "",
@@ -85,7 +85,7 @@ const LoginForm = () => {
         onChange={handleCredentials}
         type="email"
         value={credentials.email}
-        icon={<FaRegEnvelope />}
+        icon={<FaEnvelope />}
         label="Email"
         required={true}
       />
@@ -100,12 +100,12 @@ const LoginForm = () => {
         required={true}
         icon={
           showPassword ? (
-            <FaRegEyeSlash
+            <FaEyeSlash
               onClick={handleShowPassword}
               className="cursor-pointer"
             />
           ) : (
-            <FaRegEye onClick={handleShowPassword} className="cursor-pointer" />
+            <FaEye onClick={handleShowPassword} className="cursor-pointer" />
           )
         }
       />

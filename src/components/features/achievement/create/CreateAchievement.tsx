@@ -12,7 +12,7 @@ import {
 import { getErrorMessage } from "@/src/utils/general.util";
 import Image from "next/image";
 import React from "react";
-import { FaChartLine, FaLink, FaRegStickyNote } from "react-icons/fa";
+import { FaChartLine, FaLink, FaStickyNote } from "react-icons/fa";
 import { FaLockOpen, FaTrash, FaTrophy } from "react-icons/fa6";
 import { toast } from "sonner";
 
@@ -133,7 +133,7 @@ const CreateAchievement = () => {
             label="Description"
             columns={6}
             required={true}
-            icon={<FaRegStickyNote />}
+            icon={<FaStickyNote />}
           />
         </div>
       </div>

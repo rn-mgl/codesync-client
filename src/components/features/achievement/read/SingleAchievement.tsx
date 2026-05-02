@@ -10,8 +10,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import React from "react";
-import { FaArrowLeft, FaRegEdit } from "react-icons/fa";
-import { FaRegTrashCan } from "react-icons/fa6";
+import { FaArrowLeft, FaEdit } from "react-icons/fa";
+import { FaTrashCan } from "react-icons/fa6";
 
 const SingleAchievement = () => {
   const [achievement, setAchievement] = React.useState<BaseAchievement>({
@@ -113,14 +113,14 @@ const SingleAchievement = () => {
           type="button"
           className="hover:text-accent transition-all p-2"
         >
-          <FaRegEdit />
+          <FaEdit />
         </Link>
         <button
           onClick={handleCanDelete}
           type="button"
           className="p-2 rounded-full hover:text-danger transition-all"
         >
-          <FaRegTrashCan />
+          <FaTrashCan />
         </button>
       </div>
 

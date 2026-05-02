@@ -1,5 +1,5 @@
 import React from "react";
-import { FaMemory, FaRegClock } from "react-icons/fa";
+import { FaMemory, FaClock } from "react-icons/fa";
 
 const RunMetricsToggle = (props: {
   handleActiveChart: (chart: "runtime" | "memory") => void;
@@ -23,7 +23,7 @@ const RunMetricsToggle = (props: {
           </span>
         </p>
         <p>
-          <FaRegClock className="text-secondary text-2xl" />
+          <FaClock className="text-secondary text-2xl" />
         </p>
       </button>
 

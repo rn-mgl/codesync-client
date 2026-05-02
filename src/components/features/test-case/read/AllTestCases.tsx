@@ -7,12 +7,7 @@ import {
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import React from "react";
-import {
-  FaArrowLeft,
-  FaArrowRight,
-  FaMemory,
-  FaRegClock,
-} from "react-icons/fa6";
+import { FaArrowLeft, FaArrowRight, FaMemory, FaClock } from "react-icons/fa6";
 
 const AllTestCases = () => {
   const [testCases, setTestCases] = React.useState<ProblemTestCaseList>({});
@@ -81,7 +76,7 @@ const AllTestCases = () => {
                       <div className="flex items-center w-full truncate gap-2">
                         <div className="flex items-center justify-center bg-primary p-1 rounded-md text-secondary gap-1 text-xs px-2">
                           <span>Time Limit (ms)</span>
-                          <FaRegClock />
+                          <FaClock />
                         </div>
                         <span className="truncate bg-secondary p-1 px-2 rounded-md w-full">
                           {JSON.stringify(tc.time_limit_ms)} ms

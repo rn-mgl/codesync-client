@@ -20,7 +20,7 @@ import {
   FaList,
   FaListOl,
   FaQuoteLeft,
-  FaRegWindowMinimize,
+  FaWindowMinimize,
   FaStrikethrough,
 } from "react-icons/fa6";
 
@@ -234,7 +234,7 @@ const RichTextEditor = ({ ref, ...props }: RichTextEditorProps) => {
             className="bg-inherit w-8 h-8 text-xs rounded-sm flex items-center justify-center"
             onClick={() => editor.chain().focus().setHorizontalRule().run()}
           >
-            <FaRegWindowMinimize />
+            <FaWindowMinimize />
           </button>
 
           <button

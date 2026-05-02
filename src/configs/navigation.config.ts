@@ -1,43 +1,49 @@
 import { IconType } from "react-icons";
 import {
-  FaRegChartBar,
-  FaRegFlag,
-  FaRegHourglass,
-  FaRegStar,
-  FaRegUser,
+  FaChartBar,
+  FaFlag,
+  FaHourglass,
+  FaStar,
+  FaUser,
+  FaTags,
 } from "react-icons/fa";
-import { FaRegFileCode } from "react-icons/fa6";
+import { FaFileCode } from "react-icons/fa6";
 
 export const BASE_NAVIGATIONS: { name: string; url: string; icon: IconType }[] =
   [
     {
       name: "Dashboard",
       url: "/codesync",
-      icon: FaRegChartBar,
+      icon: FaChartBar,
     },
     {
       name: "Problems",
       url: "/codesync/problems",
-      icon: FaRegFlag,
+      icon: FaFlag,
+    },
+    {
+      name: "Topics",
+      url: "/codesync/topics",
+      icon: FaTags,
     },
     {
       name: "Test Cases",
       url: "/codesync/test-cases",
-      icon: FaRegFileCode,
+      icon: FaFileCode,
     },
     {
       name: "Achievements",
       url: "/codesync/achievements",
-      icon: FaRegStar,
+      icon: FaStar,
     },
     {
       name: "Sessions",
       url: "/codesync/sessions",
-      icon: FaRegHourglass,
+      icon: FaHourglass,
     },
     {
       name: "Friends",
       url: "/codesync/friends",
-      icon: FaRegUser,
+      icon: FaUser,
     },
   ];

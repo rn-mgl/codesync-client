@@ -2,8 +2,8 @@ import { SupportedLanguages } from "@/src/interfaces/language.interface";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import React from "react";
-import { FaRegEdit } from "react-icons/fa";
-import { FaCode, FaRegFileCode, FaRegTrashCan } from "react-icons/fa6";
+import { FaEdit } from "react-icons/fa";
+import { FaCode, FaFileCode, FaTrashCan } from "react-icons/fa6";
 import Languages from "./Languages";
 
 const ProblemActions = (props: {
@@ -27,7 +27,7 @@ const ProblemActions = (props: {
           title="Test Case"
           className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
         >
-          <FaRegFileCode />
+          <FaFileCode />
         </Link>
         <button
           title="Language"
@@ -46,7 +46,7 @@ const ProblemActions = (props: {
           href={`/codesync/problems/${params?.slug}/edit`}
           className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
         >
-          <FaRegEdit />
+          <FaEdit />
         </Link>
 
         <button
@@ -54,7 +54,7 @@ const ProblemActions = (props: {
           onClick={props.handleCanDelete}
           className="p-2 rounded-full bg-inherit hover:text-danger flex flex-col items-center justify-center"
         >
-          <FaRegTrashCan />
+          <FaTrashCan />
         </button>
       </div>
 

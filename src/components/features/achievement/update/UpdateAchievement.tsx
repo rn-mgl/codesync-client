@@ -14,8 +14,8 @@ import { getErrorMessage } from "@/src/utils/general.util";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import React from "react";
-import { FaChartLine, FaLink, FaRegStickyNote } from "react-icons/fa";
-import { FaLockOpen, FaRegFileImage, FaTrash, FaTrophy } from "react-icons/fa6";
+import { FaChartLine, FaLink, FaStickyNote } from "react-icons/fa";
+import { FaLockOpen, FaFileImage, FaTrash, FaTrophy } from "react-icons/fa6";
 import { toast } from "sonner";
 
 const UpdateAchievement = () => {
@@ -181,7 +181,7 @@ const UpdateAchievement = () => {
             label="Description"
             columns={6}
             required={true}
-            icon={<FaRegStickyNote />}
+            icon={<FaStickyNote />}
           />
         </div>
       </div>
@@ -217,7 +217,7 @@ const UpdateAchievement = () => {
                       className="w-6/12"
                     />
                   ) : (
-                    <FaRegFileImage className="text-2xl opacity-50" />
+                    <FaFileImage className="text-2xl opacity-50" />
                   )}
                 </div>
 

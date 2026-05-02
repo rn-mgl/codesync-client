@@ -12,7 +12,7 @@ import {
 import { useSearchParams } from "next/navigation";
 import React from "react";
 import { FaCode, FaLink } from "react-icons/fa";
-import { FaMemory, FaRegClock } from "react-icons/fa6";
+import { FaMemory, FaClock } from "react-icons/fa6";
 import { toast } from "sonner";
 
 const CreateTestCase = () => {
@@ -143,7 +143,7 @@ const CreateTestCase = () => {
             type="text"
             value={testCase.time_limit_ms}
             label="Time Limit (ms)"
-            icon={<FaRegClock />}
+            icon={<FaClock />}
             required={true}
           />
 

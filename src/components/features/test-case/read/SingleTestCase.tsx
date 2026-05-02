@@ -11,8 +11,8 @@ import {
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import React from "react";
-import { FaArrowLeft, FaCode, FaRegClock, FaRegEdit } from "react-icons/fa";
-import { FaLink, FaMemory, FaRegTrashCan } from "react-icons/fa6";
+import { FaArrowLeft, FaCode, FaClock, FaEdit } from "react-icons/fa";
+import { FaLink, FaMemory, FaTrashCan } from "react-icons/fa6";
 
 const SingleTestCase = () => {
   const [testCase, setTestCase] = React.useState<TestCaseDetails>({
@@ -95,7 +95,7 @@ const SingleTestCase = () => {
               href={`/codesync/test-cases/${params?.id}/edit`}
               className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
             >
-              <FaRegEdit />
+              <FaEdit />
             </Link>
 
             <button
@@ -103,7 +103,7 @@ const SingleTestCase = () => {
               onClick={handleCanDelete}
               className="p-2 rounded-full bg-inherit hover:text-danger flex flex-col items-center justify-center"
             >
-              <FaRegTrashCan />
+              <FaTrashCan />
             </button>
           </div>
         </div>
@@ -143,7 +143,7 @@ const SingleTestCase = () => {
           <DisplayInputField
             label="Time Limit (ms)"
             value={`${testCase.time_limit_ms}`}
-            icon={<FaRegClock />}
+            icon={<FaClock />}
           />
 
           <DisplayInputField

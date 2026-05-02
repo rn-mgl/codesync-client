@@ -4,7 +4,7 @@ import Input from "@/src/components/ui/fields/Input";
 import { ForgotPayload, ForgotResponse } from "@/src/interfaces/auth.interface";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { FaRegEnvelope } from "react-icons/fa6";
+import { FaEnvelope } from "react-icons/fa6";
 
 const ForgotForm = () => {
   const [credentials, setCredentials] = React.useState<ForgotPayload>({
@@ -65,7 +65,7 @@ const ForgotForm = () => {
         onChange={handleCredentials}
         type="username"
         value={credentials.username}
-        icon={<FaRegEnvelope />}
+        icon={<FaEnvelope />}
         label="Username"
         required={true}
       />
@@ -76,7 +76,7 @@ const ForgotForm = () => {
         onChange={handleCredentials}
         type="email"
         value={credentials.email}
-        icon={<FaRegEnvelope />}
+        icon={<FaEnvelope />}
         label="Email"
         required={true}
       />
