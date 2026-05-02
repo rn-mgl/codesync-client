@@ -37,7 +37,7 @@ export interface AchievementForm extends Omit<
   BaseAchievement,
   "id" | "points" | "icon" | "unlock_criteria"
 > {
-  icon: File | null;
+  icon: File | string | null;
   points: string;
   unlock_criteria: string;
 }

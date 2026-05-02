@@ -1,5 +1,6 @@
 "use client";
 
+import File from "@/src/components/ui/fields/File";
 import Input from "@/src/components/ui/fields/Input";
 import Select from "@/src/components/ui/fields/Select";
 import TextArea from "@/src/components/ui/fields/TextArea";
@@ -10,10 +11,9 @@ import {
   CreateAchievementResponse,
 } from "@/src/interfaces/achievement.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
-import Image from "next/image";
 import React from "react";
 import { FaChartLine, FaLink, FaStickyNote } from "react-icons/fa";
-import { FaLockOpen, FaTrash, FaTrophy } from "react-icons/fa6";
+import { FaLockOpen, FaTrophy } from "react-icons/fa6";
 import { toast } from "sonner";
 
 const CreateAchievement = () => {
@@ -144,53 +144,12 @@ const CreateAchievement = () => {
         </div>
 
         <div className="w-full flex flex-col items-start justify-start gap-4 p-2 border-primary/50 border rounded-b-md t:p-4">
-          <div className="w-full flex flex-col bg-neutral-200 p-2 rounded-lg items-center t:p-4">
-            <div className="w-full flex flex-col gap-2 items-center justify-center  t:max-w-(--breakpoint-m-l)">
-              <label htmlFor="icon" className="w-full flex h-full">
-                <div
-                  className="p-2 rounded-md aspect-video w-full border-neutral-400 bg-secondary border-2 flex flex-col 
-                          items-center justify-center bg-cover bg-center overflow-hidden"
-                >
-                  {localFile.file ? (
-                    <Image
-                      width={500}
-                      height={500}
-                      alt="File"
-                      src={localFile.url}
-                      className="w-6/12"
-                    />
-                  ) : null}
-                </div>
-
-                <input
-                  onChange={(e) => handleLocalFile(e)}
-                  ref={fileRef}
-                  id="icon"
-                  name="icon"
-                  type="file"
-                  className="fixed w-0 h-0 p-0 m-0"
-                  accept="image/*"
-                />
-              </label>
-
-              <div className="w-full flex flex-row gap-4 text-sm items-center">
-                {localFile.file ? (
-                  <>
-                    <p className="truncate w-full">{localFile.file.name}</p>
-                    <button
-                      type="button"
-                      onClick={removeLocalFile}
-                      className="p-2 rounded-full hover:text-danger transition-all"
-                    >
-                      <FaTrash />
-                    </button>
-                  </>
-                ) : (
-                  <p className="italic text-neutral-600">Select a photo...</p>
-                )}
-              </div>
-            </div>
-          </div>
+          <File
+            file={localFile}
+            fileRef={fileRef}
+            handleFile={handleLocalFile}
+            removeFile={removeLocalFile}
+          />
 
           <Select
             label="Badge Color"

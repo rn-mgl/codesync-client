@@ -62,3 +62,15 @@ export interface RichTextEditorProps {
   ref: React.RefObject<Editor | null>;
   initialValue: string;
 }
+
+export interface FileField {
+  file:
+    | {
+        url: string;
+        file: File | null;
+      }
+    | string;
+  fileRef: React.RefObject<HTMLInputElement | null>;
+  handleFile: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  removeFile: () => void;
+}
