@@ -14,7 +14,7 @@ const File = ({ file, fileRef, handleFile, removeFile }: FileField) => {
             className="p-2 rounded-md aspect-video w-full border-neutral-400 bg-secondary border-2 flex flex-col 
                             items-center justify-center bg-cover bg-center overflow-hidden"
           >
-            {typeof file === "object" ? (
+            {typeof file === "object" && file.file !== null ? (
               <Image
                 width={500}
                 height={500}
