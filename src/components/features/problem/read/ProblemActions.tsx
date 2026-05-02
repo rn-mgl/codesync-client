@@ -25,7 +25,7 @@ const ProblemActions = (props: {
         <Link
           href={`/codesync/test-cases?problem=${params?.slug}`}
           title="Test Case"
-          className="p-2 rounded-full bg-inherit hover:text-green-800 flex flex-col items-center justify-center"
+          className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
         >
           <FaRegFileCode />
         </Link>
@@ -44,7 +44,7 @@ const ProblemActions = (props: {
         <Link
           title="Edit"
           href={`/codesync/problems/${params?.slug}/edit`}
-          className="p-2 rounded-full bg-inherit hover:text-blue-800 flex flex-col items-center justify-center"
+          className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
         >
           <FaRegEdit />
         </Link>
@@ -52,7 +52,7 @@ const ProblemActions = (props: {
         <button
           title="Delete"
           onClick={props.handleCanDelete}
-          className="p-2 rounded-full bg-inherit hover:text-red-800 flex flex-col items-center justify-center"
+          className="p-2 rounded-full bg-inherit hover:text-danger flex flex-col items-center justify-center"
         >
           <FaRegTrashCan />
         </button>

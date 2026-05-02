@@ -11,10 +11,10 @@ const RunMetricsToggle = (props: {
     <div className="w-full grid grid-cols-1 gap-2 t:grid-cols-2">
       <button
         onClick={() => props.handleActiveChart("runtime")}
-        className={`w-full p-4 rounded-md flex flex-row justify-between items-center text-left transition-all bg-cyan-500
-                                         ${props.activeChart === "runtime" ? "opacity-100" : "opacity-50"}`}
+        className={`w-full p-4 rounded-md flex flex-row justify-between items-center text-left transition-all bg-primary text-secondary
+                    ${props.activeChart === "runtime" ? "opacity-100" : "opacity-50"}`}
       >
-        <p className="flex flex-col">
+        <p className="flex flex-col text-runtime">
           <span className="text-xs text-secondary font-light">
             Average Run Time
           </span>
@@ -29,10 +29,10 @@ const RunMetricsToggle = (props: {
 
       <button
         onClick={() => props.handleActiveChart("memory")}
-        className={`w-full p-4 rounded-md flex flex-row justify-between items-center text-left transition-all bg-emerald-500
+        className={`w-full p-4 rounded-md flex flex-row justify-between items-center text-left transition-all bg-primary text-secondary
                                          ${props.activeChart === "memory" ? "opacity-100" : "opacity-50"}`}
       >
-        <p className="flex flex-col">
+        <p className="flex flex-col text-memory">
           <span className="text-xs text-secondary font-light">
             Average Memory Used
           </span>

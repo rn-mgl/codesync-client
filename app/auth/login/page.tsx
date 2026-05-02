@@ -35,7 +35,7 @@ const Page = async () => {
               <p className="text-primary/60">Don&apos;t have an account?</p>
               <Link
                 href="/auth/register"
-                className="font-bold text-blue-500 hover:underline transition-all"
+                className="font-bold text-accent hover:underline transition-all"
               >
                 Sign Up
               </Link>

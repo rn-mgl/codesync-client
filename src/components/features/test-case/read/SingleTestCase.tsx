@@ -93,7 +93,7 @@ const SingleTestCase = () => {
             <Link
               title="Edit"
               href={`/codesync/test-cases/${params?.id}/edit`}
-              className="p-2 rounded-full bg-inherit hover:text-blue-800 flex flex-col items-center justify-center"
+              className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
             >
               <FaRegEdit />
             </Link>
@@ -101,7 +101,7 @@ const SingleTestCase = () => {
             <button
               title="Delete"
               onClick={handleCanDelete}
-              className="p-2 rounded-full bg-inherit hover:text-red-800 flex flex-col items-center justify-center"
+              className="p-2 rounded-full bg-inherit hover:text-danger flex flex-col items-center justify-center"
             >
               <FaRegTrashCan />
             </button>

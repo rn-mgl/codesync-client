@@ -111,14 +111,14 @@ const SingleAchievement = () => {
         <Link
           href={`/codesync/achievements/${params?.slug}/edit`}
           type="button"
-          className="hover:text-blue-600 transition-all p-2"
+          className="hover:text-accent transition-all p-2"
         >
           <FaRegEdit />
         </Link>
         <button
           onClick={handleCanDelete}
           type="button"
-          className="p-2 rounded-full hover:text-red-600 transition-all"
+          className="p-2 rounded-full hover:text-danger transition-all"
         >
           <FaRegTrashCan />
         </button>

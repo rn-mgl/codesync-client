@@ -27,7 +27,7 @@ const RunResults = (props: {
   return (
     <div className="flex flex-col items-end justify-start gap-2 w-full">
       {props.runOutput.success ? (
-        <div className="p-2 rounded-md bg-neutral-red-300 flex flex-col items-start justify-start gap-2 w-full">
+        <div className="p-2 rounded-md bg-neutral-200 flex flex-col items-start justify-start gap-2 w-full">
           <RunStatusBadge
             passed={props.runOutput.summary?.passed ?? 0}
             total={props.runOutput.summary?.total ?? 0}
@@ -65,8 +65,8 @@ const RunResults = (props: {
           )}
         </div>
       ) : (
-        <div className="p-2 rounded-md bg-red-300 min-w-fit w-full">
-          <p className="text-red-900 whitespace-pre-line text-sm">
+        <div className="p-2 rounded-md bg-danger/20 min-w-fit w-full">
+          <p className="text-danger whitespace-pre-line text-sm">
             {props.runOutput.error}
           </p>
         </div>

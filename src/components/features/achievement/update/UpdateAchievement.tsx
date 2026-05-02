@@ -239,7 +239,7 @@ const UpdateAchievement = () => {
                     <button
                       type="button"
                       onClick={removeLocalFile}
-                      className="p-2 rounded-full hover:text-red-600 transition-all"
+                      className="p-2 rounded-full hover:text-danger transition-all"
                     >
                       <FaTrash />
                     </button>
@@ -250,7 +250,7 @@ const UpdateAchievement = () => {
                     <button
                       type="button"
                       onClick={() => removeUploadedFile("icon")}
-                      className="p-2 rounded-full hover:text-red-600 transition-all"
+                      className="p-2 rounded-full hover:text-danger transition-all"
                     >
                       <FaTrash />
                     </button>

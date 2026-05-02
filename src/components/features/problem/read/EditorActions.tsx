@@ -17,7 +17,7 @@ const EditorActions = (props: {
       <button
         onClick={() => props.handleSubmission("run")}
         type="button"
-        className="w-full p-1 rounded-md font-bold bg-green-600 text-secondary t:max-w-16 t:px-4 text-sm"
+        className="w-full p-1 rounded-md font-bold bg-accent text-secondary t:max-w-16 t:px-4 text-sm"
       >
         Run
       </button>

@@ -113,7 +113,7 @@ const LoginForm = () => {
       <div className="w-full flex flex-row text-xs gap-1">
         <Link
           href="/auth/forgot"
-          className="font-bold text-blue-500 hover:underline transition-all"
+          className="font-bold text-accent hover:underline transition-all"
         >
           Forgot Password?
         </Link>

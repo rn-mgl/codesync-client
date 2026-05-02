@@ -22,13 +22,11 @@ const FailedTestCase = (props: { testCase: BaseTestCase; output: unknown }) => {
 
       <p className="text-xs mt-2">Expected Output</p>
       <div className="p-4 rounded-md bg-neutral-300 text-sm w-full">
-        <p className="font-medium ">
-          {JSON.stringify(props.testCase.expected_output, null, 2)}
-        </p>
+        <p className="font-medium ">{props.testCase.expected_output}</p>
       </div>
 
       <p className="text-xs mt-2">Submission Output</p>
-      <div className="p-4 rounded-md bg-red-300 text-red-900 text-sm w-full">
+      <div className="p-4 rounded-md bg-danger/20 text-danger text-sm w-full">
         <p className="font-medium">{JSON.stringify(props.output, null, 2)}</p>
       </div>
     </div>

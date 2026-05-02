@@ -10,7 +10,7 @@ const RunStatistics = (props: {
   const memoryData = [...props.statistics.memory].sort((a, b) => a.mb - b.mb);
 
   return (
-    <div className="w-full aspect-video p-2 rounded-md bg-primary">
+    <div className="w-full aspect-video p-2 rounded-md bg-neutral-200">
       <Bar
         data={{
           labels:
@@ -28,10 +28,10 @@ const RunStatistics = (props: {
                   ? runtimeData.map((stat) => `${stat.percentage}`)
                   : memoryData.map((stat) => `${stat.percentage}`),
               backgroundColor: [
-                props.activeChart === "runtime"
-                  ? "oklch(78.9% 0.154 211.53)"
-                  : "oklch(76.5% 0.177 163.223)",
+                props.activeChart === "runtime" ? "#ff8970" : "#839fff",
               ],
+              borderRadius: 9,
+              borderSkipped: false,
             },
           ],
         }}

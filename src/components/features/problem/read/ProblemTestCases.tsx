@@ -85,8 +85,8 @@ const ProblemTestCases = (props: TestCaseSectionProps) => {
             <p className="text-xs mt-2">Submission Output</p>
             <div
               className={`p-4 rounded-md min-w-fit w-full text-sm 
-                        ${isCorrectSubmissionOutput ? "bg-green-300 text-green-900" : "bg-red-300 text-red-900"}
-                        ${matchingSubmissionError ? "bg-red-300 text-red-900 whitespace-pre-wrap" : ""}`}
+                        ${isCorrectSubmissionOutput ? "bg-green-300 text-green-900" : "bg-danger/20 text-danger"}
+                        ${matchingSubmissionError ? "bg-danger/20 text-danger whitespace-pre-wrap" : ""}`}
             >
               <p className="font-medium">
                 {matchingSubmissionOutput || matchingSubmissionError}

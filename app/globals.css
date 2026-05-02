@@ -13,6 +13,17 @@
 
   --color-primary: #0d0d0d;
   --color-secondary: #f2f2f2;
+
+  --color-primary: #0d0d0d;
+  --color-secondary: #f2f2f2;
+
+  --color-accent: #2563eb; /* main actions, links, selected tabs */
+  --color-info: #cf52d0; /* editorial, metadata, language */
+  --color-success: #1ec198; /* accepted, passed, solved */
+  --color-warning: #ffc358; /* pending, partial, caution */
+  --color-danger: #dc003e; /* failed, errors, delete */
+  --color-runtime: #ff8970; /* time metrics */
+  --color-memory: #839fff; /* memory metrics */
 }
 
 @theme {
@@ -81,5 +92,9 @@
   ::-webkit-scrollbar-thumb {
     background: var(--color-primary);
     border-radius: 999rem;
+  }
+
+  .prose pre {
+    background-color: #0d0d0d;
   }
 }
