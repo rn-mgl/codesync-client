@@ -54,14 +54,18 @@ export type SubmissionStatistics = {
   runtime: { ms: number; percentage: number }[];
 };
 
+export type RunSubmissionResponse = ApiResponse<
+  SubmissionResponse & {
+    summary: RunSummary;
+    statistics: SubmissionStatistics | null;
+  }
+>;
+
+export type TestSubmissionResponse = ApiResponse<SubmissionResponse>;
+
 export type CreateSubmissionResponse<T extends SubmissionType> = T extends "run"
-  ? ApiResponse<
-      SubmissionResponse & {
-        summary: RunSummary;
-        statistics: SubmissionStatistics | null;
-      }
-    >
-  : ApiResponse<SubmissionResponse>;
+  ? RunSubmissionResponse
+  : TestSubmissionResponse;
 
 export type GetAllSubmissionsResponse = ApiResponse<{
   submissions: BaseSubmission[];

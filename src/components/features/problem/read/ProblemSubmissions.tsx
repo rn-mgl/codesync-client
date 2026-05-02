@@ -1,15 +1,24 @@
 import Table from "@/src/components/ui/containers/Table";
 import {
   GetAllSubmissionsResponse,
+  SubmissionAction,
   SubmissionList,
 } from "@/src/interfaces/submission.interface";
 
+import {
+  DetailsPanel,
+  GetSubmissionResponse,
+} from "@/src/interfaces/problem.interface";
+import { getErrorMessage } from "@/src/utils/general.util";
+import { normalizeString } from "@/src/utils/normalizer.util";
+import { DateTime } from "luxon";
 import { useParams } from "next/navigation";
 import React from "react";
-import { DateTime } from "luxon";
-import { normalizeString } from "@/src/utils/normalizer.util";
 
-const ProblemSubmissions = () => {
+const ProblemSubmissions = (props: {
+  handleSubmissionState: (action: SubmissionAction) => void;
+  handleActiveDetailsPanel: (panel: DetailsPanel) => void;
+}) => {
   const [submissions, setSubmissions] = React.useState<SubmissionList[]>([]);
 
   const params: { slug?: string } | null = useParams();
@@ -23,11 +32,29 @@ const ProblemSubmissions = () => {
         },
       });
 
-      const resolve = await response.json();
+      const resolve: GetSubmissionResponse = await response.json();
 
-      console.log(resolve);
+      if (!resolve.success) {
+        throw new Error(resolve.message);
+      }
+
+      const data = resolve.data;
+
+      props.handleSubmissionState({
+        type: "submit_run_success",
+        output: {
+          judge: { ...data.judge },
+          statistics: data.statistics,
+          summary: data.summary,
+        },
+      });
     } catch (error) {
-      console.log(error);
+      props.handleSubmissionState({
+        type: "submit_run_error",
+        output: getErrorMessage(error),
+      });
+    } finally {
+      props.handleActiveDetailsPanel("result");
     }
   };
 

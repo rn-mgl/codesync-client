@@ -41,6 +41,7 @@ const SingleProblem = () => {
     handleClearSubmissionState,
     handleActiveChart,
     handleActiveDetailsPanel,
+    handleSubmissionState,
   } = useSingleProblem();
 
   React.useEffect(() => {
@@ -125,7 +126,10 @@ const SingleProblem = () => {
                   />
                 </article>
               ) : activeDetailsPanel === "submission" ? (
-                <ProblemSubmissions />
+                <ProblemSubmissions
+                  handleSubmissionState={handleSubmissionState}
+                  handleActiveDetailsPanel={handleActiveDetailsPanel}
+                />
               ) : null}
             </div>
           </div>

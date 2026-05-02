@@ -1,5 +1,9 @@
 import { ApiResponse } from "./api.interface";
-import { SubmissionResponse, SubmissionType } from "./submission.interface";
+import {
+  RunSubmissionResponse,
+  SubmissionResponse,
+  SubmissionType,
+} from "./submission.interface";
 import { BaseTestCase } from "./test-case.interface";
 
 export interface InputFormat {
@@ -74,6 +78,8 @@ export type GetProblemResponse = ApiResponse<{
 }>;
 
 export type UpdateProblemResponse = ApiResponse<{ message: string }>;
+
+export type GetSubmissionResponse = RunSubmissionResponse;
 
 export interface TestCaseSectionProps {
   testCases: BaseTestCase[];
