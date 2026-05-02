@@ -59,12 +59,32 @@ const RichTextEditor = ({ ref, ...props }: RichTextEditorProps) => {
         // "can" - boolean if can activate
         isBold: context.editor?.isActive("bold") ?? false,
         canBold: context.editor?.can().chain().toggleBold().run() ?? false,
+
         isItalic: context.editor?.isActive("italic") ?? false,
         canItalic: context.editor?.can().chain().toggleItalic().run() ?? false,
+
         isStrike: context.editor?.isActive("strike") ?? false,
         canStrike: context.editor?.can().chain().toggleStrike().run() ?? false,
+
+        isBulletList: context.editor?.isActive("bulletList") ?? false,
+        canBulletList:
+          context.editor?.can().chain().toggleBulletList().run() ?? false,
+
+        isOrderedList: context.editor?.isActive("orderedList") ?? false,
+        canOrderedList:
+          context.editor?.can().chain().toggleOrderedList().run() ?? false,
+
         isCode: context.editor?.isActive("code") ?? false,
         canCode: context.editor?.can().chain().toggleCode().run() ?? false,
+
+        isCodeBlock: context.editor?.isActive("codeBlock") ?? false,
+        canCodeBlock:
+          context.editor?.can().chain().toggleCodeBlock().run() ?? false,
+
+        isBlockquote: context.editor?.isActive("blockquote") ?? false,
+        canBlockquote:
+          context.editor?.can().chain().toggleBlockquote().run() ?? false,
+
         canClearMarks:
           context.editor?.can().chain().unsetAllMarks().run() ?? false,
 
@@ -115,7 +135,7 @@ const RichTextEditor = ({ ref, ...props }: RichTextEditorProps) => {
   return (
     <div className="w-full flex flex-col items-center justify-start h-full overflow-y-hidden">
       {editor && (
-        <div className="w-full flex flex-row bg-inherit border-2 border-neutral-400 rounded-t-md border-b ">
+        <div className="w-full flex flex-row bg-inherit border-2 border-neutral-400 rounded-t-md border-b items-center gap-2">
           <div className="relative w-20 rounded-tl-md flex flex-col items-center justify-center">
             <button
               type="button"
@@ -139,7 +159,8 @@ const RichTextEditor = ({ ref, ...props }: RichTextEditorProps) => {
 
           <button
             type="button"
-            className="bg-inherit p-2.5 text-xs"
+            className={`w-8 h-8 rounded-sm flex items-center justify-center text-xs 
+                      ${editor.isActive("bold") ? "bg-primary text-secondary" : "bg-inherit text-primary"}`}
             onClick={() => editor.chain().focus().toggleBold().run()}
           >
             <FaBold />
@@ -147,7 +168,8 @@ const RichTextEditor = ({ ref, ...props }: RichTextEditorProps) => {
 
           <button
             type="button"
-            className="bg-inherit p-2.5 text-xs"
+            className={`w-8 h-8 rounded-sm flex items-center justify-center text-xs 
+                      ${editor.isActive("italic") ? "bg-primary text-secondary" : "bg-inherit text-primary"}`}
             onClick={() => editor.chain().focus().toggleItalic().run()}
           >
             <FaItalic />
@@ -155,7 +177,8 @@ const RichTextEditor = ({ ref, ...props }: RichTextEditorProps) => {
 
           <button
             type="button"
-            className="bg-inherit p-2.5 text-xs"
+            className={`w-8 h-8 rounded-sm flex items-center justify-center text-xs 
+                      ${editor.isActive("code") ? "bg-primary text-secondary" : "bg-inherit text-primary"}`}
             onClick={() => editor.chain().focus().toggleCode().run()}
           >
             <FaCode />
@@ -163,7 +186,8 @@ const RichTextEditor = ({ ref, ...props }: RichTextEditorProps) => {
 
           <button
             type="button"
-            className="bg-inherit p-2.5 text-xs"
+            className={`w-8 h-8 rounded-sm flex items-center justify-center text-xs 
+                      ${editor.isActive("strike") ? "bg-primary text-secondary" : "bg-inherit text-primary"}`}
             onClick={() => editor.chain().focus().toggleStrike().run()}
           >
             <FaStrikethrough />
@@ -171,7 +195,8 @@ const RichTextEditor = ({ ref, ...props }: RichTextEditorProps) => {
 
           <button
             type="button"
-            className="bg-inherit p-2.5 text-xs"
+            className={`w-8 h-8 rounded-sm flex items-center justify-center text-xs 
+                      ${editor.isActive("bulletList") ? "bg-primary text-secondary" : "bg-inherit text-primary"}`}
             onClick={() => editor.chain().focus().toggleBulletList().run()}
           >
             <FaList />
@@ -179,7 +204,8 @@ const RichTextEditor = ({ ref, ...props }: RichTextEditorProps) => {
 
           <button
             type="button"
-            className="bg-inherit p-2.5 text-xs"
+            className={`w-8 h-8 rounded-sm flex items-center justify-center text-xs 
+                      ${editor.isActive("orderedList") ? "bg-primary text-secondary" : "bg-inherit text-primary"}`}
             onClick={() => editor.chain().focus().toggleOrderedList().run()}
           >
             <FaListOl />
@@ -187,15 +213,17 @@ const RichTextEditor = ({ ref, ...props }: RichTextEditorProps) => {
 
           <button
             type="button"
-            className="bg-inherit p-2.5 text-xs "
+            className={`w-8 h-8 rounded-sm flex items-center justify-center text-xs 
+                      ${editor.isActive("codeBlock") ? "bg-primary text-secondary" : "bg-inherit text-primary"}`}
             onClick={() => editor.chain().focus().toggleCodeBlock().run()}
           >
-            <FaCode className="bg-primary text-secondary text-base rounded-sm p-0.5" />
+            <FaCode className="bg-neutral-700 text-secondary text-base rounded-sm p-0.5" />
           </button>
 
           <button
             type="button"
-            className="bg-inherit p-2.5 text-xs"
+            className={`w-8 h-8 rounded-sm flex items-center justify-center text-xs 
+                      ${editor.isActive("blockquote") ? "bg-primary text-secondary" : "bg-inherit text-primary"}`}
             onClick={() => editor.chain().focus().toggleBlockquote().run()}
           >
             <FaQuoteLeft />
@@ -203,7 +231,7 @@ const RichTextEditor = ({ ref, ...props }: RichTextEditorProps) => {
 
           <button
             type="button"
-            className="bg-inherit p-2.5 text-xs"
+            className="bg-inherit w-8 h-8 text-xs rounded-sm flex items-center justify-center"
             onClick={() => editor.chain().focus().setHorizontalRule().run()}
           >
             <FaRegWindowMinimize />
@@ -211,7 +239,7 @@ const RichTextEditor = ({ ref, ...props }: RichTextEditorProps) => {
 
           <button
             type="button"
-            className="bg-inherit p-2.5 text-xs"
+            className="bg-inherit w-8 h-8 text-xs rounded-sm flex items-center justify-center"
             onClick={() => editor.chain().focus().setHardBreak().run()}
           >
             <FaArrowTurnDown className="rotate-90" />
@@ -219,7 +247,7 @@ const RichTextEditor = ({ ref, ...props }: RichTextEditorProps) => {
 
           <button
             type="button"
-            className="bg-inherit p-2.5 text-xs"
+            className="bg-inherit w-8 h-8 text-xs rounded-sm flex items-center justify-center"
             onClick={() => editor.chain().focus().unsetAllMarks().run()}
           >
             <FaEraser />
@@ -227,7 +255,7 @@ const RichTextEditor = ({ ref, ...props }: RichTextEditorProps) => {
 
           <button
             type="button"
-            className="bg-inherit p-2.5 text-xs"
+            className="bg-inherit w-8 h-8 text-xs rounded-sm flex items-center justify-center"
             onClick={() => editor.chain().focus().clearNodes().run()}
           >
             <FaEraser className="bg-primary text-secondary text-base rounded-sm p-0.5" />

@@ -120,7 +120,7 @@ const SingleProblem = () => {
               ) : activeDetailsPanel === "description" ? (
                 <ProblemDetails problem={problem} />
               ) : activeDetailsPanel === "editorial" ? (
-                <article className="prose max-w-none text-primary">
+                <article className="prose max-w-none text-primary leading-snug">
                   <div
                     dangerouslySetInnerHTML={{ __html: problem.editorial }}
                   />

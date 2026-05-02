@@ -95,6 +95,10 @@
   }
 
   .prose pre {
-    background-color: #0d0d0d;
+    background-color: var(--color-primary);
+  }
+
+  .prose {
+    color: var(--color-primary);
   }
 }

@@ -32,7 +32,7 @@ const ProblemDetails = (props: { problem: BaseProblem }) => {
 
         <article>
           <div
-            className="prose max-w-none text-base text-primary"
+            className="prose max-w-none text-primary leading-snug"
             dangerouslySetInnerHTML={{ __html: props.problem.description }}
           />
         </article>
