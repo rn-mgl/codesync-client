@@ -41,10 +41,10 @@
 
   @keyframes float {
     0% {
-      transform: translateY(0rem);
+      transform: translateY(0%);
     }
     100% {
-      transform: translateY(1rem);
+      transform: translateY(10%);
     }
   }
 }

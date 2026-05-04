@@ -16,3 +16,5 @@ export interface TopicForm extends Pick<
 }
 
 export type CreateTopicResponse = ApiResponse<{ message: string }>;
+
+export type GetAllTopicResponse = ApiResponse<{ topics: BaseTopic[] }>;
