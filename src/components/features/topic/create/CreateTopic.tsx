@@ -1,0 +1,126 @@
+"use client";
+
+import File from "@/src/components/ui/fields/File";
+import Input from "@/src/components/ui/fields/Input";
+import TextArea from "@/src/components/ui/fields/TextArea";
+import useFile from "@/src/hooks/useFile";
+import { TopicForm } from "@/src/interfaces/topic.interface";
+import React from "react";
+import { FaLink } from "react-icons/fa";
+import { FaA, FaNoteSticky } from "react-icons/fa6";
+
+const CreateTopic = () => {
+  const [topic, setTopic] = React.useState<TopicForm>({
+    name: "",
+    slug: "",
+    description: "",
+    icon: null,
+  });
+
+  const { fileRef, localFile, handleLocalFile, removeLocalFile } =
+    useFile(setTopic);
+
+  const handleTopic = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+
+    setTopic((prev) => {
+      return {
+        ...prev,
+        [name]: value,
+      };
+    });
+  };
+
+  const handleCreate = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      if (!localFile.file) {
+        return;
+      }
+
+      const formData = new FormData();
+
+      formData.set("name", topic.name);
+      formData.set("slug", topic.slug);
+      formData.set("description", topic.description);
+      formData.set("icon", localFile.file);
+
+      const response = await fetch(`/api/topic`, {
+        method: "POST",
+        body: formData,
+      });
+
+      const resolve = await response.json();
+
+      console.log(resolve);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <form
+      onSubmit={(e) => handleCreate(e)}
+      className="flex flex-col items-center justify-center w-full gap-8"
+    >
+      <div className="w-full flex flex-col items-start justify-start">
+        <div className="p-4 bg-primary/80 w-full rounded-t-md font-medium text-secondary">
+          Basic Information
+        </div>
+
+        <div className="w-full flex flex-col items-start justify-start gap-4 p-2 border-primary/50 border rounded-b-md t:p-4">
+          <Input
+            id="name"
+            name="name"
+            onChange={handleTopic}
+            type="text"
+            value={topic.name}
+            label="Name"
+            icon={<FaA />}
+            required={true}
+          />
+
+          <Input
+            id="slug"
+            name="slug"
+            onChange={handleTopic}
+            type="text"
+            value={topic.slug}
+            label="Slug"
+            icon={<FaLink />}
+            required={true}
+          />
+
+          <TextArea
+            id="description"
+            name="description"
+            onChange={handleTopic}
+            value={topic.description}
+            label="Description"
+            icon={<FaNoteSticky />}
+            required={true}
+          />
+
+          <File
+            file={localFile}
+            fileRef={fileRef}
+            handleFile={handleLocalFile}
+            removeFile={removeLocalFile}
+          />
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        className="w-full p-2 rounded-md bg-primary font-black text-secondary"
+      >
+        Create
+      </button>
+    </form>
+  );
+};
+
+export default CreateTopic;
