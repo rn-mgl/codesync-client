@@ -4,10 +4,15 @@ import File from "@/src/components/ui/fields/File";
 import Input from "@/src/components/ui/fields/Input";
 import TextArea from "@/src/components/ui/fields/TextArea";
 import useFile from "@/src/hooks/useFile";
-import { TopicForm } from "@/src/interfaces/topic.interface";
+import {
+  CreateTopicResponse,
+  TopicForm,
+} from "@/src/interfaces/topic.interface";
+import { getErrorMessage } from "@/src/utils/general.util";
 import React from "react";
 import { FaLink } from "react-icons/fa";
 import { FaA, FaNoteSticky } from "react-icons/fa6";
+import { toast } from "sonner";
 
 const CreateTopic = () => {
   const [topic, setTopic] = React.useState<TopicForm>({
@@ -53,11 +58,19 @@ const CreateTopic = () => {
         body: formData,
       });
 
-      const resolve = await response.json();
+      const resolve: CreateTopicResponse = await response.json();
 
-      console.log(resolve);
+      if (!resolve.success) {
+        throw new Error(resolve.message);
+      }
+
+      const { message } = resolve.data;
+
+      toast(message);
     } catch (error) {
       console.log(error);
+      const message = getErrorMessage(error);
+      toast(message);
     }
   };
 

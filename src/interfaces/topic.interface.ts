@@ -1,3 +1,5 @@
+import { ApiResponse } from "./api.interface";
+
 export interface BaseTopic {
   id: number;
   name: string;
@@ -12,3 +14,5 @@ export interface TopicForm extends Pick<
 > {
   icon: File | null;
 }
+
+export type CreateTopicResponse = ApiResponse<{ message: string }>;
