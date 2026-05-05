@@ -12,7 +12,7 @@ const DisplayTextArea = (props: DisplayTextAreaProps) => {
       <div className="w-full flex flex-col items-center justify-center relative">
         <div
           className="w-full p-2 px-3 rounded-md text-primary border-2 border-neutral-400 
-                      resize-y min-h-40 overflow-auto"
+                      resize-y min-h-40 overflow-auto text-pretty pr-4"
         >
           <p>{props.value}</p>
         </div>
