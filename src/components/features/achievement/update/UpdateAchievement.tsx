@@ -12,6 +12,7 @@ import {
   UpdateAchievementResponse,
 } from "@/src/interfaces/achievement.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
+import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import React from "react";
 import { FaChartLine, FaLink, FaStickyNote } from "react-icons/fa";
@@ -31,6 +32,8 @@ const UpdateAchievement = () => {
     slug: "",
     unlock_criteria: "",
   });
+
+  useSession({ required: true });
 
   const params: { slug?: string } | null = useParams();
 

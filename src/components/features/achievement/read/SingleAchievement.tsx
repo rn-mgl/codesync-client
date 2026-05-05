@@ -6,6 +6,7 @@ import {
   GetAchievementResponse,
 } from "@/src/interfaces/achievement.interface";
 import { renderJSON } from "@/src/utils/renderer.util";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -29,6 +30,8 @@ const SingleAchievement = () => {
     },
   });
   const [canDelete, setCanDelete] = React.useState(false);
+
+  useSession({ required: true });
 
   const router = useRouter();
 

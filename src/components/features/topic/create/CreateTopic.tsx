@@ -9,6 +9,7 @@ import {
   TopicForm,
 } from "@/src/interfaces/topic.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
+import { useSession } from "next-auth/react";
 import React from "react";
 import { FaLink } from "react-icons/fa";
 import { FaA, FaNoteSticky } from "react-icons/fa6";
@@ -21,6 +22,8 @@ const CreateTopic = () => {
     description: "",
     icon: null,
   });
+
+  useSession({ required: true });
 
   const { fileRef, localFile, handleLocalFile, removeLocalFile } =
     useFile(setTopic);

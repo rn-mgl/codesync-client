@@ -4,12 +4,15 @@ import {
   BaseTopic,
   GetAllTopicResponse,
 } from "@/src/interfaces/topic.interface";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
 const AllTopics = () => {
   const [topics, setTopics] = React.useState<BaseTopic[]>([]);
+
+  useSession({ required: true });
 
   const mappedTopics = topics.map((topic) => {
     return (

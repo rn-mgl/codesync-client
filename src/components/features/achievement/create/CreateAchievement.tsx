@@ -11,6 +11,7 @@ import {
   CreateAchievementResponse,
 } from "@/src/interfaces/achievement.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
+import { useSession } from "next-auth/react";
 import React from "react";
 import { FaChartLine, FaLink, FaStickyNote } from "react-icons/fa";
 import { FaLockOpen, FaTrophy } from "react-icons/fa6";
@@ -27,6 +28,8 @@ const CreateAchievement = () => {
     slug: "",
     unlock_criteria: "",
   });
+
+  useSession({ required: true });
 
   const { localFile, fileRef, handleLocalFile, removeLocalFile } =
     useFile(setAchievement);

@@ -5,6 +5,7 @@ import {
   GetAllAchievementResponse,
 } from "@/src/interfaces/achievement.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -14,6 +15,8 @@ const AllAchievements = () => {
   const [achievements, setAchievements] = React.useState<
     Omit<BaseAchievement, "unlock_criteria">[]
   >([]);
+
+  useSession({ required: true });
 
   const BADGE_PALETTE: Record<string, { primary: string; secondary: string }> =
     {
