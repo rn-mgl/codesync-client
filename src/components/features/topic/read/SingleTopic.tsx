@@ -69,9 +69,9 @@ const SingleTopic = () => {
       {canDelete && (
         <Delete
           closeForm={handleCanDelete}
-          endpoint={`test-case/${params?.slug}`}
-          label="Test Case"
-          postDeleteAction={() => router.push("/codesync/test-cases")}
+          endpoint={`topic/${params?.slug}`}
+          label="Topic"
+          postDeleteAction={() => router.push("/codesync/topics")}
         />
       )}
       <div className="w-full flex justify-between">
@@ -88,7 +88,7 @@ const SingleTopic = () => {
           <div className="flex gap-2">
             <Link
               title="Edit"
-              href={`/codesync/test-cases/${params?.slug}/edit`}
+              href={`/codesync/topics/${params?.slug}/edit`}
               className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
             >
               <FaEdit />
