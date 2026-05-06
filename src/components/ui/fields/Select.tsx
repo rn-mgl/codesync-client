@@ -21,7 +21,9 @@ const Select = (props: SelectField) => {
   };
 
   const mappedOptions = props.options
-    .filter((option) => option.value.toString().includes(searchTerm))
+    .filter((option) =>
+      option.label.toLowerCase().includes(searchTerm.toLowerCase()),
+    )
     .map((option) => {
       const optionValue: OptionValue = {
         label: option.label,

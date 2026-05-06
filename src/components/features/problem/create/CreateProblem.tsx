@@ -1,5 +1,6 @@
 "use client";
 
+import CheckBox from "@/src/components/ui/fields/CheckBox";
 import Input from "@/src/components/ui/fields/Input";
 import RichTextEditor from "@/src/components/ui/fields/RichTextEditor";
 import Select from "@/src/components/ui/fields/Select";
@@ -10,6 +11,10 @@ import {
   ProblemForm,
   ProblemPayload,
 } from "@/src/interfaces/problem.interface";
+import {
+  BaseTopic,
+  GetAllTopicsResponse,
+} from "@/src/interfaces/topic.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
 import { Editor } from "@tiptap/react";
 import { useSession } from "next-auth/react";
@@ -28,6 +33,8 @@ const CreateProblem = () => {
     output_format: "",
     slug: "",
   });
+  const [topics, setTopics] = React.useState<BaseTopic[]>([]);
+  const [selectedTopics, setSelectedTopics] = React.useState<string[]>([]);
 
   const { select: difficulty, handleSelect: handleDifficulty } =
     useSelect<ProblemForm>({ label: "Easy", value: "easy" }, setProblem);
@@ -36,6 +43,21 @@ const CreateProblem = () => {
   const descriptionRef = React.useRef<Editor | null>(null);
 
   useSession({ required: true });
+
+  const topicOptions = topics.map((topic) => {
+    return { label: topic.name, value: topic.slug };
+  });
+
+  const handleCheck = (value: string | number) => {
+    setSelectedTopics((prev) =>
+      prev.includes(String(value))
+        ? [
+            ...prev.slice(0, prev.indexOf(String(value))),
+            ...prev.slice(prev.indexOf(String(value)) + 1),
+          ]
+        : [...prev, String(value)],
+    );
+  };
 
   const handleProblem = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -80,6 +102,33 @@ const CreateProblem = () => {
       toast(getErrorMessage(err));
     }
   };
+
+  React.useEffect(() => {
+    const getTopics = async () => {
+      try {
+        const response = await fetch(`/api/topic`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        const resolve: GetAllTopicsResponse = await response.json();
+
+        if (!resolve.success) {
+          throw new Error(resolve.message);
+        }
+
+        const { topics } = resolve.data;
+
+        setTopics(topics);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getTopics();
+  }, []);
 
   return (
     <form
@@ -126,6 +175,23 @@ const CreateProblem = () => {
               { label: "Hard", value: "hard" },
             ]}
             value={difficulty.value}
+          />
+        </div>
+      </div>
+
+      <div className="w-full flex flex-col items-start justify-start">
+        <div className="p-4 bg-primary/80 w-full rounded-t-md font-medium text-secondary">
+          Additional Information
+        </div>
+
+        <div className="w-full flex flex-col items-start justify-start gap-4 p-2 border-primary/50 border rounded-b-md t:p-4">
+          <CheckBox
+            options={topicOptions}
+            id="topics"
+            name="topics"
+            label="Topics"
+            selectedOptions={selectedTopics}
+            handleCheck={handleCheck}
           />
         </div>
       </div>

@@ -75,3 +75,9 @@ export interface FileField {
   handleFile: (e: React.ChangeEvent<HTMLInputElement>) => void;
   removeFile: () => void;
 }
+
+export interface CheckBoxField extends Omit<BaseFieldProperties, "value"> {
+  options: { label: string; value: string | number }[];
+  selectedOptions: (string | number)[];
+  handleCheck: (value: string | number) => void;
+}

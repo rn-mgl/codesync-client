@@ -133,10 +133,19 @@ const RichTextEditor = ({ ref, ...props }: RichTextEditorProps) => {
     });
 
   return (
-    <div className="w-full flex flex-col items-center justify-start h-full overflow-y-hidden">
+    <div className="w-full flex flex-col items-center justify-start h-full overflow-y-hidden relative">
+      <Activity mode={isActiveHeaderOptions ? "visible" : "hidden"}>
+        <div
+          className="absolute flex flex-col rounded-md items-center justify-center 
+                            top-1 left-0.5 translate-y-10.5 w-20 max-w-20 bg-neutral-200 z-70"
+        >
+          {mappedHeaderTypes}
+        </div>
+      </Activity>
+
       {editor && (
-        <div className="w-full flex flex-row bg-inherit border-2 border-neutral-400 rounded-t-md border-b items-center gap-2">
-          <div className="relative w-20 rounded-tl-md flex flex-col items-center justify-center">
+        <div className="w-full flex flex-row bg-inherit border-2 border-neutral-400 rounded-t-md border-b items-center gap-2 overflow-x-auto">
+          <div className="relative w-20 min-w-20 rounded-tl-md flex flex-col items-center justify-center">
             <button
               type="button"
               className="rounded-tl-md p-2.5 font-medium text-sm w-full"
@@ -145,21 +154,12 @@ const RichTextEditor = ({ ref, ...props }: RichTextEditorProps) => {
               H{headerType}
             </button>
 
-            <Activity mode={isActiveHeaderOptions ? "visible" : "hidden"}>
-              <div
-                className="absolute flex flex-col rounded-md items-center justify-center 
-                            top-0 translate-y-10.5 w-full bg-neutral-200 z-30"
-              >
-                {mappedHeaderTypes}
-              </div>
-            </Activity>
-
             <FaChevronDown className="absolute right-2 text-xs" />
           </div>
 
           <button
             type="button"
-            className={`w-8 h-8 rounded-sm flex items-center justify-center text-xs 
+            className={`w-8 h-8 min-w-8 min-h-8 rounded-sm flex items-center justify-center text-xs 
                       ${editor.isActive("bold") ? "bg-primary text-secondary" : "bg-inherit text-primary"}`}
             onClick={() => editor.chain().focus().toggleBold().run()}
           >
@@ -168,7 +168,7 @@ const RichTextEditor = ({ ref, ...props }: RichTextEditorProps) => {
 
           <button
             type="button"
-            className={`w-8 h-8 rounded-sm flex items-center justify-center text-xs 
+            className={`w-8 h-8 min-w-8 min-h-8 rounded-sm flex items-center justify-center text-xs 
                       ${editor.isActive("italic") ? "bg-primary text-secondary" : "bg-inherit text-primary"}`}
             onClick={() => editor.chain().focus().toggleItalic().run()}
           >
@@ -177,7 +177,7 @@ const RichTextEditor = ({ ref, ...props }: RichTextEditorProps) => {
 
           <button
             type="button"
-            className={`w-8 h-8 rounded-sm flex items-center justify-center text-xs 
+            className={`w-8 h-8 min-w-8 min-h-8 rounded-sm flex items-center justify-center text-xs 
                       ${editor.isActive("code") ? "bg-primary text-secondary" : "bg-inherit text-primary"}`}
             onClick={() => editor.chain().focus().toggleCode().run()}
           >
@@ -186,7 +186,7 @@ const RichTextEditor = ({ ref, ...props }: RichTextEditorProps) => {
 
           <button
             type="button"
-            className={`w-8 h-8 rounded-sm flex items-center justify-center text-xs 
+            className={`w-8 h-8 min-w-8 min-h-8 rounded-sm flex items-center justify-center text-xs 
                       ${editor.isActive("strike") ? "bg-primary text-secondary" : "bg-inherit text-primary"}`}
             onClick={() => editor.chain().focus().toggleStrike().run()}
           >
@@ -195,7 +195,7 @@ const RichTextEditor = ({ ref, ...props }: RichTextEditorProps) => {
 
           <button
             type="button"
-            className={`w-8 h-8 rounded-sm flex items-center justify-center text-xs 
+            className={`w-8 h-8 min-w-8 min-h-8 rounded-sm flex items-center justify-center text-xs 
                       ${editor.isActive("bulletList") ? "bg-primary text-secondary" : "bg-inherit text-primary"}`}
             onClick={() => editor.chain().focus().toggleBulletList().run()}
           >
@@ -204,7 +204,7 @@ const RichTextEditor = ({ ref, ...props }: RichTextEditorProps) => {
 
           <button
             type="button"
-            className={`w-8 h-8 rounded-sm flex items-center justify-center text-xs 
+            className={`w-8 h-8 min-w-8 min-h-8 rounded-sm flex items-center justify-center text-xs 
                       ${editor.isActive("orderedList") ? "bg-primary text-secondary" : "bg-inherit text-primary"}`}
             onClick={() => editor.chain().focus().toggleOrderedList().run()}
           >
@@ -213,7 +213,7 @@ const RichTextEditor = ({ ref, ...props }: RichTextEditorProps) => {
 
           <button
             type="button"
-            className={`w-8 h-8 rounded-sm flex items-center justify-center text-xs 
+            className={`w-8 h-8 min-w-8 min-h-8 rounded-sm flex items-center justify-center text-xs 
                       ${editor.isActive("codeBlock") ? "bg-primary text-secondary" : "bg-inherit text-primary"}`}
             onClick={() => editor.chain().focus().toggleCodeBlock().run()}
           >
@@ -222,7 +222,7 @@ const RichTextEditor = ({ ref, ...props }: RichTextEditorProps) => {
 
           <button
             type="button"
-            className={`w-8 h-8 rounded-sm flex items-center justify-center text-xs 
+            className={`w-8 h-8 min-w-8 min-h-8 rounded-sm flex items-center justify-center text-xs 
                       ${editor.isActive("blockquote") ? "bg-primary text-secondary" : "bg-inherit text-primary"}`}
             onClick={() => editor.chain().focus().toggleBlockquote().run()}
           >
@@ -231,7 +231,7 @@ const RichTextEditor = ({ ref, ...props }: RichTextEditorProps) => {
 
           <button
             type="button"
-            className="bg-inherit w-8 h-8 text-xs rounded-sm flex items-center justify-center"
+            className="bg-inherit w-8 h-8 min-w-8 min-h-8 text-xs rounded-sm flex items-center justify-center"
             onClick={() => editor.chain().focus().setHorizontalRule().run()}
           >
             <FaWindowMinimize />
@@ -239,7 +239,7 @@ const RichTextEditor = ({ ref, ...props }: RichTextEditorProps) => {
 
           <button
             type="button"
-            className="bg-inherit w-8 h-8 text-xs rounded-sm flex items-center justify-center"
+            className="bg-inherit w-8 h-8 min-w-8 min-h-8 text-xs rounded-sm flex items-center justify-center"
             onClick={() => editor.chain().focus().setHardBreak().run()}
           >
             <FaArrowTurnDown className="rotate-90" />
@@ -247,7 +247,7 @@ const RichTextEditor = ({ ref, ...props }: RichTextEditorProps) => {
 
           <button
             type="button"
-            className="bg-inherit w-8 h-8 text-xs rounded-sm flex items-center justify-center"
+            className="bg-inherit w-8 h-8 min-w-8 min-h-8 text-xs rounded-sm flex items-center justify-center"
             onClick={() => editor.chain().focus().unsetAllMarks().run()}
           >
             <FaEraser />
@@ -255,7 +255,7 @@ const RichTextEditor = ({ ref, ...props }: RichTextEditorProps) => {
 
           <button
             type="button"
-            className="bg-inherit w-8 h-8 text-xs rounded-sm flex items-center justify-center"
+            className="bg-inherit w-8 h-8 min-w-8 min-h-8 text-xs rounded-sm flex items-center justify-center"
             onClick={() => editor.chain().focus().clearNodes().run()}
           >
             <FaEraser className="bg-primary text-secondary text-base rounded-sm p-0.5" />

@@ -2,7 +2,7 @@
 
 import {
   BaseTopic,
-  GetAllTopicResponse,
+  GetAllTopicsResponse,
 } from "@/src/interfaces/topic.interface";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
@@ -57,7 +57,7 @@ const AllTopics = () => {
           },
         });
 
-        const resolve: GetAllTopicResponse = await response.json();
+        const resolve: GetAllTopicsResponse = await response.json();
 
         if (!resolve.success) {
           throw new Error(resolve.message);
