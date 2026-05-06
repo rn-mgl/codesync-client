@@ -95,7 +95,7 @@
   }
 
   .prose pre {
-    background-color: var(--color-primary);
+    background-color: var(--color-neutral-700);
   }
 
   .prose {

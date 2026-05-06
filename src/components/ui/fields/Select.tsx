@@ -4,36 +4,46 @@ import { OptionValue, SelectField } from "@/src/interfaces/field.interface";
 import React, { Activity } from "react";
 import { FaChevronUp } from "react-icons/fa";
 import { FaChevronDown } from "react-icons/fa6";
+import Input from "./Input";
 
 const Select = (props: SelectField) => {
   const [isVisibleOptions, setIsVisibleOptions] = React.useState(false);
+  const [searchTerm, setSearchTerm] = React.useState("");
 
   const handleIsVisibleOptions = () => {
     setIsVisibleOptions((prev) => !prev);
   };
 
-  const mappedOptions = props.options.map((option) => {
-    const optionValue: OptionValue = {
-      label: option.label,
-      value: option.value,
-      target: props.id ?? props.name,
-    };
+  const handleSearchTerm = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
 
-    return (
-      <button
-        type="button"
-        key={option.label}
-        onClick={() => {
-          props.onChange(optionValue);
-          handleIsVisibleOptions();
-        }}
-        className={`p-2 rounded-md hover:bg-primary/50 hover:text-secondary w-full text-left transition-allz
+    setSearchTerm(value);
+  };
+
+  const mappedOptions = props.options
+    .filter((option) => option.value.toString().includes(searchTerm))
+    .map((option) => {
+      const optionValue: OptionValue = {
+        label: option.label,
+        value: option.value,
+        target: props.id ?? props.name,
+      };
+
+      return (
+        <button
+          type="button"
+          key={option.label}
+          onClick={() => {
+            props.onChange(optionValue);
+            handleIsVisibleOptions();
+          }}
+          className={`p-2 rounded-md hover:bg-primary/50 hover:text-secondary w-full text-left transition-allz
                     ${option.value === props.value ? "bg-primary text-secondary font-medium" : "bg-neutral-300"}`}
-      >
-        {option.label}
-      </button>
-    );
-  });
+        >
+          {option.label}
+        </button>
+      );
+    });
 
   return (
     <div className="w-full flex flex-col items-start justify-center bg-secondary gap-1">
@@ -55,10 +65,20 @@ const Select = (props: SelectField) => {
 
           <Activity mode={isVisibleOptions ? "visible" : "hidden"}>
             <div
-              className="w-full absolute top-0 flex flex-col items-start justify-center bg-neutral-200 rounded-md z-30 translate-y-11 p-2
-                        animate-fade shadow-md gap-2"
+              className="w-full absolute top-0 flex flex-col items-start justify-start bg-neutral-200 rounded-md z-30 translate-y-11 p-2
+                        animate-fade shadow-md gap-2 max-h-60 overflow-y-hidden"
             >
-              {mappedOptions}
+              <Input
+                type="text"
+                id="search"
+                name="search"
+                placeholder="Search"
+                onChange={handleSearchTerm}
+                value={searchTerm}
+              />
+              <div className="w-full h-full flex flex-col items-start justify-start overflow-y-auto gap-2">
+                {mappedOptions}
+              </div>
             </div>
           </Activity>
         </div>

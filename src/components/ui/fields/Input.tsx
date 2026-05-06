@@ -3,7 +3,7 @@ import React from "react";
 
 const Input = (props: InputField) => {
   return (
-    <div className="w-full flex flex-col items-start justify-center bg-secondary gap-1">
+    <div className="w-full flex flex-col items-start justify-center gap-1">
       {props.label ? (
         <label
           htmlFor={props.id}
@@ -20,8 +20,9 @@ const Input = (props: InputField) => {
           id={props.id}
           onChange={(e) => props.onChange(e)}
           value={props.value}
+          placeholder={props.placeholder ?? ""}
           required={true}
-          className="w-full p-2 px-3 rounded-md text-primary border-2 border-neutral-400 outline-none"
+          className="w-full p-2 px-3 rounded-md text-primary border-2 border-neutral-400 outline-none bg-secondary "
         />
 
         {props.icon ? (
