@@ -54,11 +54,12 @@ const CheckBox = (props: CheckBoxField) => {
         <div className="w-full max-w-(--breakpoint-m-l) ml-auto">
           <Input
             type="text"
-            id="search"
-            name="search"
+            id="searchCheckbox"
+            name="searchCheckbox"
             onChange={handleSearchTerm}
             value={searchTerm}
             placeholder="Search"
+            required={false}
           />
         </div>
 

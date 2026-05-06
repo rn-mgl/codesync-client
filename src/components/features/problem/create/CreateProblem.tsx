@@ -75,10 +75,11 @@ const CreateProblem = () => {
   const handleCreate = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const problemPayload: ProblemPayload = {
+      const problemPayload: ProblemPayload & { topics: string[] } = {
         ...problem,
         editorial: editorialRef.current?.getHTML() ?? "",
         description: descriptionRef.current?.getHTML() ?? "",
+        topics: selectedTopics,
       };
 
       const response = await fetch(`/api/problem`, {

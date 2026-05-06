@@ -21,7 +21,7 @@ const Input = (props: InputField) => {
           onChange={(e) => props.onChange(e)}
           value={props.value}
           placeholder={props.placeholder ?? ""}
-          required={true}
+          required={props.required}
           className="w-full p-2 px-3 rounded-md text-primary border-2 border-neutral-400 outline-none bg-secondary "
         />
 

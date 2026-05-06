@@ -72,11 +72,12 @@ const Select = (props: SelectField) => {
             >
               <Input
                 type="text"
-                id="search"
-                name="search"
+                id="searchSelect"
+                name="searchSelect"
                 placeholder="Search"
                 onChange={handleSearchTerm}
                 value={searchTerm}
+                required={false}
               />
               <div className="w-full h-full flex flex-col items-start justify-start overflow-y-auto gap-2">
                 {mappedOptions}
