@@ -167,6 +167,10 @@ const UpdateProblem = () => {
         const { topics } = resolve.data;
 
         setTopics(topics);
+
+        const alreadySelected = topics.map((topic) => topic.slug);
+
+        setSelectedTopics(alreadySelected);
       } catch (err) {
         console.error(err);
       }
