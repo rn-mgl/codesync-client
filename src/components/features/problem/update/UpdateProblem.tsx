@@ -122,8 +122,7 @@ const UpdateProblem = () => {
           },
         });
 
-        const resolve: GetProblemResponse & GetAllTopicsResponse =
-          await response.json();
+        const resolve: GetProblemResponse = await response.json();
 
         if (!resolve.success) {
           throw new Error(resolve.message);

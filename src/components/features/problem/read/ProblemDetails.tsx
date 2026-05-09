@@ -1,7 +1,11 @@
 import { BaseProblem } from "@/src/interfaces/problem.interface";
+import { BaseTopic } from "@/src/interfaces/topic.interface";
 import React from "react";
 
-const ProblemDetails = (props: { problem: BaseProblem }) => {
+const ProblemDetails = (props: {
+  problem: BaseProblem;
+  topics: BaseTopic[];
+}) => {
   const formattedConstraints = Object.entries(props.problem.constraints).map(
     ([key, value]) => {
       return (
@@ -23,12 +27,25 @@ const ProblemDetails = (props: { problem: BaseProblem }) => {
     },
   );
 
+  const mappedTopics = props.topics.map((topic) => {
+    return (
+      <div
+        key={topic.id}
+        className="w-fit px-2 py-0.5 rounded-full bg-neutral-300 text-xs"
+      >
+        {topic.name}
+      </div>
+    );
+  });
+
   return (
     <div className="flex flex-col items-start justify-start gap-4 ">
       <div className="w-full flex flex-col gap-4">
         <h1 className="text-xl font-bold text-pretty t:text-2xl">
           {props.problem.id}. {props.problem.title}
         </h1>
+
+        <div className="w-full flex flex-wrap gap-2">{mappedTopics}</div>
 
         <article>
           <div

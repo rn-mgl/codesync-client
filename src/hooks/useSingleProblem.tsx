@@ -21,6 +21,7 @@ import { generateBoilerPlate } from "@/src/utils/problem.util";
 import * as Monaco from "monaco-editor";
 import { useParams } from "next/navigation";
 import React from "react";
+import { BaseTopic } from "../interfaces/topic.interface";
 
 const submissionReducer = (
   state: SubmissionState,
@@ -96,6 +97,7 @@ export default function useSingleProblem() {
   );
   const [activeDetailsPanel, setActiveDetailsPanel] =
     React.useState<DetailsPanel>("description");
+  const [topics, setTopics] = React.useState<BaseTopic[]>([]);
 
   const params: { slug?: string } | null = useParams();
   const editorRef = React.useRef<Monaco.editor.IStandaloneCodeEditor | null>(
@@ -123,6 +125,7 @@ export default function useSingleProblem() {
 
       setProblem(data.problem);
       setTestCases(data.testCases);
+      setTopics(data.topics);
     } catch (err) {
       console.error(err);
     }
@@ -301,6 +304,7 @@ export default function useSingleProblem() {
     submittedTestOutput,
     submittedRunOutput,
     activeDetailsPanel,
+    topics,
     getProblem,
     handleSubmission,
     handleCanDelete,

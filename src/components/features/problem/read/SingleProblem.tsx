@@ -34,6 +34,7 @@ const SingleProblem = () => {
     submittedTestOutput,
     submittedRunOutput,
     activeDetailsPanel,
+    topics,
     getProblem,
     handleSubmission,
     handleCanDelete,
@@ -118,7 +119,7 @@ const SingleProblem = () => {
                   handleActiveChart={handleActiveChart}
                 />
               ) : activeDetailsPanel === "description" ? (
-                <ProblemDetails problem={problem} />
+                <ProblemDetails problem={problem} topics={topics} />
               ) : activeDetailsPanel === "editorial" ? (
                 <article className="prose max-w-none text-primary leading-snug">
                   <div

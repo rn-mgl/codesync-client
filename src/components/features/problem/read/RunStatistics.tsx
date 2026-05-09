@@ -25,8 +25,8 @@ const RunStatistics = (props: {
                   : "Memory Complexity",
               data:
                 props.activeChart === "runtime"
-                  ? runtimeData.map((stat) => `${stat.percentage}`)
-                  : memoryData.map((stat) => `${stat.percentage}`),
+                  ? runtimeData.map((stat) => stat.percentage)
+                  : memoryData.map((stat) => stat.percentage),
               backgroundColor: [
                 props.activeChart === "runtime" ? "#ff8970" : "#839fff",
               ],
@@ -42,6 +42,9 @@ const RunStatistics = (props: {
             },
             x: {
               beginAtZero: true,
+              ticks: {
+                autoSkip: true,
+              },
             },
           },
           responsive: true,

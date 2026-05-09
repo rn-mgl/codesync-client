@@ -5,6 +5,7 @@ import {
   SubmissionType,
 } from "./submission.interface";
 import { BaseTestCase } from "./test-case.interface";
+import { BaseTopic } from "./topic.interface";
 
 export interface InputFormat {
   style: "function" | "class";
@@ -75,6 +76,7 @@ export type GetAllProblemsResponse = ApiResponse<{ problems: ProblemList[] }>;
 export type GetProblemResponse = ApiResponse<{
   problem: BaseProblem;
   testCases: BaseTestCase[];
+  topics: BaseTopic[];
 }>;
 
 export type UpdateProblemResponse = ApiResponse<{ message: string }>;
