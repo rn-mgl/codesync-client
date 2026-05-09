@@ -122,13 +122,14 @@ const UpdateProblem = () => {
           },
         });
 
-        const resolve: GetProblemResponse = await response.json();
+        const resolve: GetProblemResponse & GetAllTopicsResponse =
+          await response.json();
 
         if (!resolve.success) {
           throw new Error(resolve.message);
         }
 
-        const { problem } = resolve.data;
+        const { problem, topics } = resolve.data;
 
         setProblem({
           title: problem.title,
@@ -140,6 +141,8 @@ const UpdateProblem = () => {
           output_format: JSON.stringify(problem.output_format, null, 2),
           slug: problem.slug,
         });
+
+        setSelectedTopics(topics.map((topic) => topic.slug));
       } catch (err) {
         console.error(err);
       }
@@ -167,10 +170,6 @@ const UpdateProblem = () => {
         const { topics } = resolve.data;
 
         setTopics(topics);
-
-        const alreadySelected = topics.map((topic) => topic.slug);
-
-        setSelectedTopics(alreadySelected);
       } catch (err) {
         console.error(err);
       }
