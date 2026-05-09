@@ -1,5 +1,5 @@
 export const normalizeString = (s: string) => {
-  const SPACERS = ["_", "."];
+  const SPACERS = ["_", ".", "-"];
 
   SPACERS.forEach((spacer) => {
     if (s.includes(spacer)) {

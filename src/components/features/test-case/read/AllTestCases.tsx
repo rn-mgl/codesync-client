@@ -4,9 +4,11 @@ import {
   GetAllTestCaseResponse,
   ProblemTestCaseList,
 } from "@/src/interfaces/test-case.interface";
+import { normalizeString } from "@/src/utils/normalizer.util";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import React from "react";
+import { FaPlus } from "react-icons/fa";
 import { FaArrowLeft, FaArrowRight, FaMemory, FaClock } from "react-icons/fa6";
 
 const AllTestCases = () => {
@@ -21,8 +23,18 @@ const AllTestCases = () => {
           key={problem}
           className="w-full flex flex-col items-center justify-center gap-4"
         >
-          <div className="bg-primary text-secondary font-bold w-full p-4 rounded-md text-sm">
-            {problem}
+          <div className="bg-primary text-secondary font-bold w-full p-4 rounded-md text-sm flex flex-row justify-between">
+            <p className="truncate capitalize">{normalizeString(problem)}</p>
+
+            <Link
+              href={`/codesync/test-cases/create?problem=${problem}`}
+              className="text-secondary font-normal flex flex-row items-center 
+                              justify-center gap-2 hover:border-b px-1"
+            >
+              <span className="hidden t:flex">Add Test Case</span>
+
+              <FaPlus />
+            </Link>
           </div>
 
           <div className="w-full grid grid-cols-1 items-center justify-start gap-4 t:grid-cols-2 l-l:grid-cols-4">
