@@ -46,7 +46,7 @@ const CreateTopic = () => {
 
     try {
       if (!localFile.file) {
-        return;
+        throw new Error(`Icon is required.`);
       }
 
       const formData = new FormData();

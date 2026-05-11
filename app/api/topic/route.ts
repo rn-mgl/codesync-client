@@ -1,10 +1,12 @@
 import { env } from "@/src/configs/env.config";
 import { ApiResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import ApiError from "@/src/lib/ApiError";
+import { TopicSchema } from "@/src/schemas/topic.schema";
 import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
 import { StatusCodes } from "http-status-codes";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
+import * as z from "zod";
 
 export async function POST(req: NextRequest) {
   try {
@@ -20,6 +22,16 @@ export async function POST(req: NextRequest) {
     const token = cookies.user.token;
     const url = env.SERVER_URL;
     const formData = await req.formData();
+
+    const parsedForm = Object.fromEntries(formData.entries());
+
+    const parser = TopicSchema.safeParse(parsedForm);
+
+    if (parser.error) {
+      const prettifyError = z.prettifyError(parser.error);
+
+      throw new ApiError(prettifyError, StatusCodes.BAD_REQUEST);
+    }
 
     const response = await fetch(`${url}/topic`, {
       method: "POST",
