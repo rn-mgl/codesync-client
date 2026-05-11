@@ -21,15 +21,13 @@ const CreateTestCase = () => {
   const [testCase, setTestCase] = React.useState<TestCaseForm>({
     expected_output: "",
     input: "",
-    problem: "",
+    problem: params?.get("problem") || "",
     memory_limit_mb: "",
     order_index: "",
     time_limit_ms: "",
     is_hidden: false,
     is_sample: true,
   });
-
-  const resolvedProblem = testCase.problem || params?.get("problem") || "";
 
   const handleTestCase = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -100,7 +98,7 @@ const CreateTestCase = () => {
             name="problem"
             onChange={handleTestCase}
             type="text"
-            value={resolvedProblem}
+            value={testCase.problem}
             label="Problem"
             icon={<FaLink />}
             required={true}

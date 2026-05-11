@@ -5,6 +5,8 @@ import ApiError from "@/src/lib/ApiError";
 import { StatusCodes } from "http-status-codes";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
+import { TestCaseSchema } from "@/src/schemas/test-case.schema";
+import z from "zod";
 
 export async function POST(req: NextRequest) {
   try {
@@ -23,6 +25,16 @@ export async function POST(req: NextRequest) {
 
     if (!("testCase" in body)) {
       throw new ApiError(`Invalid values passed.`, StatusCodes.BAD_REQUEST);
+    }
+
+    const testCase = body.testCase;
+
+    const parser = TestCaseSchema.safeParse(testCase);
+
+    if (parser.error) {
+      const prettifyError = z.prettifyError(parser.error);
+
+      throw new ApiError(prettifyError, StatusCodes.BAD_REQUEST);
     }
 
     const response = await fetch(`${url}/test-case`, {

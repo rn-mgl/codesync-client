@@ -106,7 +106,7 @@ const UpdateTestCase = () => {
 
         setTestCase({
           problem: test_case.slug,
-          expected_output: JSON.stringify(test_case.expected_output, null, 2),
+          expected_output: test_case.expected_output,
           input: JSON.stringify(test_case.input, null, 2),
           memory_limit_mb: String(test_case.memory_limit_mb),
           order_index: String(test_case.order_index),
