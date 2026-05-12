@@ -28,7 +28,7 @@ const UpdateAchievement = () => {
     description: "",
     icon: null,
     name: "",
-    points: "0",
+    points: 0,
     slug: "",
     unlock_criteria: "",
   });
@@ -81,7 +81,7 @@ const UpdateAchievement = () => {
       formData.set("description", achievement.description);
       formData.set("icon", achievement.icon);
       formData.set("name", achievement.name);
-      formData.set("points", achievement.points);
+      formData.set("points", String(achievement.points) ?? "0");
       formData.set("slug", achievement.slug);
       formData.set("unlock_criteria", achievement.unlock_criteria);
 
@@ -131,7 +131,7 @@ const UpdateAchievement = () => {
           description: achievement.description,
           icon: achievement.icon,
           name: achievement.name,
-          points: String(achievement.points),
+          points: achievement.points,
           slug: achievement.slug,
           unlock_criteria: JSON.stringify(achievement.unlock_criteria, null, 2),
         });
