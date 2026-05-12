@@ -1,11 +1,11 @@
-import { ApiResponse } from "./api.interface";
+import { ApiResponse } from "@/interfaces/api.interface";
 import {
   RunSubmissionResponse,
   SubmissionResponse,
   SubmissionType,
-} from "./submission.interface";
-import { BaseTestCase } from "./test-case.interface";
-import { BaseTopic } from "./topic.interface";
+} from "@/interfaces/submission.interface";
+import { BaseTestCase } from "@/interfaces/test-case.interface";
+import { BaseTopic } from "@/interfaces/topic.interface";
 
 export interface InputFormat {
   style: "function" | "class";

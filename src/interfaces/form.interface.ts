@@ -1,4 +1,4 @@
-import { ApiResponse } from "./api.interface";
+import { ApiResponse } from "@/interfaces/api.interface";
 
 type endpoints =
   | "problem"

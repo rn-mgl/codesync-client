@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import HeadNav from "./HeadNav";
-import SideNav from "./SideNav";
+import HeadNav from "@/components/layout/navigation/HeadNav";
+import SideNav from "@/components/layout/navigation/SideNav";
 
 const Navigation = ({ children }: { children: React.ReactNode }) => {
   const [showSideNav, setShowSideNav] = React.useState(false);

@@ -1,5 +1,5 @@
-import { SupportedLanguages } from "../interfaces/language.interface";
-import { InputFormat } from "../interfaces/problem.interface";
+import { SupportedLanguages } from "@/interfaces/language.interface";
+import { InputFormat } from "@/interfaces/problem.interface";
 
 export const generateBoilerPlate = (
   inputFormat: InputFormat,

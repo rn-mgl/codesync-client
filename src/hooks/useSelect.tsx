@@ -1,6 +1,6 @@
 import React from "react";
 import { SelectHook } from "@/interfaces/hook.interface";
-import { OptionValue } from "../interfaces/field.interface";
+import { OptionValue } from "@/interfaces/field.interface";
 
 export default function useSelect<T>(
   initialValue: SelectHook,

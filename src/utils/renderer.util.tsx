@@ -1,4 +1,4 @@
-import { normalizeString } from "./normalizer.util";
+import { normalizeString } from "@/utils/normalizer.util";
 
 export const renderArray = (array: unknown[]) => {
   return array.map((data, index) => {

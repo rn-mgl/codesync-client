@@ -21,7 +21,7 @@ import { generateBoilerPlate } from "@/src/utils/problem.util";
 import * as Monaco from "monaco-editor";
 import { useParams } from "next/navigation";
 import React from "react";
-import { BaseTopic } from "../interfaces/topic.interface";
+import { BaseTopic } from "@/interfaces/topic.interface";
 
 const submissionReducer = (
   state: SubmissionState,

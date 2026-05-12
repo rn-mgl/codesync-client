@@ -6,11 +6,11 @@ import {
   SubmissionResponse,
   SubmissionStatistics,
 } from "@/src/interfaces/submission.interface";
-import FailedTestCase from "./FailedTestCase";
-import RunMetricsToggle from "./RunMetricsToggle";
-import RunStatistics from "./RunStatistics";
-import RunStatusBadge from "./RunStatusBadge";
-import SubmittedCodePreview from "./SubmittedCodePreview";
+import FailedTestCase from "@/components/features/problem/read/FailedTestCase";
+import RunMetricsToggle from "@/components/features/problem/read/RunMetricsToggle";
+import RunStatistics from "@/components/features/problem/read/RunStatistics";
+import RunStatusBadge from "@/components/features/problem/read/RunStatusBadge";
+import SubmittedCodePreview from "@/components/features/problem/read/SubmittedCodePreview";
 
 const RunResults = (props: {
   runOutput: {

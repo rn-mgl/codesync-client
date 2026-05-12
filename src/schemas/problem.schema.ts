@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { InputFormat, OutputFormat } from "../interfaces/problem.interface";
+import { InputFormat, OutputFormat } from "@/interfaces/problem.interface";
 
 export const ProblemSchema = z.object({
   title: z.string().min(1, { error: "Required" }),

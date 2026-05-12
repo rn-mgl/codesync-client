@@ -1,6 +1,6 @@
-import { ApiResponse } from "./api.interface";
-import { SupportedLanguages } from "./language.interface";
-import { BaseTestCase } from "./test-case.interface";
+import { ApiResponse } from "@/interfaces/api.interface";
+import { SupportedLanguages } from "@/interfaces/language.interface";
+import { BaseTestCase } from "@/interfaces/test-case.interface";
 
 export interface BaseSubmission {
   id: number;

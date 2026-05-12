@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import React from "react";
 import { FaEdit } from "react-icons/fa";
 import { FaCode, FaFileCode, FaTrashCan } from "react-icons/fa6";
-import Languages from "./Languages";
+import Languages from "@/components/features/problem/read/Languages";
 
 const ProblemActions = (props: {
   language: SupportedLanguages;

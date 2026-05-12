@@ -6,7 +6,7 @@ import {
   InputHTMLAttributes,
   ReactElement,
 } from "react";
-import { SupportedLanguages } from "./language.interface";
+import { SupportedLanguages } from "@/interfaces/language.interface";
 
 interface BaseFieldProperties {
   name: string;

@@ -1,5 +1,5 @@
-import { ApiResponse } from "./api.interface";
-import { BaseProblem } from "./problem.interface";
+import { ApiResponse } from "@/interfaces/api.interface";
+import { BaseProblem } from "@/interfaces/problem.interface";
 
 export interface BaseTestCase {
   id: number;

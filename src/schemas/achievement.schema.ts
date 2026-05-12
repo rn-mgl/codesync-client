@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { UnlockCriteria } from "../interfaces/achievement.interface";
+import { UnlockCriteria } from "@/interfaces/achievement.interface";
 
 const VALID_TYPES: UnlockCriteria["type"][] = [
   "composite",

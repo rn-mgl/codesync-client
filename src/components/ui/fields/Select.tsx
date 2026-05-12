@@ -4,7 +4,7 @@ import { OptionValue, SelectField } from "@/src/interfaces/field.interface";
 import React, { Activity } from "react";
 import { FaChevronUp } from "react-icons/fa";
 import { FaChevronDown } from "react-icons/fa6";
-import Input from "./Input";
+import Input from "@/components/ui/fields/Input";
 
 const Select = (props: SelectField) => {
   const [isVisibleOptions, setIsVisibleOptions] = React.useState(false);

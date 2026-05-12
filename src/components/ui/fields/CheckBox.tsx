@@ -1,6 +1,6 @@
 import { CheckBoxField } from "@/src/interfaces/field.interface";
 import React from "react";
-import Input from "./Input";
+import Input from "@/components/ui/fields/Input";
 
 const CheckBox = (props: CheckBoxField) => {
   const [searchTerm, setSearchTearm] = React.useState("");

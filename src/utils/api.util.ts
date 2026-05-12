@@ -1,6 +1,6 @@
 import { JWT } from "next-auth/jwt";
-import ApiError from "../lib/ApiError";
-import { ApiResponse, ErrorResponse } from "../interfaces/api.interface";
+import ApiError from "@/lib/ApiError";
+import { ApiResponse, ErrorResponse } from "@/interfaces//api.interface";
 
 export const isJWTCookie = (cookie: unknown): cookie is JWT => {
   return (

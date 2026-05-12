@@ -9,13 +9,13 @@ import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import { FaArrowLeft, FaCheck } from "react-icons/fa6";
 import { toast } from "sonner";
-import DetailsAction from "./DetailsAction";
-import EditorActions from "./EditorActions";
-import ProblemActions from "./ProblemActions";
-import ProblemDetails from "./ProblemDetails";
-import ProblemTestCases from "./ProblemTestCases";
-import RunResults from "./RunResults";
-import ProblemSubmissions from "./ProblemSubmissions";
+import DetailsAction from "@/components/features/problem/read/DetailsAction";
+import EditorActions from "@/components/features/problem/read/EditorActions";
+import ProblemActions from "@/components/features/problem/read/ProblemActions";
+import ProblemDetails from "@/components/features/problem/read/ProblemDetails";
+import ProblemTestCases from "@/components/features/problem/read/ProblemTestCases";
+import RunResults from "@/components/features/problem/read/RunResults";
+import ProblemSubmissions from "@/components/features/problem/read/ProblemSubmissions";
 
 const SingleProblem = () => {
   useSession({ required: true });
