@@ -1,8 +1,8 @@
 "use client";
 
-import unverified from "@/public/auth/unverified.svg";
-import verified from "@/public/auth/verified.svg";
-import verifying from "@/public/auth/verifying.svg";
+import unverified from "@/assets/auth/unverified.svg";
+import verified from "@/assets/auth/verified.svg";
+import verifying from "@/assets/auth/verifying.svg";
 import { VerifyResponse } from "@/src/interfaces/auth.interface";
 import Image from "next/image";
 import Link from "next/link";

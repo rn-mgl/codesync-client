@@ -1,6 +1,6 @@
 import React from "react";
-import logoDark from "@/public/global/logoDark.svg";
-import logoLight from "@/public/global/logoLight.svg";
+import logoDark from "@/assets/global/logoDark.svg";
+import logoLight from "@/assets/global/logoLight.svg";
 import Image from "next/image";
 
 const Logo = (props: { type?: "light" | "dark"; isTransparent?: boolean }) => {

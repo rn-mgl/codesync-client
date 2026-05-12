@@ -1,4 +1,4 @@
-import reset from "@/public/auth/reset.svg";
+import reset from "@/assets/auth/reset.svg";
 import ResetForm from "@/src/components/features/auth/reset/ResetForm";
 import Logo from "@/src/components/global/Logo";
 import Image from "next/image";

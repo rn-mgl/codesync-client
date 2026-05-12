@@ -1,4 +1,4 @@
-import forgot from "@/public/auth/forgot.svg";
+import forgot from "@/assets/auth/forgot.svg";
 import ForgotForm from "@/src/components/features/auth/forgot/ForgotForm";
 import Logo from "@/src/components/global/Logo";
 import Image from "next/image";

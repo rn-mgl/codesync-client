@@ -1,4 +1,4 @@
-import register from "@/public/auth/register.svg";
+import register from "@/assets/auth/register.svg";
 import RegisterForm from "@/src/components/features/auth/register/RegisterForm";
 import Logo from "@/src/components/global/Logo";
 import Image from "next/image";

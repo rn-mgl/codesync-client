@@ -1,4 +1,4 @@
-import sending from "@/public/auth/sending.svg";
+import sending from "@/assets/auth/sending.svg";
 import Logo from "@/src/components/global/Logo";
 import Image from "next/image";
 import Link from "next/link";

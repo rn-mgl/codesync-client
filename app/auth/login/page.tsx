@@ -1,4 +1,4 @@
-import login from "@/public/auth/login.svg";
+import login from "@/assets/auth/login.svg";
 import LoginForm from "@/src/components/features/auth/login/LoginForm";
 import Logo from "@/src/components/global/Logo";
 import Image from "next/image";
