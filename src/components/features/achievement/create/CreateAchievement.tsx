@@ -24,7 +24,7 @@ const CreateAchievement = () => {
     description: "",
     icon: null,
     name: "",
-    points: "",
+    points: 0,
     slug: "",
     unlock_criteria: "",
   });
@@ -70,7 +70,7 @@ const CreateAchievement = () => {
       formData.set("description", achievement.description);
       formData.set("icon", achievement.icon);
       formData.set("name", achievement.name);
-      formData.set("points", achievement.points);
+      formData.set("points", String(achievement.points) ?? "0");
       formData.set("slug", achievement.slug);
       formData.set("unlock_criteria", achievement.unlock_criteria);
 
