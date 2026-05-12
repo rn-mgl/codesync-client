@@ -3,25 +3,22 @@
 import Input from "@/src/components/ui/fields/Input";
 import TextArea from "@/src/components/ui/fields/TextArea";
 import Toggle from "@/src/components/ui/fields/Toggle";
-import { getErrorMessage } from "@/src/utils/general.util";
 import {
   CreateTestCaseResponse,
   TestCaseForm,
   TestCasePayload,
 } from "@/src/interfaces/test-case.interface";
-import { useSearchParams } from "next/navigation";
+import { getErrorMessage } from "@/src/utils/general.util";
 import React from "react";
 import { FaCode, FaLink } from "react-icons/fa";
-import { FaMemory, FaClock } from "react-icons/fa6";
+import { FaClock, FaMemory } from "react-icons/fa6";
 import { toast } from "sonner";
 
-const CreateTestCase = () => {
-  const params = useSearchParams();
-
+const CreateTestCase = (props: { problem?: string }) => {
   const [testCase, setTestCase] = React.useState<TestCaseForm>({
     expected_output: "",
     input: "",
-    problem: params?.get("problem") || "",
+    problem: props.problem ?? "",
     memory_limit_mb: "",
     order_index: "",
     time_limit_ms: "",

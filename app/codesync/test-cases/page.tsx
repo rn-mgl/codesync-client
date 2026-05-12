@@ -1,6 +1,5 @@
 import AllTestCases from "@/src/components/features/test-case/read/AllTestCases";
 import Link from "next/link";
-import React from "react";
 import { FaPlus } from "react-icons/fa";
 import { Toaster } from "sonner";
 
@@ -28,7 +27,7 @@ const Page = async ({
           <FaPlus />
         </Link>
 
-        <AllTestCases />
+        <AllTestCases problem={problem} />
       </div>
     </div>
   );

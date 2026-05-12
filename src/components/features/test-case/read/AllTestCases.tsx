@@ -6,15 +6,14 @@ import {
 } from "@/src/interfaces/test-case.interface";
 import { normalizeString } from "@/src/utils/normalizer.util";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import React from "react";
 import { FaPlus } from "react-icons/fa";
-import { FaArrowLeft, FaArrowRight, FaMemory, FaClock } from "react-icons/fa6";
+import { FaArrowLeft, FaArrowRight, FaClock, FaMemory } from "react-icons/fa6";
 
-const AllTestCases = () => {
+const AllTestCases = (props: { problem?: string }) => {
   const [testCases, setTestCases] = React.useState<ProblemTestCaseList>({});
 
-  const params = useSearchParams();
+  const problemParam = props?.problem;
 
   const mappedTestCases = Object.entries(testCases ?? {}).map(
     ([problem, testCase]) => {
@@ -109,7 +108,7 @@ const AllTestCases = () => {
     const getTestCases = async () => {
       try {
         const searchParams = {
-          problem: params?.get("problem") ?? "",
+          problem: problemParam ?? "",
         };
 
         const query = new URLSearchParams(searchParams).toString();
@@ -136,7 +135,7 @@ const AllTestCases = () => {
     };
 
     getTestCases();
-  }, [params]);
+  }, [problemParam]);
 
   return mappedTestCases;
 };
