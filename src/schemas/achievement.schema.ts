@@ -72,6 +72,7 @@ export const AchievementSchema = z.object({
       try {
         return JSON.parse(val);
       } catch (error) {
+        console.log(error);
         ctx.addIssue({
           code: "invalid_format",
           message: "Invalid JSON format.",

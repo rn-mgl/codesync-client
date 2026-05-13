@@ -1,12 +1,5 @@
 import { IconType } from "react-icons";
-import {
-  FaChartBar,
-  FaFlag,
-  FaHourglass,
-  FaStar,
-  FaUser,
-  FaTags,
-} from "react-icons/fa";
+import { FaChartBar, FaFlag, FaStar, FaTags } from "react-icons/fa";
 import { FaFileCode } from "react-icons/fa6";
 
 export const BASE_NAVIGATIONS: { name: string; url: string; icon: IconType }[] =

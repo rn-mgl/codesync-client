@@ -50,7 +50,7 @@ const RichTextEditor = ({ ref, ...props }: RichTextEditorProps) => {
   });
 
   // state tracker of editor to handle ui changes
-  const editorState = useEditorState({
+  useEditorState({
     editor,
     selector: (context: EditorStateSnapshot<Editor | null>) => {
       return {
