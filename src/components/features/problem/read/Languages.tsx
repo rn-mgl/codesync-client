@@ -6,7 +6,7 @@ import React from "react";
 
 const Languages = (props: LanguageModal) => {
   const languages: SupportedLanguages[] = React.useMemo(
-    () => ["javascript", "php"],
+    () => ["javascript", "php", "java"],
     [],
   );
 

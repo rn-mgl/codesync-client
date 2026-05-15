@@ -4,4 +4,4 @@ export interface LanguageModal {
   selectLanguage: (language: SupportedLanguages) => void;
 }
 
-export type SupportedLanguages = "javascript" | "php";
+export type SupportedLanguages = "javascript" | "php" | "java";
