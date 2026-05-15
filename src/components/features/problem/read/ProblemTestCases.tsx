@@ -66,8 +66,8 @@ const ProblemTestCases = (props: TestCaseSectionProps) => {
         {matchingSubmissionLogs && matchingSubmissionLogs.length ? (
           <>
             <p className="text-xs mt-2">Log Output</p>
-            <div className="p-4 rounded-md bg-neutral-300 w-full text-sm">
-              <p className="font-medium whitespace-pre">
+            <div className="p-4 rounded-md bg-neutral-300 w-full text-sm ">
+              <p className="font-medium whitespace-pre-wrap">
                 {matchingSubmissionLogs
                   .map((log) =>
                     typeof log === "object"
