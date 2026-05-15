@@ -1,8 +1,9 @@
 import { SupportedLanguages } from "@/interfaces/language.interface";
-import { InputFormat } from "@/interfaces/problem.interface";
+import { InputFormat, OutputFormat } from "@/interfaces/problem.interface";
 
 export const generateBoilerPlate = (
   inputFormat: InputFormat,
+  outputFormat: OutputFormat,
   language: SupportedLanguages,
 ) => {
   const style = inputFormat.style; // function or class
@@ -26,7 +27,7 @@ export const generateBoilerPlate = (
       parameters = inputFormat.params
         .map((param) => `${getJavaType(param.type)} ${param.name}`)
         .join(", ");
-      boilerPlate = `static Object ${name}(${parameters}) {\n\t\n}`;
+      boilerPlate = `static ${getJavaType(outputFormat.type)} ${name}(${parameters}) {\n\t\n}`;
       break;
   }
 
@@ -40,7 +41,7 @@ const getJavaType = (type: string): string => {
     int: "int",
     integer: "int",
     long: "long",
-    number: "double",
+    number: "int",
     double: "double",
     float: "float",
     boolean: "boolean",

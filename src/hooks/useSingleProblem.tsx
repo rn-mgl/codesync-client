@@ -291,7 +291,12 @@ export default function useSingleProblem() {
   );
 
   const startingCode =
-    storedCode || generateBoilerPlate(problem.input_format, currentLanguage);
+    storedCode ||
+    generateBoilerPlate(
+      problem.input_format,
+      problem.output_format,
+      currentLanguage,
+    );
 
   return {
     problem,
