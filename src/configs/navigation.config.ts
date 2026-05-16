@@ -1,6 +1,6 @@
 import { IconType } from "react-icons";
 import { FaChartBar, FaFlag, FaStar, FaTags } from "react-icons/fa";
-import { FaFileCode } from "react-icons/fa6";
+import { FaFileCode, FaLightbulb } from "react-icons/fa6";
 
 export const BASE_NAVIGATIONS: { name: string; url: string; icon: IconType }[] =
   [
@@ -18,6 +18,11 @@ export const BASE_NAVIGATIONS: { name: string; url: string; icon: IconType }[] =
       name: "Topics",
       url: "/codesync/topics",
       icon: FaTags,
+    },
+    {
+      name: "Hints",
+      url: "/codesync/hints",
+      icon: FaLightbulb,
     },
     {
       name: "Test Cases",
