@@ -1,3 +1,4 @@
+import CreateHint from "@/src/components/features/hint/create/CreateHint";
 import Link from "next/link";
 import { FaArrowLeft } from "react-icons/fa6";
 import { Toaster } from "sonner";
@@ -20,6 +21,8 @@ const Page = async () => {
           <div className="w-full p-4 t:p-6 rounded-md bg-primary text-secondary font-bold t:text-lg">
             Create Hint
           </div>
+
+          <CreateHint />
         </div>
       </div>
     </div>
