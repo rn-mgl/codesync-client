@@ -31,13 +31,15 @@ const CreateHint = () => {
   };
 
   const handleCreate = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
     try {
       const response = await fetch(`/api/hint`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(hint),
+        body: JSON.stringify({ hint }),
       });
 
       const resolve: CreateHintResponse = await response.json();

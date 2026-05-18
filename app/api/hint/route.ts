@@ -21,6 +21,10 @@ export async function POST(req: NextRequest) {
     const url = env.SERVER_URL;
     const body = await req.json();
 
+    if (!("hint" in body)) {
+      throw new ApiError("Invalid request.", StatusCodes.BAD_REQUEST);
+    }
+
     const response = await fetch(`${url}/hint`, {
       method: "POST",
       headers: {
