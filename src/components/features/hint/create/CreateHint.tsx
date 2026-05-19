@@ -9,12 +9,12 @@ import { FaLink } from "react-icons/fa";
 import { FaLightbulb } from "react-icons/fa6";
 import { toast } from "sonner";
 
-const CreateHint = () => {
+const CreateHint = (props: { problem?: string }) => {
   const [hint, setHint] = React.useState<HintForm>({
     hint: "",
     level: 0,
     order_index: 0,
-    problem: "",
+    problem: props.problem ?? "",
   });
 
   const handleHint = (

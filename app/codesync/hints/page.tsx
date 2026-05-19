@@ -1,8 +1,15 @@
+import AllHints from "@/src/components/features/hint/read/AllHints";
 import Link from "next/link";
 import { FaPlus } from "react-icons/fa6";
 import { Toaster } from "sonner";
 
-const Page = async () => {
+const Page = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ problem?: string }>;
+}) => {
+  const problem = (await searchParams).problem;
+
   return (
     <div className="w-full flex flex-col items-center justify-start min-h-full h-auto">
       <Toaster style={{ fontFamily: "var(--font-onest)" }} />
@@ -15,6 +22,8 @@ const Page = async () => {
           Add Hint
           <FaPlus />
         </Link>
+
+        <AllHints problem={problem} />
       </div>
     </div>
   );

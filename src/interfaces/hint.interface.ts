@@ -12,4 +12,8 @@ export interface HintForm extends Omit<BaseHint, "id" | "problem_id"> {
   problem: string;
 }
 
+export type ProblemHintList = Record<string, BaseHint[]>;
+
 export type CreateHintResponse = ApiResponse<{ message: string }>;
+
+export type GetAllHintsResponse = ApiResponse<{ hints: ProblemHintList }>;

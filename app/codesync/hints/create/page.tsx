@@ -3,7 +3,13 @@ import Link from "next/link";
 import { FaArrowLeft } from "react-icons/fa6";
 import { Toaster } from "sonner";
 
-const Page = async () => {
+const Page = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ problem?: string }>;
+}) => {
+  const problem = (await searchParams).problem;
+
   return (
     <div className="w-full flex flex-col items-center justify-start min-h-full h-auto">
       <Toaster style={{ fontFamily: "var(--font-onest)" }} />
@@ -22,7 +28,7 @@ const Page = async () => {
             Create Hint
           </div>
 
-          <CreateHint />
+          <CreateHint problem={problem} />
         </div>
       </div>
     </div>
