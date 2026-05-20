@@ -6,7 +6,7 @@ import { CreateHintResponse, HintForm } from "@/src/interfaces/hint.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
 import React from "react";
 import { FaLink } from "react-icons/fa";
-import { FaLightbulb } from "react-icons/fa6";
+import { FaArrowDown19, FaArrowTrendUp, FaLightbulb } from "react-icons/fa6";
 import { toast } from "sonner";
 
 const CreateHint = (props: { problem?: string }) => {
@@ -98,7 +98,7 @@ const CreateHint = (props: { problem?: string }) => {
             type="number"
             value={hint.level}
             label="Level"
-            icon={<FaLink />}
+            icon={<FaArrowTrendUp />}
             required={true}
           />
 
@@ -109,7 +109,7 @@ const CreateHint = (props: { problem?: string }) => {
             type="number"
             value={hint.order_index}
             label="Level"
-            icon={<FaLink />}
+            icon={<FaArrowDown19 />}
             required={true}
           />
         </div>
