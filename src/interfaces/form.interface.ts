@@ -5,7 +5,8 @@ type endpoints =
   | "submission"
   | "test-case"
   | "achievement"
-  | "topic";
+  | "topic"
+  | "hint";
 type identifier = string;
 
 export interface DeleteForm {

@@ -2,9 +2,10 @@
 
 import DisplayInputField from "@/src/components/ui/containers/DisplayInputField";
 import DisplayTextArea from "@/src/components/ui/containers/DisplayTextArea";
+import Delete from "@/src/components/ui/forms/Delete";
 import { BaseHint, GetHintResponse } from "@/src/interfaces/hint.interface";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import { FaEdit } from "react-icons/fa";
 import {
@@ -25,7 +26,15 @@ const SingleHint = () => {
     problem_id: 0,
   });
 
+  const [canDelete, setCanDelete] = React.useState(false);
+
   const params: { id?: string } | null = useParams();
+
+  const router = useRouter();
+
+  const handleCanDelete = () => {
+    setCanDelete((prev) => !prev);
+  };
 
   React.useEffect(() => {
     const getHint = async () => {
@@ -58,14 +67,14 @@ const SingleHint = () => {
 
   return (
     <div className="flex flex-col items-start justify-start w-full gap-8">
-      {/* {canDelete && (
+      {canDelete && (
         <Delete
           closeForm={handleCanDelete}
-          endpoint={`test-case/${params?.id}`}
-          label="Test Case"
-          postDeleteAction={() => router.push("/codesync/test-cases")}
+          endpoint={`hint/${params?.id}`}
+          label="Hint"
+          postDeleteAction={() => router.push("/codesync/hints")}
         />
-      )} */}
+      )}
       <div className="w-full flex justify-between">
         <Link
           href="/codesync/hints"
