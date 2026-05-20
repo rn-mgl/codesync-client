@@ -17,3 +17,5 @@ export type ProblemHintList = Record<string, BaseHint[]>;
 export type CreateHintResponse = ApiResponse<{ message: string }>;
 
 export type GetAllHintsResponse = ApiResponse<{ hints: ProblemHintList }>;
+
+export type GetHintResponse = ApiResponse<{ hint: BaseHint }>;
