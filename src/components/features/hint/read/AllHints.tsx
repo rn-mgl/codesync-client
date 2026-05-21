@@ -1,20 +1,13 @@
 "use client";
 
 import {
-  BaseHint,
   GetAllHintsResponse,
   ProblemHintList,
 } from "@/src/interfaces/hint.interface";
 import { normalizeString } from "@/src/utils/normalizer.util";
 import Link from "next/link";
 import React from "react";
-import {
-  FaArrowDown19,
-  FaArrowTurnUp,
-  FaBrain,
-  FaLightbulb,
-  FaPlus,
-} from "react-icons/fa6";
+import { FaArrowDown19, FaBrain, FaLightbulb, FaPlus } from "react-icons/fa6";
 
 const AllHints = (props: { problem?: string }) => {
   const [hints, setHints] = React.useState<ProblemHintList>({});
