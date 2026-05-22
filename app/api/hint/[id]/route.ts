@@ -104,7 +104,54 @@ export async function PATCH(
   }
 }
 
-export async function DELETE(req: NextRequest) {
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ id?: string }> },
+) {
   try {
-  } catch (error) {}
+    const cookies = await getToken({ req });
+
+    if (!isJWTCookie(cookies)) {
+      throw new ApiError(
+        `You are unauthorized to proceed.`,
+        StatusCodes.UNAUTHORIZED,
+      );
+    }
+
+    const token = cookies.user.token;
+    const url = env.SERVER_URL;
+    const id = (await params).id;
+
+    const response = await fetch(
+      `${url}/hint/${id}`,
+
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Origin: env.APP_URL,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    const resolve: ServerResponse = await response.json();
+
+    if (!resolve.success) {
+      throw new ApiError(resolve.message, response.status);
+    }
+
+    const apiRespone: ApiResponse<typeof resolve.data> = {
+      success: true,
+      data: resolve.data,
+    };
+
+    return NextResponse.json(apiRespone, { status: response.status });
+  } catch (error) {
+    console.log(error);
+
+    const apiResponse = handleErrorResponse(error);
+
+    return NextResponse.json(apiResponse, { status: apiResponse.status });
+  }
 }

@@ -97,7 +97,7 @@ const SingleHint = () => {
 
             <button
               title="Delete"
-              // onClick={handleCanDelete}
+              onClick={handleCanDelete}
               className="p-2 rounded-full bg-inherit hover:text-danger flex flex-col items-center justify-center"
             >
               <FaTrashCan />
