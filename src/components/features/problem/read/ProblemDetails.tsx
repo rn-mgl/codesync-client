@@ -1,8 +1,8 @@
 import { BaseHint } from "@/src/interfaces/hint.interface";
 import { BaseProblem } from "@/src/interfaces/problem.interface";
 import { BaseTopic } from "@/src/interfaces/topic.interface";
-import React, { Activity } from "react";
-import { FaChevronDown, FaChevronRight } from "react-icons/fa6";
+import React from "react";
+import { FaChevronRight } from "react-icons/fa6";
 
 const ProblemDetails = (props: {
   problem: BaseProblem;
