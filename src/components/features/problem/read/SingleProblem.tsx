@@ -35,6 +35,7 @@ const SingleProblem = () => {
     submittedRunOutput,
     activeDetailsPanel,
     topics,
+    hints,
     getProblem,
     handleSubmission,
     handleCanDelete,
@@ -44,6 +45,8 @@ const SingleProblem = () => {
     handleActiveDetailsPanel,
     handleSubmissionState,
   } = useSingleProblem();
+
+  console.log(hints);
 
   React.useEffect(() => {
     const handler = async (e: KeyboardEvent) => {
@@ -119,7 +122,11 @@ const SingleProblem = () => {
                   handleActiveChart={handleActiveChart}
                 />
               ) : activeDetailsPanel === "description" ? (
-                <ProblemDetails problem={problem} topics={topics} />
+                <ProblemDetails
+                  problem={problem}
+                  topics={topics}
+                  hints={hints}
+                />
               ) : activeDetailsPanel === "editorial" ? (
                 <article className="prose max-w-none text-primary leading-snug">
                   <div

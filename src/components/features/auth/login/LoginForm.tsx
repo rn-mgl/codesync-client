@@ -32,7 +32,7 @@ const LoginForm = () => {
     setShowPassword((prev) => !prev);
   };
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
