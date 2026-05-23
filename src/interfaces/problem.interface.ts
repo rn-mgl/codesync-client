@@ -6,6 +6,7 @@ import {
 } from "@/interfaces/submission.interface";
 import { BaseTestCase } from "@/interfaces/test-case.interface";
 import { BaseTopic } from "@/interfaces/topic.interface";
+import { BaseHint } from "./hint.interface";
 
 export interface InputFormat {
   style: "function" | "class";
@@ -77,6 +78,7 @@ export type GetProblemResponse = ApiResponse<{
   problem: BaseProblem;
   testCases: BaseTestCase[];
   topics: BaseTopic[];
+  hints: BaseHint[];
 }>;
 
 export type UpdateProblemResponse = ApiResponse<{ message: string }>;
