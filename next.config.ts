@@ -3,8 +3,9 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   env: {
     SERVER_URL: process.env.SERVER_URL,
-    AUTH_SECRET: process.env.AUTH_SECRET,
     APP_URL: process.env.APP_URL,
+    NEXTAUTH_SECRET: process.env.NEXTAUTH_URL,
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
   },
   images: {
     remotePatterns: [
