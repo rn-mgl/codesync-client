@@ -1,5 +1,5 @@
-import "next-auth";
-import "next-auth/jwt";
+import NextAuth from "next-auth";
+import { JWT } from "next-auth/jwt";
 
 interface User {
   token: string;
