@@ -28,6 +28,7 @@ export type LoginResponse = ApiResponse<{
   user: {
     id: number;
     is_verified: boolean;
+    name : string
   };
 }>;
 

@@ -9,6 +9,7 @@ export const authOptions: AuthOptions = {
         credentials: {
           token: "",
           id: "",
+          name : ""
         },
       },
       async authorize(data) {
@@ -30,9 +31,10 @@ export const authOptions: AuthOptions = {
         user &&
         "token" in user &&
         typeof user.token === "string" &&
-        typeof user.id === "number"
+        typeof user.id === "number" &&
+        typeof user.name === "string"
       ) {
-        token.user = { token: user.token, id: user.id };
+        token.user = { token: user.token, id: user.id, name : user.name };
       }
 
       return token;
