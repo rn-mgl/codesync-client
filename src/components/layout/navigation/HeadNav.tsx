@@ -1,13 +1,15 @@
 import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { FaBars } from "react-icons/fa6";
 
 const HeadNav = (props: {
   showSideNav: boolean;
   handleShowSideNav: () => void;
 }) => {
-
-  const {data : session} = useSession()
-  const user = session?.user
+  const { data: session } = useSession();
+  const path = usePathname();
+  const user = session?.user;
 
   return (
     <div className="w-full flex flex-row items-center justify-between p-4 bg-neutral-800 rounded-md">
@@ -18,11 +20,12 @@ const HeadNav = (props: {
         >
           <FaBars className="text-secondary" />
         </button>
-        <p className="text-sm font-medium text-secondary">
-          {user?.name}
-        </p>
+        <p className="text-sm font-medium text-secondary">{user?.name}</p>
       </div>
-      <div className="w-8 h-8 rounded-full bg-secondary" />
+      <Link
+        href="/codesync/profile"
+        className={`w-8 h-8 rounded-full bg-secondary ${path === "/codesync/profile" ? "border-2 border-info" : "border-0"} transition-all`}
+      />
     </div>
   );
 };
