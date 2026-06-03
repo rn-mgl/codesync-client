@@ -24,9 +24,9 @@ const DisplayFile = (props: DisplayFileProps) => {
 
   return (
     <div className="w-full flex flex-col bg-neutral-200 p-2 rounded-lg items-center t:p-4">
-      <div className="w-full flex flex-col gap-2 items-center justify-center  t:max-w-(--breakpoint-m-l)">
+      <div className="w-full flex flex-col gap-2 items-center justify-center  t:max-w-60">
         <div
-          className="p-2 rounded-md aspect-video w-full border-neutral-400 bg-secondary border-2 flex flex-col 
+          className="p-2 rounded-md aspect-square w-full border-neutral-400 bg-secondary border-2 flex flex-col 
                               items-center justify-center bg-cover bg-center overflow-hidden"
         >
           {rendered[props.type]}

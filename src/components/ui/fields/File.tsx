@@ -5,14 +5,14 @@ import { FaFileImage, FaTrash } from "react-icons/fa6";
 const File = ({ file, fileRef, handleFile, removeFile }: FileField) => {
   return (
     <div className="w-full flex flex-col bg-neutral-200 p-2 rounded-lg items-center t:p-4">
-      <div className="w-full flex flex-col gap-2 items-center justify-center  t:max-w-(--breakpoint-m-l)">
+      <div className="w-full flex flex-col gap-2 items-center justify-center t:max-w-60">
         <label
           htmlFor="icon"
-          className="w-full flex h-full hover:cursor-pointer hover:brightness-90 transition-all"
+          className="w-full flex items-center justify-center h-full hover:cursor-pointer hover:brightness-90 transition-all"
         >
           <div
-            className="p-2 rounded-md aspect-video w-full border-neutral-400 bg-secondary border-2 flex flex-col 
-                            items-center justify-center bg-cover bg-center overflow-hidden"
+            className="p-2 rounded-md aspect-square w-full border-neutral-400 bg-secondary border-2 flex flex-col 
+                            items-center justify-center bg-cover bg-center overflow-hidden "
           >
             {typeof file === "object" && file.file !== null ? (
               <Image
@@ -20,7 +20,7 @@ const File = ({ file, fileRef, handleFile, removeFile }: FileField) => {
                 height={500}
                 alt="File"
                 src={file.url}
-                className="w-6/12"
+                className="w-full"
               />
             ) : typeof file === "string" && file !== "" ? (
               <Image
@@ -28,7 +28,7 @@ const File = ({ file, fileRef, handleFile, removeFile }: FileField) => {
                 height={500}
                 alt="File"
                 src={file}
-                className="w-6/12"
+                className="w-full"
               />
             ) : (
               <FaFileImage className="text-2xl opacity-50" />

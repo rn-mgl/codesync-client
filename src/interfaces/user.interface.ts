@@ -9,6 +9,20 @@ export interface BaseUser {
   problems_solved: number;
   total_submission: number;
   is_verified: boolean;
+  image: string;
+}
+
+export interface UserForm extends Pick<
+  BaseUser,
+  "first_name" | "last_name" | "username"
+> {
+  image: File | string | null;
+}
+
+export interface PasswordForm {
+  current_password: string;
+  new_password: string;
+  confirm_new_password: string;
 }
 
 export type GetUserResponse = ApiResponse<{ user: BaseUser }>;

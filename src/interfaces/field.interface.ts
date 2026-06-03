@@ -20,10 +20,6 @@ interface BaseFieldProperties {
 export interface InputField extends BaseFieldProperties {
   type: HTMLInputTypeAttribute;
   placeholder?: string;
-  inputMode?: DetailedHTMLProps<
-    InputHTMLAttributes<HTMLInputElement>,
-    HTMLInputElement
-  >;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 

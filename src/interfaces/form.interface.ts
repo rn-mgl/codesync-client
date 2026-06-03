@@ -9,10 +9,17 @@ type endpoints =
   | "hint";
 type identifier = string;
 
-export interface DeleteForm {
-  endpoint: `${endpoints}/${identifier}`;
-  closeForm: () => void;
+export interface BaseForm {
   label?: string;
+  closeForm: () => void;
+}
+
+export interface UpdateForm extends BaseForm {
+  postUpdateAction?: () => void;
+}
+
+export interface DeleteForm extends BaseForm {
+  endpoint: `${endpoints}/${identifier}`;
   postDeleteAction?: () => void;
 }
 
