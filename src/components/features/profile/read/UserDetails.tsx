@@ -7,6 +7,25 @@ import { FaEdit } from "react-icons/fa";
 import { FaLock } from "react-icons/fa6";
 import UpdateUserDetails from "../update/UpdateUserDetails";
 
+const fetchUser = async () => {
+  const response = await fetch(`/api/user`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const resolve: GetUserResponse = await response.json();
+
+  if (!resolve.success) {
+    throw new Error(resolve.message);
+  }
+
+  const { user } = resolve.data;
+
+  return user;
+};
+
 const UserDetails = () => {
   const [user, setUser] = React.useState<BaseUser>({
     email: "",
@@ -32,31 +51,28 @@ const UserDetails = () => {
     setCanChangePassword((prev) => !prev);
   };
 
+  const getUser = React.useCallback(async () => {
+    try {
+      setUser(await fetchUser());
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
   React.useEffect(() => {
-    const getUser = async () => {
-      try {
-        const response = await fetch(`/api/user`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+    let isCurrent = true;
 
-        const resolve: GetUserResponse = await response.json();
-
-        if (!resolve.success) {
-          throw new Error(resolve.message);
+    fetchUser()
+      .then((user) => {
+        if (isCurrent) {
+          setUser(user);
         }
+      })
+      .catch((error) => console.log(error));
 
-        const { user } = resolve.data;
-
-        setUser(user);
-      } catch (error) {
-        console.log(error);
-      }
+    return () => {
+      isCurrent = false;
     };
-
-    getUser();
   }, []);
 
   return (
@@ -70,12 +86,16 @@ const UserDetails = () => {
             username: user.username,
           }}
           closeForm={handleCanEditDetails}
+          postUpdateAction={getUser}
           label="Profile"
         />
       )}
 
       <div className="w-full flex flex-col gap-4 t:flex-row">
-        <div className="w-full h-full bg-primary rounded-lg aspect-square t:max-w-60"></div>
+        <div
+          style={{ backgroundImage: `url(${user.image})` }}
+          className={`w-full h-full bg-primary rounded-lg aspect-square t:max-w-60 bg-center bg-contain`}
+        ></div>
         <div className="w-full rounded-lg bg-neutral-200 p-4 flex flex-col items-center justify-center gap-2">
           <p>
             <span className="font-bold">

@@ -204,6 +204,8 @@ const UpdateAchievement = () => {
                   ? achievement.icon
                   : ""
             }
+            id="icon"
+            name="icon"
             fileRef={fileRef}
             handleFile={handleLocalFile}
             removeFile={

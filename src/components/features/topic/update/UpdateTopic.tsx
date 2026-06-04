@@ -175,6 +175,8 @@ const UpdateTopic = () => {
                   ? topic.icon
                   : ""
             }
+            id="icon"
+            name="icon"
             fileRef={fileRef}
             handleFile={handleLocalFile}
             removeFile={

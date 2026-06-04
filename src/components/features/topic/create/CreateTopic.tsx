@@ -121,6 +121,8 @@ const CreateTopic = () => {
           />
 
           <File
+            id="icon"
+            name="icon"
             file={localFile}
             fileRef={fileRef}
             handleFile={handleLocalFile}

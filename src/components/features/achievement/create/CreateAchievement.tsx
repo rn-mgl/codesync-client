@@ -148,6 +148,8 @@ const CreateAchievement = () => {
 
         <div className="w-full flex flex-col items-start justify-start gap-4 p-2 border-primary/50 border rounded-b-md t:p-4">
           <File
+            name="icon"
+            id="icon"
             file={localFile}
             fileRef={fileRef}
             handleFile={handleLocalFile}

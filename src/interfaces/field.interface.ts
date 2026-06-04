@@ -60,7 +60,7 @@ export interface RichTextEditorProps {
   initialValue: string;
 }
 
-export interface FileField {
+export interface FileField extends Pick<BaseFieldProperties, "name" | "id"> {
   file:
     | {
         url: string;

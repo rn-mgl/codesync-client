@@ -2,12 +2,19 @@ import { FileField } from "@/src/interfaces/field.interface";
 import Image from "next/image";
 import { FaFileImage, FaTrash } from "react-icons/fa6";
 
-const File = ({ file, fileRef, handleFile, removeFile }: FileField) => {
+const File = ({
+  file,
+  fileRef,
+  handleFile,
+  removeFile,
+  id,
+  name,
+}: FileField) => {
   return (
     <div className="w-full flex flex-col bg-neutral-200 p-2 rounded-lg items-center t:p-4">
       <div className="w-full flex flex-col gap-2 items-center justify-center t:max-w-60">
         <label
-          htmlFor="icon"
+          htmlFor={name}
           className="w-full flex items-center justify-center h-full hover:cursor-pointer hover:brightness-90 transition-all"
         >
           <div
@@ -38,8 +45,8 @@ const File = ({ file, fileRef, handleFile, removeFile }: FileField) => {
           <input
             onChange={(e) => handleFile(e)}
             ref={fileRef}
-            id="icon"
-            name="icon"
+            id={id}
+            name={name}
             type="file"
             className="fixed w-0 h-0 p-0 m-0"
             accept="image/*"

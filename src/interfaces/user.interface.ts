@@ -26,3 +26,5 @@ export interface PasswordForm {
 }
 
 export type GetUserResponse = ApiResponse<{ user: BaseUser }>;
+
+export type UpdateUserResponse = ApiResponse<{ message: string }>;
