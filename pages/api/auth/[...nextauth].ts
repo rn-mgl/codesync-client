@@ -9,7 +9,8 @@ export const authOptions: AuthOptions = {
         credentials: {
           token: "",
           id: "",
-          name : ""
+          name: "",
+          image: "",
         },
       },
       async authorize(data) {
@@ -34,7 +35,12 @@ export const authOptions: AuthOptions = {
         typeof user.id === "number" &&
         typeof user.name === "string"
       ) {
-        token.user = { token: user.token, id: user.id, name : user.name };
+        token.user = {
+          token: user.token,
+          id: user.id,
+          name: user.name,
+          image: user.image ?? "",
+        };
       }
 
       return token;

@@ -24,7 +24,8 @@ const HeadNav = (props: {
       </div>
       <Link
         href="/codesync/profile"
-        className={`w-8 h-8 rounded-full bg-secondary ${path === "/codesync/profile" ? "border-2 border-info" : "border-0"} transition-all`}
+        style={{ backgroundImage: `url(${user?.image})` }}
+        className={`w-8 h-8 rounded-full bg-secondary ${path === "/codesync/profile" ? "border-2 border-info" : "border-0"} transition-all bg-center bg-cover`}
       />
     </div>
   );

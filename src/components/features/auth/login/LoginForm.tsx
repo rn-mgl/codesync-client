@@ -63,7 +63,8 @@ const LoginForm = () => {
         credentials: JSON.stringify({
           token: data.token,
           id: data.user.id,
-          name : data.user.name
+          name: data.user.name,
+          image: data.user.image,
         }),
       });
 
