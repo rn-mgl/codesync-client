@@ -74,8 +74,6 @@ const AllTopics = () => {
     getTopics();
   }, []);
 
-  console.log(topics);
-
   return (
     <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-3 l-l:grid-cols-4 gap-4">
       {mappedTopics}
