@@ -6,6 +6,7 @@ import React from "react";
 import { FaEdit } from "react-icons/fa";
 import { FaLock } from "react-icons/fa6";
 import UpdateUserDetails from "../update/UpdateUserDetails";
+import ChangePassword from "../update/ChangePassword";
 
 const fetchUser = async () => {
   const response = await fetch(`/api/user`, {
@@ -91,6 +92,10 @@ const UserDetails = () => {
         />
       )}
 
+      {canChangePassword && (
+        <ChangePassword closeForm={handleCanChangePassword} />
+      )}
+
       <div className="w-full flex flex-col gap-4 t:flex-row">
         <div
           style={{ backgroundImage: `url(${user.image})` }}
@@ -115,7 +120,10 @@ const UserDetails = () => {
           <FaEdit />
         </button>
 
-        <button className="p-2 rounded-full flex flex-col items-center justify-center hover:text-primary">
+        <button
+          onClick={handleCanChangePassword}
+          className="p-2 rounded-full flex flex-col items-center justify-center hover:text-primary"
+        >
           <FaLock />
         </button>
       </div>
