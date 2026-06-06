@@ -41,10 +41,11 @@ const UpdateUserDetails = (props: UpdateForm & { user: UserForm }) => {
     try {
       const formData = new FormData();
 
-      formData.set("first_name", userDetails.first_name);
-      formData.set("last_name", userDetails.last_name);
-      formData.set("username", userDetails.username);
-      formData.set("image", userDetails.image ?? "");
+      formData.set("action", "user_details");
+
+      Object.entries(userDetails).forEach(([key, value]) => {
+        formData.set(key, value ?? "");
+      });
 
       const response = await fetch(`/api/user`, {
         method: "PATCH",

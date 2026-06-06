@@ -1,8 +1,11 @@
 "use client";
 import Input from "@/src/components/ui/fields/Input";
 import { BaseForm } from "@/src/interfaces/form.interface";
+import { UpdateUserResponse } from "@/src/interfaces/user.interface";
+import { getErrorMessage } from "@/src/utils/general.util";
 import React from "react";
 import { FaEye, FaEyeSlash, FaXmark } from "react-icons/fa6";
+import { toast } from "sonner";
 
 const ChangePassword = (props: BaseForm) => {
   const [password, setPassword] = React.useState({
@@ -36,6 +39,41 @@ const ChangePassword = (props: BaseForm) => {
     });
   };
 
+  const handleUpdate = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const formData = new FormData();
+
+      formData.set("action", "change_password");
+
+      Object.entries(password).forEach(([key, value]) => {
+        formData.set(key, value);
+      });
+
+      const response = await fetch(`/api/user`, {
+        method: "PATCH",
+        body: formData,
+      });
+
+      const resolve: UpdateUserResponse = await response.json();
+
+      if (!resolve.success) {
+        throw new Error(resolve.message);
+      }
+
+      const { message } = resolve.data;
+
+      toast(message);
+
+      props.closeForm();
+    } catch (error) {
+      console.log(error);
+      const message = getErrorMessage(error);
+      toast(message);
+    }
+  };
+
   return (
     <div
       className="w-full h-full flex flex-col items-center justify-center fixed top-0 
@@ -54,7 +92,7 @@ const ChangePassword = (props: BaseForm) => {
         </div>
         <div className="w-full h-fit bg-secondary rounded-lg p-4">
           <form
-            // onSubmit={(e) => handleUpdate(e)}
+            onSubmit={(e) => handleUpdate(e)}
             className="flex flex-col items-center justify-start gap-2"
           >
             <Input
