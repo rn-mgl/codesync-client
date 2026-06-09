@@ -45,6 +45,7 @@ const FiltersSchema = z.object({
 
 const UnlockSchema: z.ZodType<UnlockCriteria> = z.lazy(() =>
   z.object({
+    model: z.string(),
     version: z.number(),
     type: z.enum(VALID_TYPES),
     match: z.enum(VALID_MATCH),
