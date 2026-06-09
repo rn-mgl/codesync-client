@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import React from "react";
 import { FaEdit } from "react-icons/fa";
-import { FaCode, FaFileCode, FaTrashCan } from "react-icons/fa6";
+import { FaCode, FaFileCode, FaLightbulb, FaTrashCan } from "react-icons/fa6";
 import Languages from "@/components/features/problem/read/Languages";
 
 const ProblemActions = (props: {
@@ -28,6 +28,13 @@ const ProblemActions = (props: {
           className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
         >
           <FaFileCode />
+        </Link>
+        <Link
+          href={`/codesync/hints?problem=${params?.slug}`}
+          title="Test Case"
+          className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
+        >
+          <FaLightbulb />
         </Link>
         <button
           title="Language"

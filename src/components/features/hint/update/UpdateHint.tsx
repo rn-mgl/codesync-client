@@ -154,7 +154,7 @@ const UpdateHint = () => {
             onChange={handleHint}
             type="number"
             value={hint.order_index}
-            label="Level"
+            label="Order Index"
             icon={<FaArrowDown19 />}
             required={true}
           />
