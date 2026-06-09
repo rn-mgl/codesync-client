@@ -1,6 +1,7 @@
 import { BaseHint } from "@/src/interfaces/hint.interface";
 import { BaseProblem } from "@/src/interfaces/problem.interface";
 import { BaseTopic } from "@/src/interfaces/topic.interface";
+import Image from "next/image";
 import React from "react";
 import { FaChevronRight } from "react-icons/fa6";
 
@@ -47,9 +48,18 @@ const ProblemDetails = (props: {
     return (
       <div
         key={topic.id}
-        className="w-fit px-2 py-0.5 rounded-full bg-neutral-300 text-xs"
+        className="w-fit px-1.5 py-0.5 rounded-full bg-neutral-300 text-xs flex flex-row items-center justify-between gap-1"
       >
-        {topic.name}
+        <span>
+          <Image
+            src={topic.icon}
+            alt="icon"
+            width={20}
+            height={20}
+            className="max-w-4"
+          />
+        </span>
+        <span>{topic.name}</span>
       </div>
     );
   });
