@@ -38,13 +38,13 @@ const AllAchievements = () => {
     return (
       <div
         key={achievement.id}
-        className="w-full bg-neutral-200 rounded-lg p-2 flex flex-col gap-2 group"
+        className="w-full bg-neutral-200 rounded-lg p-2 flex flex-row gap-2 group"
       >
         <div
           style={{
             background: `linear-gradient(135deg, ${BADGE_PALETTE[achievement.badge_color].primary}, ${BADGE_PALETTE[achievement.badge_color].secondary}, ${BADGE_PALETTE[achievement.badge_color].primary})`,
           }}
-          className="w-full aspect-video rounded-sm flex flex-col items-center justify-center overflow-hidden"
+          className="w-full aspect-square rounded-sm max-w-24 t:max-w-30 flex flex-col items-center justify-center overflow-hidden"
         >
           <Image
             src={achievement.icon}
@@ -52,19 +52,24 @@ const AllAchievements = () => {
             width={200}
             height={200}
             draggable={false}
-            className="drop-shadow-lg group-hover:animate-float w-4/12"
+            className="drop-shadow-lg group-hover:animate-float w-full p-2"
           />
         </div>
 
-        <div className="w-full flex flex-col gap-2 text-center text-sm">
-          <div className="w-full flex flex-row items-center justify-between">
-            <Link
-              href={`/codesync/achievements/${achievement.slug}`}
-              className="font-bold truncate hover:underline underline-offset-2 transition-all"
-            >
-              {achievement.name}
-            </Link>
-            <p className="font-medium">{achievement.points}</p>
+        <div className="w-full flex flex-col gap-2 text-sm">
+          <div className="w-full flex flex-col items-start gap-2 h-full">
+            <div>
+              <Link
+                href={`/codesync/achievements/${achievement.slug}`}
+                className="font-bold truncate hover:underline underline-offset-2 transition-all"
+              >
+                {achievement.name}
+              </Link>
+            </div>
+
+            <div className="font-medium bg-neutral-300 w-full h-full rounded-sm p-1 overflow-y-auto">
+              {achievement.points}
+            </div>
           </div>
         </div>
       </div>
@@ -100,7 +105,7 @@ const AllAchievements = () => {
   }, []);
 
   return (
-    <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-3 l-l:grid-cols-4 gap-4">
+    <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-2 l-l:grid-cols-3 gap-4">
       {mappedAchievements}
     </div>
   );
