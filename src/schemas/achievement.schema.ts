@@ -44,18 +44,28 @@ const FiltersSchema = z.object({
 });
 
 const UnlockSchema: z.ZodType<UnlockCriteria> = z.lazy(() =>
-  z.object({
-    version: z.number(),
-    type: z.enum(VALID_TYPES),
-    match: z.enum(VALID_MATCH),
-    metric: z.string().optional(),
-    operator: z.enum(VALID_OPERATOR).optional(),
-    value: z.number().optional(),
-    scope: z.enum(VALID_SCOPE).optional(),
-    filters: FiltersSchema.optional(),
-    conditions: z.array(UnlockSchema).optional(),
-    progress_label: z.string().optional(),
-  }),
+  z
+    .object({
+      version: z.number(),
+      type: z.enum(VALID_TYPES),
+      match: z.enum(VALID_MATCH).optional(),
+      metric: z.string().optional(),
+      operator: z.enum(VALID_OPERATOR).optional(),
+      value: z.number().optional(),
+      scope: z.enum(VALID_SCOPE).optional(),
+      filters: FiltersSchema.optional(),
+      conditions: z.array(UnlockSchema).optional(),
+      progress_label: z.string().optional(),
+    })
+    .superRefine((val, ctx) => {
+      if (val.conditions !== undefined && val.match === undefined) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["match"],
+          message: "Match is required when conditions are present.",
+        });
+      }
+    }),
 );
 
 export const AchievementSchema = z.object({
