@@ -1,13 +1,16 @@
 "use client";
 
+import DisplayFile from "@/src/components/ui/containers/DisplayFile";
+import DisplayInputField from "@/src/components/ui/containers/DisplayInputField";
+import DisplayTextArea from "@/src/components/ui/containers/DisplayTextArea";
 import Delete from "@/src/components/ui/forms/Delete";
 import {
   BaseAchievement,
   GetAchievementResponse,
 } from "@/src/interfaces/achievement.interface";
+import { normalizeString } from "@/src/utils/normalizer.util";
 import { renderJSON } from "@/src/utils/renderer.util";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import React from "react";
@@ -89,7 +92,7 @@ const SingleAchievement = () => {
   }, [params?.slug]);
 
   return (
-    <div className="flex flex-col items-start justify-start w-full gap-4 h-full l-l:overflow-hidden">
+    <div className="flex flex-col items-start justify-start w-full gap-4">
       {canDelete ? (
         <Delete
           closeForm={handleCanDelete}
@@ -127,57 +130,52 @@ const SingleAchievement = () => {
         </button>
       </div>
 
-      <div className="p-4 rounded-md bg-primary text-secondary t:p-6 w-full">
-        <h1 className="font-bold text-center text-sm">{achievement.name}</h1>
-      </div>
-
-      <div className="grid grid-cols-1 h-full gap-4 items-center justify-center l-l:grid-cols-2 w-full l-l:overflow-hidden">
-        <div className="w-full flex h-full flex-col aspect-square t:aspect-video">
-          <div className="w-full h-full flex flex-col items-center justify-center bg-neutral-200 rounded-lg p-2 t:p-4">
-            <div
-              style={{
-                background: `linear-gradient(135deg, ${BADGE_PALETTE[achievement.badge_color].primary}, ${BADGE_PALETTE[achievement.badge_color].secondary}, ${BADGE_PALETTE[achievement.badge_color].primary})`,
-              }}
-              className="w-full flex items-center justify-center h-full rounded-sm overflow-hidden"
-            >
-              {achievement.icon && (
-                <Image
-                  src={achievement.icon}
-                  loading="eager"
-                  width={400}
-                  height={400}
-                  alt="Icon"
-                  className="animate-float drop-shadow-lg w-5/12"
-                />
-              )}
-            </div>
+      <div className="flex flex-col gap-4 items-center justify-center w-full overflow-auto">
+        <div className="w-full flex flex-col">
+          <div
+            style={{
+              background: `linear-gradient(135deg, ${BADGE_PALETTE[achievement.badge_color].primary}, ${BADGE_PALETTE[achievement.badge_color].secondary}, ${BADGE_PALETTE[achievement.badge_color].primary})`,
+            }}
+            className="w-full flex items-center justify-center  p-8 rounded-lg"
+          >
+            {achievement.icon && achievement.icon !== "" && (
+              <DisplayFile src={achievement.icon} type="image" />
+            )}
           </div>
         </div>
 
-        <div className="w-full flex h-full flex-col l-l:overflow-hidden">
-          <div className="w-full h-full grid grid-cols-1 grid-rows-3 gap-4 l-l:overflow-hidden">
-            <div className="flex flex-col h-full overflow-hidden row-span-1">
-              <div className="p-4 bg-primary/80 w-full rounded-t-md font-medium text-secondary text-center">
-                <p>Description</p>
-              </div>
+        <div className="w-full flex flex-col">
+          <div className="p-4 bg-primary/80 w-full rounded-t-md font-medium text-secondary text-center">
+            <p>Basic Information</p>
+          </div>
 
-              <div
-                className="p-2 border border-neutral-400 rounded-b-md bg-secondary overflow-y-auto text-sm 
-                        min-h-40 max-h-96 l-l:min-h-auto l-l:max-h-none h-full t:p-4"
-              >
-                <p>{achievement.description}</p>
-              </div>
-            </div>
+          <div
+            className="flex flex-col p-2 border border-neutral-400 rounded-b-md bg-secondary text-sm 
+                        l-l:min-h-auto l-l:max-h-none  t:p-4 gap-4 capitalize"
+          >
+            <DisplayInputField value={achievement.name} label="Name" />
 
-            <div className="w-full h-full flex flex-col overflow-hidden row-span-2">
-              <div className="p-4 bg-primary/80 w-full rounded-t-md font-medium text-secondary text-center">
-                <p>Unlock Criteria</p>
-              </div>
+            <DisplayInputField value={achievement.points} label="Points" />
 
-              <div className="p-2 rounded-b-md border border-neutral-400 h-full overflow-y-auto text-sm t:text-base t:p-4 flex flex-col gap-2">
-                {mappedCriteria}
-              </div>
-            </div>
+            <DisplayInputField
+              value={normalizeString(achievement.category)}
+              label="Category"
+            />
+
+            <DisplayTextArea
+              value={achievement.description}
+              label="Description"
+            />
+          </div>
+        </div>
+
+        <div className="w-full flex flex-col">
+          <div className="p-4 bg-primary/80 w-full rounded-t-md font-medium text-secondary text-center">
+            <p>Unlock Criteria</p>
+          </div>
+
+          <div className="p-2 rounded-b-md border border-neutral-400 text-sm t:text-base t:p-4 flex flex-col gap-2">
+            {mappedCriteria}
           </div>
         </div>
       </div>
