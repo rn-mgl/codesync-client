@@ -4,10 +4,7 @@ export const renderArray = (array: unknown[]) => {
   return array.map((data, index) => {
     if (Array.isArray(data)) {
       return (
-        <div
-          key={index}
-          className="p-1 rounded-sm bg-neutral-300 capitalize flex flex-col gap-2"
-        >
+        <div key={index} className="rounded-sm capitalize flex flex-col gap-2">
           {data.join(", ")}
         </div>
       );
@@ -22,10 +19,7 @@ export const renderArray = (array: unknown[]) => {
       );
     } else {
       return (
-        <div
-          key={index}
-          className=" p-1 rounded-sm bg-neutral-300 capitalize flex flex-col gap-2"
-        >
+        <div key={index} className="rounded-sm capitalize flex flex-col gap-2">
           {typeof data !== "string"
             ? JSON.stringify(data)
             : normalizeString(data)}
@@ -41,13 +35,13 @@ export const renderObject = (object: object) => {
       return (
         <div
           key={nestedKey}
-          className="flex flex-row gap-2 items-start justify-start text-sm"
+          className="flex flex-row items-start justify-start text-sm"
         >
-          <span className="text-secondary bg-primary p-1 px-2 rounded-sm capitalize">
-            {normalizeString(nestedKey)}
+          <span className="text-primary font-bold rounded-sm capitalize">
+            {normalizeString(nestedKey)}:
           </span>
 
-          <div className="p-1 rounded-sm bg-neutral-300 capitalize flex flex-col gap-2">
+          <div className="rounded-sm capitalize flex flex-col gap-2">
             {Array.isArray(nestedValue)
               ? nestedValue.join(", ")
               : renderJSON(nestedValue)}
@@ -57,13 +51,13 @@ export const renderObject = (object: object) => {
     } else {
       <div
         key={nestedKey}
-        className="flex flex-row gap-2 items-start justify-start text-sm"
+        className="flex flex-row items-start justify-start text-sm"
       >
-        <span className="text-secondary bg-primary p-1 px-2 rounded-sm capitalize">
-          {normalizeString(nestedKey)}
+        <span className="text-primary font-bold rounded-sm capitalize">
+          {normalizeString(nestedKey)}:
         </span>
 
-        <div className="p-1 rounded-sm bg-neutral-300 capitalize">
+        <div className="rounded-sm capitalize">
           {JSON.stringify(nestedValue)}
         </div>
       </div>;
@@ -76,15 +70,13 @@ export const renderJSON = (json: object): React.ReactNode => {
     return (
       <div
         key={key}
-        className="flex flex-row gap-2 items-start justify-start text-sm"
+        className="flex gap-1 flex-row items-start justify-start text-sm"
       >
-        <span className="text-secondary bg-primary p-1 px-2 rounded-sm capitalize">
-          {normalizeString(key)}
+        <span className="text-primary font-bold rounded-sm capitalize">
+          {normalizeString(key)}:
         </span>
 
-        <div
-          className={`${typeof value === "object" && value !== null ? "p-2" : "p-1"} rounded-sm bg-neutral-300 capitalize flex flex-col gap-2`}
-        >
+        <div className="rounded-sm capitalize flex flex-col gap-2">
           {Array.isArray(value)
             ? renderArray(value)
             : typeof value === "object" && value !== null
