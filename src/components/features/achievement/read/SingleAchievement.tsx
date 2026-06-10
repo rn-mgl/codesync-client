@@ -25,7 +25,6 @@ const SingleAchievement = () => {
     points: 0,
     slug: "",
     unlock_criteria: {
-      model: "",
       type: "metric_threshold",
       version: 1,
     },

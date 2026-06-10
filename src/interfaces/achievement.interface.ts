@@ -2,7 +2,6 @@ import { ApiResponse } from "@/interfaces/api.interface";
 
 export interface UnlockCriteria {
   version: number;
-  model: string;
   type: "metric_threshold" | "streak" | "composite" | "special";
   metric?: string;
   operator?: ">=" | "=" | "<=";
