@@ -68,7 +68,7 @@ const AllAchievements = () => {
             </div>
 
             <div className="font-medium bg-neutral-300 w-full h-full rounded-sm p-1 overflow-y-auto">
-              {achievement.points}
+              {achievement.description}
             </div>
           </div>
         </div>
