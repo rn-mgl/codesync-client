@@ -73,7 +73,7 @@ const ProblemSubmissions = (props: {
           <span className="capitalize">{submission.language}</span>
           <span>{submission.execution_time_ms} ms</span>
           <span>{submission.memory_used_mb} mb</span>
-          <span>{DateTime.fromISO(submission.created_at).toFormat("DDD")}</span>
+          <span>{DateTime.fromSQL(submission.created_at).toFormat("DDD")}</span>
         </p>
       </button>
     );
