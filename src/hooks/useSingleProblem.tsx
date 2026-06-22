@@ -23,6 +23,7 @@ import { useParams } from "next/navigation";
 import React from "react";
 import { BaseTopic } from "@/interfaces/topic.interface";
 import { BaseHint } from "../interfaces/hint.interface";
+import { useSession } from "next-auth/react";
 
 const submissionReducer = (
   state: SubmissionState,
@@ -106,6 +107,9 @@ export default function useSingleProblem() {
     null,
   );
 
+  const { data: session } = useSession({ required: true });
+  const user = session?.user;
+
   const getProblem = React.useCallback(async () => {
     try {
       if (!params?.slug) return;
@@ -141,9 +145,14 @@ export default function useSingleProblem() {
 
         if (!editorRef.current) return;
 
+        if (!user?.id) return;
+
         const code = editorRef.current.getValue();
 
-        localStorage.setItem(`${params.slug}_${currentLanguage}`, code);
+        localStorage.setItem(
+          `${params.slug}_${user.id}_${currentLanguage}`,
+          code,
+        );
 
         const submission = {
           type,
@@ -198,7 +207,7 @@ export default function useSingleProblem() {
         console.error(err);
       }
     },
-    [currentLanguage, params],
+    [currentLanguage, user, params],
   );
 
   const handleCanDelete = () => {
@@ -278,7 +287,7 @@ export default function useSingleProblem() {
       }
     : null;
 
-  const startingCodeKey = `${params?.slug ?? ""}_${currentLanguage}`;
+  const startingCodeKey = `${params?.slug ?? ""}_${user?.id}_${currentLanguage}`;
 
   // use this hook to get localstorage without tripping lint and undefined localstorage
   const storedCode = React.useSyncExternalStore(

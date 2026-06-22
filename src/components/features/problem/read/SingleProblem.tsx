@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import React from "react";
-import { FaArrowLeft, FaCheck } from "react-icons/fa6";
+import { FaArrowLeft, FaCheck, FaXmark } from "react-icons/fa6";
 import { toast } from "sonner";
 import DetailsAction from "@/components/features/problem/read/DetailsAction";
 import EditorActions from "@/components/features/problem/read/EditorActions";
@@ -18,7 +18,8 @@ import RunResults from "@/components/features/problem/read/RunResults";
 import ProblemSubmissions from "@/components/features/problem/read/ProblemSubmissions";
 
 const SingleProblem = () => {
-  useSession({ required: true });
+  const { data: session } = useSession({ required: true });
+  const user = session?.user;
 
   const params: { slug?: string } | null = useParams();
   const router = useRouter();
@@ -46,15 +47,19 @@ const SingleProblem = () => {
     handleSubmissionState,
   } = useSingleProblem();
 
-  console.log(hints);
-
   React.useEffect(() => {
     const handler = async (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.key === "s" && params?.slug) {
+      if (!user?.id) {
+        toast(
+          <span className="flex gap-1 items-center justify-center">
+            Log In First <FaXmark />
+          </span>,
+        );
+      } else if (e.ctrlKey && e.key === "s" && params?.slug) {
         e.preventDefault();
 
         localStorage.setItem(
-          `${params?.slug}_${currentLanguage}`,
+          `${params?.slug}_${user?.id}_${currentLanguage}`,
           editorRef.current?.getValue() ?? "",
         );
 
@@ -75,7 +80,7 @@ const SingleProblem = () => {
     return () => {
       window.removeEventListener("keydown", handler);
     };
-  }, [params?.slug, editorRef, currentLanguage, handleSubmission]);
+  }, [params?.slug, editorRef, currentLanguage, user, handleSubmission]);
 
   React.useEffect(() => {
     getProblem();
