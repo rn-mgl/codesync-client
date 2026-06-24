@@ -114,3 +114,11 @@
     color: var(--color-primary);
   }
 }
+
+[contenteditable]:empty::before,
+[contenteditable]:has(> br:only-child)::before {
+  content: attr(data-placeholder);
+  pointer-events: none;
+  display: block;
+  opacity: 0.5;
+}

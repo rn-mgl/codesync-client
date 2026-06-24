@@ -1,3 +1,4 @@
+import Cody from "@/src/components/features/cody/Cody";
 import Navigation from "@/src/components/layout/navigation/Navigation";
 import { Metadata } from "next";
 import React from "react";
@@ -15,6 +16,7 @@ export default function RootLayout({
     <Navigation>
       <div className="w-full h-full bg-secondary rounded-md p-4 border border-neutral-300 t:p-8 overflow-y-auto">
         {children}
+        <Cody />
       </div>
     </Navigation>
   );
