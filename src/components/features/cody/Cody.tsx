@@ -69,7 +69,7 @@ const Cody = () => {
                 }`}
     >
       {showPanel ? (
-        <div className="w-full h-full rounded-md flex flex-col items-start justify-start animate-fade p-2 gap-2">
+        <div className="w-full h-full rounded-md flex flex-col items-start justify-start p-2 gap-2">
           <div className="w-full flex flex-row items-center justify-between bg-primary rounded-sm text-secondary p-2.5">
             <p>Ask Cody</p>
 
@@ -102,7 +102,7 @@ const Cody = () => {
       ) : (
         <button
           onClick={handleShowPanel}
-          className="rounded-full bg-primary max-w-10 w-10 p-2 animate-fade"
+          className="rounded-full bg-primary max-w-10 w-10 p-2"
         >
           <Logo isTransparent type="light" />
         </button>
