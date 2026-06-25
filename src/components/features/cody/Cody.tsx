@@ -2,21 +2,59 @@
 import React from "react";
 import { FaMessage, FaXmark } from "react-icons/fa6";
 import Logo from "../../global/Logo";
+import { AskCodyResponse } from "@/src/interfaces/ai.interface";
 
 const Cody = () => {
   const [showPanel, setShowPanel] = React.useState(false);
+  const [interaction, setInteraction] = React.useState<string | null>(null);
   const messageRef = React.useRef<HTMLDivElement | null>(null);
 
   const handleShowPanel = () => {
     setShowPanel((prev) => !prev);
   };
 
-  const onInput = () => {
+  const askCody = async () => {
+    try {
+      const el = messageRef.current;
+
+      if (!el) return;
+
+      const request = { message: el.textContent, interaction };
+
+      const response = await fetch(`/api/cody`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(request),
+      });
+
+      const resolve: AskCodyResponse = await response.json();
+
+      if (!resolve.success) {
+        throw new Error(resolve.message);
+      }
+
+      const data = resolve.data;
+
+      setInteraction(data.interaction);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleInput = (e: React.KeyboardEvent<HTMLDivElement>) => {
     const el = messageRef.current;
 
     if (!el) return;
 
     if (el.textContent.trim() === "") {
+      el.innerHTML = "";
+    }
+
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      askCody();
       el.innerHTML = "";
     }
   };
@@ -27,7 +65,7 @@ const Cody = () => {
                 ${
                   showPanel
                     ? "w-full h-full top-0 right-0 l-s:max-w-(--breakpoint-m-l) shadow-md backdrop-blur-md bg-neutral-600/20"
-                    : "right-3 bottom-3 drop-shadow-md"
+                    : "right-5 bottom-5 drop-shadow-md"
                 }`}
     >
       {showPanel ? (
@@ -47,7 +85,7 @@ const Cody = () => {
 
           <div className="flex flex-row items-end w-full bg-secondary rounded-md gap-2 p-2 ">
             <div
-              onInput={onInput}
+              onKeyDown={(e) => handleInput(e)}
               id="cody-input"
               data-placeholder="Ask away"
               ref={messageRef}
