@@ -1,5 +1,5 @@
 import { env } from "@/src/configs/env.config";
-import { ApiResponse, ServerResponse } from "@/src/interfaces/api.interface";
+import { ApiResponse } from "@/src/interfaces/api.interface";
 import ApiError from "@/src/lib/ApiError";
 import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
 import { StatusCodes } from "http-status-codes";
@@ -31,18 +31,21 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify(body),
     });
 
-    const resolve: ServerResponse = await response.json();
-
-    if (!resolve.success) {
-      throw new ApiError(resolve.message, response.status);
+    if (!response.ok) {
+      throw new ApiError(`Failed to create stream.`, response.status);
     }
 
-    const apiResponse: ApiResponse<typeof resolve.data> = {
-      success: true,
-      data: resolve.data,
-    };
+    const stream = response.body;
 
-    return NextResponse.json(apiResponse, { status: response.status });
+    // send back to front end as stream
+    return new NextResponse(stream, {
+      status: response.status,
+      headers: {
+        "Content-Type": "text/event-stream",
+        "cache-control": "no-cache, no-transform",
+        connection: "keep-alive",
+      },
+    });
   } catch (error) {
     console.log(error);
 
