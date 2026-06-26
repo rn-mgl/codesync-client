@@ -1,12 +1,15 @@
 "use client";
+
 import React from "react";
 import { FaMessage, FaXmark } from "react-icons/fa6";
 import Logo from "../../global/Logo";
-import { AskCodyResponse } from "@/src/interfaces/ai.interface";
 
 const Cody = () => {
   const [showPanel, setShowPanel] = React.useState(false);
   const [interaction, setInteraction] = React.useState<string | null>(null);
+  const [chats, setChats] = React.useState<
+    { message: string; sender: "cody" | "user"; id: number }[]
+  >([]);
   const messageRef = React.useRef<HTMLDivElement | null>(null);
 
   const handleShowPanel = () => {
@@ -19,7 +22,17 @@ const Cody = () => {
 
       if (!el) return;
 
-      const request = { message: el.textContent, interaction };
+      const message = el.textContent;
+
+      if (!message) return;
+
+      // push user message
+      setChats((prev) => [
+        ...prev,
+        { message: message, sender: "user", id: Math.random() },
+      ]);
+
+      const request = { message: message, interaction };
 
       const response = await fetch(`/api/cody`, {
         method: "POST",
@@ -29,15 +42,80 @@ const Cody = () => {
         body: JSON.stringify(request),
       });
 
-      const resolve: AskCodyResponse = await response.json();
-
-      if (!resolve.success) {
-        throw new Error(resolve.message);
+      if (!response.body) {
+        throw new Error(`Could not parse response.`);
       }
 
-      const data = resolve.data;
+      // to read the stream from response
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder("utf-8");
 
-      setInteraction(data.interaction);
+      let buffer = ""; // for token buffer
+      let messageBuffer = ""; // for formatting the existing chat content with the token
+      let rafId: number | null = null; // for animation request
+
+      // chat id
+      const id = Math.random();
+
+      // rendering of token for state
+      const flush = () => {
+        setChats((prev) => {
+          const idx = prev.findIndex((c) => c.id === id);
+
+          if (idx === -1) {
+            return prev;
+          }
+
+          const next = [...prev];
+          next[idx] = { ...next[idx], message: messageBuffer };
+
+          return next;
+        });
+        rafId = null;
+      };
+
+      // queue the flush using raf
+      const scheduleFlush = () => {
+        if (rafId === null) {
+          rafId = requestAnimationFrame(flush);
+        }
+      };
+
+      // initialize cody message
+      setChats((prev) => [...prev, { message: "", sender: "cody", id }]);
+
+      while (true) {
+        const { value, done } = await reader.read();
+
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+
+        const lines = buffer.split("\n");
+        buffer = lines.pop() || "";
+
+        for (const line of lines) {
+          const cleanLine = line.trim();
+
+          if (cleanLine.startsWith("data: cody_completed=")) {
+            const interactionId = cleanLine.replace(
+              "data: cody_completed=",
+              "",
+            );
+
+            setInteraction(interactionId);
+          } else if (cleanLine.startsWith("data: ")) {
+            const token = cleanLine.replace("data: ", "");
+            messageBuffer += token;
+
+            scheduleFlush();
+          }
+        }
+      }
+
+      // final cleanup of animation
+      if (rafId) cancelAnimationFrame(rafId);
+      flush();
     } catch (error) {
       console.log(error);
     }
@@ -58,6 +136,30 @@ const Cody = () => {
       el.innerHTML = "";
     }
   };
+
+  const mappedChats = chats.map((chat) => {
+    return (
+      <div
+        key={chat.id}
+        className={`w-full flex text-sm ${chat.sender === "cody" ? "justify-start" : "justify-end"}`}
+      >
+        <div
+          className={`
+            w-fit p-2 rounded-md max-w-10/12 t:max-w-8/12 l-s:max-w-10/12 whitespace-pre-line
+            ${
+              chat.sender === "cody"
+                ? "bg-accent text-secondary"
+                : "bg-neutral-300 text-primary justify-end items-end"
+            }
+          `}
+        >
+          {chat.message}
+        </div>
+      </div>
+    );
+  });
+
+  console.log(chats);
 
   return (
     <div
@@ -81,7 +183,9 @@ const Cody = () => {
             </button>
           </div>
 
-          <div className="w-full flex flex-col items-start bg-secondary h-full rounded-md"></div>
+          <div className="w-full flex flex-col items-start bg-secondary h-full rounded-md gap-4 overflow-y-auto p-2">
+            {mappedChats}
+          </div>
 
           <div className="flex flex-row items-end w-full bg-secondary rounded-md gap-2 p-2 ">
             <div
