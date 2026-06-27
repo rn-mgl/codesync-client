@@ -7,6 +7,7 @@ import Logo from "../../global/Logo";
 const Cody = () => {
   const [showPanel, setShowPanel] = React.useState(false);
   const [interaction, setInteraction] = React.useState<string | null>(null);
+  const [chatId, setChatId] = React.useState(0);
   const [chats, setChats] = React.useState<
     { message: string; sender: "cody" | "user"; id: number }[]
   >([]);
@@ -22,6 +23,8 @@ const Cody = () => {
 
       if (!el) return;
 
+      if (!chatId) return;
+
       const message = el.textContent;
 
       if (!message) return;
@@ -32,10 +35,10 @@ const Cody = () => {
         { message: message, sender: "user", id: Math.random() },
       ]);
 
-      const request = { message: message, interaction };
+      const request = { message: message, interaction, id: chatId };
 
-      const response = await fetch(`/api/cody`, {
-        method: "POST",
+      const response = await fetch(`/api/cody/${chatId}`, {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
@@ -81,6 +84,8 @@ const Cody = () => {
         }
       };
 
+      let dataLines: string[] = [];
+
       // initialize cody message
       setChats((prev) => [...prev, { message: "", sender: "cody", id }]);
 
@@ -94,26 +99,132 @@ const Cody = () => {
         const lines = buffer.split("\n");
         buffer = lines.pop() || "";
 
-        for (const line of lines) {
-          const cleanLine = line.trim();
+        for (const rawLine of lines) {
+          const line = rawLine.replace(/\r$/, "");
 
-          if (cleanLine.startsWith("data: cody_completed=")) {
-            const interactionId = cleanLine.replace(
-              "data: cody_completed=",
-              "",
-            );
+          if (line === "") {
+            if (dataLines.length > 0) {
+              const data = dataLines.join("\n");
+              dataLines = [];
 
-            setInteraction(interactionId);
-          } else if (cleanLine.startsWith("data: ")) {
-            const token = cleanLine.replace("data: ", "");
-            messageBuffer += token;
+              if (data.startsWith("cody_completed=")) {
+                const interactionId = data.replace("cody_completed=", "");
+                setInteraction(interactionId);
+              } else {
+                messageBuffer += data;
+                scheduleFlush();
+              }
+            }
+          }
 
-            scheduleFlush();
+          if (line.startsWith("data:")) {
+            const value = line.startsWith("data: ")
+              ? line.slice("data: ".length)
+              : line.slice("data:".length);
+            dataLines.push(value);
           }
         }
       }
 
       // final cleanup of animation
+      if (rafId) cancelAnimationFrame(rafId);
+      flush();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const initializeCody = async () => {
+    try {
+      const response = await fetch(`/api/cody`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.body) {
+        throw new Error(`Could not parse response.`);
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+
+      let buffer = "";
+      let messageBuffer = "";
+      let rafId: null | number = null;
+
+      const id = Math.random();
+
+      setChats((prev) => [...prev, { id, message: "", sender: "cody" }]);
+
+      const flush = () => {
+        setChats((prev) => {
+          const index = prev.findIndex((c) => c.id === id);
+
+          if (index === -1) return prev;
+
+          const next = [...prev];
+          next[index] = { ...next[index], message: messageBuffer };
+
+          return next;
+        });
+
+        rafId = null;
+      };
+
+      const scheduleFlush = () => {
+        if (!rafId) {
+          rafId = requestAnimationFrame(flush);
+        }
+      };
+
+      let dataLines: string[] = [];
+
+      while (true) {
+        const { value, done } = await reader.read();
+
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+
+        const lines = buffer.split("\n");
+        buffer = lines.pop() || "";
+
+        for (const rawLine of lines) {
+          const line = rawLine.replace(/\r$/, "");
+
+          if (line === "") {
+            if (dataLines.length > 0) {
+              const data = dataLines.join("\n");
+
+              dataLines = [];
+
+              console.log(data);
+
+              if (data.startsWith("stored=")) {
+                const id = data.slice("stored=".length);
+
+                setChatId(Number(id));
+              } else if (data.startsWith("cody_completed=")) {
+                const interactionId = data.slice("cody_completed=".length);
+                setInteraction(interactionId);
+              } else {
+                messageBuffer += data;
+                scheduleFlush();
+              }
+            }
+          }
+
+          if (line.startsWith("data:")) {
+            const value = line.startsWith("data: ")
+              ? line.slice(6)
+              : line.slice(5);
+            dataLines.push(value);
+          }
+        }
+      }
+
       if (rafId) cancelAnimationFrame(rafId);
       flush();
     } catch (error) {
@@ -159,8 +270,6 @@ const Cody = () => {
     );
   });
 
-  console.log(chats);
-
   return (
     <div
       className={`fixed flex flex-col items-start justify-start z-30 
@@ -205,7 +314,10 @@ const Cody = () => {
         </div>
       ) : (
         <button
-          onClick={handleShowPanel}
+          onClick={() => {
+            handleShowPanel();
+            initializeCody();
+          }}
           className="rounded-full bg-primary max-w-10 w-10 p-2"
         >
           <Logo isTransparent type="light" />

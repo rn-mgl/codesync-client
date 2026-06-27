@@ -6,7 +6,10 @@ import { StatusCodes } from "http-status-codes";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: NextRequest) {
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ id?: string }> },
+) {
   try {
     const cookies = await getToken({ req });
 
@@ -18,15 +21,18 @@ export async function POST(req: NextRequest) {
     }
 
     const token = cookies.user.token;
+    const body = await req.json();
     const url = env.SERVER_URL;
+    const id = (await params).id;
 
-    const response = await fetch(`${url}/cody`, {
-      method: "POST",
+    const response = await fetch(`${url}/cody/${id}`, {
+      method: "PATCH",
       headers: {
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL,
         "Content-Type": "application/json",
       },
+      body: JSON.stringify(body),
     });
 
     if (!response.ok) {
@@ -35,6 +41,7 @@ export async function POST(req: NextRequest) {
 
     const stream = response.body;
 
+    // send back to front end as stream
     return new NextResponse(stream, {
       status: response.status,
       headers: {
