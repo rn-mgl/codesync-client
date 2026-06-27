@@ -29,6 +29,8 @@ const Cody = () => {
 
       if (!message) return;
 
+      el.innerHTML = "";
+
       // push user message
       setChats((prev) => [
         ...prev,
@@ -200,8 +202,6 @@ const Cody = () => {
 
               dataLines = [];
 
-              console.log(data);
-
               if (data.startsWith("stored=")) {
                 const id = data.slice("stored=".length);
 
@@ -244,7 +244,6 @@ const Cody = () => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       askCody();
-      el.innerHTML = "";
     }
   };
 
@@ -307,7 +306,10 @@ const Cody = () => {
                         border-none break-all max-h-32 overflow-y-auto t:max-h-40 rounded-sm text-primary"
             ></div>
 
-            <button className="p-3 rounded-md text-secondary bg-accent">
+            <button
+              onClick={askCody}
+              className="p-3 rounded-md text-secondary bg-accent"
+            >
               <FaMessage />
             </button>
           </div>
