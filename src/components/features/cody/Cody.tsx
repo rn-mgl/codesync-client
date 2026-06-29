@@ -17,6 +17,105 @@ const Cody = () => {
     setShowPanel((prev) => !prev);
   };
 
+  const streamResponse = async (
+    reader: ReadableStreamDefaultReader<Uint8Array<ArrayBuffer>>,
+  ) => {
+    const decoder = new TextDecoder("utf-8");
+
+    let buffer = ""; // for token buffer
+    let messageBuffer = ""; // for formatting the existing chat content with the token
+    let rafId: number | null = null; // for animation request
+
+    // chat id
+    const id = Math.random();
+
+    // rendering of token for state
+    const flush = () => {
+      setChats((prev) => {
+        const idx = prev.findIndex((c) => c.id === id);
+
+        if (idx === -1) {
+          return prev;
+        }
+
+        const next = [...prev];
+        next[idx] = { ...next[idx], message: messageBuffer };
+
+        return next;
+      });
+
+      rafId = null;
+    };
+
+    // queue the flush using raf
+    const scheduleFlush = () => {
+      if (rafId === null) {
+        rafId = requestAnimationFrame(flush);
+      }
+    };
+
+    let dataLines: string[] = [];
+
+    // initialize cody message
+    setChats((prev) => [...prev, { message: "", sender: "cody", id }]);
+
+    while (true) {
+      const { value, done } = await reader.read();
+
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+
+      const lines = buffer.split("\n");
+      buffer = lines.pop() || "";
+
+      let event: "message" | "cody_completed" | "stored" = "message";
+
+      for (const rawLine of lines) {
+        const line = rawLine.replace(/\r$/, "");
+
+        if (line === "") {
+          if (dataLines.length > 0) {
+            const data = dataLines.join("\n");
+
+            dataLines = [];
+
+            if (event === "stored") {
+              setChatId(Number(data));
+            } else if (event === "cody_completed") {
+              setInteraction(data);
+            } else {
+              messageBuffer += data;
+              scheduleFlush();
+            }
+          }
+        }
+
+        if (line.startsWith("event:")) {
+          const value = (
+            line.startsWith("event: ")
+              ? line.slice("event: ".length)
+              : line.slice("event:".length)
+          ) as "message" | "cody_completed" | "stored";
+
+          event = value;
+        }
+
+        if (line.startsWith("data:")) {
+          const value = line.startsWith("data: ")
+            ? line.slice("data: ".length)
+            : line.slice("data:".length);
+
+          dataLines.push(value);
+        }
+      }
+    }
+
+    // final cleanup of animation
+    if (rafId) cancelAnimationFrame(rafId);
+    flush();
+  };
+
   const askCody = async () => {
     try {
       const el = messageRef.current;
@@ -53,84 +152,8 @@ const Cody = () => {
 
       // to read the stream from response
       const reader = response.body.getReader();
-      const decoder = new TextDecoder("utf-8");
 
-      let buffer = ""; // for token buffer
-      let messageBuffer = ""; // for formatting the existing chat content with the token
-      let rafId: number | null = null; // for animation request
-
-      // chat id
-      const id = Math.random();
-
-      // rendering of token for state
-      const flush = () => {
-        setChats((prev) => {
-          const idx = prev.findIndex((c) => c.id === id);
-
-          if (idx === -1) {
-            return prev;
-          }
-
-          const next = [...prev];
-          next[idx] = { ...next[idx], message: messageBuffer };
-
-          return next;
-        });
-        rafId = null;
-      };
-
-      // queue the flush using raf
-      const scheduleFlush = () => {
-        if (rafId === null) {
-          rafId = requestAnimationFrame(flush);
-        }
-      };
-
-      let dataLines: string[] = [];
-
-      // initialize cody message
-      setChats((prev) => [...prev, { message: "", sender: "cody", id }]);
-
-      while (true) {
-        const { value, done } = await reader.read();
-
-        if (done) break;
-
-        buffer += decoder.decode(value, { stream: true });
-
-        const lines = buffer.split("\n");
-        buffer = lines.pop() || "";
-
-        for (const rawLine of lines) {
-          const line = rawLine.replace(/\r$/, "");
-
-          if (line === "") {
-            if (dataLines.length > 0) {
-              const data = dataLines.join("\n");
-              dataLines = [];
-
-              if (data.startsWith("cody_completed=")) {
-                const interactionId = data.replace("cody_completed=", "");
-                setInteraction(interactionId);
-              } else {
-                messageBuffer += data;
-                scheduleFlush();
-              }
-            }
-          }
-
-          if (line.startsWith("data:")) {
-            const value = line.startsWith("data: ")
-              ? line.slice("data: ".length)
-              : line.slice("data:".length);
-            dataLines.push(value);
-          }
-        }
-      }
-
-      // final cleanup of animation
-      if (rafId) cancelAnimationFrame(rafId);
-      flush();
+      await streamResponse(reader);
     } catch (error) {
       console.log(error);
     }
@@ -150,83 +173,8 @@ const Cody = () => {
       }
 
       const reader = response.body.getReader();
-      const decoder = new TextDecoder("utf-8");
 
-      let buffer = "";
-      let messageBuffer = "";
-      let rafId: null | number = null;
-
-      const id = Math.random();
-
-      setChats((prev) => [...prev, { id, message: "", sender: "cody" }]);
-
-      const flush = () => {
-        setChats((prev) => {
-          const index = prev.findIndex((c) => c.id === id);
-
-          if (index === -1) return prev;
-
-          const next = [...prev];
-          next[index] = { ...next[index], message: messageBuffer };
-
-          return next;
-        });
-
-        rafId = null;
-      };
-
-      const scheduleFlush = () => {
-        if (!rafId) {
-          rafId = requestAnimationFrame(flush);
-        }
-      };
-
-      let dataLines: string[] = [];
-
-      while (true) {
-        const { value, done } = await reader.read();
-
-        if (done) break;
-
-        buffer += decoder.decode(value, { stream: true });
-
-        const lines = buffer.split("\n");
-        buffer = lines.pop() || "";
-
-        for (const rawLine of lines) {
-          const line = rawLine.replace(/\r$/, "");
-
-          if (line === "") {
-            if (dataLines.length > 0) {
-              const data = dataLines.join("\n");
-
-              dataLines = [];
-
-              if (data.startsWith("stored=")) {
-                const id = data.slice("stored=".length);
-
-                setChatId(Number(id));
-              } else if (data.startsWith("cody_completed=")) {
-                const interactionId = data.slice("cody_completed=".length);
-                setInteraction(interactionId);
-              } else {
-                messageBuffer += data;
-                scheduleFlush();
-              }
-            }
-          }
-
-          if (line.startsWith("data:")) {
-            const value = line.startsWith("data: ")
-              ? line.slice(6)
-              : line.slice(5);
-            dataLines.push(value);
-          }
-        }
-      }
-
-      if (rafId) cancelAnimationFrame(rafId);
-      flush();
+      await streamResponse(reader);
     } catch (error) {
       console.log(error);
     }
