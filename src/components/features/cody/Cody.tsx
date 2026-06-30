@@ -58,8 +58,6 @@ const Cody = () => {
     setShowPanel((prev) => !prev);
   };
 
-  console.log(state);
-
   const streamResponse = async (
     reader: ReadableStreamDefaultReader<Uint8Array<ArrayBuffer>>,
   ) => {
