@@ -1,21 +1,64 @@
 "use client";
 
+import { Chat, CodyAction, CodyState } from "@/src/interfaces/cody.interface";
 import React from "react";
 import { FaMessage, FaXmark } from "react-icons/fa6";
 import Logo from "../../global/Logo";
 
+const reducer = (state: CodyState, action: CodyAction) => {
+  switch (action.type) {
+    case "set_interaction":
+      return {
+        ...state,
+        interaction: action.data,
+      };
+    case "set_session":
+      return {
+        ...state,
+        chatId: action.data,
+      };
+    case "new_session":
+      return {
+        interaction: null,
+        chatId: 0,
+        chats: [],
+      };
+    case "push_chat":
+      return {
+        ...state,
+        chats: [...state.chats, action.data],
+      };
+    case "update_chat":
+      const index = state.chats.findIndex((c) => c.id === action.data.id);
+
+      if (index === -1) return state;
+
+      const update = [...state.chats];
+      update[index] = { ...update[index], message: action.data.message };
+
+      return {
+        ...state,
+        chats: update,
+      };
+    default:
+      return state;
+  }
+};
+
 const Cody = () => {
   const [showPanel, setShowPanel] = React.useState(false);
-  const [interaction, setInteraction] = React.useState<string | null>(null);
-  const [chatId, setChatId] = React.useState(0);
-  const [chats, setChats] = React.useState<
-    { message: string; sender: "cody" | "user"; id: number }[]
-  >([]);
+  const [state, dispatch] = React.useReducer(reducer, {
+    interaction: null,
+    chatId: 0,
+    chats: [],
+  });
   const messageRef = React.useRef<HTMLDivElement | null>(null);
 
   const handleShowPanel = () => {
     setShowPanel((prev) => !prev);
   };
+
+  console.log(state);
 
   const streamResponse = async (
     reader: ReadableStreamDefaultReader<Uint8Array<ArrayBuffer>>,
@@ -31,20 +74,9 @@ const Cody = () => {
 
     // rendering of token for state
     const flush = () => {
-      setChats((prev) => {
-        const idx = prev.findIndex((c) => c.id === id);
-
-        if (idx === -1) {
-          return prev;
-        }
-
-        const next = [...prev];
-        next[idx] = { ...next[idx], message: messageBuffer };
-
-        return next;
-      });
-
       rafId = null;
+      dispatch({ type: "update_chat", data: { id, message: messageBuffer } });
+      return;
     };
 
     // queue the flush using raf
@@ -57,7 +89,9 @@ const Cody = () => {
     let dataLines: string[] = [];
 
     // initialize cody message
-    setChats((prev) => [...prev, { message: "", sender: "cody", id }]);
+    const newChat = { message: "", sender: "cody", id } as Chat;
+
+    dispatch({ type: "push_chat", data: newChat });
 
     while (true) {
       const { value, done } = await reader.read();
@@ -74,23 +108,6 @@ const Cody = () => {
       for (const rawLine of lines) {
         const line = rawLine.replace(/\r$/, "");
 
-        if (line === "") {
-          if (dataLines.length > 0) {
-            const data = dataLines.join("\n");
-
-            dataLines = [];
-
-            if (event === "stored") {
-              setChatId(Number(data));
-            } else if (event === "cody_completed") {
-              setInteraction(data);
-            } else {
-              messageBuffer += data;
-              scheduleFlush();
-            }
-          }
-        }
-
         if (line.startsWith("event:")) {
           const value = (
             line.startsWith("event: ")
@@ -99,14 +116,33 @@ const Cody = () => {
           ) as "message" | "cody_completed" | "stored";
 
           event = value;
-        }
-
-        if (line.startsWith("data:")) {
+        } else if (line.startsWith("data:")) {
           const value = line.startsWith("data: ")
             ? line.slice("data: ".length)
             : line.slice("data:".length);
 
           dataLines.push(value);
+        } else if (line === "") {
+          if (dataLines.length > 0) {
+            const data = dataLines.join("\n");
+
+            dataLines = [];
+
+            switch (event) {
+              case "stored":
+                dispatch({ type: "set_session", data: Number(data) });
+                break;
+              case "cody_completed":
+                dispatch({ type: "set_interaction", data: data });
+                break;
+              case "message":
+                messageBuffer += data;
+                scheduleFlush();
+                break;
+            }
+          }
+
+          continue;
         }
       }
     }
@@ -119,6 +155,7 @@ const Cody = () => {
   const askCody = async () => {
     try {
       const el = messageRef.current;
+      const chatId = state.chatId;
 
       if (!el) return;
 
@@ -130,13 +167,19 @@ const Cody = () => {
 
       el.innerHTML = "";
 
-      // push user message
-      setChats((prev) => [
-        ...prev,
-        { message: message, sender: "user", id: Math.random() },
-      ]);
+      const newChat = {
+        message: message,
+        sender: "user",
+        id: Math.random(),
+      } as Chat;
 
-      const request = { message: message, interaction, id: chatId };
+      dispatch({ type: "push_chat", data: newChat });
+
+      const request = {
+        message: message,
+        interaction: state.interaction,
+        id: chatId,
+      };
 
       const response = await fetch(`/api/cody/${chatId}`, {
         method: "PATCH",
@@ -195,7 +238,7 @@ const Cody = () => {
     }
   };
 
-  const mappedChats = chats.map((chat) => {
+  const mappedChats = state.chats.map((chat) => {
     return (
       <div
         key={chat.id}
