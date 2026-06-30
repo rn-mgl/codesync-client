@@ -1,11 +1,14 @@
 import { ApiResponse } from "./api.interface";
 
 export interface BaseCody {
-  output: string;
+  id: number;
+  name: string;
+  user_id: number;
   interaction: string;
 }
 
 export type AskCodyResponse = ApiResponse<BaseCody>;
+export type GetAllCodyResponse = ApiResponse<{ chats: BaseCody[] }>;
 
 export interface Chat {
   message: string;

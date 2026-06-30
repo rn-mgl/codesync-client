@@ -1,9 +1,16 @@
 "use client";
 
-import { Chat, CodyAction, CodyState } from "@/src/interfaces/cody.interface";
+import {
+  BaseCody,
+  Chat,
+  CodyAction,
+  CodyState,
+  GetAllCodyResponse,
+} from "@/src/interfaces/cody.interface";
 import React from "react";
 import { FaMessage, FaXmark } from "react-icons/fa6";
 import Logo from "../../global/Logo";
+import { FaHistory } from "react-icons/fa";
 
 const reducer = (state: CodyState, action: CodyAction) => {
   switch (action.type) {
@@ -52,6 +59,7 @@ const Cody = () => {
     chatId: 0,
     chats: [],
   });
+  const [history, setHistory] = React.useState<BaseCody[]>([]);
   const messageRef = React.useRef<HTMLDivElement | null>(null);
 
   const handleShowPanel = () => {
@@ -221,6 +229,37 @@ const Cody = () => {
     }
   };
 
+  const getHistory = async () => {
+    try {
+      if (history.length) return history;
+
+      const response = await fetch(`/api/cody`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const resolve: GetAllCodyResponse = await response.json();
+
+      if (!resolve.success) {
+        throw new Error(resolve.message);
+      }
+
+      const { chats } = resolve.data;
+
+      setHistory(chats);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const startChat = () => {
+    dispatch({ type: "new_session" });
+    handleShowPanel();
+    initializeCody();
+  };
+
   const handleInput = (e: React.KeyboardEvent<HTMLDivElement>) => {
     const el = messageRef.current;
 
@@ -260,7 +299,7 @@ const Cody = () => {
 
   return (
     <div
-      className={`fixed flex flex-col items-start justify-start z-30 
+      className={`fixed flex flex-col items-start justify-start z-20 
                 ${
                   showPanel
                     ? "w-full h-full top-0 right-0 l-s:max-w-(--breakpoint-m-l) shadow-md backdrop-blur-md bg-neutral-600/20"
@@ -280,8 +319,18 @@ const Cody = () => {
             </button>
           </div>
 
-          <div className="w-full flex flex-col items-start bg-secondary h-full rounded-md gap-4 overflow-y-auto p-2">
-            {mappedChats}
+          <div className="w-full flex flex-col items-start bg-secondary h-full rounded-md gap-4 overflow-hidden p-2">
+            <div className="text-xs w-full flex justify-end">
+              <button
+                onClick={getHistory}
+                className="flex items-center justify-center gap-2 p-1 px-2 rounded-full text-primary bg-secondary"
+              >
+                <FaHistory /> <span>Chats</span>
+              </button>
+            </div>
+            <div className="w-full h-full flex flex-col items-center justify-start overflow-y-auto gap-4">
+              {mappedChats}
+            </div>
           </div>
 
           <div className="flex flex-row items-end w-full bg-secondary rounded-md gap-2 p-2 ">
@@ -305,10 +354,7 @@ const Cody = () => {
         </div>
       ) : (
         <button
-          onClick={() => {
-            handleShowPanel();
-            initializeCody();
-          }}
+          onClick={startChat}
           className="rounded-full bg-primary max-w-10 w-10 p-2"
         >
           <Logo isTransparent type="light" />
