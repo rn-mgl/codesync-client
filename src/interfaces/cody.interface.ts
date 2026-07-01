@@ -4,14 +4,18 @@ export interface BaseCody {
   id: number;
   name: string;
   user_id: number;
+  input: string;
+  output: string;
+  previous_interaction: string;
   interaction: string;
 }
 
 export type AskCodyResponse = ApiResponse<BaseCody>;
 export type GetAllCodyResponse = ApiResponse<{ chats: BaseCody[] }>;
+export type GetCodyResponse = ApiResponse<{ chat: BaseCody }>;
 
 export interface Chat {
-  message: string;
+  input: string;
   sender: "cody" | "user";
   id: number;
 }
@@ -27,4 +31,4 @@ export type CodyAction =
   | { type: "set_interaction"; data: string }
   | { type: "set_session"; data: number }
   | { type: "push_chat"; data: Chat }
-  | { type: "update_chat"; data: Pick<Chat, "id" | "message"> };
+  | { type: "update_chat"; data: Pick<Chat, "id" | "input"> };

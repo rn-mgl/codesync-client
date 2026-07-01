@@ -1,6 +1,11 @@
 "use client";
 
-import { Chat, CodyAction, CodyState } from "@/src/interfaces/cody.interface";
+import {
+  Chat,
+  CodyAction,
+  CodyState,
+  GetCodyResponse,
+} from "@/src/interfaces/cody.interface";
 import React from "react";
 import { FaHistory } from "react-icons/fa";
 import { FaMessage, FaXmark } from "react-icons/fa6";
@@ -36,7 +41,7 @@ const reducer = (state: CodyState, action: CodyAction) => {
       if (index === -1) return state;
 
       const update = [...state.chats];
-      update[index] = { ...update[index], message: action.data.message };
+      update[index] = { ...update[index], input: action.data.input };
 
       return {
         ...state,
@@ -48,17 +53,17 @@ const reducer = (state: CodyState, action: CodyAction) => {
 };
 
 const Cody = () => {
-  const [showPanel, setShowPanel] = React.useState(false);
+  const [canSeePanel, setCanSeePanel] = React.useState(false);
   const [state, dispatch] = React.useReducer(reducer, {
     interaction: null,
     chatId: 0,
     chats: [],
   });
   const [canSeeHistory, setCanSeeHistory] = React.useState(false);
-  const messageRef = React.useRef<HTMLDivElement | null>(null);
+  const inputRef = React.useRef<HTMLDivElement | null>(null);
 
-  const handleShowPanel = () => {
-    setShowPanel((prev) => !prev);
+  const handleCanSeePanel = () => {
+    setCanSeePanel((prev) => !prev);
   };
 
   const streamResponse = async (
@@ -67,7 +72,7 @@ const Cody = () => {
     const decoder = new TextDecoder("utf-8");
 
     let buffer = ""; // for token buffer
-    let messageBuffer = ""; // for formatting the existing chat content with the token
+    let inputBuffer = ""; // for formatting the existing chat content with the token
     let rafId: number | null = null; // for animation request
 
     // chat id
@@ -76,7 +81,7 @@ const Cody = () => {
     // rendering of token for state
     const flush = () => {
       rafId = null;
-      dispatch({ type: "update_chat", data: { id, message: messageBuffer } });
+      dispatch({ type: "update_chat", data: { id, input: inputBuffer } });
       return;
     };
 
@@ -89,8 +94,8 @@ const Cody = () => {
 
     let dataLines: string[] = [];
 
-    // initialize cody message
-    const newChat = { message: "", sender: "cody", id } as Chat;
+    // initialize cody input
+    const newChat = { input: "", sender: "cody", id } as Chat;
 
     dispatch({ type: "push_chat", data: newChat });
 
@@ -137,7 +142,7 @@ const Cody = () => {
                 dispatch({ type: "set_interaction", data: data });
                 break;
               case "message":
-                messageBuffer += data;
+                inputBuffer += data;
                 scheduleFlush();
                 break;
             }
@@ -155,21 +160,21 @@ const Cody = () => {
 
   const askCody = async () => {
     try {
-      const el = messageRef.current;
+      const el = inputRef.current;
       const chatId = state.chatId;
 
       if (!el) return;
 
       if (!chatId) return;
 
-      const message = el.textContent;
+      const input = el.textContent;
 
-      if (!message) return;
+      if (!input) return;
 
       el.innerHTML = "";
 
       const newChat = {
-        message: message,
+        input: input,
         sender: "user",
         id: Math.random(),
       } as Chat;
@@ -177,7 +182,7 @@ const Cody = () => {
       dispatch({ type: "push_chat", data: newChat });
 
       const request = {
-        message: message,
+        input: input,
         interaction: state.interaction,
         id: chatId,
       };
@@ -226,12 +231,12 @@ const Cody = () => {
 
   const startChat = () => {
     dispatch({ type: "new_session" });
-    handleShowPanel();
+    handleCanSeePanel();
     initializeCody();
   };
 
   const handleInput = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    const el = messageRef.current;
+    const el = inputRef.current;
 
     if (!el) return;
 
@@ -247,6 +252,29 @@ const Cody = () => {
 
   const handleCanSeeHistory = () => {
     setCanSeeHistory((prev) => !prev);
+  };
+
+  const getHistory = async (id: number) => {
+    try {
+      const response = await fetch(`/api/cody/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const resolve: GetCodyResponse = await response.json();
+
+      if (!resolve.success) {
+        throw new Error(resolve.message);
+      }
+
+      const { chat } = resolve.data;
+
+      console.log(chat);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const mappedChats = state.chats.map((chat) => {
@@ -265,7 +293,7 @@ const Cody = () => {
             }
           `}
         >
-          {chat.message}
+          {chat.input}
         </div>
       </div>
     );
@@ -275,18 +303,18 @@ const Cody = () => {
     <div
       className={`fixed flex flex-col items-start justify-start z-20 
                 ${
-                  showPanel
+                  canSeePanel
                     ? "w-full h-full top-0 right-0 l-s:max-w-(--breakpoint-m-l) shadow-md backdrop-blur-md bg-neutral-600/20"
                     : "right-5 bottom-5 drop-shadow-md"
                 }`}
     >
-      {showPanel ? (
+      {canSeePanel ? (
         <div className="w-full h-full rounded-md flex flex-col items-start justify-start p-2 gap-2">
           <div className="w-full flex flex-row items-center justify-between bg-primary rounded-sm text-secondary p-2.5">
             <p>Ask Cody</p>
 
             <button
-              onClick={handleShowPanel}
+              onClick={handleCanSeePanel}
               className="p-2 rounded-full hover:bg-secondary/10"
             >
               <FaXmark />
@@ -297,12 +325,12 @@ const Cody = () => {
             <div className="text-xs w-full flex justify-end relative">
               <button
                 onClick={handleCanSeeHistory}
-                className="flex items-center justify-center gap-2 p-1 px-2 rounded-full text-primary bg-secondary"
+                className={`flex items-center justify-center gap-2 p-1 px-2 rounded-full ${canSeeHistory ? "text-secondary bg-primary" : "text-primary bg-secondary"}`}
               >
                 <FaHistory /> <span>Chats</span>
               </button>
 
-              {canSeeHistory && <History />}
+              {canSeeHistory && <History getHistory={getHistory} />}
             </div>
 
             <div className="w-full h-full flex flex-col items-center justify-start overflow-y-auto gap-4">
@@ -315,7 +343,7 @@ const Cody = () => {
               onKeyDown={(e) => handleInput(e)}
               id="cody-input"
               data-placeholder="Ask away"
-              ref={messageRef}
+              ref={inputRef}
               contentEditable={true}
               className="w-full flex flex-col items-start outline-none bg-neutral-200 p-2 min-h-10
                         border-none break-all max-h-32 overflow-y-auto t:max-h-40 rounded-sm text-primary"
