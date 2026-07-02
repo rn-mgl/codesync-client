@@ -4,7 +4,7 @@ import {
   Chat,
   CodyAction,
   CodyState,
-  GetCodyResponse,
+  GetHistoryResponse,
 } from "@/src/interfaces/cody.interface";
 import React from "react";
 import { FaHistory } from "react-icons/fa";
@@ -29,6 +29,10 @@ const reducer = (state: CodyState, action: CodyAction) => {
         interaction: null,
         chatId: 0,
         chats: [],
+      };
+    case "use_history":
+      return {
+        ...action.data,
       };
     case "push_chat":
       return {
@@ -263,15 +267,18 @@ const Cody = () => {
         },
       });
 
-      const resolve: GetCodyResponse = await response.json();
+      const resolve: GetHistoryResponse = await response.json();
 
       if (!resolve.success) {
         throw new Error(resolve.message);
       }
 
-      const { chat } = resolve.data;
+      const { chats, interaction } = resolve.data;
 
-      console.log(chat);
+      dispatch({
+        type: "use_history",
+        data: { chatId: id, interaction: interaction, chats: chats },
+      });
     } catch (error) {
       console.log(error);
     }

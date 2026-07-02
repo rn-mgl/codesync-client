@@ -12,7 +12,10 @@ export interface BaseCody {
 
 export type AskCodyResponse = ApiResponse<BaseCody>;
 export type GetAllCodyResponse = ApiResponse<{ chats: BaseCody[] }>;
-export type GetCodyResponse = ApiResponse<{ chat: BaseCody }>;
+export type GetHistoryResponse = ApiResponse<{
+  chats: Chat[];
+  interaction: string;
+}>;
 
 export interface Chat {
   input: string;
@@ -31,4 +34,5 @@ export type CodyAction =
   | { type: "set_interaction"; data: string }
   | { type: "set_session"; data: number }
   | { type: "push_chat"; data: Chat }
-  | { type: "update_chat"; data: Pick<Chat, "id" | "input"> };
+  | { type: "update_chat"; data: Pick<Chat, "id" | "input"> }
+  | { type: "use_history"; data: CodyState };
