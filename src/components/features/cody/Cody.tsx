@@ -264,7 +264,7 @@ const Cody = () => {
       >
         <div
           className={`
-            w-fit p-2 rounded-md max-w-10/12 t:max-w-8/12 l-s:max-w-10/12 text-sm
+            w-fit p-2 rounded-md max-w-11/12 text-sm
             ${
               chat.sender === "cody"
                 ? "bg-neutral-300"
