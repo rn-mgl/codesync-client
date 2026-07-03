@@ -273,7 +273,9 @@ const Cody = () => {
           `}
         >
           <div
-            dangerouslySetInnerHTML={{ __html: marked(chat.input) }}
+            dangerouslySetInnerHTML={{
+              __html: marked(chat.input, { async: false }),
+            }}
             className="prose leading-snug text-sm font-normal font-stretch-normal"
             style={{
               color:
