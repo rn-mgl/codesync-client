@@ -3,13 +3,15 @@
 import { BaseCody, GetAllCodyResponse } from "@/src/interfaces/cody.interface";
 import React from "react";
 
-const History = (props: { getHistory: (id: number) => Promise<void> }) => {
+const History = (props: {
+  getHistory: (interaction: string) => Promise<void>;
+}) => {
   const [history, setHistory] = React.useState<BaseCody[]>([]);
 
   const mappedHistory = history.map((h) => {
     return (
       <button
-        onClick={() => props.getHistory(h.id)}
+        onClick={() => props.getHistory(h.interaction)}
         className="w-full p-2 rounded-sm bg-neutral-700 text-secondary text-xs"
         key={h.id}
       >

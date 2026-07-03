@@ -25,14 +25,12 @@ export interface Chat {
 
 export interface CodyState {
   interaction: string | null;
-  chatId: number;
   chats: Chat[];
 }
 
 export type CodyAction =
   | { type: "new_session" }
   | { type: "set_interaction"; data: string }
-  | { type: "set_session"; data: number }
   | { type: "push_chat"; data: Chat }
   | { type: "update_chat"; data: Pick<Chat, "id" | "input"> }
   | { type: "use_history"; data: CodyState };

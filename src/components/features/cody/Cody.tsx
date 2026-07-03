@@ -19,16 +19,17 @@ const reducer = (state: CodyState, action: CodyAction) => {
         ...state,
         interaction: action.data,
       };
-    case "set_session":
-      return {
-        ...state,
-        chatId: action.data,
-      };
     case "new_session":
       return {
         interaction: null,
-        chatId: 0,
-        chats: [],
+        chats: [
+          {
+            id: Math.random(),
+            input:
+              "Hi! I'm Cody 🤖, your general AI assistant 🚀\n\nWhat can I help you with?",
+            sender: "cody" as "cody" | "user",
+          },
+        ],
       };
     case "use_history":
       return {
@@ -60,7 +61,6 @@ const Cody = () => {
   const [canSeePanel, setCanSeePanel] = React.useState(false);
   const [state, dispatch] = React.useReducer(reducer, {
     interaction: null,
-    chatId: 0,
     chats: [],
   });
   const [canSeeHistory, setCanSeeHistory] = React.useState(false);
@@ -139,9 +139,6 @@ const Cody = () => {
             dataLines = [];
 
             switch (event) {
-              case "stored":
-                dispatch({ type: "set_session", data: Number(data) });
-                break;
               case "cody_completed":
                 dispatch({ type: "set_interaction", data: data });
                 break;
@@ -165,11 +162,8 @@ const Cody = () => {
   const askCody = async () => {
     try {
       const el = inputRef.current;
-      const chatId = state.chatId;
 
       if (!el) return;
-
-      if (!chatId) return;
 
       const input = el.textContent;
 
@@ -188,15 +182,14 @@ const Cody = () => {
       const request = {
         input: input,
         interaction: state.interaction,
-        id: chatId,
       };
 
-      const response = await fetch(`/api/cody/${chatId}`, {
-        method: "PATCH",
+      const response = await fetch(`/api/cody`, {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(request),
+        body: JSON.stringify({ chat: request }),
       });
 
       if (!response.body) {
@@ -212,31 +205,9 @@ const Cody = () => {
     }
   };
 
-  const initializeCody = async () => {
-    try {
-      const response = await fetch(`/api/cody`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.body) {
-        throw new Error(`Could not parse response.`);
-      }
-
-      const reader = response.body.getReader();
-
-      await streamResponse(reader);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const startChat = () => {
     dispatch({ type: "new_session" });
     handleCanSeePanel();
-    initializeCody();
   };
 
   const handleInput = (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -258,9 +229,9 @@ const Cody = () => {
     setCanSeeHistory((prev) => !prev);
   };
 
-  const getHistory = async (id: number) => {
+  const getHistory = async (history: string) => {
     try {
-      const response = await fetch(`/api/cody/${id}`, {
+      const response = await fetch(`/api/cody/${history}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -277,7 +248,7 @@ const Cody = () => {
 
       dispatch({
         type: "use_history",
-        data: { chatId: id, interaction: interaction, chats: chats },
+        data: { interaction: interaction, chats: chats },
       });
     } catch (error) {
       console.log(error);

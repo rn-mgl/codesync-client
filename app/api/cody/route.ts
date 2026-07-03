@@ -20,6 +20,11 @@ export async function POST(req: NextRequest) {
 
     const token = cookies.user.token;
     const url = env.SERVER_URL;
+    const body = await req.json();
+
+    if (!("chat" in body)) {
+      throw new ApiError(`Invalid payload.`, StatusCodes.BAD_REQUEST);
+    }
 
     const response = await fetch(`${url}/cody`, {
       method: "POST",
@@ -28,6 +33,7 @@ export async function POST(req: NextRequest) {
         Origin: env.APP_URL,
         "Content-Type": "application/json",
       },
+      body: JSON.stringify(body),
     });
 
     if (!response.ok) {
