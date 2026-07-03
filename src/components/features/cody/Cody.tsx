@@ -11,6 +11,7 @@ import { FaHistory } from "react-icons/fa";
 import { FaMessage, FaXmark } from "react-icons/fa6";
 import Logo from "../../global/Logo";
 import History from "./read/History";
+import { marked } from "marked";
 
 const reducer = (state: CodyState, action: CodyAction) => {
   switch (action.type) {
@@ -26,7 +27,7 @@ const reducer = (state: CodyState, action: CodyAction) => {
           {
             id: Math.random(),
             input:
-              "Hi! I'm Cody 🤖, your general AI assistant 🚀\n\nWhat can I help you with?",
+              "Hi! I'm Cody 🤖, your general AI assistant 🚀<br /><br />What can I help you with?",
             sender: "cody" as "cody" | "user",
           },
         ],
@@ -263,15 +264,24 @@ const Cody = () => {
       >
         <div
           className={`
-            w-fit p-2 rounded-md max-w-10/12 t:max-w-8/12 l-s:max-w-10/12 whitespace-pre-line
+            w-fit p-2 rounded-md max-w-10/12 t:max-w-8/12 l-s:max-w-10/12 text-sm
             ${
               chat.sender === "cody"
-                ? "bg-accent text-secondary"
-                : "bg-neutral-300 text-primary justify-end items-end"
+                ? "bg-neutral-300"
+                : "bg-accent justify-end items-end"
             }
           `}
         >
-          {chat.input}
+          <div
+            dangerouslySetInnerHTML={{ __html: marked(chat.input) }}
+            className="prose leading-snug text-sm font-normal font-stretch-normal"
+            style={{
+              color:
+                chat.sender === "cody"
+                  ? "var(--color-primary)"
+                  : "var(--color-secondary)",
+            }}
+          ></div>
         </div>
       </div>
     );
