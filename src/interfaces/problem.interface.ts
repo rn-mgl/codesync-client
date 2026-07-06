@@ -12,6 +12,7 @@ export interface InputFormat {
   style: "function" | "class";
   version: number;
   name: string;
+  method?: string;
   params: { name: string; type: string }[];
 }
 

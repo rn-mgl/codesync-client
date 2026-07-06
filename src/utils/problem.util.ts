@@ -8,6 +8,7 @@ export const generateBoilerPlate = (
 ) => {
   const style = inputFormat.style; // function or class
   const name = inputFormat.name; // function or class name
+  const methodName = inputFormat.method ?? "solve";
 
   let boilerPlate: string = "";
   let parameters: string = "";
@@ -15,19 +16,28 @@ export const generateBoilerPlate = (
   switch (language) {
     case "javascript":
       parameters = inputFormat.params.map((param) => param.name).join(", "); // parameters
-      boilerPlate = `${style} ${name} (${parameters}) {\n\t\n}`;
+      boilerPlate =
+        style === "class"
+          ? `class ${name} {\n\t${methodName}(${parameters}) {\n\t\t\n\t}\n}`
+          : `function ${name}(${parameters}) {\n\t\n}`;
       break;
     case "php":
       parameters = inputFormat.params
         .map((param) => `$${param.name}`)
         .join(", ");
-      boilerPlate = `<?php\n\n${style} ${name} (${parameters}) {\n\t\n}\n\n?>`;
+      boilerPlate =
+        style === "class"
+          ? `<?php\n\nclass ${name} {\n\tpublic function ${methodName}(${parameters}) {\n\t\t\n\t}\n}\n\n?>`
+          : `<?php\n\nfunction ${name}(${parameters}) {\n\t\n}\n\n?>`;
       break;
     case "java":
       parameters = inputFormat.params
         .map((param) => `${getJavaType(param.type)} ${param.name}`)
         .join(", ");
-      boilerPlate = `static ${getJavaType(outputFormat.type)} ${name}(${parameters}) {\n\t\n}`;
+      boilerPlate =
+        style === "class"
+          ? `static class ${name} {\n\tpublic ${getJavaType(outputFormat.type)} ${methodName}(${parameters}) {\n\t\t\n\t}\n}`
+          : `static ${getJavaType(outputFormat.type)} ${name}(${parameters}) {\n\t\n}`;
       break;
   }
 
@@ -50,6 +60,7 @@ const getJavaType = (type: string): string => {
     char: "char",
     character: "char",
     object: "Object",
+    treenode: "TreeNode",
     void: "void",
   };
 
