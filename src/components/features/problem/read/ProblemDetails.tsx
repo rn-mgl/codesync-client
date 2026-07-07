@@ -84,7 +84,7 @@ const ProblemDetails = (props: {
         </button>
 
         {isActive ? (
-          <div className="w-full p-2 rounded-sm bg-secondary animate-fade">
+          <div className="w-full p-2 rounded-sm bg-secondary animate-fade text-wrap">
             {hint.hint}
           </div>
         ) : null}
