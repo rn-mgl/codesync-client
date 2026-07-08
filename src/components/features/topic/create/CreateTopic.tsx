@@ -1,9 +1,7 @@
 "use client";
 
-import File from "@/src/components/ui/fields/File";
 import Input from "@/src/components/ui/fields/Input";
 import TextArea from "@/src/components/ui/fields/TextArea";
-import useFile from "@/src/hooks/useFile";
 import {
   CreateTopicResponse,
   TopicForm,
@@ -12,7 +10,7 @@ import { getErrorMessage } from "@/src/utils/general.util";
 import { useSession } from "next-auth/react";
 import React from "react";
 import { FaLink } from "react-icons/fa";
-import { FaA, FaNoteSticky } from "react-icons/fa6";
+import { FaA, FaNoteSticky, FaTag } from "react-icons/fa6";
 import { toast } from "sonner";
 
 const CreateTopic = () => {
@@ -20,23 +18,26 @@ const CreateTopic = () => {
     name: "",
     slug: "",
     description: "",
-    icon: null,
+    icon: "",
   });
 
   useSession({ required: true });
-
-  const { fileRef, localFile, handleLocalFile, removeLocalFile } =
-    useFile(setTopic);
 
   const handleTopic = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
 
+    let appliedValue = value;
+
+    if (name === "icon" && !/\p{Extended_Pictographic}/u.test(appliedValue)) {
+      appliedValue = "";
+    }
+
     setTopic((prev) => {
       return {
         ...prev,
-        [name]: value,
+        [name]: appliedValue,
       };
     });
   };
@@ -45,20 +46,9 @@ const CreateTopic = () => {
     e.preventDefault();
 
     try {
-      if (!localFile.file) {
-        throw new Error(`Icon is required.`);
-      }
-
-      const formData = new FormData();
-
-      formData.set("name", topic.name);
-      formData.set("slug", topic.slug);
-      formData.set("description", topic.description);
-      formData.set("icon", localFile.file);
-
       const response = await fetch(`/api/topic`, {
         method: "POST",
-        body: formData,
+        body: JSON.stringify({ topic }),
       });
 
       const resolve: CreateTopicResponse = await response.json();
@@ -120,13 +110,15 @@ const CreateTopic = () => {
             required={true}
           />
 
-          <File
+          <Input
             id="icon"
             name="icon"
-            file={localFile}
-            fileRef={fileRef}
-            handleFile={handleLocalFile}
-            removeFile={removeLocalFile}
+            onChange={handleTopic}
+            type="text"
+            value={topic.icon}
+            label="Icon"
+            icon={<FaTag />}
+            required={true}
           />
         </div>
       </div>

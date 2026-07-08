@@ -8,12 +8,7 @@ export interface BaseTopic {
   icon: string;
 }
 
-export interface TopicForm extends Pick<
-  BaseTopic,
-  "name" | "slug" | "description"
-> {
-  icon: File | string | null;
-}
+export type TopicForm = Omit<BaseTopic, "id">;
 
 export type CreateTopicResponse = ApiResponse<{ message: string }>;
 

@@ -1,6 +1,5 @@
 "use client";
 
-import File from "@/src/components/ui/fields/File";
 import Input from "@/src/components/ui/fields/Input";
 import TextArea from "@/src/components/ui/fields/TextArea";
 import useFile from "@/src/hooks/useFile";
@@ -13,13 +12,13 @@ import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import React from "react";
 import { FaLink } from "react-icons/fa";
-import { FaA, FaNoteSticky } from "react-icons/fa6";
+import { FaA, FaNoteSticky, FaTag } from "react-icons/fa6";
 import { toast } from "sonner";
 
 const UpdateTopic = () => {
   const [topic, setTopic] = React.useState<TopicForm>({
     description: "",
-    icon: null,
+    icon: "",
     name: "",
     slug: "",
   });
@@ -55,25 +54,9 @@ const UpdateTopic = () => {
     try {
       if (!params?.slug) return;
 
-      if (!topic.icon && !localFile.file) return;
-
-      const formData = new FormData();
-
-      formData.set("name", topic.name);
-      formData.set("description", topic.description);
-      formData.set("slug", topic.slug);
-      formData.set(
-        "icon",
-        localFile.file
-          ? localFile.file
-          : typeof topic.icon === "string"
-            ? topic.icon
-            : "",
-      );
-
       const response = await fetch(`/api/topic/${params?.slug}`, {
         method: "PATCH",
-        body: formData,
+        body: JSON.stringify({ topic }),
       });
 
       const resolve: UpdateTopicResponse = await response.json();
@@ -167,25 +150,15 @@ const UpdateTopic = () => {
             required={true}
           />
 
-          <File
-            file={
-              localFile.file
-                ? localFile
-                : typeof topic.icon === "string"
-                  ? topic.icon
-                  : ""
-            }
+          <Input
             id="icon"
             name="icon"
-            fileRef={fileRef}
-            handleFile={handleLocalFile}
-            removeFile={
-              localFile.file
-                ? removeLocalFile
-                : typeof topic.icon === "string"
-                  ? () => removeUploadedFile("icon")
-                  : removeLocalFile
-            }
+            onChange={handleTopic}
+            type="text"
+            value={topic.icon}
+            label="Icon"
+            icon={<FaTag />}
+            required={true}
           />
         </div>
       </div>

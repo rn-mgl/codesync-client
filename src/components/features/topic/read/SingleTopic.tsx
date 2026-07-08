@@ -1,6 +1,5 @@
 "use client";
 
-import DisplayFile from "@/src/components/ui/containers/DisplayFile";
 import DisplayInputField from "@/src/components/ui/containers/DisplayInputField";
 import DisplayTextArea from "@/src/components/ui/containers/DisplayTextArea";
 import Delete from "@/src/components/ui/forms/Delete";
@@ -14,6 +13,7 @@ import {
   FaArrowLeft,
   FaLink,
   FaNoteSticky,
+  FaTag,
   FaTrashCan,
 } from "react-icons/fa6";
 
@@ -111,17 +111,29 @@ const SingleTopic = () => {
         </div>
 
         <div className="w-full flex flex-col items-start justify-start gap-4 p-2 border-primary/50 border rounded-b-md t:p-4">
-          <DisplayInputField value={`${topic.name}`} icon={<FaA />} />
+          <DisplayInputField
+            label="Name"
+            value={`${topic.name}`}
+            icon={<FaA />}
+          />
 
-          <DisplayInputField value={`${topic.slug}`} icon={<FaLink />} />
+          <DisplayInputField
+            label="Slug"
+            value={`${topic.slug}`}
+            icon={<FaLink />}
+          />
 
           <DisplayTextArea
-            label="Input"
+            label="Description"
             value={topic.description}
             icon={<FaNoteSticky />}
           />
 
-          <DisplayFile type="image" src={topic.icon} />
+          <DisplayInputField
+            label="Icon"
+            value={`${topic.icon}`}
+            icon={<FaTag />}
+          />
         </div>
       </div>
     </div>

@@ -21,11 +21,15 @@ export async function POST(req: NextRequest) {
 
     const token = cookies.user.token;
     const url = env.SERVER_URL;
-    const formData = await req.formData();
+    const body = await req.json();
 
-    const parsedForm = Object.fromEntries(formData.entries());
+    if (!("topic" in body)) {
+      throw new ApiError(`Invalid request.`, StatusCodes.BAD_REQUEST);
+    }
 
-    const parser = TopicSchema.safeParse(parsedForm);
+    const topic = body.topic;
+
+    const parser = TopicSchema.safeParse(topic);
 
     if (parser.error) {
       const prettifyError = z.prettifyError(parser.error);
@@ -38,8 +42,9 @@ export async function POST(req: NextRequest) {
       headers: {
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL,
+        "Content-Type": "application/json",
       },
-      body: formData,
+      body: JSON.stringify({ topic }),
     });
 
     const resolve: ServerResponse = await response.json();
