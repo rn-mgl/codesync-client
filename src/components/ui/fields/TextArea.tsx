@@ -21,7 +21,7 @@ const TextArea = (props: TextAreaField) => {
           value={props.value}
           required={true}
           cols={props.columns ?? 5}
-          className="w-full p-2 px-3 rounded-md text-primary border-2 border-neutral-400 outline-none min-h-50"
+          className={`w-full p-2 px-3 rounded-md text-primary border-2 border-neutral-400 outline-none min-h-50 ${props.icon ? "pr-6" : "pr-3"}`}
         />
 
         {props.icon ? (

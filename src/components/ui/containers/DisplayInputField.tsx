@@ -10,7 +10,9 @@ const DisplayInputField = (props: DisplayInputFieldProps) => {
       ) : null}
 
       <div className="w-full flex flex-col items-center justify-center relative">
-        <div className="w-full p-2 px-3 rounded-md text-primary border-2 border-neutral-400 outline-none">
+        <div
+          className={`w-full p-2 px-3 rounded-md text-primary border-2 border-neutral-400 outline-none ${props.icon ? "pr-6" : "pr-3"}`}
+        >
           <p>{props.value}</p>
         </div>
 
