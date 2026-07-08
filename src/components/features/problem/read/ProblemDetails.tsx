@@ -50,15 +50,7 @@ const ProblemDetails = (props: {
         key={topic.id}
         className="w-fit px-1.5 py-0.5 rounded-full bg-neutral-300 text-xs flex flex-row items-center justify-between gap-1"
       >
-        <span>
-          <Image
-            src={topic.icon}
-            alt="icon"
-            width={20}
-            height={20}
-            className="max-w-4"
-          />
-        </span>
+        <span>{topic.icon}</span>
         <span>{topic.name}</span>
       </div>
     );
