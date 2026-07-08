@@ -247,9 +247,16 @@ const Cody = () => {
 
       const { chats, interaction } = resolve.data;
 
+      chats.unshift({
+        id: Math.random(),
+        input:
+          "Hi! I'm Cody 🤖, your general AI assistant 🚀<br /><br />What can I help you with?",
+        sender: "cody" as "cody" | "user",
+      });
+
       dispatch({
         type: "use_history",
-        data: { interaction: interaction, chats: chats },
+        data: { interaction: interaction, chats },
       });
     } catch (error) {
       console.log(error);
