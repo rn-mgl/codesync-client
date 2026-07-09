@@ -21,50 +21,50 @@ const Offer = () => {
     >
       <div className="w-full items-center justify-center flex flex-col gap-8 h-full max-w-(--breakpoint-l-s) z-10">
         <div className="text-center">
-          <p className="text-neutral-600 l-l:text-lg">available right now</p>
+          <p className="text-neutral-600 l-l:text-lg">all in one place</p>
           <h1 className="text-2xl font-black text-primary t:text-5xl l-l:text-7xl">
-            Current Feature Set
+            A Complete Ecosystem
           </h1>
         </div>
 
         <div className="grid grid-cols-1 gap-4 t:grid-cols-2">
           <div className="w-full p-4 t:p-8 rounded-md bg-neutral-200 border-neutral-300 border-2 flex flex-col items-start justify-center gap-4">
             <h2 className="text-primary font-bold t:text-lg l-l:text-xl">
-              Problem Workspace
+              Problem Library
             </h2>
             <p className=" text-xs text-neutral-600 t:text-sm l-l:text-base">
-              Browse, create, edit, and solve problems with rich statements,
-              constraints, editorials, topics, and difficulty filters.
+              Curated problems tagged by company and difficulty. From Arrays to
+              DP, we have it all.
             </p>
           </div>
 
           <div className="w-full p-4 t:p-8 rounded-md bg-neutral-200 border-neutral-300 border-2 flex flex-col items-end justify-center gap-4 text-right">
             <h2 className="text-primary font-bold t:text-lg l-l:text-xl">
-              Code Runs & Submissions
+              Real-Time Editor
             </h2>
             <p className="text-xs text-neutral-600 t:text-sm l-l:text-base">
-              Write code in the in-browser editor, run test cases, inspect
-              failures, and review submitted solutions with runtime details.
+              Code with friends instantly. OT-based synchronization ensures zero
+              conflicts, just like Google Docs for code.
             </p>
           </div>
 
           <div className="w-full p-4 t:p-8 rounded-md bg-neutral-200 border-neutral-300 border-2 flex flex-col items-start justify-center gap-4">
             <h2 className="text-primary font-bold t:text-lg l-l:text-xl">
-              Hints, Topics & Test Cases
+              Mock Interviews
             </h2>
             <p className="text-xs text-neutral-600 t:text-sm l-l:text-base">
-              Manage topic collections, progressive hints, sample cases, hidden
-              cases, memory limits, and execution time limits from one flow.
+              Simulate the pressure. Integrated video chat, whiteboards, and
+              role-based permissions for interviewers.
             </p>
           </div>
 
           <div className=" w-full p-4 t:p-8 rounded-md bg-neutral-200 border-neutral-300 border-2 flex flex-col items-end justify-center gap-4 text-right">
             <h2 className="text-primary font-bold t:text-lg l-l:text-xl">
-              Cody & Achievements
+              AI Insights
             </h2>
             <p className="text-xs text-neutral-600 t:text-sm l-l:text-base">
-              Ask Cody for help while practicing, then keep momentum with
-              achievement pages, progress signals, and profile controls.
+              Stuck? Get progressive hints without spoilers. Our AI analyzes
+              your complexity and suggests optimizations.
             </p>
           </div>
         </div>

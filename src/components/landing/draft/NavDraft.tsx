@@ -12,10 +12,10 @@ const Nav = (props: { hide?: boolean }) => {
           <Logo type="dark" />
         </Link>
         <Link className="p-1" href="#offer">
-          Features
+          Offers
         </Link>
         <Link className="p-1" href="#action">
-          Start
+          Action
         </Link>
 
         <Link

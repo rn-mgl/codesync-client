@@ -19,19 +19,18 @@ const Hero = () => {
         <div className="w-full flex flex-col items-center justify-center gap-2">
           <h1 className="text-3xl font-black text-secondary t:text-5xl l-l:text-7xl">
             <span className="bg-linear-to-br from-fuchsia-600 to-red-600 bg-clip-text text-transparent">
-              Practice
+              Master
             </span>{" "}
-            problems; <br />{" "}
+            the code; <br />{" "}
             <span className="bg-linear-to-br from-teal-600 to-blue-600 bg-clip-text text-transparent">
-              track
+              Sync
             </span>{" "}
-            every run.
+            your success.
           </h1>
 
           <h2 className="text-secondary/80 t:text-base max-w-(--breakpoint-t) l-l:text-lg">
-            CodeSync is a focused practice workspace with curated problems,
-            runnable submissions, guided hints, Cody assistance, and achievement
-            progress.
+            Your platform for real-time collaborative coding, mock interviews,
+            and technical mastery. Built for teams, tailored for you.
           </h2>
         </div>
 
@@ -41,7 +40,7 @@ const Hero = () => {
             className="bg-linear-to-br from-secondary to-white p-2 rounded-md t:max-w-fit t:px-4 font-bold text-primary w-full
                     flex flex-row items-center justify-center gap-2"
           >
-            Start Practicing <FaArrowRightLong />
+            Start Now <FaArrowRightLong />
           </Link>
         </div>
 
@@ -55,47 +54,49 @@ const Hero = () => {
 
             <div>
               <p className="text-xs text-neutral-500">
-                currentWorkspace.ts
+                collaborativeSession.js
               </p>
             </div>
           </div>
           <div className="w-full p-4 font-mono rounded-b-md bg-neutral-900 border border-neutral-600 border-t-0 text-left">
             <p>
               <span className="text-red-400">const</span>{" "}
-              <span className="text-purple-400">practiceLoop</span>{" "}
+              <span className="text-purple-400">solveTogether</span>{" "}
               <span className="text-red-400">=</span>{" "}
               <span className="text-blue-400">(</span>
-              <span className="text-amber-400">problem</span>
+              <span className="text-amber-400">users: </span>
+              <span className="text-blue-400">number</span>
+              <span className="text-green-400">[]</span>
               <span className="text-blue-400">)</span>
               <span className="text-red-400">:</span>
-              <span className="text-blue-400"> Progress </span>{" "}
+              <span className="text-blue-400"> string </span>{" "}
               <span className="text-red-400">=&gt;</span>{" "}
               <span className="text-blue-400">&#123;</span> <br />
             </p>
             <p className="indent-4">
-              <span className="text-red-400 indent-4">const</span>{" "}
-              <span className="text-amber-400">submission</span>{" "}
-              <span className="text-red-400">=</span>{" "}
-              <span className="text-blue-400">run</span>
+              <span className="text-red-400 indent-4">if</span>{" "}
               <span className="text-green-400">(</span>
-              <span className="text-amber-400">problem</span>
-              <span className="text-green-400">)</span>
-              <span className="text-white">;</span>
+              <span className="text-amber-400">users</span>
+              <span className="text-white">.</span>
+              <span className="text-blue-400">length</span>{" "}
+              <span className="text-red-400 indent-4">&gt;</span>{" "}
+              <span className="text-blue-400">1</span>
+              <span className="text-green-400">) &#123;</span>{" "}
             </p>
             <p className="indent-8">
               <span className="text-red-400 indent-4">return</span>{" "}
-              <span className="text-blue-400">Cody</span>
-              <span className="text-white">.</span>
-              <span className="text-purple-400">review</span>
-              <span className="text-green-400">(</span>
-              <span className="text-amber-400">submission</span>
-              <span className="text-green-400">)</span>
+              <span className="text-blue-400">
+                &quot;Real-time Sync Active 🚀&quot;
+              </span>
               <span className="text-white">;</span>
             </p>
             <p className="indent-4">
-              <span className="text-green-400">
-                {"// problems, hints, tests, wins"}
-              </span>
+              <span className="text-green-400">&#125;</span>{" "}
+            </p>
+            <p className="indent-4">
+              <span className="text-red-400 indent-4">return</span>{" "}
+              <span className="text-blue-400">&quot;Building...&quot;</span>
+              <span className="text-white">;</span>
             </p>
             <p>
               <span className="text-blue-400">&#125;</span>{" "}
