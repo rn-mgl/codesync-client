@@ -14,7 +14,6 @@ export interface BaseSubmission {
   test_results: string | null;
   error_message: string | null;
   created_at: string;
-  deleted_at: string | null;
 }
 
 export type SubmissionStatus =
