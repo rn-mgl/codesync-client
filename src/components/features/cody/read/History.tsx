@@ -12,7 +12,7 @@ const History = (props: {
     return (
       <button
         onClick={() => props.getHistory(h.interaction)}
-        className="w-full p-2 rounded-sm bg-neutral-700 text-secondary text-xs"
+        className="w-full p-2 rounded-sm bg-neutral-800 text-secondary text-xs"
         key={h.id}
       >
         {h.name}
@@ -48,7 +48,10 @@ const History = (props: {
   }, []);
 
   return (
-    <div className="w-full flex flex-col items-start justify-start gap-2 absolute backdrop-blur-md bg-primary p-2 rounded-md top-8 shadow-sm animate-fade">
+    <div
+      className="w-full flex flex-col items-start justify-start gap-2 absolute backdrop-blur-md bg-primary/40 
+              p-2 rounded-md top-8 shadow-md animate-fade max-h-80 overflow-y-auto"
+    >
       {mappedHistory}
     </div>
   );
