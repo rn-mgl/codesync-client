@@ -31,10 +31,10 @@ const SideNav = (props: {
                         : "text-secondary bg-primary hover:bg-neutral-800"
                     }`}
       >
-        <nav.icon />
+        <nav.icon className="min-w-5" />
 
         <Activity mode={props.showSideNav ? "visible" : "hidden"}>
-          <span className="animate-fade">{nav.name}</span>
+          <span className="animate-fade truncate">{nav.name}</span>
         </Activity>
       </Link>
     );
@@ -51,7 +51,7 @@ const SideNav = (props: {
     <div
       className={`h-full flex-row items-start justify-start fixed top-0 left-0 overflow-hidden
                l-s:max-w-(--breakpoint-m-s) l-s:static animate-fade p-1 gap-1 z-30
-               ${props.showSideNav ? "flex w-full t:backdrop-blur-md l-s:backdrop-blur-[0px]" : "hidden l-s:flex l-s:w-20"}`}
+               ${props.showSideNav ? "flex w-full t:backdrop-blur-md l-s:backdrop-blur-[0px] l-s:min-w-(--breakpoint-m-s)" : "hidden l-s:flex l-s:w-20"}`}
     >
       <div className="w-full h-full flex flex-col items-start justify-start t:w-1/2 l-s:w-full gap-1">
         <div
