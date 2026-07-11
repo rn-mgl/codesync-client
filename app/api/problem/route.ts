@@ -78,8 +78,11 @@ export async function GET(req: NextRequest) {
     }
 
     const url = env.SERVER_URL;
+    const params = new URL(req.url).searchParams;
 
-    const response = await fetch(`${url}/problem`, {
+    const query = params.toString();
+
+    const response = await fetch(`${url}/problem?${query}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

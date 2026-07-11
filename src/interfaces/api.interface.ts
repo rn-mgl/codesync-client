@@ -19,3 +19,9 @@ export type ApiResponse<T = unknown> = SuccessResponse<T> | ErrorResponse;
 export type ServerResponse<T = unknown> =
   | Omit<SuccessResponse<T>, "status">
   | Omit<ErrorResponse, "status">;
+
+export interface PaginateData {
+  pages: number;
+}
+
+export type PaginateResponse = { pagination: PaginateData };

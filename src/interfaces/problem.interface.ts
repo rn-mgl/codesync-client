@@ -1,4 +1,4 @@
-import { ApiResponse } from "@/interfaces/api.interface";
+import { ApiResponse, PaginateResponse } from "@/interfaces/api.interface";
 import {
   RunSubmissionResponse,
   SubmissionResponse,
@@ -73,7 +73,9 @@ export type ProblemList = Pick<
 
 export type CreateProblemResponse = ApiResponse<{ message: string }>;
 
-export type GetAllProblemsResponse = ApiResponse<{ problems: ProblemList[] }>;
+export type GetAllProblemsResponse = ApiResponse<
+  { problems: ProblemList[] } & PaginateResponse
+>;
 
 export type GetProblemResponse = ApiResponse<{
   problem: BaseProblem;
