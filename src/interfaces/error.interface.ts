@@ -1,4 +1,4 @@
-export interface ApiErrorDetails {
+export interface APIErrorDetails {
   message: string;
   statusCode: number;
 }

@@ -1,6 +1,6 @@
 import { env } from "@/src/configs/env.config";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
-import ApiError from "@/src/lib/ApiError";
+import APIError from "@/src/lib/APIError";
 import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
 import { StatusCodes } from "http-status-codes";
 import { getToken } from "next-auth/jwt";
@@ -14,7 +14,7 @@ export async function PATCH(
     const cookies = await getToken({ req });
 
     if (!isJWTCookie(cookies)) {
-      throw new ApiError(
+      throw new APIError(
         `You are unauthorized to proceed.`,
         StatusCodes.UNAUTHORIZED,
       );
@@ -36,7 +36,7 @@ export async function PATCH(
     });
 
     if (!response.ok) {
-      throw new ApiError(`Failed to create stream.`, response.status);
+      throw new APIError(`Failed to create stream.`, response.status);
     }
 
     const stream = response.body;
@@ -67,7 +67,7 @@ export async function GET(
     const cookies = await getToken({ req });
 
     if (!isJWTCookie(cookies)) {
-      throw new ApiError(
+      throw new APIError(
         `You are unauthorized to proceed.`,
         StatusCodes.UNAUTHORIZED,
       );
@@ -89,7 +89,7 @@ export async function GET(
     const resolve: ServerResponse = await response.json();
 
     if (!resolve.success) {
-      throw new ApiError(resolve.message, response.status);
+      throw new APIError(resolve.message, response.status);
     }
 
     const APIResponse: APIResponse<typeof resolve.data> = {

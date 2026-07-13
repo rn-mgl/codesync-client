@@ -1,5 +1,5 @@
 import { APIResponse } from "@/src/interfaces/api.interface";
-import ApiError from "@/src/lib/ApiError";
+import APIError from "@/src/lib/APIError";
 import { VerifySchema } from "@/src/schemas/auth.schema";
 import { ServerResponse } from "@/interfaces/api.interface";
 import { StatusCodes } from "http-status-codes";
@@ -15,7 +15,7 @@ export async function PATCH(req: NextRequest) {
     const body = await req.json();
 
     if (!("token" in body) || typeof body.token !== "string") {
-      throw new ApiError(
+      throw new APIError(
         `You are not allowed to perform this operation.`,
         StatusCodes.BAD_REQUEST,
       );
@@ -25,7 +25,7 @@ export async function PATCH(req: NextRequest) {
 
     if (parser.error) {
       const prettifyError = z.prettifyError(parser.error);
-      throw new ApiError(prettifyError, StatusCodes.BAD_REQUEST);
+      throw new APIError(prettifyError, StatusCodes.BAD_REQUEST);
     }
 
     const response = await fetch(`${url}/auth/verify`, {
@@ -39,7 +39,7 @@ export async function PATCH(req: NextRequest) {
     const resolve: ServerResponse = await response.json();
 
     if (!resolve.success) {
-      throw new ApiError(resolve.message, response.status);
+      throw new APIError(resolve.message, response.status);
     }
 
     const APIResponse: APIResponse<typeof resolve.data> = {

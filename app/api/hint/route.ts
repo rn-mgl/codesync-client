@@ -1,6 +1,6 @@
 import { env } from "@/src/configs/env.config";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
-import ApiError from "@/src/lib/ApiError";
+import APIError from "@/src/lib/APIError";
 import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
 import { StatusCodes } from "http-status-codes";
 import { getToken } from "next-auth/jwt";
@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
     const cookies = await getToken({ req });
 
     if (!isJWTCookie(cookies)) {
-      throw new ApiError(
+      throw new APIError(
         `You are unauthorized to proceed.`,
         StatusCodes.UNAUTHORIZED,
       );
@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
 
     if (!("hint" in body)) {
-      throw new ApiError("Invalid request.", StatusCodes.BAD_REQUEST);
+      throw new APIError("Invalid request.", StatusCodes.BAD_REQUEST);
     }
 
     const response = await fetch(`${url}/hint`, {
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
     const resolve: ServerResponse = await response.json();
 
     if (!resolve.success) {
-      throw new ApiError(resolve.message, response.status);
+      throw new APIError(resolve.message, response.status);
     }
 
     const APIResponse: APIResponse<typeof resolve.data> = {
@@ -61,7 +61,7 @@ export async function GET(req: NextRequest, {}) {
     const cookies = await getToken({ req });
 
     if (!isJWTCookie(cookies)) {
-      throw new ApiError(
+      throw new APIError(
         `You are unauthorized to proceed.`,
         StatusCodes.UNAUTHORIZED,
       );
@@ -90,7 +90,7 @@ export async function GET(req: NextRequest, {}) {
     const resolve: ServerResponse = await response.json();
 
     if (!resolve.success) {
-      throw new ApiError(resolve.message, response.status);
+      throw new APIError(resolve.message, response.status);
     }
 
     const APIResponse: APIResponse<typeof resolve.data> = {

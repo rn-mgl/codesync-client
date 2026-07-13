@@ -1,5 +1,5 @@
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
-import ApiError from "@/src/lib/ApiError";
+import APIError from "@/src/lib/APIError";
 import { ProblemSchema } from "@/src/schemas/problem.schema";
 import { StatusCodes } from "http-status-codes";
 import { NextRequest, NextResponse } from "next/server";
@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
 
     if (!("problem" in body)) {
-      throw new ApiError(`Invalid data passed.`, StatusCodes.BAD_REQUEST);
+      throw new APIError(`Invalid data passed.`, StatusCodes.BAD_REQUEST);
     }
 
     const { problem } = body;
@@ -22,14 +22,14 @@ export async function POST(req: NextRequest) {
 
     if (parser.error) {
       const prettifyError = z.prettifyError(parser.error);
-      throw new ApiError(prettifyError, StatusCodes.BAD_REQUEST);
+      throw new APIError(prettifyError, StatusCodes.BAD_REQUEST);
     }
 
     const url = env.SERVER_URL;
     const cookies = await getToken({ req });
 
     if (!isJWTCookie(cookies)) {
-      throw new ApiError(
+      throw new APIError(
         `You are unauthorized to proceed.`,
         StatusCodes.UNAUTHORIZED,
       );
@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
     const resolve: ServerResponse = await response.json();
 
     if (!resolve.success) {
-      throw new ApiError(resolve.message, response.status);
+      throw new APIError(resolve.message, response.status);
     }
 
     const APIResponse: APIResponse<typeof resolve.data> = {
@@ -71,7 +71,7 @@ export async function GET(req: NextRequest) {
     const cookies = await getToken({ req });
 
     if (!isJWTCookie(cookies)) {
-      throw new ApiError(
+      throw new APIError(
         `You are not allowed to proceed with this request.`,
         StatusCodes.UNAUTHORIZED,
       );
@@ -94,7 +94,7 @@ export async function GET(req: NextRequest) {
     const resolve: ServerResponse = await response.json();
 
     if (!resolve.success) {
-      throw new ApiError(resolve.message, response.status);
+      throw new APIError(resolve.message, response.status);
     }
 
     const APIResponse: APIResponse<typeof resolve.data> = {

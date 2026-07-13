@@ -1,7 +1,7 @@
 import { env } from "@/src/configs/env.config";
 import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
-import ApiError from "@/src/lib/ApiError";
+import APIError from "@/src/lib/APIError";
 import { ProblemSchema } from "@/src/schemas/problem.schema";
 import { StatusCodes } from "http-status-codes";
 import { getToken } from "next-auth/jwt";
@@ -16,7 +16,7 @@ export async function GET(
     const cookies = await getToken({ req });
 
     if (!isJWTCookie(cookies)) {
-      throw new ApiError(
+      throw new APIError(
         `You are unauthorized to proceed.`,
         StatusCodes.UNAUTHORIZED,
       );
@@ -25,7 +25,7 @@ export async function GET(
     const param = await params;
 
     if (!param.slug) {
-      throw new ApiError(
+      throw new APIError(
         `Invalid request, missing slug.`,
         StatusCodes.BAD_REQUEST,
       );
@@ -53,7 +53,7 @@ export async function GET(
     const resolve: ServerResponse = await response.json();
 
     if (!resolve.success) {
-      throw new ApiError(resolve.message, response.status);
+      throw new APIError(resolve.message, response.status);
     }
 
     const APIResponse: APIResponse<typeof resolve.data> = {
@@ -79,7 +79,7 @@ export async function PATCH(
     const cookies = await getToken({ req });
 
     if (!isJWTCookie(cookies)) {
-      throw new ApiError(
+      throw new APIError(
         `You are unauthorized to proceed.`,
         StatusCodes.UNAUTHORIZED,
       );
@@ -88,7 +88,7 @@ export async function PATCH(
     const param = await params;
 
     if (!param.slug) {
-      throw new ApiError(
+      throw new APIError(
         `Invalid request, missing slug.`,
         StatusCodes.BAD_REQUEST,
       );
@@ -97,7 +97,7 @@ export async function PATCH(
     const body = await req.json();
 
     if (!("problem" in body)) {
-      throw new ApiError(`Invalid data passed.`, StatusCodes.BAD_REQUEST);
+      throw new APIError(`Invalid data passed.`, StatusCodes.BAD_REQUEST);
     }
 
     const { problem } = body;
@@ -106,7 +106,7 @@ export async function PATCH(
 
     if (parser.error) {
       const prettifyError = z.prettifyError(parser.error);
-      throw new ApiError(prettifyError, StatusCodes.BAD_REQUEST);
+      throw new APIError(prettifyError, StatusCodes.BAD_REQUEST);
     }
 
     const token = cookies.user.token;
@@ -126,7 +126,7 @@ export async function PATCH(
     const resolve: ServerResponse = await response.json();
 
     if (!resolve.success) {
-      throw new ApiError(resolve.message, response.status);
+      throw new APIError(resolve.message, response.status);
     }
 
     const APIResponse: APIResponse<typeof resolve.data> = {
@@ -152,7 +152,7 @@ export async function DELETE(
     const cookies = await getToken({ req });
 
     if (!isJWTCookie(cookies)) {
-      throw new ApiError(
+      throw new APIError(
         `You are unauthenticated to proceed.`,
         StatusCodes.UNAUTHORIZED,
       );
@@ -180,7 +180,7 @@ export async function DELETE(
     const resolve: ServerResponse = await response.json();
 
     if (!resolve.success) {
-      throw new ApiError(resolve.message, response.status);
+      throw new APIError(resolve.message, response.status);
     }
 
     const APIResponse: APIResponse<typeof resolve.data> = {

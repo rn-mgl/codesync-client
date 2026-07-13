@@ -1,7 +1,7 @@
 import { env } from "@/src/configs/env.config";
 import { handleErrorResponse } from "@/src/utils/api.util";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
-import ApiError from "@/src/lib/ApiError";
+import APIError from "@/src/lib/APIError";
 import { ResetSchema } from "@/src/schemas/auth.schema";
 import { StatusCodes } from "http-status-codes";
 import { NextRequest, NextResponse } from "next/server";
@@ -19,7 +19,7 @@ export async function PATCH(req: NextRequest) {
 
     if (parser.error) {
       const prettifyError = z.prettifyError(parser.error);
-      throw new ApiError(prettifyError, StatusCodes.BAD_REQUEST);
+      throw new APIError(prettifyError, StatusCodes.BAD_REQUEST);
     }
 
     const response = await fetch(`${url}/auth/reset`, {
@@ -33,7 +33,7 @@ export async function PATCH(req: NextRequest) {
     const resolve: ServerResponse = await response.json();
 
     if (!resolve.success) {
-      throw new ApiError(resolve.message, response.status);
+      throw new APIError(resolve.message, response.status);
     }
 
     const APIResponse: APIResponse<typeof resolve.data> = {

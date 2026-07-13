@@ -1,6 +1,6 @@
 import { env } from "@/src/configs/env.config";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
-import ApiError from "@/src/lib/ApiError";
+import APIError from "@/src/lib/APIError";
 import { ForgotSchema } from "@/src/schemas/auth.schema";
 import { StatusCodes } from "http-status-codes";
 import { NextRequest, NextResponse } from "next/server";
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
 
     if (parser.error) {
       const prettifyError = z.prettifyError(parser.error);
-      throw new ApiError(prettifyError, StatusCodes.BAD_REQUEST);
+      throw new APIError(prettifyError, StatusCodes.BAD_REQUEST);
     }
 
     const response = await fetch(`${url}/auth/forgot`, {
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     const resolve: ServerResponse = await response.json();
 
     if (!resolve.success) {
-      throw new ApiError(resolve.message, response.status);
+      throw new APIError(resolve.message, response.status);
     }
 
     const APIResponse: APIResponse<typeof resolve.data> = {
@@ -44,12 +44,12 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     console.log(err);
 
-    const isApiError = err instanceof ApiError;
+    const isAPIError = err instanceof APIError;
 
     const APIResponse: APIResponse = {
       success: false,
-      message: isApiError ? err.message : "An unexpected error occurred.",
-      status: isApiError ? err.statusCode : StatusCodes.INTERNAL_SERVER_ERROR,
+      message: isAPIError ? err.message : "An unexpected error occurred.",
+      status: isAPIError ? err.statusCode : StatusCodes.INTERNAL_SERVER_ERROR,
     };
 
     return NextResponse.json(APIResponse, { status: APIResponse.status });
