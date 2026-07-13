@@ -1,4 +1,4 @@
-import { ApiResponse } from "./api.interface";
+import { APIResponse } from "./api.interface";
 import { BaseProblem } from "./problem.interface";
 
 export interface BaseHint {
@@ -17,10 +17,10 @@ export interface HintForm extends Omit<BaseHint, "id" | "problem_id" | "slug"> {
 
 export type ProblemHintList = Record<string, HintDetails[]>;
 
-export type CreateHintResponse = ApiResponse<{ message: string }>;
+export type CreateHintResponse = APIResponse<{ message: string }>;
 
-export type UpdateHintResponse = ApiResponse<{ message: string }>;
+export type UpdateHintResponse = APIResponse<{ message: string }>;
 
-export type GetAllHintsResponse = ApiResponse<{ hints: ProblemHintList }>;
+export type GetAllHintsResponse = APIResponse<{ hints: ProblemHintList }>;
 
-export type GetHintResponse = ApiResponse<{ hint: HintDetails }>;
+export type GetHintResponse = APIResponse<{ hint: HintDetails }>;

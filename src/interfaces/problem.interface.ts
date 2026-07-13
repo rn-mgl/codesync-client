@@ -1,4 +1,4 @@
-import { ApiResponse, APIPaginateResponse } from "@/interfaces/api.interface";
+import { APIResponse, APIPaginateResponse } from "@/interfaces/api.interface";
 import {
   RunSubmissionResponse,
   SubmissionResponse,
@@ -71,20 +71,20 @@ export type ProblemList = Pick<
   "id" | "title" | "slug" | "difficulty" | "acceptance_rate"
 >;
 
-export type CreateProblemResponse = ApiResponse<{ message: string }>;
+export type CreateProblemResponse = APIResponse<{ message: string }>;
 
-export type GetAllProblemsResponse = ApiResponse<
+export type GetAllProblemsResponse = APIResponse<
   { problems: ProblemList[] } & APIPaginateResponse
 >;
 
-export type GetProblemResponse = ApiResponse<{
+export type GetProblemResponse = APIResponse<{
   problem: BaseProblem;
   testCases: BaseTestCase[];
   topics: BaseTopic[];
   hints: BaseHint[];
 }>;
 
-export type UpdateProblemResponse = ApiResponse<{ message: string }>;
+export type UpdateProblemResponse = APIResponse<{ message: string }>;
 
 export type GetSubmissionResponse = RunSubmissionResponse;
 

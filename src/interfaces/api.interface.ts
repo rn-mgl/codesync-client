@@ -14,7 +14,7 @@ export interface ErrorResponse extends BaseResponse {
   message: string;
 }
 
-export type ApiResponse<T = unknown> = SuccessResponse<T> | ErrorResponse;
+export type APIResponse<T = unknown> = SuccessResponse<T> | ErrorResponse;
 
 export type ServerResponse<T = unknown> =
   | Omit<SuccessResponse<T>, "status">

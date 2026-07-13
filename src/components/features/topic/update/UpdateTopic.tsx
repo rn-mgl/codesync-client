@@ -2,7 +2,6 @@
 
 import Input from "@/src/components/ui/fields/Input";
 import TextArea from "@/src/components/ui/fields/TextArea";
-import useFile from "@/src/hooks/useFile";
 import {
   GetTopicResponse,
   TopicForm,
@@ -26,14 +25,6 @@ const UpdateTopic = () => {
   useSession({ required: true });
 
   const params: { slug?: string } | null = useParams();
-
-  const {
-    fileRef,
-    localFile,
-    handleLocalFile,
-    removeLocalFile,
-    removeUploadedFile,
-  } = useFile(setTopic);
 
   const handleTopic = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,

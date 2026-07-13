@@ -1,5 +1,5 @@
 import { env } from "@/src/configs/env.config";
-import { ApiResponse, ServerResponse } from "@/src/interfaces/api.interface";
+import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import ApiError from "@/src/lib/ApiError";
 import { TopicSchema } from "@/src/schemas/topic.schema";
 import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
@@ -51,18 +51,18 @@ export async function GET(
       throw new ApiError(resolve.message, response.status);
     }
 
-    const apiResponse: ApiResponse<typeof resolve.data> = {
+    const APIResponse: APIResponse<typeof resolve.data> = {
       success: true,
       data: resolve.data,
     };
 
-    return NextResponse.json(apiResponse, { status: response.status });
+    return NextResponse.json(APIResponse, { status: response.status });
   } catch (error) {
     console.log(error);
 
-    const apiResponse = handleErrorResponse(error);
+    const APIResponse = handleErrorResponse(error);
 
-    return NextResponse.json(apiResponse, { status: apiResponse.status });
+    return NextResponse.json(APIResponse, { status: APIResponse.status });
   }
 }
 
@@ -126,18 +126,18 @@ export async function PATCH(
       throw new ApiError(resolve.message, response.status);
     }
 
-    const apiResponse: ApiResponse<typeof resolve.data> = {
+    const APIResponse: APIResponse<typeof resolve.data> = {
       success: true,
       data: resolve.data,
     };
 
-    return NextResponse.json(apiResponse, { status: response.status });
+    return NextResponse.json(APIResponse, { status: response.status });
   } catch (error) {
     console.log(error);
 
-    const apiResponse = handleErrorResponse(error);
+    const APIResponse = handleErrorResponse(error);
 
-    return NextResponse.json(apiResponse, { status: apiResponse.status });
+    return NextResponse.json(APIResponse, { status: APIResponse.status });
   }
 }
 
@@ -180,17 +180,17 @@ export async function DELETE(
       throw new ApiError(resolve.message, response.status);
     }
 
-    const apiResponse: ApiResponse<typeof resolve.data> = {
+    const APIResponse: APIResponse<typeof resolve.data> = {
       success: true,
       data: resolve.data,
     };
 
-    return NextResponse.json(apiResponse, { status: response.status });
+    return NextResponse.json(APIResponse, { status: response.status });
   } catch (error) {
     console.log(error);
 
-    const apiResponse = handleErrorResponse(error);
+    const APIResponse = handleErrorResponse(error);
 
-    return NextResponse.json(apiResponse, { status: apiResponse.status });
+    return NextResponse.json(APIResponse, { status: APIResponse.status });
   }
 }

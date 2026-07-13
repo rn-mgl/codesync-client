@@ -1,4 +1,4 @@
-import { ApiResponse } from "@/interfaces/api.interface";
+import { APIResponse } from "@/interfaces/api.interface";
 
 type endpoints =
   | "problem"
@@ -23,4 +23,4 @@ export interface DeleteForm extends BaseForm {
   postDeleteAction?: () => void;
 }
 
-export type DeleteResponse = ApiResponse<{ message: string }>;
+export type DeleteResponse = APIResponse<{ message: string }>;

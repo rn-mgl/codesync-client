@@ -1,4 +1,4 @@
-import { ApiResponse } from "@/interfaces/api.interface";
+import { APIResponse } from "@/interfaces/api.interface";
 
 export interface LoginPayload {
   email: string;
@@ -23,7 +23,7 @@ export interface RegisterPayload {
   password: string;
 }
 
-export type LoginResponse = ApiResponse<{
+export type LoginResponse = APIResponse<{
   token: string | null;
   user: {
     id: number;
@@ -33,12 +33,12 @@ export type LoginResponse = ApiResponse<{
   };
 }>;
 
-export type RegisterResponse = ApiResponse<{
+export type RegisterResponse = APIResponse<{
   token: string;
 }>;
 
-export type ForgotResponse = ApiResponse<{ message: string }>;
+export type ForgotResponse = APIResponse<{ message: string }>;
 
-export type ResetResponse = ApiResponse<{ message: string }>;
+export type ResetResponse = APIResponse<{ message: string }>;
 
-export type VerifyResponse = ApiResponse<{ verified: boolean }>;
+export type VerifyResponse = APIResponse<{ verified: boolean }>;

@@ -1,4 +1,4 @@
-import { ApiResponse } from "@/interfaces/api.interface";
+import { APIResponse } from "@/interfaces/api.interface";
 import { SupportedLanguages } from "@/interfaces/language.interface";
 import { BaseTestCase } from "@/interfaces/test-case.interface";
 
@@ -53,20 +53,20 @@ export type SubmissionStatistics = {
   runtime: { ms: number; percentage: number }[];
 };
 
-export type RunSubmissionResponse = ApiResponse<
+export type RunSubmissionResponse = APIResponse<
   SubmissionResponse & {
     summary: RunSummary;
     statistics: SubmissionStatistics | null;
   }
 >;
 
-export type TestSubmissionResponse = ApiResponse<SubmissionResponse>;
+export type TestSubmissionResponse = APIResponse<SubmissionResponse>;
 
 export type CreateSubmissionResponse<T extends SubmissionType> = T extends "run"
   ? RunSubmissionResponse
   : TestSubmissionResponse;
 
-export type GetAllSubmissionsResponse = ApiResponse<{
+export type GetAllSubmissionsResponse = APIResponse<{
   submissions: BaseSubmission[];
 }>;
 

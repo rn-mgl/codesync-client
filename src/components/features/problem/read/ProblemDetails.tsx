@@ -1,7 +1,6 @@
 import { BaseHint } from "@/src/interfaces/hint.interface";
 import { BaseProblem } from "@/src/interfaces/problem.interface";
 import { BaseTopic } from "@/src/interfaces/topic.interface";
-import Image from "next/image";
 import React from "react";
 import { FaChevronRight } from "react-icons/fa6";
 

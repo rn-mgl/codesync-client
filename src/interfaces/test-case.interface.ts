@@ -1,4 +1,4 @@
-import { ApiResponse } from "@/interfaces/api.interface";
+import { APIResponse } from "@/interfaces/api.interface";
 import { BaseProblem } from "@/interfaces/problem.interface";
 
 export interface BaseTestCase {
@@ -46,14 +46,14 @@ export type ProblemTestCaseList = Record<
     Pick<BaseProblem, "slug" | "title">)[]
 >;
 
-export type CreateTestCaseResponse = ApiResponse<{ message: string }>;
+export type CreateTestCaseResponse = APIResponse<{ message: string }>;
 
-export type GetAllTestCaseResponse = ApiResponse<{
+export type GetAllTestCaseResponse = APIResponse<{
   test_cases: ProblemTestCaseList;
 }>;
 
-export type GetTestCaseResponse = ApiResponse<{
+export type GetTestCaseResponse = APIResponse<{
   test_case: BaseTestCase & Pick<BaseProblem, "slug" | "title">;
 }>;
 
-export type UpdateTestCaseResponse = ApiResponse<{ message: string }>;
+export type UpdateTestCaseResponse = APIResponse<{ message: string }>;

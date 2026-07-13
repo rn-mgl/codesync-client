@@ -1,4 +1,4 @@
-import { ApiResponse } from "./api.interface";
+import { APIResponse } from "./api.interface";
 
 export interface BaseUser {
   id: number;
@@ -25,6 +25,6 @@ export interface PasswordForm {
   confirm_new_password: string;
 }
 
-export type GetUserResponse = ApiResponse<{ user: BaseUser }>;
+export type GetUserResponse = APIResponse<{ user: BaseUser }>;
 
-export type UpdateUserResponse = ApiResponse<{ message: string }>;
+export type UpdateUserResponse = APIResponse<{ message: string }>;

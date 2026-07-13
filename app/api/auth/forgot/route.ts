@@ -1,5 +1,5 @@
 import { env } from "@/src/configs/env.config";
-import { ApiResponse, ServerResponse } from "@/src/interfaces/api.interface";
+import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import ApiError from "@/src/lib/ApiError";
 import { ForgotSchema } from "@/src/schemas/auth.schema";
 import { StatusCodes } from "http-status-codes";
@@ -35,23 +35,23 @@ export async function POST(req: NextRequest) {
       throw new ApiError(resolve.message, response.status);
     }
 
-    const apiResponse: ApiResponse<typeof resolve.data> = {
+    const APIResponse: APIResponse<typeof resolve.data> = {
       success: resolve.success,
       data: resolve.data,
     };
 
-    return NextResponse.json(apiResponse, { status: response.status });
+    return NextResponse.json(APIResponse, { status: response.status });
   } catch (err) {
     console.log(err);
 
     const isApiError = err instanceof ApiError;
 
-    const apiResponse: ApiResponse = {
+    const APIResponse: APIResponse = {
       success: false,
       message: isApiError ? err.message : "An unexpected error occurred.",
       status: isApiError ? err.statusCode : StatusCodes.INTERNAL_SERVER_ERROR,
     };
 
-    return NextResponse.json(apiResponse, { status: apiResponse.status });
+    return NextResponse.json(APIResponse, { status: APIResponse.status });
   }
 }

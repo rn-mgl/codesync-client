@@ -1,4 +1,4 @@
-import { ApiResponse } from "./api.interface";
+import { APIResponse } from "./api.interface";
 
 export interface BaseCody {
   id: number;
@@ -10,9 +10,9 @@ export interface BaseCody {
   interaction: string;
 }
 
-export type AskCodyResponse = ApiResponse<BaseCody>;
-export type GetAllCodyResponse = ApiResponse<{ chats: BaseCody[] }>;
-export type GetHistoryResponse = ApiResponse<{
+export type AskCodyResponse = APIResponse<BaseCody>;
+export type GetAllCodyResponse = APIResponse<{ chats: BaseCody[] }>;
+export type GetHistoryResponse = APIResponse<{
   chats: Chat[];
   interaction: string;
 }>;

@@ -1,6 +1,6 @@
 import { env } from "@/src/configs/env.config";
 import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
-import { ApiResponse, ServerResponse } from "@/src/interfaces/api.interface";
+import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import ApiError from "@/src/lib/ApiError";
 import { SubmissionSchema } from "@/src/schemas/submission.schema";
 import { StatusCodes } from "http-status-codes";
@@ -53,18 +53,18 @@ export async function POST(req: NextRequest) {
       throw new ApiError(resolve.message, response.status);
     }
 
-    const apiResponse: ApiResponse<typeof resolve.data> = {
+    const APIResponse: APIResponse<typeof resolve.data> = {
       success: true,
       data: resolve.data,
     };
 
-    return NextResponse.json(apiResponse, { status: response.status });
+    return NextResponse.json(APIResponse, { status: response.status });
   } catch (error) {
     console.log(error);
 
-    const apiResponse: ApiResponse = handleErrorResponse(error);
+    const APIResponse: APIResponse = handleErrorResponse(error);
 
-    return NextResponse.json(apiResponse, { status: apiResponse.status });
+    return NextResponse.json(APIResponse, { status: APIResponse.status });
   }
 }
 
@@ -103,17 +103,17 @@ export async function GET(req: NextRequest) {
       throw new ApiError(resolve.message, response.status);
     }
 
-    const apiResponse: ApiResponse<typeof resolve.data> = {
+    const APIResponse: APIResponse<typeof resolve.data> = {
       success: true,
       data: resolve.data,
     };
 
-    return NextResponse.json(apiResponse);
+    return NextResponse.json(APIResponse);
   } catch (error) {
     console.log(error);
 
-    const apiResponse: ApiResponse = handleErrorResponse(error);
+    const APIResponse: APIResponse = handleErrorResponse(error);
 
-    return NextResponse.json(apiResponse, { status: apiResponse.status });
+    return NextResponse.json(APIResponse, { status: APIResponse.status });
   }
 }

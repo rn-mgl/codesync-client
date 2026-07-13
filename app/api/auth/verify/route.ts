@@ -1,4 +1,4 @@
-import { ApiResponse } from "@/src/interfaces/api.interface";
+import { APIResponse } from "@/src/interfaces/api.interface";
 import ApiError from "@/src/lib/ApiError";
 import { VerifySchema } from "@/src/schemas/auth.schema";
 import { ServerResponse } from "@/interfaces/api.interface";
@@ -42,17 +42,17 @@ export async function PATCH(req: NextRequest) {
       throw new ApiError(resolve.message, response.status);
     }
 
-    const apiResponse: ApiResponse<typeof resolve.data> = {
+    const APIResponse: APIResponse<typeof resolve.data> = {
       success: resolve.success,
       data: resolve.data,
     };
 
-    return NextResponse.json(apiResponse, { status: response.status });
+    return NextResponse.json(APIResponse, { status: response.status });
   } catch (error) {
     console.log(error);
 
-    const apiResponse: ApiResponse = handleErrorResponse(error);
+    const APIResponse: APIResponse = handleErrorResponse(error);
 
-    return NextResponse.json(apiResponse, { status: apiResponse.status });
+    return NextResponse.json(APIResponse, { status: APIResponse.status });
   }
 }

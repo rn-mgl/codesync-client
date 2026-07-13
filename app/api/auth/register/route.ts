@@ -1,6 +1,6 @@
 import { env } from "@/src/configs/env.config";
 import { handleErrorResponse } from "@/src/utils/api.util";
-import { ApiResponse, ServerResponse } from "@/src/interfaces/api.interface";
+import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import ApiError from "@/src/lib/ApiError";
 import { RegisterSchema } from "@/src/schemas/auth.schema";
 import { StatusCodes } from "http-status-codes";
@@ -36,17 +36,17 @@ export async function POST(req: NextRequest) {
       throw new ApiError(resolve.message, response.status);
     }
 
-    const apiResponse: ApiResponse<typeof resolve.data> = {
+    const APIResponse: APIResponse<typeof resolve.data> = {
       success: resolve.success,
       data: resolve.data,
     };
 
-    return NextResponse.json(apiResponse, { status: response.status });
+    return NextResponse.json(APIResponse, { status: response.status });
   } catch (err) {
     console.log(err);
 
-    const apiResponse: ApiResponse = handleErrorResponse(err);
+    const APIResponse: APIResponse = handleErrorResponse(err);
 
-    return NextResponse.json(apiResponse, { status: apiResponse.status });
+    return NextResponse.json(APIResponse, { status: APIResponse.status });
   }
 }
