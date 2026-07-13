@@ -1,6 +1,8 @@
 "use client";
 
 import Table from "@/src/components/ui/containers/Table";
+import Paginate from "@/src/components/ui/filters/Paginate";
+import usePaginate from "@/src/hooks/usePaginate";
 import {
   GetAllProblemsResponse,
   ProblemList,
@@ -11,10 +13,17 @@ import React from "react";
 
 const AllProblems = () => {
   const [problems, setProblems] = React.useState<ProblemList[]>([]);
-  const [page, setPage] = React.useState(0);
-  const [limit, setLimit] = React.useState(10);
-  const [pages, setPages] = React.useState(0);
-  const [canSelectLimit, setCanSelectLimit] = React.useState(false);
+
+  const {
+    page,
+    pages,
+    limit,
+    canSelectLimit,
+    handlePages,
+    handleCanSelectLimit,
+    handleLimit,
+    handlePage,
+  } = usePaginate();
 
   useSession({ required: true });
 
@@ -28,18 +37,6 @@ const AllProblems = () => {
     low: "var(--color-red-600)",
     average: "var(--color-amber-600)",
     high: "var(--color-green-600)",
-  };
-
-  const handleLimit = (limit: number) => {
-    setLimit(limit);
-  };
-
-  const handlePage = (page: number) => {
-    setPage(page);
-  };
-
-  const handleCanSelectLimit = () => {
-    setCanSelectLimit((prev) => !prev);
   };
 
   const mappedProblems = problems.map((problem) => {
@@ -84,34 +81,6 @@ const AllProblems = () => {
     );
   });
 
-  const mappedPages = new Array(pages).fill(0).map((_, i) => {
-    return (
-      <button
-        key={i}
-        onClick={() => handlePage(i)}
-        className={`p-2 rounded-sm border aspect-square w-10 min-w-10 text-xs 
-                  ${page === i ? "bg-primary text-secondary" : "bg-secondary text-primary"}`}
-      >
-        {i}
-      </button>
-    );
-  });
-
-  const mappedLimits = [10, 25, 50, 100].map((l) => {
-    return (
-      <button
-        key={l}
-        onClick={() => handleLimit(l)}
-        className={`p-2 rounded-sm border aspect-square w-10 text-xs 
-                  ${l === limit ? "bg-primary text-secondary" : "bg-secondary text-primary"}`}
-      >
-        {l}
-      </button>
-    );
-  });
-
-  console.log(mappedPages);
-
   React.useEffect(() => {
     const getProblems = async () => {
       try {
@@ -135,46 +104,31 @@ const AllProblems = () => {
         const { pagination, problems } = resolve.data;
 
         setProblems(problems);
-        setPages(pagination.pages);
+        handlePages(pagination.pages);
       } catch (err) {
         console.error(err);
       }
     };
 
     getProblems();
-  }, [limit, page]);
+  }, [limit, page, handlePages]);
 
   return (
-    <div className="w-full flex flex-col items-start justify-start gap-4">
+    <div className="w-full flex flex-col items-start justify-start gap-4 h-auto">
       <Table<ProblemList>
         headers={["id", "title", "difficulty", "acceptance_rate"]}
         data={mappedProblems}
       />
 
-      <div className="flex flex-row w-full justify-between">
-        <div className="relative flex flex-row items-start justify-start gap-2">
-          <div className="flex flex-row items-center justify-center gap-2">
-            <span className="text-sm">Show</span>
-
-            <button
-              onClick={handleCanSelectLimit}
-              className="p-1 text-sm border font-medium rounded-sm aspect-square w-10"
-            >
-              {limit}
-            </button>
-          </div>
-
-          {canSelectLimit ? (
-            <div className="flex flex-col items-center justify-start gap-1 absolute right-0 top-12 animate-fade">
-              {mappedLimits}
-            </div>
-          ) : null}
-        </div>
-
-        <div className="w-fit max-w-(--breakpoint-m-m) flex items-center justify-start overflow-x-auto gap-1">
-          {mappedPages}
-        </div>
-      </div>
+      <Paginate
+        limit={limit}
+        page={page}
+        pages={pages}
+        canSelectLimit={canSelectLimit}
+        handleCanSelectLimit={handleCanSelectLimit}
+        handleLimit={handleLimit}
+        handlePage={handlePage}
+      />
     </div>
   );
 };
