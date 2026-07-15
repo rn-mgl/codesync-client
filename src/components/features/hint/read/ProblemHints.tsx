@@ -15,7 +15,7 @@ const ProblemHints = (props: ProblemHintProperties) => {
     <Link
       key={hint.id}
       href={`/codesync/hints/${hint.id}`}
-      className="w-full flex flex-col items-start justify-center gap-2 p-4 bg-neutral-200 rounded-md hover:bg-neutral-300 transition-colors"
+      className="w-full flex flex-col items-start justify-center gap-2 p-4 bg-neutral-200 rounded-md hover:bg-neutral-300 transition-all"
     >
       <p className="font-bold text-base">Hint {hint.id}</p>
 
@@ -75,7 +75,7 @@ const ProblemHints = (props: ProblemHintProperties) => {
             <Link
               href={`/codesync/hints/create?problem=${props.selectedProblem}`}
               className="text-primary font-normal flex flex-row items-center 
-                            justify-center gap-2 hover:bg-secondary/20 p-2 rounded-md text-sm"
+                            justify-center gap-2 hover:bg-secondary/20 p-2 rounded-md text-sm hover:underline underline-offset-2"
             >
               <span>Add Hint</span>
               <FaPlus />

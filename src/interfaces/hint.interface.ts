@@ -1,4 +1,4 @@
-import { APIResponse } from "./api.interface";
+import { APIPaginateResponse, APIResponse } from "./api.interface";
 import { BaseProblem } from "./problem.interface";
 
 export interface BaseHint {
@@ -27,6 +27,8 @@ export type CreateHintResponse = APIResponse<{ message: string }>;
 
 export type UpdateHintResponse = APIResponse<{ message: string }>;
 
-export type GetAllHintsResponse = APIResponse<{ hints: ProblemHintList }>;
+export type GetAllHintsResponse = APIResponse<
+  { hints: ProblemHintList } & APIPaginateResponse
+>;
 
 export type GetHintResponse = APIResponse<{ hint: HintDetails }>;
