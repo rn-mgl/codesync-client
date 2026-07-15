@@ -29,16 +29,16 @@ const AllHints = (props: { problem?: string }) => {
 
   const problemParam = props.problem;
 
-  const handledSelectedProblem = (problem: string) => {
+  const handleSelectedProblem = (problem: string) => {
     setSelectedProblem((prev) => (prev === problem ? null : problem));
   };
 
   const mappedProblems = Object.entries(hints).map(([problem, list]) => {
     return (
-      <div
+      <button
         key={problem}
-        onClick={() => setSelectedProblem(problem)}
-        className="w-full bg-neutral-200 rounded-lg p-4 flex flex-col items-start justify-start gap-2 cursor-pointer hover:bg-neutral-300 transition-all"
+        onClick={() => handleSelectedProblem(problem)}
+        className="w-full text-left bg-neutral-200 rounded-lg p-4 flex flex-col items-start justify-start gap-2 cursor-pointer hover:bg-neutral-300 transition-all"
       >
         <p className="text-sm font-bold capitalize truncate w-full">
           {normalizeString(problem)}
@@ -46,7 +46,7 @@ const AllHints = (props: { problem?: string }) => {
         <p className="text-xs text-neutral-500">
           {list.length} {list.length === 1 ? "hint" : "hints"}
         </p>
-      </div>
+      </button>
     );
   });
 
@@ -96,7 +96,7 @@ const AllHints = (props: { problem?: string }) => {
         <ProblemHints
           problemHints={hints[selectedProblem]}
           selectedProblem={selectedProblem}
-          handleSelectedProblem={handledSelectedProblem}
+          handleSelectedProblem={handleSelectedProblem}
         />
       )}
 

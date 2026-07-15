@@ -1,105 +1,54 @@
 "use client";
 
+import Paginate from "@/src/components/ui/filters/Paginate";
+import usePaginate from "@/src/hooks/usePaginate";
 import {
   GetAllTestCaseResponse,
   ProblemTestCaseList,
 } from "@/src/interfaces/test-case.interface";
 import { normalizeString } from "@/src/utils/normalizer.util";
-import Link from "next/link";
 import React from "react";
-import { FaPlus } from "react-icons/fa";
-import { FaArrowLeft, FaArrowRight, FaClock, FaMemory } from "react-icons/fa6";
+import ProblemTestCases from "./ProblemTestCases";
 
 const AllTestCases = (props: { problem?: string }) => {
   const [testCases, setTestCases] = React.useState<ProblemTestCaseList>({});
+  const [selectedProblem, setSelectedProblem] = React.useState<string | null>(
+    null,
+  );
+
+  const {
+    pages,
+    page,
+    limit,
+    canSelectLimit,
+    handleCanSelectLimit,
+    handleLimit,
+    handlePage,
+    handlePages,
+  } = usePaginate();
+
+  const handleSelectedProblem = (problem: string) => {
+    setSelectedProblem((prev) => (prev === problem ? null : problem));
+  };
 
   const problemParam = props?.problem;
 
-  const mappedTestCases = Object.entries(testCases ?? {}).map(
-    ([problem, testCase]) => {
+  const mappedProblems = Object.entries(testCases ?? {}).map(
+    ([problem, list]) => {
       return (
-        <div
+        <button
           key={problem}
-          className="w-full flex flex-col items-center justify-center gap-4"
+          onClick={() => handleSelectedProblem(problem)}
+          className="w-full text-left bg-neutral-200 rounded-lg p-4 flex flex-col items-start justify-start gap-2 cursor-pointer hover:bg-neutral-300 transition-all"
         >
-          <div className="bg-primary text-secondary font-bold w-full p-4 rounded-md text-sm flex flex-row justify-between">
-            <p className="truncate capitalize">{normalizeString(problem)}</p>
+          <p className="text-sm font-bold capitalize truncate w-full">
+            {normalizeString(problem)}
+          </p>
 
-            <Link
-              href={`/codesync/test-cases/create?problem=${problem}`}
-              className="text-secondary font-normal flex flex-row items-center 
-                              justify-center gap-2 hover:border-b px-1"
-            >
-              <span className="hidden t:flex">Add Test Case</span>
-
-              <FaPlus />
-            </Link>
-          </div>
-
-          <div className="w-full grid grid-cols-1 items-center justify-start gap-4 t:grid-cols-2 l-l:grid-cols-4">
-            {testCase.map((tc) => {
-              return (
-                <div
-                  key={tc.id}
-                  className="w-full flex flex-col items-center justify-center"
-                >
-                  <div className="w-full flex flex-col items-start justify-center text-sm">
-                    <Link
-                      href={`/codesync/test-cases/${tc.id}`}
-                      className="w-full p-4 border-b border-b-neutral-300 bg-neutral-200 rounded-t-md group"
-                    >
-                      <p className="font-bold text-base group-hover:underline underline-offset-2">
-                        TC {tc.id}
-                      </p>
-                    </Link>
-
-                    <div className="w-full p-4 flex flex-col items-start justify-center gap-2 bg-neutral-300 rounded-b-md">
-                      <div className="flex items-center w-full truncate gap-2">
-                        <div className="flex items-center justify-center bg-primary p-1 rounded-md text-secondary gap-1 text-xs px-2">
-                          <span>Input</span>
-                          <FaArrowRight />
-                        </div>
-                        <span className="truncate bg-secondary p-1 px-2 rounded-md w-full">
-                          {JSON.stringify(tc.input)}
-                        </span>
-                      </div>
-
-                      <div className="flex items-center w-full truncate gap-2">
-                        <div className="flex items-center justify-center bg-primary p-1 rounded-md text-secondary gap-1 text-xs px-2">
-                          <span>Expected Output</span>
-                          <FaArrowLeft />
-                        </div>
-                        <span className="truncate bg-secondary p-1 px-2 rounded-md w-full">
-                          {tc.expected_output}
-                        </span>
-                      </div>
-
-                      <div className="flex items-center w-full truncate gap-2">
-                        <div className="flex items-center justify-center bg-primary p-1 rounded-md text-secondary gap-1 text-xs px-2">
-                          <span>Memory Limit (mb)</span>
-                          <FaMemory />
-                        </div>
-                        <span className="truncate bg-secondary p-1 px-2 rounded-md w-full">
-                          {JSON.stringify(tc.memory_limit_mb)} mb
-                        </span>
-                      </div>
-
-                      <div className="flex items-center w-full truncate gap-2">
-                        <div className="flex items-center justify-center bg-primary p-1 rounded-md text-secondary gap-1 text-xs px-2">
-                          <span>Time Limit (ms)</span>
-                          <FaClock />
-                        </div>
-                        <span className="truncate bg-secondary p-1 px-2 rounded-md w-full">
-                          {JSON.stringify(tc.time_limit_ms)} ms
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+          <p className="text-xs text-neutral-500">
+            {list.length} {list.length === 1 ? "test case" : "test cases"}
+          </p>
+        </button>
       );
     },
   );
@@ -109,6 +58,8 @@ const AllTestCases = (props: { problem?: string }) => {
       try {
         const searchParams = {
           problem: problemParam ?? "",
+          limit: String(limit),
+          page: String(page),
         };
 
         const query = new URLSearchParams(searchParams).toString();
@@ -126,18 +77,42 @@ const AllTestCases = (props: { problem?: string }) => {
           throw new Error(resolve.message);
         }
 
-        const { test_cases } = resolve.data;
+        const { test_cases, pagination } = resolve.data;
 
         setTestCases(test_cases);
+        handlePages(pagination.pages);
       } catch (error) {
         console.log(error);
       }
     };
 
     getTestCases();
-  }, [problemParam]);
+  }, [problemParam, limit, page, handlePages]);
 
-  return mappedTestCases;
+  return (
+    <div className="flex flex-col items-center justify-start gap-8 w-full">
+      <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-3 l-l:grid-cols-4 gap-4">
+        {mappedProblems}
+      </div>
+      {selectedProblem && (
+        <ProblemTestCases
+          selectedProblem={selectedProblem}
+          problemTestCases={testCases[selectedProblem]}
+          handleSelectedProblem={handleSelectedProblem}
+        />
+      )}
+
+      <Paginate
+        limit={limit}
+        pages={pages}
+        page={page}
+        canSelectLimit={canSelectLimit}
+        handleCanSelectLimit={handleCanSelectLimit}
+        handleLimit={handleLimit}
+        handlePage={handlePage}
+      />
+    </div>
+  );
 };
 
 export default AllTestCases;

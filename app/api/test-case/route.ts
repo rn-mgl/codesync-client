@@ -79,15 +79,11 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const request = new URL(req.url);
+    const searchParams = new URL(req.url).searchParams;
     const token = cookies.user.token;
     const url = env.SERVER_URL;
 
-    const searchParams = {
-      problem: request.searchParams.get("problem") ?? "",
-    };
-
-    const query = new URLSearchParams(searchParams).toString();
+    const query = searchParams.toString();
 
     const response = await fetch(`${url}/test-case?${query}`, {
       method: "GET",

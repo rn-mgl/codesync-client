@@ -1,4 +1,4 @@
-import { APIResponse } from "@/interfaces/api.interface";
+import { APIPaginateResponse, APIResponse } from "@/interfaces/api.interface";
 import { BaseProblem } from "@/interfaces/problem.interface";
 
 export interface BaseTestCase {
@@ -40,17 +40,21 @@ export interface TestCasePayload extends Omit<
 export type TestCaseDetails = BaseTestCase &
   Pick<BaseProblem, "slug" | "title">;
 
-export type ProblemTestCaseList = Record<
-  string,
-  (Omit<BaseTestCase, "order_index" | "problem_id"> &
-    Pick<BaseProblem, "slug" | "title">)[]
->;
+export type ProblemTestCaseProperties = Omit<
+  BaseTestCase,
+  "order_index" | "problem_id"
+> &
+  Pick<BaseProblem, "slug" | "title">;
+
+export type ProblemTestCaseList = Record<string, ProblemTestCaseProperties[]>;
 
 export type CreateTestCaseResponse = APIResponse<{ message: string }>;
 
-export type GetAllTestCaseResponse = APIResponse<{
-  test_cases: ProblemTestCaseList;
-}>;
+export type GetAllTestCaseResponse = APIResponse<
+  {
+    test_cases: ProblemTestCaseList;
+  } & APIPaginateResponse
+>;
 
 export type GetTestCaseResponse = APIResponse<{
   test_case: BaseTestCase & Pick<BaseProblem, "slug" | "title">;
