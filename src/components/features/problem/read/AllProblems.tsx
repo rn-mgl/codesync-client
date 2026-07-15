@@ -48,19 +48,17 @@ const AllProblems = () => {
           : "high";
 
     return (
-      <div
+      <Link
+        href={`/codesync/problems/${problem.slug}`}
         key={problem.id}
         className="w-full not-last:border-b-2 border-neutral-400 transition-all
                   hover:bg-neutral-200 first:rounded-t-md last:rounded-b-md"
       >
         <div className="grid grid-cols-4 w-full p-4 gap-4 text-sm items-center">
           <p>{problem.id}</p>
-          <Link
-            href={`/codesync/problems/${problem.slug}`}
-            className="hover:underline underline-offset-2 truncate"
-          >
+          <p className="hover:underline underline-offset-2 truncate">
             {problem.title}
-          </Link>
+          </p>
           <p
             style={{ background: DIFFICULTY_COLOR[problem.difficulty] }}
             className="w-fit rounded-full px-2 py-0.5 text-secondary text-xs capitalize"
@@ -77,7 +75,7 @@ const AllProblems = () => {
             ></div>
           </div>
         </div>
-      </div>
+      </Link>
     );
   });
 

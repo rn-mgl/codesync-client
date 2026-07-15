@@ -28,26 +28,22 @@ const AllTopics = () => {
 
   const mappedTopics = topics.map((topic) => {
     return (
-      <div
+      <Link
+        href={`/codesync/topics/${topic.slug}`}
         key={topic.id}
-        className="w-full bg-neutral-200 rounded-lg p-2 flex flex-row gap-2 group group"
+        className="w-full bg-neutral-200 rounded-lg p-2 flex flex-row gap-2 group group hover:bg-neutral-300 transition-all"
       >
         <div className="aspect-square max-w-12 w-12 h-12 bg-secondary rounded-sm p-2 text-lg flex flex-col items-center justify-center">
           {topic.icon}
         </div>
 
         <div className="w-full flex flex-col items-start justify-start gap-2">
-          <Link
-            href={`/codesync/topics/${topic.slug}`}
-            className="text-sm font-bold hover:underline underline-offset-2"
-          >
-            {topic.name}
-          </Link>
+          <p className="text-sm font-bold">{topic.name}</p>
           <p className="truncate text-xs w-full text-wrap line-clamp-1">
             {topic.description}
           </p>
         </div>
-      </div>
+      </Link>
     );
   });
 
