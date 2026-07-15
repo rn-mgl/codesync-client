@@ -15,6 +15,12 @@ export interface HintForm extends Omit<BaseHint, "id" | "problem_id" | "slug"> {
   problem: string;
 }
 
+export interface ProblemHintProperties {
+  selectedProblem: string;
+  problemHints: HintDetails[];
+  handleSelectedProblem: (problem: string) => void;
+}
+
 export type ProblemHintList = Record<string, HintDetails[]>;
 
 export type CreateHintResponse = APIResponse<{ message: string }>;
