@@ -20,7 +20,7 @@ export type ServerResponse<T = unknown> =
   | Omit<SuccessResponse<T>, "status">
   | Omit<ErrorResponse, "status">;
 
-export interface APIPaginateData {
+interface APIPaginateData {
   pages: number;
 }
 

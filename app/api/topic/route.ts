@@ -81,8 +81,11 @@ export async function GET(req: NextRequest) {
 
     const token = cookies.user.token;
     const url = env.SERVER_URL;
+    const searchParams = new URL(req.url).searchParams;
 
-    const response = await fetch(`${url}/topic`, {
+    const query = searchParams.toString();
+
+    const response = await fetch(`${url}/topic?${query}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,

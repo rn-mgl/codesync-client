@@ -1,5 +1,7 @@
 "use client";
 
+import Paginate from "@/src/components/ui/filters/Paginate";
+import usePaginate from "@/src/hooks/usePaginate";
 import {
   BaseTopic,
   GetAllTopicsResponse,
@@ -10,6 +12,17 @@ import React from "react";
 
 const AllTopics = () => {
   const [topics, setTopics] = React.useState<BaseTopic[]>([]);
+
+  const {
+    pages,
+    page,
+    limit,
+    canSelectLimit,
+    handlePages,
+    handleCanSelectLimit,
+    handleLimit,
+    handlePage,
+  } = usePaginate();
 
   useSession({ required: true });
 
@@ -41,7 +54,14 @@ const AllTopics = () => {
   React.useEffect(() => {
     const getTopics = async () => {
       try {
-        const response = await fetch(`/api/topic`, {
+        const searchParams = {
+          limit: String(limit),
+          page: String(page),
+        };
+
+        const query = new URLSearchParams(searchParams).toString();
+
+        const response = await fetch(`/api/topic?${query}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -54,20 +74,33 @@ const AllTopics = () => {
           throw new Error(resolve.message);
         }
 
-        const { topics } = resolve.data;
+        const { topics, pagination } = resolve.data;
 
         setTopics(topics);
+        handlePages(pagination.pages);
       } catch (error) {
         console.log(error);
       }
     };
 
     getTopics();
-  }, []);
+  }, [handlePages, limit, page]);
 
   return (
-    <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-3 l-l:grid-cols-4 gap-4">
-      {mappedTopics}
+    <div className="w-full flex flex-col items-start justify-start h-auto gap-8">
+      <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-3 l-l:grid-cols-4 gap-4">
+        {mappedTopics}
+      </div>
+
+      <Paginate
+        limit={limit}
+        page={page}
+        pages={pages}
+        canSelectLimit={canSelectLimit}
+        handleCanSelectLimit={handleCanSelectLimit}
+        handlePage={handlePage}
+        handleLimit={handleLimit}
+      />
     </div>
   );
 };
