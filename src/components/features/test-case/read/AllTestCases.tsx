@@ -3,17 +3,17 @@
 import Paginate from "@/src/components/ui/filters/Paginate";
 import usePaginate from "@/src/hooks/usePaginate";
 import {
-  GetAllTestCaseResponse,
-  ProblemTestCaseList,
+  GetTestCaseCountResponse,
+  ProblemTestCaseCount,
 } from "@/src/interfaces/test-case.interface";
 import { normalizeString } from "@/src/utils/normalizer.util";
 import React from "react";
 import ProblemTestCases from "./ProblemTestCases";
 
 const AllTestCases = (props: { problem?: string }) => {
-  const [testCases, setTestCases] = React.useState<ProblemTestCaseList>({});
+  const [testCases, setTestCases] = React.useState<ProblemTestCaseCount>({});
   const [selectedProblem, setSelectedProblem] = React.useState<string | null>(
-    null,
+    props.problem ?? null,
   );
 
   const {
@@ -34,7 +34,7 @@ const AllTestCases = (props: { problem?: string }) => {
   const problemParam = props?.problem;
 
   const mappedProblems = Object.entries(testCases ?? {}).map(
-    ([problem, list]) => {
+    ([problem, count]) => {
       return (
         <button
           key={problem}
@@ -46,7 +46,7 @@ const AllTestCases = (props: { problem?: string }) => {
           </p>
 
           <p className="text-xs text-neutral-500">
-            {list.length} {list.length === 1 ? "test case" : "test cases"}
+            {count} {count === 1 ? "test case" : "test cases"}
           </p>
         </button>
       );
@@ -60,6 +60,7 @@ const AllTestCases = (props: { problem?: string }) => {
           problem: problemParam ?? "",
           limit: String(limit),
           page: String(page),
+          list_all: "0",
         };
 
         const query = new URLSearchParams(searchParams).toString();
@@ -71,7 +72,7 @@ const AllTestCases = (props: { problem?: string }) => {
           },
         });
 
-        const resolve: GetAllTestCaseResponse = await response.json();
+        const resolve: GetTestCaseCountResponse = await response.json();
 
         if (!resolve.success) {
           throw new Error(resolve.message);
@@ -97,7 +98,6 @@ const AllTestCases = (props: { problem?: string }) => {
       {selectedProblem && (
         <ProblemTestCases
           selectedProblem={selectedProblem}
-          problemTestCases={testCases[selectedProblem]}
           handleSelectedProblem={handleSelectedProblem}
         />
       )}

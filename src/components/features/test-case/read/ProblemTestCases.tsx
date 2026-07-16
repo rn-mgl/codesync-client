@@ -1,6 +1,14 @@
-import { ProblemTestCaseProperties } from "@/src/interfaces/test-case.interface";
+"use client";
+
+import Paginate from "@/src/components/ui/filters/Paginate";
+import usePaginate from "@/src/hooks/usePaginate";
+import {
+  GetAllTestCasesResponse,
+  ProblemTestCaseProperties,
+} from "@/src/interfaces/test-case.interface";
 import { normalizeString } from "@/src/utils/normalizer.util";
 import Link from "next/link";
+import React from "react";
 import { FaPlus } from "react-icons/fa";
 import {
   FaArrowLeft,
@@ -12,10 +20,61 @@ import {
 
 const ProblemTestCases = (props: {
   selectedProblem: string;
-  problemTestCases: ProblemTestCaseProperties[];
   handleSelectedProblem: (problem: string) => void;
 }) => {
-  const mappedTestCases = props.problemTestCases.map((tc) => {
+  const [testCases, setTestCases] = React.useState<ProblemTestCaseProperties[]>(
+    [],
+  );
+
+  const {
+    pages,
+    page,
+    limit,
+    canSelectLimit,
+    handleCanSelectLimit,
+    handleLimit,
+    handlePage,
+    handlePages,
+  } = usePaginate();
+
+  React.useEffect(() => {
+    const getTestCases = async () => {
+      try {
+        const searchParams = {
+          problem: props.selectedProblem,
+          list_all: "1",
+          page: String(page),
+          limit: String(limit),
+        };
+
+        const query = new URLSearchParams(searchParams).toString();
+
+        const response = await fetch(`/api/test-case?${query}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        const resolve: GetAllTestCasesResponse = await response.json();
+
+        if (!resolve.success) {
+          throw new Error(resolve.message);
+        }
+
+        const { test_cases, pagination } = resolve.data;
+
+        setTestCases(test_cases[props.selectedProblem]);
+        handlePages(pagination.pages);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getTestCases();
+  }, [props.selectedProblem, page, limit, handlePages]);
+
+  const mappedTestCases = testCases.map((tc) => {
     return (
       <div
         key={tc.id}
@@ -96,7 +155,7 @@ const ProblemTestCases = (props: {
           </div>
         </div>
 
-        <div className="w-full h-auto max-h-full bg-secondary rounded-lg p-4 flex flex-col items-start justify-start gap-4 overflow-y-auto">
+        <div className="w-full h-auto max-h-full bg-secondary rounded-lg p-4 flex flex-col items-start justify-start gap-8 overflow-y-auto">
           <div className="w-full flex items-center justify-end">
             <Link
               href={`/codesync/test-cases/create?problem=${props.selectedProblem}`}
@@ -108,13 +167,23 @@ const ProblemTestCases = (props: {
             </Link>
           </div>
 
-          {props.problemTestCases.length === 0 ? (
+          {testCases.length === 0 ? (
             <p className="text-sm text-neutral-500">No Test Cases yet.</p>
           ) : (
             <div className="grid grid-cols-1 items-start justify-start gap-4 t:grid-cols-2 l-s:grid-cols-3 l-l:grid-cols-4">
               {mappedTestCases}
             </div>
           )}
+
+          <Paginate
+            limit={limit}
+            pages={pages}
+            page={page}
+            canSelectLimit={canSelectLimit}
+            handleCanSelectLimit={handleCanSelectLimit}
+            handleLimit={handleLimit}
+            handlePage={handlePage}
+          />
         </div>
       </div>
     </div>

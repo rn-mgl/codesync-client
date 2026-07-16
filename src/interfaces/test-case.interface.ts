@@ -46,11 +46,19 @@ export type ProblemTestCaseProperties = Omit<
 > &
   Pick<BaseProblem, "slug" | "title">;
 
+export type ProblemTestCaseCount = Record<string, number>;
+
 export type ProblemTestCaseList = Record<string, ProblemTestCaseProperties[]>;
 
 export type CreateTestCaseResponse = APIResponse<{ message: string }>;
 
-export type GetAllTestCaseResponse = APIResponse<
+export type GetTestCaseCountResponse = APIResponse<
+  {
+    test_cases: ProblemTestCaseCount;
+  } & APIPaginateResponse
+>;
+
+export type GetAllTestCasesResponse = APIResponse<
   {
     test_cases: ProblemTestCaseList;
   } & APIPaginateResponse
