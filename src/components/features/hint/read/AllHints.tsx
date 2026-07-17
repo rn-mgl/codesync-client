@@ -1,17 +1,17 @@
 "use client";
 
+import Paginate from "@/src/components/ui/filters/Paginate";
+import usePaginate from "@/src/hooks/usePaginate";
 import {
-  GetAllHintsResponse,
-  ProblemHintList,
+  GetHintsCountResponse,
+  ProblemHintCount,
 } from "@/src/interfaces/hint.interface";
 import { normalizeString } from "@/src/utils/normalizer.util";
 import React from "react";
 import ProblemHints from "./ProblemHints";
-import usePaginate from "@/src/hooks/usePaginate";
-import Paginate from "@/src/components/ui/filters/Paginate";
 
 const AllHints = (props: { problem?: string }) => {
-  const [hints, setHints] = React.useState<ProblemHintList>({});
+  const [hints, setHints] = React.useState<ProblemHintCount>({});
   const [selectedProblem, setSelectedProblem] = React.useState<string | null>(
     null,
   );
@@ -33,7 +33,7 @@ const AllHints = (props: { problem?: string }) => {
     setSelectedProblem((prev) => (prev === problem ? null : problem));
   };
 
-  const mappedProblems = Object.entries(hints).map(([problem, list]) => {
+  const mappedProblems = Object.entries(hints).map(([problem, count]) => {
     return (
       <button
         key={problem}
@@ -44,7 +44,7 @@ const AllHints = (props: { problem?: string }) => {
           {normalizeString(problem)}
         </p>
         <p className="text-xs text-neutral-500">
-          {list.length} {list.length === 1 ? "hint" : "hints"}
+          {count} {count === 1 ? "hint" : "hints"}
         </p>
       </button>
     );
@@ -57,6 +57,7 @@ const AllHints = (props: { problem?: string }) => {
           problem: problemParam ?? "",
           limit: String(limit),
           page: String(page),
+          list_all: "0",
         };
 
         const query = new URLSearchParams(searchParams).toString();
@@ -68,7 +69,7 @@ const AllHints = (props: { problem?: string }) => {
           },
         });
 
-        const resolve: GetAllHintsResponse = await response.json();
+        const resolve: GetHintsCountResponse = await response.json();
 
         if (!resolve.success) {
           throw new Error(resolve.message);
@@ -94,7 +95,6 @@ const AllHints = (props: { problem?: string }) => {
 
       {selectedProblem && (
         <ProblemHints
-          problemHints={hints[selectedProblem]}
           selectedProblem={selectedProblem}
           handleSelectedProblem={handleSelectedProblem}
         />

@@ -170,7 +170,7 @@ const ProblemTestCases = (props: {
           {testCases.length === 0 ? (
             <p className="text-sm text-neutral-500">No Test Cases yet.</p>
           ) : (
-            <div className="grid grid-cols-1 items-start justify-start gap-4 t:grid-cols-2 l-s:grid-cols-3 l-l:grid-cols-4">
+            <div className="grid grid-cols-1 items-start justify-start gap-4 t:grid-cols-2 l-s:grid-cols-3 l-l:grid-cols-4 w-full">
               {mappedTestCases}
             </div>
           )}
