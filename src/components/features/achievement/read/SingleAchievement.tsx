@@ -1,6 +1,5 @@
 "use client";
 
-import DisplayFile from "@/src/components/ui/containers/DisplayFile";
 import DisplayInputField from "@/src/components/ui/containers/DisplayInputField";
 import DisplayTextArea from "@/src/components/ui/containers/DisplayTextArea";
 import Delete from "@/src/components/ui/forms/Delete";
@@ -138,9 +137,10 @@ const SingleAchievement = () => {
             }}
             className="w-full flex items-center justify-center  p-8 rounded-lg"
           >
-            {achievement.icon && achievement.icon !== "" && (
-              <DisplayFile src={achievement.icon} type="image" />
-            )}
+            <div
+              dangerouslySetInnerHTML={{ __html: achievement.icon }}
+              className="w-full max-w-60 drop-shadow-xl"
+            />
           </div>
         </div>
 

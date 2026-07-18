@@ -46,16 +46,14 @@ const AllAchievements = () => {
       >
         <div
           style={{ backgroundColor: BADGE_COLORS[achievement.badge_color] }}
-          className="aspect-square max-w-12 w-12 h-12 bg-secondary rounded-sm p-2 text-lg flex flex-col items-center justify-center"
+          className="aspect-square max-w-12 w-12 h-12 bg-secondary rounded-sm p-1 text-lg flex flex-col items-center justify-center"
         >
-          <Image
-            src={achievement.icon}
-            alt="icon"
-            width={200}
-            height={200}
-            draggable={false}
-            className="drop-shadow-lg group-hover:animate-float w-full p-1 rounded-md"
-          />
+          <div className="w-full flex items-center justify-center">
+            <div
+              dangerouslySetInnerHTML={{ __html: achievement.icon }}
+              className="w-full"
+            />
+          </div>
         </div>
 
         <div className="w-full flex flex-col items-start justify-start gap-2">
