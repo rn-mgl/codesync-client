@@ -18,33 +18,22 @@ const AllAchievements = () => {
 
   useSession({ required: true });
 
-  const BADGE_PALETTE: Record<string, { primary: string; secondary: string }> =
-    {
-      bronze: {
-        primary: "#CE8946",
-        secondary: "#FCA956",
-      },
-      silver: {
-        primary: "#C4C4C4",
-        secondary: "#E0E0E0",
-      },
-      gold: {
-        primary: "#EFBF04",
-        secondary: "#FFC766",
-      },
-    };
+  const BADGE_COLORS: Record<string, string> = {
+    bronze: "#CE8946",
+    silver: "#C4C4C4",
+    gold: "#EFBF04",
+  };
 
   const mappedAchievements = achievements.map((achievement) => {
     return (
-      <div
+      <Link
+        href={`/codesync/achievements/${achievement.slug}`}
         key={achievement.id}
-        className="w-full bg-neutral-200 rounded-lg p-2 flex flex-row gap-2 group"
+        className="w-full bg-neutral-200 rounded-lg p-2 flex flex-row gap-2 group hover:bg-neutral-300 transition-all"
       >
         <div
-          style={{
-            background: `linear-gradient(135deg, ${BADGE_PALETTE[achievement.badge_color].primary}, ${BADGE_PALETTE[achievement.badge_color].secondary}, ${BADGE_PALETTE[achievement.badge_color].primary})`,
-          }}
-          className="w-full aspect-square rounded-sm max-w-24 t:max-w-30 flex flex-col items-center justify-center overflow-hidden"
+          style={{ backgroundColor: BADGE_COLORS[achievement.badge_color] }}
+          className="aspect-square max-w-12 w-12 h-12 bg-secondary rounded-sm p-2 text-lg flex flex-col items-center justify-center"
         >
           <Image
             src={achievement.icon}
@@ -52,27 +41,17 @@ const AllAchievements = () => {
             width={200}
             height={200}
             draggable={false}
-            className="drop-shadow-lg group-hover:animate-float w-full p-2"
+            className="drop-shadow-lg group-hover:animate-float w-full p-1 rounded-md"
           />
         </div>
 
-        <div className="w-full flex flex-col gap-2 text-sm">
-          <div className="w-full flex flex-col items-start gap-2 h-full">
-            <div>
-              <Link
-                href={`/codesync/achievements/${achievement.slug}`}
-                className="font-bold truncate hover:underline underline-offset-2 transition-all"
-              >
-                {achievement.name}
-              </Link>
-            </div>
-
-            <div className="font-medium bg-neutral-300 w-full h-full rounded-sm p-1 overflow-y-auto">
-              {achievement.description}
-            </div>
-          </div>
+        <div className="w-full flex flex-col items-start justify-start gap-2">
+          <p className="text-sm font-bold">{achievement.name}</p>
+          <p className="truncate text-xs w-full text-wrap line-clamp-1">
+            {achievement.description}
+          </p>
         </div>
-      </div>
+      </Link>
     );
   });
 
