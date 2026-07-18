@@ -1,4 +1,4 @@
-import { APIResponse } from "@/interfaces/api.interface";
+import { APIPaginateResponse, APIResponse } from "@/interfaces/api.interface";
 
 export interface UnlockCriteria {
   version: number;
@@ -57,9 +57,11 @@ type ACHIEVEMENT_CATEGORIES =
   | "skill"
   | "special";
 
-export type GetAllAchievementResponse = APIResponse<{
-  achievements: Omit<BaseAchievement, "unlock_criteria">[];
-}>;
+export type GetAllAchievementResponse = APIResponse<
+  {
+    achievements: Omit<BaseAchievement, "unlock_criteria">[];
+  } & APIPaginateResponse
+>;
 
 export type CreateAchievementResponse = APIResponse<{ message: string }>;
 

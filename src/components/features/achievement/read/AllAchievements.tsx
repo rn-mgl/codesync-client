@@ -1,5 +1,7 @@
 "use client";
 
+import Paginate from "@/src/components/ui/filters/Paginate";
+import usePaginate from "@/src/hooks/usePaginate";
 import {
   BaseAchievement,
   GetAllAchievementResponse,
@@ -15,6 +17,17 @@ const AllAchievements = () => {
   const [achievements, setAchievements] = React.useState<
     Omit<BaseAchievement, "unlock_criteria">[]
   >([]);
+
+  const {
+    pages,
+    page,
+    limit,
+    canSelectLimit,
+    handleCanSelectLimit,
+    handleLimit,
+    handlePage,
+    handlePages,
+  } = usePaginate();
 
   useSession({ required: true });
 
@@ -58,7 +71,14 @@ const AllAchievements = () => {
   React.useEffect(() => {
     const getAchievements = async () => {
       try {
-        const response = await fetch(`/api/achievement`, {
+        const searchParams = {
+          page: String(page),
+          limit: String(limit),
+        };
+
+        const query = new URLSearchParams(searchParams).toString();
+
+        const response = await fetch(`/api/achievement?${query}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -71,9 +91,10 @@ const AllAchievements = () => {
           throw new Error(resolve.message);
         }
 
-        const { achievements } = resolve.data;
+        const { achievements, pagination } = resolve.data;
 
         setAchievements(achievements);
+        handlePages(pagination.pages);
       } catch (error) {
         const message = getErrorMessage(error);
         toast(message);
@@ -81,11 +102,23 @@ const AllAchievements = () => {
     };
 
     getAchievements();
-  }, []);
+  }, [handlePages, page, limit]);
 
   return (
-    <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-2 l-l:grid-cols-3 gap-4">
-      {mappedAchievements}
+    <div className="w-full flex flex-col items-start justify-start gap-8">
+      <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-2 l-l:grid-cols-3 gap-4">
+        {mappedAchievements}
+      </div>
+
+      <Paginate
+        limit={limit}
+        pages={pages}
+        page={page}
+        canSelectLimit={canSelectLimit}
+        handleCanSelectLimit={handleCanSelectLimit}
+        handleLimit={handleLimit}
+        handlePage={handlePage}
+      />
     </div>
   );
 };

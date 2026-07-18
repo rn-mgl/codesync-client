@@ -21,8 +21,10 @@ export async function GET(req: NextRequest) {
 
     const url = env.SERVER_URL;
     const token = cookies.user.token;
+    const searchParams = new URL(req.url).searchParams;
+    const query = searchParams.toString();
 
-    const response = await fetch(`${url}/achievement`, {
+    const response = await fetch(`${url}/achievement?${query}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
