@@ -8,7 +8,6 @@ import {
 } from "@/src/interfaces/achievement.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { toast } from "sonner";
