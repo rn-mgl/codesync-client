@@ -88,11 +88,15 @@ export async function PATCH(
       throw new APIError(`Invalid request.`, StatusCodes.BAD_REQUEST);
     }
 
-    const formData = await req.formData();
+    const body = await req.json();
 
-    const parsed = Object.fromEntries(formData.entries());
+    if (!("achievement" in body)) {
+      throw new APIError(`Invalid request.`, StatusCodes.BAD_REQUEST);
+    }
 
-    const parser = AchievementSchema.safeParse(parsed);
+    const achievement = body.achievement;
+
+    const parser = AchievementSchema.safeParse(achievement);
 
     if (parser.error) {
       const prettifyError = z.prettifyError(parser.error);
@@ -100,15 +104,20 @@ export async function PATCH(
       throw new APIError(prettifyError, StatusCodes.BAD_REQUEST);
     }
 
-    formData.set("lookup", "slug");
+    const searchParams = {
+      lookup: "slug",
+    };
 
-    const response = await fetch(`${url}/achievement/${slug}`, {
+    const query = new URLSearchParams(searchParams).toString();
+
+    const response = await fetch(`${url}/achievement/${slug}?${query}`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL,
+        "Content-Type": "application/json",
       },
-      body: formData,
+      body: JSON.stringify({ achievement }),
     });
 
     const resolve: ServerResponse = await response.json();

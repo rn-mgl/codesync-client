@@ -47,7 +47,7 @@ const AllAchievements = () => {
           style={{ backgroundColor: BADGE_COLORS[achievement.badge_color] }}
           className="aspect-square max-w-12 w-12 h-12 bg-secondary rounded-sm p-1 text-lg flex flex-col items-center justify-center"
         >
-          <div className="w-full flex items-center justify-center">
+          <div className="w-full flex items-center justify-center h-full">
             <div
               dangerouslySetInnerHTML={{ __html: achievement.icon }}
               className="w-full"

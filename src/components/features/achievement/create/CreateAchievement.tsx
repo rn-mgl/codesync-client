@@ -1,10 +1,9 @@
 "use client";
 
-import File from "@/src/components/ui/fields/File";
+import light from "@/public/global/LogoLight.svg";
 import Input from "@/src/components/ui/fields/Input";
 import Select from "@/src/components/ui/fields/Select";
 import TextArea from "@/src/components/ui/fields/TextArea";
-import useFile from "@/src/hooks/useFile";
 import useSelect from "@/src/hooks/useSelect";
 import {
   AchievementForm,
@@ -12,6 +11,7 @@ import {
 } from "@/src/interfaces/achievement.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 import React from "react";
 import { FaChartLine, FaLink, FaStickyNote } from "react-icons/fa";
 import { FaLockOpen, FaTrophy } from "react-icons/fa6";
@@ -22,17 +22,30 @@ const CreateAchievement = () => {
     badge_color: "bronze",
     category: "problems",
     description: "",
-    icon: null,
     name: "",
     points: 0,
     slug: "",
     unlock_criteria: "",
+    icon: "",
   });
 
   useSession({ required: true });
 
-  const { localFile, fileRef, handleLocalFile, removeLocalFile } =
-    useFile(setAchievement);
+  const BADGE_PALETTE: Record<string, { primary: string; secondary: string }> =
+    {
+      bronze: {
+        primary: "#CE8946",
+        secondary: "#FCA956",
+      },
+      silver: {
+        primary: "#C4C4C4",
+        secondary: "#E0E0E0",
+      },
+      gold: {
+        primary: "#EFBF04",
+        secondary: "#FFC766",
+      },
+    };
 
   const { select: category, handleSelect: handleCategory } = useSelect(
     { label: "Problems", value: "problems" },
@@ -61,22 +74,12 @@ const CreateAchievement = () => {
     e.preventDefault();
 
     try {
-      const formData = new FormData();
-
-      if (!achievement.icon) return;
-
-      formData.set("badge_color", achievement.badge_color);
-      formData.set("category", achievement.category);
-      formData.set("description", achievement.description);
-      formData.set("icon", achievement.icon);
-      formData.set("name", achievement.name);
-      formData.set("points", String(achievement.points) ?? "0");
-      formData.set("slug", achievement.slug);
-      formData.set("unlock_criteria", achievement.unlock_criteria);
-
       const response = await fetch(`/api/achievement`, {
         method: "POST",
-        body: formData,
+        body: JSON.stringify({ achievement }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
 
       const resolve: CreateAchievementResponse = await response.json();
@@ -147,14 +150,20 @@ const CreateAchievement = () => {
         </div>
 
         <div className="w-full flex flex-col items-start justify-start gap-4 p-2 border-primary/50 border rounded-b-md t:p-4">
-          <File
-            name="icon"
-            id="icon"
-            file={localFile}
-            fileRef={fileRef}
-            handleFile={handleLocalFile}
-            removeFile={removeLocalFile}
-          />
+          <div className="w-full flex flex-col">
+            <div
+              style={{
+                background: `linear-gradient(135deg, ${BADGE_PALETTE[achievement.badge_color].primary}, ${BADGE_PALETTE[achievement.badge_color].secondary}, ${BADGE_PALETTE[achievement.badge_color].primary})`,
+              }}
+              className="w-full flex items-center justify-center  p-8 rounded-lg"
+            >
+              <Image
+                src={light}
+                alt="placeholder"
+                className="w-full max-w-60 bg-primary p-2 rounded-lg shadow-lg"
+              />
+            </div>
+          </div>
 
           <Select
             label="Badge Color"

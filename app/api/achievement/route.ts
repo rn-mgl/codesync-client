@@ -63,11 +63,15 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const formData = await req.formData();
+    const body = await req.json();
 
-    const parsed = Object.fromEntries(formData.entries());
+    if (!("achievement" in body)) {
+      throw new APIError(`Invalid request.`, StatusCodes.BAD_REQUEST);
+    }
 
-    const parser = AchievementSchema.safeParse(parsed);
+    const achievement = body.achievement;
+
+    const parser = AchievementSchema.safeParse(achievement);
 
     if (parser.error) {
       const prettifyError = z.prettifyError(parser.error);
@@ -83,8 +87,9 @@ export async function POST(req: NextRequest) {
       headers: {
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL,
+        "Content-Type": "application/json",
       },
-      body: formData,
+      body: JSON.stringify({ achievement }),
     });
 
     const resolve: ServerResponse = await response.json();

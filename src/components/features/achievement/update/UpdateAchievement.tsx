@@ -1,10 +1,8 @@
 "use client";
 
-import File from "@/src/components/ui/fields/File";
 import Input from "@/src/components/ui/fields/Input";
 import Select from "@/src/components/ui/fields/Select";
 import TextArea from "@/src/components/ui/fields/TextArea";
-import useFile from "@/src/hooks/useFile";
 import useSelect from "@/src/hooks/useSelect";
 import {
   AchievementForm,
@@ -21,12 +19,12 @@ import { toast } from "sonner";
 
 const UpdateAchievement = () => {
   const [achievement, setAchievement] = React.useState<
-    Omit<AchievementForm, "icon"> & { icon: File | null | string }
+    AchievementForm & Pick<AchievementForm, "icon">
   >({
     badge_color: "bronze",
     category: "problems",
     description: "",
-    icon: null,
+    icon: "",
     name: "",
     points: 0,
     slug: "",
@@ -37,13 +35,21 @@ const UpdateAchievement = () => {
 
   const params: { slug?: string } | null = useParams();
 
-  const {
-    fileRef,
-    localFile,
-    handleLocalFile,
-    removeLocalFile,
-    removeUploadedFile,
-  } = useFile(setAchievement);
+  const BADGE_PALETTE: Record<string, { primary: string; secondary: string }> =
+    {
+      bronze: {
+        primary: "#CE8946",
+        secondary: "#FCA956",
+      },
+      silver: {
+        primary: "#C4C4C4",
+        secondary: "#E0E0E0",
+      },
+      gold: {
+        primary: "#EFBF04",
+        secondary: "#FFC766",
+      },
+    };
 
   const { select: badgeColor, handleSelect: handleBadgeColor } = useSelect(
     { label: "Bronze", value: "bronze" },
@@ -72,22 +78,24 @@ const UpdateAchievement = () => {
     e.preventDefault();
 
     try {
-      if (!achievement.icon || !params?.slug) return;
+      if (!params?.slug) return;
 
-      const formData = new FormData();
-
-      formData.set("badge_color", achievement.badge_color);
-      formData.set("category", achievement.category);
-      formData.set("description", achievement.description);
-      formData.set("icon", achievement.icon);
-      formData.set("name", achievement.name);
-      formData.set("points", String(achievement.points) ?? "0");
-      formData.set("slug", achievement.slug);
-      formData.set("unlock_criteria", achievement.unlock_criteria);
+      const achievementPayload = {
+        badge_color: achievement.badge_color,
+        category: achievement.category,
+        description: achievement.description,
+        name: achievement.name,
+        points: String(achievement.points),
+        slug: achievement.slug,
+        unlock_criteria: achievement.unlock_criteria,
+      };
 
       const response = await fetch(`/api/achievement/${params.slug}`, {
         method: "PATCH",
-        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ achievement: achievementPayload }),
       });
 
       const resolve: UpdateAchievementResponse = await response.json();
@@ -195,25 +203,19 @@ const UpdateAchievement = () => {
         </div>
 
         <div className="w-full flex flex-col items-start justify-start gap-4 p-2 border-primary/50 border rounded-b-md t:p-4">
-          <File
-            file={
-              localFile.file
-                ? localFile
-                : typeof achievement.icon === "string" &&
-                    achievement.icon !== ""
-                  ? achievement.icon
-                  : ""
-            }
-            id="icon"
-            name="icon"
-            fileRef={fileRef}
-            handleFile={handleLocalFile}
-            removeFile={
-              localFile.file
-                ? removeLocalFile
-                : () => removeUploadedFile("icon")
-            }
-          />
+          <div className="w-full flex flex-col">
+            <div
+              style={{
+                background: `linear-gradient(135deg, ${BADGE_PALETTE[achievement.badge_color].primary}, ${BADGE_PALETTE[achievement.badge_color].secondary}, ${BADGE_PALETTE[achievement.badge_color].primary})`,
+              }}
+              className="w-full flex items-center justify-center  p-8 rounded-lg"
+            >
+              <div
+                dangerouslySetInnerHTML={{ __html: achievement.icon }}
+                className="w-full max-w-60 drop-shadow-xl"
+              />
+            </div>
+          </div>
 
           <Select
             label="Badge Color"

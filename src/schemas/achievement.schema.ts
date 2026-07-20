@@ -72,7 +72,6 @@ export const AchievementSchema = z.object({
   name: z.string().min(1, { error: "Required" }),
   slug: z.string().min(1, { error: "Required" }),
   description: z.string().min(1, { error: "Required" }),
-  icon: z.string().min(1, { error: "Required" }),
   points: z.string().refine((val) => !Number.isNaN(Number(val)), {
     error: "Points must be a number.",
   }),
