@@ -2,7 +2,7 @@ import React from "react";
 
 export default function usePaginate() {
   const [page, setPage] = React.useState(0);
-  const [limit, setLimit] = React.useState(10);
+  const [limit, setLimit] = React.useState(25);
   const [pages, setPages] = React.useState(0);
   const [canSelectLimit, setCanSelectLimit] = React.useState(false);
 
