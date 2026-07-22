@@ -8,7 +8,7 @@ import {
   GetAchievementResponse,
 } from "@/src/interfaces/achievement.interface";
 import { normalizeString } from "@/src/utils/normalizer.util";
-import { renderJSON } from "@/src/utils/renderer.util";
+import { renderJSON } from "./JsonRenderer";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -58,8 +58,6 @@ const SingleAchievement = () => {
   const handleCanDelete = () => {
     setCanDelete((prev) => !prev);
   };
-
-  const mappedCriteria = renderJSON(achievement.unlock_criteria);
 
   React.useEffect(() => {
     const getAchievement = async () => {
@@ -139,7 +137,7 @@ const SingleAchievement = () => {
           >
             <div
               dangerouslySetInnerHTML={{ __html: achievement.icon }}
-              className="w-full max-w-60 drop-shadow-xl"
+              className="max-w-60 w-50 h-50 drop-shadow-xl"
             />
           </div>
         </div>
@@ -175,7 +173,7 @@ const SingleAchievement = () => {
           </div>
 
           <div className="p-2 rounded-b-md border border-neutral-400 text-sm t:text-base t:p-4 flex flex-col gap-2">
-            {mappedCriteria}
+            {renderJSON(achievement.unlock_criteria)}
           </div>
         </div>
       </div>
