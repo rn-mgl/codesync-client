@@ -50,7 +50,7 @@ const AllAchievements = () => {
           <div className="w-full flex items-center justify-center h-full">
             <div
               dangerouslySetInnerHTML={{ __html: achievement.icon }}
-              className="w-full h-full flex items-center justify-center"
+              className="w-full h-full flex items-center justify-center relative"
             />
           </div>
         </div>
