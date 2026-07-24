@@ -1,5 +1,6 @@
 "use client";
 
+import TopicLoader from "@/src/components/ui/loader/TopicLoader";
 import DisplayInputField from "@/src/components/ui/containers/DisplayInputField";
 import DisplayTextArea from "@/src/components/ui/containers/DisplayTextArea";
 import Delete from "@/src/components/ui/forms/Delete";
@@ -26,6 +27,7 @@ const SingleTopic = () => {
     slug: "",
   });
   const [canDelete, setCanDelete] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
 
   const params: { slug?: string } | null = useParams();
 
@@ -37,6 +39,8 @@ const SingleTopic = () => {
 
   React.useEffect(() => {
     const getTopic = async () => {
+      setLoading(true);
+
       try {
         if (!params?.slug) return;
 
@@ -58,6 +62,8 @@ const SingleTopic = () => {
         setTopic(topic);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -74,68 +80,75 @@ const SingleTopic = () => {
           postDeleteAction={() => router.push("/codesync/topics")}
         />
       )}
-      <div className="w-full flex justify-between">
-        <Link
-          href="/codesync/topics"
-          className="text-primary font-bold flex flex-row items-center 
-                    justify-center gap-2 hover:border-b px-1 w-fit"
-        >
-          <FaArrowLeft />
-          All Topics
-        </Link>
 
-        <div>
-          <div className="flex gap-2">
+      {loading ? (
+        <TopicLoader />
+      ) : (
+        <>
+          <div className="w-full flex justify-between">
             <Link
-              title="Edit"
-              href={`/codesync/topics/${params?.slug}/edit`}
-              className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
+              href="/codesync/topics"
+              className="text-primary font-bold flex flex-row items-center 
+                        justify-center gap-2 hover:border-b px-1 w-fit"
             >
-              <FaEdit />
+              <FaArrowLeft />
+              All Topics
             </Link>
 
-            <button
-              title="Delete"
-              onClick={handleCanDelete}
-              className="p-2 rounded-full bg-inherit hover:text-danger flex flex-col items-center justify-center"
-            >
-              <FaTrashCan />
-            </button>
+            <div>
+              <div className="flex gap-2">
+                <Link
+                  title="Edit"
+                  href={`/codesync/topics/${params?.slug}/edit`}
+                  className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
+                >
+                  <FaEdit />
+                </Link>
+
+                <button
+                  title="Delete"
+                  onClick={handleCanDelete}
+                  className="p-2 rounded-full bg-inherit hover:text-danger flex flex-col items-center justify-center"
+                >
+                  <FaTrashCan />
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      <div className="w-full flex flex-col items-start justify-start">
-        <div className="p-4 bg-primary/80 w-full rounded-t-md font-medium text-secondary">
-          Basic Information
-        </div>
+          <div className="w-full flex flex-col items-start justify-start">
+            <div className="p-4 bg-primary/80 w-full rounded-t-md font-medium text-secondary">
+              Basic Information
+            </div>
 
-        <div className="w-full flex flex-col items-start justify-start gap-4 p-2 border-primary/50 border rounded-b-md t:p-4">
-          <DisplayInputField
-            label="Name"
-            value={`${topic.name}`}
-            icon={<FaA />}
-          />
+            <div className="w-full flex flex-col items-start justify-start gap-4 p-2 border-primary/50 border rounded-b-md t:p-4">
+              <DisplayInputField
+                label="Name"
+                value={`${topic.name}`}
+                icon={<FaA />}
+              />
 
-          <DisplayInputField
-            label="Slug"
-            value={`${topic.slug}`}
-            icon={<FaLink />}
-          />
+              <DisplayInputField
+                label="Slug"
+                value={`${topic.slug}`}
+                icon={<FaLink />}
+              />
 
-          <DisplayTextArea
-            label="Description"
-            value={topic.description}
-            icon={<FaNoteSticky />}
-          />
+              <DisplayTextArea
+                label="Description"
+                value={topic.description}
+                icon={<FaNoteSticky />}
+              />
 
-          <DisplayInputField
-            label="Icon"
-            value={`${topic.icon}`}
-            icon={<FaTag />}
-          />
-        </div>
-      </div>
+              <DisplayInputField
+                label="Icon"
+                value={`${topic.icon}`}
+                icon={<FaTag />}
+              />
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

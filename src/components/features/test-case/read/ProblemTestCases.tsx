@@ -1,5 +1,6 @@
 "use client";
 
+import BlockLoader from "@/src/components/ui/loader/BlockLoader";
 import Paginate from "@/src/components/ui/filters/Paginate";
 import usePaginate from "@/src/hooks/usePaginate";
 import {
@@ -25,6 +26,7 @@ const ProblemTestCases = (props: {
   const [testCases, setTestCases] = React.useState<ProblemTestCaseProperties[]>(
     [],
   );
+  const [loading, setLoading] = React.useState(true);
 
   const {
     pages,
@@ -39,6 +41,8 @@ const ProblemTestCases = (props: {
 
   React.useEffect(() => {
     const getTestCases = async () => {
+      setLoading(true);
+
       try {
         const searchParams = {
           problem: props.selectedProblem,
@@ -68,6 +72,8 @@ const ProblemTestCases = (props: {
         handlePages(pagination.pages);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -167,7 +173,9 @@ const ProblemTestCases = (props: {
             </Link>
           </div>
 
-          {testCases.length === 0 ? (
+          {loading ? (
+            <BlockLoader count={4} />
+          ) : testCases.length === 0 ? (
             <p className="text-sm text-neutral-500">No Test Cases yet.</p>
           ) : (
             <div className="grid grid-cols-1 items-start justify-start gap-4 t:grid-cols-2 l-s:grid-cols-3 l-l:grid-cols-4 w-full">
@@ -175,15 +183,17 @@ const ProblemTestCases = (props: {
             </div>
           )}
 
-          <Paginate
-            limit={limit}
-            pages={pages}
-            page={page}
-            canSelectLimit={canSelectLimit}
-            handleCanSelectLimit={handleCanSelectLimit}
-            handleLimit={handleLimit}
-            handlePage={handlePage}
-          />
+          {!loading && (
+            <Paginate
+              limit={limit}
+              pages={pages}
+              page={page}
+              canSelectLimit={canSelectLimit}
+              handleCanSelectLimit={handleCanSelectLimit}
+              handleLimit={handleLimit}
+              handlePage={handlePage}
+            />
+          )}
         </div>
       </div>
     </div>
