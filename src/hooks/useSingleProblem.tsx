@@ -101,6 +101,7 @@ export default function useSingleProblem() {
     React.useState<DetailsPanel>("description");
   const [topics, setTopics] = React.useState<BaseTopic[]>([]);
   const [hints, setHints] = React.useState<BaseHint[]>([]);
+  const [loading, setLoading] = React.useState(true);
 
   const params: { slug?: string } | null = useParams();
   const editorRef = React.useRef<Monaco.editor.IStandaloneCodeEditor | null>(
@@ -111,6 +112,8 @@ export default function useSingleProblem() {
   const user = session?.user;
 
   const getProblem = React.useCallback(async () => {
+    setLoading(true);
+
     try {
       if (!params?.slug) return;
 
@@ -135,6 +138,8 @@ export default function useSingleProblem() {
       setHints(data.hints);
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   }, [params]);
 
@@ -323,6 +328,7 @@ export default function useSingleProblem() {
     activeDetailsPanel,
     topics,
     hints,
+    loading,
     getProblem,
     handleSubmission,
     handleCanDelete,

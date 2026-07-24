@@ -1,5 +1,6 @@
 "use client";
 
+import ProblemLoader from "@/src/components/ui/loader/ProblemLoader";
 import CodeEditor from "@/src/components/ui/fields/CodeEditor";
 import Delete from "@/src/components/ui/forms/Delete";
 import useSingleProblem from "@/src/hooks/useSingleProblem";
@@ -37,6 +38,7 @@ const SingleProblem = () => {
     activeDetailsPanel,
     topics,
     hints,
+    loading,
     getProblem,
     handleSubmission,
     handleCanDelete,
@@ -99,84 +101,90 @@ const SingleProblem = () => {
         />
       )}
 
-      <div className="w-full h-full flex flex-col l-s:overflow-hidden gap-4">
-        <Link
-          href="/codesync/problems"
-          className="text-primary font-bold flex flex-row items-center 
-                    justify-center gap-2 hover:border-b px-1 w-fit"
-        >
-          <FaArrowLeft />
-          All Problems
-        </Link>
+      {loading ? (
+        <ProblemLoader />
+      ) : (
+        <>
+          <div className="w-full h-full flex flex-col l-s:overflow-hidden gap-4">
+            <Link
+              href="/codesync/problems"
+              className="text-primary font-bold flex flex-row items-center 
+                        justify-center gap-2 hover:border-b px-1 w-fit"
+            >
+              <FaArrowLeft />
+              All Problems
+            </Link>
 
-        <div className="w-full h-full max-h-screen min-h-screen flex flex-col l-s:min-h-auto l-s:overflow-hidden gap-2">
-          <DetailsAction
-            activeDetailsPanel={activeDetailsPanel}
-            didSubmitRun={!!submittedRunOutput}
-            handleActiveDetailsPanel={handleActiveDetailsPanel}
-            handleClearSubmissionState={handleClearSubmissionState}
-          />
-
-          <div className="w-full h-full flex overflow-y-auto flex-col l-s:overflow-hidden border rounded-md border-neutral-400 bg-secondary">
-            <div className="w-full h-full flex flex-col gap-8 p-2 overflow-y-auto l-s:max-h-full">
-              {submittedRunOutput && activeDetailsPanel === "result" ? (
-                <RunResults
-                  runOutput={submittedRunOutput}
-                  language={currentLanguage}
-                  activeChart={activeChart}
-                  handleActiveChart={handleActiveChart}
-                />
-              ) : activeDetailsPanel === "description" ? (
-                <ProblemDetails
-                  problem={problem}
-                  topics={topics}
-                  hints={hints}
-                />
-              ) : activeDetailsPanel === "editorial" ? (
-                <article className="prose max-w-none text-primary leading-snug">
-                  <div
-                    dangerouslySetInnerHTML={{ __html: problem.editorial }}
-                  />
-                </article>
-              ) : activeDetailsPanel === "submission" ? (
-                <ProblemSubmissions
-                  handleSubmissionState={handleSubmissionState}
-                  handleActiveDetailsPanel={handleActiveDetailsPanel}
-                />
-              ) : null}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="w-full h-full flex flex-col items-start justify-start gap-2 l-s:h-full l-s:overflow-y-hidden">
-        <ProblemActions
-          language={currentLanguage}
-          handleCurrentLanguage={handleCurrentLanguage}
-          handleCanDelete={handleCanDelete}
-        />
-
-        <div className="w-full grid grid-cols-1 grid-rows-2 items-start justify-start gap-4 h-screen l-s:h-full rounded-md overflow-hidden">
-          <div className="w-full h-full grid-rows-1 p-2 rounded-md bg-[#1e1e1e] flex flex-col items-center justify-center">
-            <CodeEditor
-              language={currentLanguage}
-              boilerPlate={startingCode}
-              ref={editorRef}
-            />
-            <EditorActions handleSubmission={handleSubmission} />
-          </div>
-
-          <div className="w-full flex flex-col items-end justify-start grid-rows-1 h-full overflow-y-hidden">
-            <div className="w-full h-full rounded-md flex flex-col items-start justify-start overflow-y-hidden">
-              <ProblemTestCases
-                testCases={testCases}
-                submittedTestOutput={submittedTestOutput}
+            <div className="w-full h-full max-h-screen min-h-screen flex flex-col l-s:min-h-auto l-s:overflow-hidden gap-2">
+              <DetailsAction
+                activeDetailsPanel={activeDetailsPanel}
+                didSubmitRun={!!submittedRunOutput}
+                handleActiveDetailsPanel={handleActiveDetailsPanel}
                 handleClearSubmissionState={handleClearSubmissionState}
               />
+
+              <div className="w-full h-full flex overflow-y-auto flex-col l-s:overflow-hidden border rounded-md border-neutral-400 bg-secondary">
+                <div className="w-full h-full flex flex-col gap-8 p-2 overflow-y-auto l-s:max-h-full">
+                  {submittedRunOutput && activeDetailsPanel === "result" ? (
+                    <RunResults
+                      runOutput={submittedRunOutput}
+                      language={currentLanguage}
+                      activeChart={activeChart}
+                      handleActiveChart={handleActiveChart}
+                    />
+                  ) : activeDetailsPanel === "description" ? (
+                    <ProblemDetails
+                      problem={problem}
+                      topics={topics}
+                      hints={hints}
+                    />
+                  ) : activeDetailsPanel === "editorial" ? (
+                    <article className="prose max-w-none text-primary leading-snug">
+                      <div
+                        dangerouslySetInnerHTML={{ __html: problem.editorial }}
+                      />
+                    </article>
+                  ) : activeDetailsPanel === "submission" ? (
+                    <ProblemSubmissions
+                      handleSubmissionState={handleSubmissionState}
+                      handleActiveDetailsPanel={handleActiveDetailsPanel}
+                    />
+                  ) : null}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+
+          <div className="w-full h-full flex flex-col items-start justify-start gap-2 l-s:h-full l-s:overflow-y-hidden">
+            <ProblemActions
+              language={currentLanguage}
+              handleCurrentLanguage={handleCurrentLanguage}
+              handleCanDelete={handleCanDelete}
+            />
+
+            <div className="w-full grid grid-cols-1 grid-rows-2 items-start justify-start gap-4 h-screen l-s:h-full rounded-md overflow-hidden">
+              <div className="w-full h-full grid-rows-1 p-2 rounded-md bg-[#1e1e1e] flex flex-col items-center justify-center">
+                <CodeEditor
+                  language={currentLanguage}
+                  boilerPlate={startingCode}
+                  ref={editorRef}
+                />
+                <EditorActions handleSubmission={handleSubmission} />
+              </div>
+
+              <div className="w-full flex flex-col items-end justify-start grid-rows-1 h-full overflow-y-hidden">
+                <div className="w-full h-full rounded-md flex flex-col items-start justify-start overflow-y-hidden">
+                  <ProblemTestCases
+                    testCases={testCases}
+                    submittedTestOutput={submittedTestOutput}
+                    handleClearSubmissionState={handleClearSubmissionState}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };
