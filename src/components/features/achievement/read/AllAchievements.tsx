@@ -6,6 +6,7 @@ import {
   BaseAchievement,
   GetAllAchievementResponse,
 } from "@/src/interfaces/achievement.interface";
+import { BADGE_COLORS } from "@/src/configs/achievement.config";
 import { getErrorMessage } from "@/src/utils/general.util";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -29,12 +30,6 @@ const AllAchievements = () => {
   } = usePaginate();
 
   useSession({ required: true });
-
-  const BADGE_COLORS: Record<string, string> = {
-    bronze: "#CE8946",
-    silver: "#C4C4C4",
-    gold: "#EFBF04",
-  };
 
   const mappedAchievements = achievements.map((achievement) => {
     return (
