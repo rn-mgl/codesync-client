@@ -1,5 +1,6 @@
 "use client";
 
+import BlockLoader from "@/src/components/ui/loader/BlockLoader";
 import Paginate from "@/src/components/ui/filters/Paginate";
 import usePaginate from "@/src/hooks/usePaginate";
 import {
@@ -15,6 +16,7 @@ const AllTestCases = (props: { problem?: string }) => {
   const [selectedProblem, setSelectedProblem] = React.useState<string | null>(
     props.problem ?? null,
   );
+  const [loading, setLoading] = React.useState(true);
 
   const {
     pages,
@@ -55,6 +57,8 @@ const AllTestCases = (props: { problem?: string }) => {
 
   React.useEffect(() => {
     const getTestCases = async () => {
+      setLoading(true);
+
       try {
         const searchParams = {
           problem: problemParam ?? "",
@@ -84,6 +88,8 @@ const AllTestCases = (props: { problem?: string }) => {
         handlePages(pagination.pages);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -92,9 +98,13 @@ const AllTestCases = (props: { problem?: string }) => {
 
   return (
     <div className="flex flex-col items-center justify-start gap-8 w-full">
-      <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-3 l-l:grid-cols-4 gap-4">
-        {mappedProblems}
-      </div>
+      {loading ? (
+        <BlockLoader />
+      ) : (
+        <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-3 l-l:grid-cols-4 gap-4">
+          {mappedProblems}
+        </div>
+      )}
       {selectedProblem && (
         <ProblemTestCases
           selectedProblem={selectedProblem}

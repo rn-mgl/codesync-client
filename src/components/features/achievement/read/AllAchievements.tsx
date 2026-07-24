@@ -1,5 +1,6 @@
 "use client";
 
+import BlockLoader from "@/src/components/ui/loader/BlockLoader";
 import Paginate from "@/src/components/ui/filters/Paginate";
 import usePaginate from "@/src/hooks/usePaginate";
 import {
@@ -17,6 +18,7 @@ const AllAchievements = () => {
   const [achievements, setAchievements] = React.useState<
     Omit<BaseAchievement, "unlock_criteria">[]
   >([]);
+  const [loading, setLoading] = React.useState(true);
 
   const {
     pages,
@@ -62,6 +64,8 @@ const AllAchievements = () => {
 
   React.useEffect(() => {
     const getAchievements = async () => {
+      setLoading(true);
+
       try {
         const searchParams = {
           page: String(page),
@@ -90,6 +94,8 @@ const AllAchievements = () => {
       } catch (error) {
         const message = getErrorMessage(error);
         toast(message);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -98,9 +104,13 @@ const AllAchievements = () => {
 
   return (
     <div className="w-full flex flex-col items-start justify-start gap-8">
-      <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-2 l-l:grid-cols-3 gap-4">
-        {mappedAchievements}
-      </div>
+      {loading ? (
+        <BlockLoader />
+      ) : (
+        <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-2 l-l:grid-cols-3 gap-4">
+          {mappedAchievements}
+        </div>
+      )}
 
       <Paginate
         limit={limit}

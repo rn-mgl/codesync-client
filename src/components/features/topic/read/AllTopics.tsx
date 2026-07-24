@@ -1,5 +1,6 @@
 "use client";
 
+import BlockLoader from "@/src/components/ui/loader/BlockLoader";
 import Paginate from "@/src/components/ui/filters/Paginate";
 import usePaginate from "@/src/hooks/usePaginate";
 import {
@@ -12,6 +13,7 @@ import React from "react";
 
 const AllTopics = () => {
   const [topics, setTopics] = React.useState<BaseTopic[]>([]);
+  const [loading, setLoading] = React.useState(true);
 
   const {
     pages,
@@ -49,6 +51,8 @@ const AllTopics = () => {
 
   React.useEffect(() => {
     const getTopics = async () => {
+      setLoading(true);
+
       try {
         const searchParams = {
           limit: String(limit),
@@ -76,6 +80,8 @@ const AllTopics = () => {
         handlePages(pagination.pages);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -84,9 +90,13 @@ const AllTopics = () => {
 
   return (
     <div className="w-full flex flex-col items-start justify-start h-auto gap-8">
-      <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-3 l-l:grid-cols-4 gap-4">
-        {mappedTopics}
-      </div>
+      {loading ? (
+        <BlockLoader />
+      ) : (
+        <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-3 l-l:grid-cols-4 gap-4">
+          {mappedTopics}
+        </div>
+      )}
 
       <Paginate
         limit={limit}

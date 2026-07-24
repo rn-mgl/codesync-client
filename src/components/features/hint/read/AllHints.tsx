@@ -1,5 +1,6 @@
 "use client";
 
+import BlockLoader from "@/src/components/ui/loader/BlockLoader";
 import Paginate from "@/src/components/ui/filters/Paginate";
 import usePaginate from "@/src/hooks/usePaginate";
 import {
@@ -15,6 +16,7 @@ const AllHints = (props: { problem?: string }) => {
   const [selectedProblem, setSelectedProblem] = React.useState<string | null>(
     null,
   );
+  const [loading, setLoading] = React.useState(true);
 
   const {
     pages,
@@ -52,6 +54,8 @@ const AllHints = (props: { problem?: string }) => {
 
   React.useEffect(() => {
     const getHints = async () => {
+      setLoading(true);
+
       try {
         const searchParams = {
           problem: problemParam ?? "",
@@ -81,6 +85,8 @@ const AllHints = (props: { problem?: string }) => {
         handlePages(pagination.pages);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -89,9 +95,13 @@ const AllHints = (props: { problem?: string }) => {
 
   return (
     <div className="w-full flex flex-col gap-8 itemsce justify-start">
-      <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-3 l-l:grid-cols-4 gap-4">
-        {mappedProblems}
-      </div>
+      {loading ? (
+        <BlockLoader />
+      ) : (
+        <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-3 l-l:grid-cols-4 gap-4">
+          {mappedProblems}
+        </div>
+      )}
 
       {selectedProblem && (
         <ProblemHints

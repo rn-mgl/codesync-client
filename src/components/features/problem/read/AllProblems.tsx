@@ -1,5 +1,6 @@
 "use client";
 
+import TableLoader from "@/src/components/ui/loader/TableLoader";
 import Table from "@/src/components/ui/containers/Table";
 import Paginate from "@/src/components/ui/filters/Paginate";
 import usePaginate from "@/src/hooks/usePaginate";
@@ -13,6 +14,7 @@ import React from "react";
 
 const AllProblems = () => {
   const [problems, setProblems] = React.useState<ProblemList[]>([]);
+  const [loading, setLoading] = React.useState(true);
 
   const {
     page,
@@ -81,6 +83,8 @@ const AllProblems = () => {
 
   React.useEffect(() => {
     const getProblems = async () => {
+      setLoading(true);
+
       try {
         const searchParams = { limit: String(limit), page: String(page) };
 
@@ -105,6 +109,8 @@ const AllProblems = () => {
         handlePages(pagination.pages);
       } catch (err) {
         console.error(err);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -113,10 +119,14 @@ const AllProblems = () => {
 
   return (
     <div className="w-full flex flex-col items-start justify-start gap-4 h-auto">
-      <Table<ProblemList>
-        headers={["id", "title", "difficulty", "acceptance_rate"]}
-        data={mappedProblems}
-      />
+      {loading ? (
+        <TableLoader />
+      ) : (
+        <Table<ProblemList>
+          headers={["id", "title", "difficulty", "acceptance_rate"]}
+          data={mappedProblems}
+        />
+      )}
 
       <Paginate
         limit={limit}
