@@ -7,6 +7,7 @@ import { BaseHint, GetHintResponse } from "@/src/interfaces/hint.interface";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import React from "react";
+import HintLoader from "@/src/components/ui/loader/HintLoader";
 import { FaEdit } from "react-icons/fa";
 import {
   FaArrowDown19,
@@ -25,6 +26,8 @@ const SingleHint = () => {
     order_index: 0,
     problem_id: 0,
   });
+
+  const [loading, setLoading] = React.useState(true);
 
   const [canDelete, setCanDelete] = React.useState(false);
 
@@ -59,11 +62,17 @@ const SingleHint = () => {
         setHint(hint);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
 
     getHint();
   }, [params?.id]);
+
+  if (loading) {
+    return <HintLoader />;
+  }
 
   return (
     <div className="flex flex-col items-start justify-start w-full gap-8">

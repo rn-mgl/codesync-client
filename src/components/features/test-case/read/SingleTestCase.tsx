@@ -13,6 +13,7 @@ import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import { FaArrowLeft, FaCode, FaClock, FaEdit } from "react-icons/fa";
 import { FaLink, FaMemory, FaTrashCan } from "react-icons/fa6";
+import TestCaseLoader from "@/src/components/ui/loader/TestCaseLoader";
 
 const SingleTestCase = () => {
   const [testCase, setTestCase] = React.useState<TestCaseDetails>({
@@ -28,6 +29,8 @@ const SingleTestCase = () => {
     is_sample: true,
     is_hidden: false,
   });
+
+  const [loading, setLoading] = React.useState(true);
 
   const [canDelete, setCanDelete] = React.useState(false);
 
@@ -62,11 +65,17 @@ const SingleTestCase = () => {
         setTestCase(test_case);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
 
     getTestCase();
   }, [params]);
+
+  if (loading) {
+    return <TestCaseLoader />;
+  }
 
   return (
     <div className="flex flex-col items-start justify-start w-full gap-8">

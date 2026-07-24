@@ -13,6 +13,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import React from "react";
+import AchievementLoader from "@/src/components/ui/loader/AchievementLoader";
 import { FaArrowLeft, FaEdit } from "react-icons/fa";
 import { FaTrashCan } from "react-icons/fa6";
 
@@ -31,6 +32,7 @@ const SingleAchievement = () => {
       version: 1,
     },
   });
+  const [loading, setLoading] = React.useState(true);
   const [canDelete, setCanDelete] = React.useState(false);
 
   useSession({ required: true });
@@ -82,11 +84,17 @@ const SingleAchievement = () => {
         setAchievement(achievement);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
 
     getAchievement();
   }, [params?.slug]);
+
+  if (loading) {
+    return <AchievementLoader />;
+  }
 
   return (
     <div className="flex flex-col items-start justify-start w-full gap-4">
