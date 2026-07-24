@@ -1,6 +1,7 @@
 "use client";
 
 import light from "@/public/global/LogoLight.svg";
+import { BADGE_PALETTE } from "@/src/configs/achievement.config";
 import Input from "@/src/components/ui/fields/Input";
 import Select from "@/src/components/ui/fields/Select";
 import TextArea from "@/src/components/ui/fields/TextArea";
@@ -30,22 +31,6 @@ const CreateAchievement = () => {
   });
 
   useSession({ required: true });
-
-  const BADGE_PALETTE: Record<string, { primary: string; secondary: string }> =
-    {
-      bronze: {
-        primary: "#CE8946",
-        secondary: "#FCA956",
-      },
-      silver: {
-        primary: "#C4C4C4",
-        secondary: "#E0E0E0",
-      },
-      gold: {
-        primary: "#EFBF04",
-        secondary: "#FFC766",
-      },
-    };
 
   const { select: category, handleSelect: handleCategory } = useSelect(
     { label: "Problems", value: "problems" },

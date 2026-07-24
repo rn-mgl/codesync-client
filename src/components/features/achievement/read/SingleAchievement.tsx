@@ -7,6 +7,7 @@ import {
   BaseAchievement,
   GetAchievementResponse,
 } from "@/src/interfaces/achievement.interface";
+import { BADGE_PALETTE } from "@/src/configs/achievement.config";
 import { normalizeString } from "@/src/utils/normalizer.util";
 import { renderJSON } from "./JsonRenderer";
 import { useSession } from "next-auth/react";
@@ -38,22 +39,6 @@ const SingleAchievement = () => {
   useSession({ required: true });
 
   const router = useRouter();
-
-  const BADGE_PALETTE: Record<string, { primary: string; secondary: string }> =
-    {
-      bronze: {
-        primary: "#CE8946",
-        secondary: "#FCA956",
-      },
-      silver: {
-        primary: "#C4C4C4",
-        secondary: "#E0E0E0",
-      },
-      gold: {
-        primary: "#EFBF04",
-        secondary: "#FFC766",
-      },
-    };
 
   const params: { slug?: string } | null = useParams();
 
