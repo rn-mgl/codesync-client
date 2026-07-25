@@ -2,6 +2,8 @@
 
 import Input from "@/src/components/ui/fields/Input";
 import { LoginPayload, LoginResponse } from "@/src/interfaces/auth.interface";
+import { getErrorMessage } from "@/src/utils/general.util";
+import { errorToast } from "@/src/utils/toast.util";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -75,7 +77,7 @@ const LoginForm = () => {
         router.push("/codesync");
       }
     } catch (err) {
-      console.error(err);
+      errorToast(getErrorMessage(err));
     } finally {
       setLoading(false);
     }

@@ -7,6 +7,8 @@ import {
   GetAllTestCasesResponse,
   ProblemTestCaseProperties,
 } from "@/src/interfaces/test-case.interface";
+import { getErrorMessage } from "@/src/utils/general.util";
+import { errorToast } from "@/src/utils/toast.util";
 import { normalizeString } from "@/src/utils/normalizer.util";
 import Link from "next/link";
 import React from "react";
@@ -71,7 +73,7 @@ const ProblemTestCases = (props: {
         setTestCases(test_cases[props.selectedProblem]);
         handlePages(pagination.pages);
       } catch (error) {
-        console.log(error);
+        errorToast(getErrorMessage(error));
       } finally {
         setLoading(false);
       }

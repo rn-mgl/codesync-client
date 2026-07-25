@@ -7,6 +7,8 @@ import {
   GetTestCaseCountResponse,
   ProblemTestCaseCount,
 } from "@/src/interfaces/test-case.interface";
+import { getErrorMessage } from "@/src/utils/general.util";
+import { errorToast } from "@/src/utils/toast.util";
 import { normalizeString } from "@/src/utils/normalizer.util";
 import React from "react";
 import ProblemTestCases from "./ProblemTestCases";
@@ -87,7 +89,7 @@ const AllTestCases = (props: { problem?: string }) => {
         setTestCases(test_cases);
         handlePages(pagination.pages);
       } catch (error) {
-        console.log(error);
+        errorToast(getErrorMessage(error));
       } finally {
         setLoading(false);
       }

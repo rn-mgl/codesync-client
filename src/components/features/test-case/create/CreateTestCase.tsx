@@ -9,10 +9,10 @@ import {
   TestCasePayload,
 } from "@/src/interfaces/test-case.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
+import { successToast, errorToast } from "@/src/utils/toast.util";
 import React from "react";
 import { FaCode, FaLink } from "react-icons/fa";
 import { FaClock, FaMemory } from "react-icons/fa6";
-import { toast } from "sonner";
 
 const CreateTestCase = (props: { problem?: string }) => {
   const [testCase, setTestCase] = React.useState<TestCaseForm>({
@@ -71,11 +71,9 @@ const CreateTestCase = (props: { problem?: string }) => {
 
       const { data } = resolve;
 
-      toast(data.message);
+      successToast(data.message);
     } catch (error: unknown) {
-      const message = getErrorMessage(error);
-      toast(message);
-      console.error(error);
+      errorToast(getErrorMessage(error));
     }
   };
 

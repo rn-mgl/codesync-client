@@ -16,11 +16,11 @@ import {
   GetAllTopicsResponse,
 } from "@/src/interfaces/topic.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
+import { successToast, errorToast } from "@/src/utils/toast.util";
 import { Editor } from "@tiptap/react";
 import { useSession } from "next-auth/react";
 import React from "react";
 import { FaCode, FaLink, FaPuzzlePiece } from "react-icons/fa6";
-import { toast } from "sonner";
 
 const CreateProblem = () => {
   const [problem, setProblem] = React.useState<ProblemForm>({
@@ -98,9 +98,9 @@ const CreateProblem = () => {
 
       const data = resolve.data;
 
-      toast(data.message);
+      successToast(data.message);
     } catch (err) {
-      toast(getErrorMessage(err));
+      errorToast(getErrorMessage(err));
     }
   };
 
@@ -124,7 +124,7 @@ const CreateProblem = () => {
 
         setTopics(topics);
       } catch (error) {
-        console.log(error);
+        errorToast(getErrorMessage(error));
       }
     };
 

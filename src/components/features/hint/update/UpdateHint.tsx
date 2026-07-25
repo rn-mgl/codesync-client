@@ -8,11 +8,11 @@ import {
   GetHintResponse,
 } from "@/src/interfaces/hint.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
+import { successToast, errorToast } from "@/src/utils/toast.util";
 import { useParams } from "next/navigation";
 import React from "react";
 import { FaLink } from "react-icons/fa";
 import { FaArrowDown19, FaArrowTrendUp, FaLightbulb } from "react-icons/fa6";
-import { toast } from "sonner";
 
 const UpdateHint = () => {
   const [hint, setHint] = React.useState<HintForm>({
@@ -59,11 +59,9 @@ const UpdateHint = () => {
 
       const { message } = resolve.data;
 
-      toast(message);
+      successToast(message);
     } catch (error) {
-      console.log(error);
-      const message = getErrorMessage(error);
-      toast(message);
+      errorToast(getErrorMessage(error));
     }
   };
 
@@ -97,7 +95,7 @@ const UpdateHint = () => {
           };
         });
       } catch (error) {
-        console.log(error);
+        errorToast(getErrorMessage(error));
       }
     };
 

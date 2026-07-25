@@ -7,12 +7,13 @@ import {
   TopicForm,
   UpdateTopicResponse,
 } from "@/src/interfaces/topic.interface";
+import { getErrorMessage } from "@/src/utils/general.util";
+import { successToast, errorToast } from "@/src/utils/toast.util";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import React from "react";
 import { FaLink } from "react-icons/fa";
 import { FaA, FaNoteSticky, FaTag } from "react-icons/fa6";
-import { toast } from "sonner";
 
 const UpdateTopic = () => {
   const [topic, setTopic] = React.useState<TopicForm>({
@@ -58,9 +59,9 @@ const UpdateTopic = () => {
 
       const { message } = resolve.data;
 
-      toast(message);
+      successToast(message);
     } catch (error) {
-      console.log(error);
+      errorToast(getErrorMessage(error));
     }
   };
 
@@ -91,7 +92,7 @@ const UpdateTopic = () => {
           slug: topic.slug,
         });
       } catch (error) {
-        console.log(error);
+        errorToast(getErrorMessage(error));
       }
     };
 

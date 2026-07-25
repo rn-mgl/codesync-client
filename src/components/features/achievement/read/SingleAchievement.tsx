@@ -8,6 +8,8 @@ import {
   GetAchievementResponse,
 } from "@/src/interfaces/achievement.interface";
 import { BADGE_PALETTE } from "@/src/configs/achievement.config";
+import { getErrorMessage } from "@/src/utils/general.util";
+import { errorToast } from "@/src/utils/toast.util";
 import { normalizeString } from "@/src/utils/normalizer.util";
 import { renderJSON } from "./JsonRenderer";
 import { useSession } from "next-auth/react";
@@ -68,7 +70,7 @@ const SingleAchievement = () => {
 
         setAchievement(achievement);
       } catch (error) {
-        console.log(error);
+        errorToast(getErrorMessage(error));
       } finally {
         setLoading(false);
       }

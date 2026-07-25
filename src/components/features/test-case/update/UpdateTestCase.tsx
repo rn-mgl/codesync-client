@@ -4,6 +4,7 @@ import Input from "@/src/components/ui/fields/Input";
 import TextArea from "@/src/components/ui/fields/TextArea";
 import Toggle from "@/src/components/ui/fields/Toggle";
 import { getErrorMessage } from "@/src/utils/general.util";
+import { successToast, errorToast } from "@/src/utils/toast.util";
 import {
   GetTestCaseResponse,
   TestCaseForm,
@@ -14,7 +15,6 @@ import { useParams } from "next/navigation";
 import React from "react";
 import { FaCode, FaLink } from "react-icons/fa";
 import { FaMemory, FaClock } from "react-icons/fa6";
-import { toast } from "sonner";
 
 const UpdateTestCase = () => {
   const [testCase, setTestCase] = React.useState<TestCaseForm>({
@@ -76,11 +76,9 @@ const UpdateTestCase = () => {
 
       const { data } = resolve;
 
-      toast(data.message);
+      successToast(data.message);
     } catch (error: unknown) {
-      const message = getErrorMessage(error);
-      toast(message);
-      console.error(error);
+      errorToast(getErrorMessage(error));
     }
   };
 
@@ -115,7 +113,7 @@ const UpdateTestCase = () => {
           is_hidden: test_case.is_hidden,
         });
       } catch (error) {
-        console.log(error);
+        errorToast(getErrorMessage(error));
       }
     };
 

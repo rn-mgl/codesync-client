@@ -2,6 +2,8 @@
 
 import Input from "@/src/components/ui/fields/Input";
 import { ForgotPayload, ForgotResponse } from "@/src/interfaces/auth.interface";
+import { getErrorMessage } from "@/src/utils/general.util";
+import { errorToast } from "@/src/utils/toast.util";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { FaEnvelope } from "react-icons/fa6";
@@ -54,7 +56,7 @@ const ForgotForm = () => {
 
       router.push("/auth/sending?type=reset");
     } catch (error) {
-      console.log(error);
+      errorToast(getErrorMessage(error));
     } finally {
       setLoading(false);
     }

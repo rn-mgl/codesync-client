@@ -11,12 +11,12 @@ import {
   UpdateAchievementResponse,
 } from "@/src/interfaces/achievement.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
+import { successToast, errorToast } from "@/src/utils/toast.util";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import React from "react";
 import { FaChartLine, FaLink, FaStickyNote } from "react-icons/fa";
 import { FaLockOpen, FaTrophy } from "react-icons/fa6";
-import { toast } from "sonner";
 
 const UpdateAchievement = () => {
   const [achievement, setAchievement] = React.useState<
@@ -90,11 +90,9 @@ const UpdateAchievement = () => {
       }
       const { message } = resolve.data;
 
-      toast(message);
+      successToast(message);
     } catch (error) {
-      console.error(error);
-      const message = getErrorMessage(error);
-      toast(message);
+      errorToast(getErrorMessage(error));
     }
   };
 
@@ -129,7 +127,7 @@ const UpdateAchievement = () => {
           unlock_criteria: JSON.stringify(achievement.unlock_criteria, null, 2),
         });
       } catch (error) {
-        console.error(error);
+        errorToast(getErrorMessage(error));
       }
     };
 

@@ -4,6 +4,8 @@ import DisplayInputField from "@/src/components/ui/containers/DisplayInputField"
 import DisplayTextArea from "@/src/components/ui/containers/DisplayTextArea";
 import Delete from "@/src/components/ui/forms/Delete";
 import { BaseHint, GetHintResponse } from "@/src/interfaces/hint.interface";
+import { getErrorMessage } from "@/src/utils/general.util";
+import { errorToast } from "@/src/utils/toast.util";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import React from "react";
@@ -61,7 +63,7 @@ const SingleHint = () => {
 
         setHint(hint);
       } catch (error) {
-        console.log(error);
+        errorToast(getErrorMessage(error));
       } finally {
         setLoading(false);
       }

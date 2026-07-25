@@ -1,7 +1,8 @@
 import { DeleteForm, DeleteResponse } from "@/src/interfaces/form.interface";
+import { getErrorMessage } from "@/src/utils/general.util";
+import { successToast, errorToast } from "@/src/utils/toast.util";
 import React from "react";
 import { FaXmark } from "react-icons/fa6";
-import { toast } from "sonner";
 
 const Delete = (props: DeleteForm) => {
   const handleDelete = async (e: React.SubmitEvent) => {
@@ -23,13 +24,13 @@ const Delete = (props: DeleteForm) => {
 
       const { message } = resolve.data;
 
-      toast(message);
+      successToast(message);
 
       if (props.postDeleteAction) {
         props.postDeleteAction();
       }
     } catch (error) {
-      console.error(error);
+      errorToast(getErrorMessage(error));
     }
   };
 

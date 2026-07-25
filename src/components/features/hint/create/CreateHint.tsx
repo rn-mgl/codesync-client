@@ -4,10 +4,10 @@ import Input from "@/src/components/ui/fields/Input";
 import TextArea from "@/src/components/ui/fields/TextArea";
 import { CreateHintResponse, HintForm } from "@/src/interfaces/hint.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
+import { successToast, errorToast } from "@/src/utils/toast.util";
 import React from "react";
 import { FaLink } from "react-icons/fa";
 import { FaArrowDown19, FaArrowTrendUp, FaLightbulb } from "react-icons/fa6";
-import { toast } from "sonner";
 
 const CreateHint = (props: { problem?: string }) => {
   const [hint, setHint] = React.useState<HintForm>({
@@ -50,11 +50,9 @@ const CreateHint = (props: { problem?: string }) => {
 
       const { message } = resolve.data;
 
-      toast(message);
+      successToast(message);
     } catch (error) {
-      console.log(error);
-      const message = getErrorMessage(error);
-      toast(message);
+      errorToast(getErrorMessage(error));
     }
   };
 

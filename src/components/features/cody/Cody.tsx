@@ -6,6 +6,8 @@ import {
   CodyState,
   GetHistoryResponse,
 } from "@/src/interfaces/cody.interface";
+import { getErrorMessage } from "@/src/utils/general.util";
+import { errorToast } from "@/src/utils/toast.util";
 import React from "react";
 import { FaHistory } from "react-icons/fa";
 import { FaMessage, FaXmark } from "react-icons/fa6";
@@ -65,6 +67,7 @@ const Cody = () => {
     chats: [],
   });
   const [canSeeHistory, setCanSeeHistory] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   const inputRef = React.useRef<HTMLDivElement | null>(null);
 
   const handleCanSeePanel = () => {
@@ -172,6 +175,8 @@ const Cody = () => {
 
       el.innerHTML = "";
 
+      setLoading(true);
+
       const newChat = {
         input: input,
         sender: "user",
@@ -202,7 +207,9 @@ const Cody = () => {
 
       await streamResponse(reader);
     } catch (error) {
-      console.log(error);
+      errorToast(getErrorMessage(error));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -259,7 +266,7 @@ const Cody = () => {
         data: { interaction: interaction, chats },
       });
     } catch (error) {
-      console.log(error);
+      errorToast(getErrorMessage(error));
     }
   };
 
@@ -332,23 +339,34 @@ const Cody = () => {
 
             <div className="w-full h-full flex flex-col items-center justify-start overflow-y-auto gap-4">
               {mappedChats}
+
+              {loading && state.chats[state.chats.length - 1]?.sender === "user" && (
+                <div className="w-full flex justify-start">
+                  <div className="w-fit p-2 rounded-md bg-neutral-300 flex gap-1">
+                    <span className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-pulse" />
+                    <span className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-pulse [animation-delay:150ms]" />
+                    <span className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-pulse [animation-delay:300ms]" />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
           <div className="flex flex-row items-end w-full bg-secondary rounded-md gap-2 p-2 ">
             <div
-              onKeyDown={(e) => handleInput(e)}
+              onKeyDown={(e) => !loading && handleInput(e)}
               id="cody-input"
-              data-placeholder="Ask away"
+              data-placeholder={loading ? "Cody is thinking..." : "Ask away"}
               ref={inputRef}
-              contentEditable={true}
-              className="w-full flex flex-col items-start outline-none bg-neutral-200 p-2 min-h-10
-                        border-none break-all max-h-32 overflow-y-auto t:max-h-40 rounded-sm text-primary"
+              contentEditable={!loading}
+              className={`w-full flex flex-col items-start outline-none bg-neutral-200 p-2 min-h-10
+                        border-none break-all max-h-32 overflow-y-auto t:max-h-40 rounded-sm text-primary ${loading ? "opacity-50" : ""}`}
             ></div>
 
             <button
-              onClick={askCody}
-              className="p-3 rounded-md text-secondary bg-accent"
+              onClick={!loading ? askCody : undefined}
+              disabled={loading}
+              className="p-3 rounded-md text-secondary bg-accent disabled:opacity-50"
             >
               <FaMessage />
             </button>

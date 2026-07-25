@@ -1,6 +1,8 @@
 "use client";
 
 import { BaseCody, GetAllCodyResponse } from "@/src/interfaces/cody.interface";
+import { getErrorMessage } from "@/src/utils/general.util";
+import { errorToast } from "@/src/utils/toast.util";
 import React from "react";
 
 const History = (props: {
@@ -40,7 +42,7 @@ const History = (props: {
 
         setHistory(chats);
       } catch (error) {
-        console.log(error);
+        errorToast(getErrorMessage(error));
       }
     };
 

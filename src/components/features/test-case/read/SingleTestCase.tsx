@@ -8,6 +8,8 @@ import {
   GetTestCaseResponse,
   TestCaseDetails,
 } from "@/src/interfaces/test-case.interface";
+import { getErrorMessage } from "@/src/utils/general.util";
+import { errorToast } from "@/src/utils/toast.util";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import React from "react";
@@ -64,7 +66,7 @@ const SingleTestCase = () => {
 
         setTestCase(test_case);
       } catch (error) {
-        console.log(error);
+        errorToast(getErrorMessage(error));
       } finally {
         setLoading(false);
       }

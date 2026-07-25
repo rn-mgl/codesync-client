@@ -5,6 +5,8 @@ import {
   RegisterPayload,
   RegisterResponse,
 } from "@/src/interfaces/auth.interface";
+import { getErrorMessage } from "@/src/utils/general.util";
+import { errorToast } from "@/src/utils/toast.util";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { FaEnvelope, FaEye, FaEyeSlash, FaUser } from "react-icons/fa6";
@@ -65,7 +67,7 @@ const RegisterForm = () => {
 
       router.push("/auth/sending?type=verification");
     } catch (error) {
-      console.log(error);
+      errorToast(getErrorMessage(error));
     } finally {
       setLoading(false);
     }

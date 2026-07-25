@@ -7,11 +7,11 @@ import {
   TopicForm,
 } from "@/src/interfaces/topic.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
+import { successToast, errorToast } from "@/src/utils/toast.util";
 import { useSession } from "next-auth/react";
 import React from "react";
 import { FaLink } from "react-icons/fa";
 import { FaA, FaNoteSticky, FaTag } from "react-icons/fa6";
-import { toast } from "sonner";
 
 const CreateTopic = () => {
   const [topic, setTopic] = React.useState<TopicForm>({
@@ -59,11 +59,9 @@ const CreateTopic = () => {
 
       const { message } = resolve.data;
 
-      toast(message);
+      successToast(message);
     } catch (error) {
-      console.log(error);
-      const message = getErrorMessage(error);
-      toast(message);
+      errorToast(getErrorMessage(error));
     }
   };
 

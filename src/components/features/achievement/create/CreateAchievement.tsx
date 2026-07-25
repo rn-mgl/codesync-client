@@ -11,12 +11,12 @@ import {
   CreateAchievementResponse,
 } from "@/src/interfaces/achievement.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
+import { successToast, errorToast } from "@/src/utils/toast.util";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import React from "react";
 import { FaChartLine, FaLink, FaStickyNote } from "react-icons/fa";
 import { FaLockOpen, FaTrophy } from "react-icons/fa6";
-import { toast } from "sonner";
 
 const CreateAchievement = () => {
   const [achievement, setAchievement] = React.useState<AchievementForm>({
@@ -75,11 +75,9 @@ const CreateAchievement = () => {
 
       const { message } = resolve.data;
 
-      toast(message);
+      successToast(message);
     } catch (error) {
-      console.log(error);
-      const message = getErrorMessage(error);
-      toast(message);
+      errorToast(getErrorMessage(error));
     }
   };
 

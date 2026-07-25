@@ -16,12 +16,13 @@ import {
   BaseTopic,
   GetAllTopicsResponse,
 } from "@/src/interfaces/topic.interface";
+import { getErrorMessage } from "@/src/utils/general.util";
+import { successToast, errorToast } from "@/src/utils/toast.util";
 import { Editor } from "@tiptap/react";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import React from "react";
 import { FaCode, FaLink, FaPuzzlePiece } from "react-icons/fa6";
-import { toast } from "sonner";
 
 const UpdateProblem = () => {
   const [problem, setProblem] = React.useState<ProblemForm>({
@@ -104,9 +105,9 @@ const UpdateProblem = () => {
 
       const data = resolve.data;
 
-      toast(data.message);
+      successToast(data.message);
     } catch (err) {
-      console.log(err);
+      errorToast(getErrorMessage(err));
     }
   };
 
@@ -143,7 +144,7 @@ const UpdateProblem = () => {
 
         setSelectedTopics(topics.map((topic) => topic.slug));
       } catch (err) {
-        console.error(err);
+        errorToast(getErrorMessage(err));
       }
     };
 
@@ -170,7 +171,7 @@ const UpdateProblem = () => {
 
         setTopics(topics);
       } catch (err) {
-        console.error(err);
+        errorToast(getErrorMessage(err));
       }
     };
 

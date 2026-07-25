@@ -1,5 +1,7 @@
 "use client";
 
+import { getErrorMessage } from "@/src/utils/general.util";
+import { errorToast } from "@/src/utils/toast.util";
 import BlockLoader from "@/src/components/ui/loader/BlockLoader";
 import Paginate from "@/src/components/ui/filters/Paginate";
 import usePaginate from "@/src/hooks/usePaginate";
@@ -79,7 +81,7 @@ const AllTopics = () => {
         setTopics(topics);
         handlePages(pagination.pages);
       } catch (error) {
-        console.log(error);
+        errorToast(getErrorMessage(error));
       } finally {
         setLoading(false);
       }

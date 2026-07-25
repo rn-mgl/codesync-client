@@ -9,10 +9,10 @@ import {
 } from "@/src/interfaces/achievement.interface";
 import { BADGE_COLORS } from "@/src/configs/achievement.config";
 import { getErrorMessage } from "@/src/utils/general.util";
+import { errorToast } from "@/src/utils/toast.util";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
-import { toast } from "sonner";
 
 const AllAchievements = () => {
   const [achievements, setAchievements] = React.useState<
@@ -92,8 +92,7 @@ const AllAchievements = () => {
         setAchievements(achievements);
         handlePages(pagination.pages);
       } catch (error) {
-        const message = getErrorMessage(error);
-        toast(message);
+        errorToast(getErrorMessage(error));
       } finally {
         setLoading(false);
       }

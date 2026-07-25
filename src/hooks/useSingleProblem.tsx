@@ -17,6 +17,7 @@ import {
 } from "@/src/interfaces/submission.interface";
 import { BaseTestCase } from "@/src/interfaces/test-case.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
+import { errorToast } from "@/src/utils/toast.util";
 import { generateBoilerPlate } from "@/src/utils/problem.util";
 import * as Monaco from "monaco-editor";
 import { useParams } from "next/navigation";
@@ -137,7 +138,7 @@ export default function useSingleProblem() {
       setTopics(data.topics);
       setHints(data.hints);
     } catch (err) {
-      console.error(err);
+      errorToast(getErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -209,7 +210,6 @@ export default function useSingleProblem() {
           type: `submit_${type}_error`,
           output: getErrorMessage(err),
         });
-        console.error(err);
       }
     },
     [currentLanguage, user, params],

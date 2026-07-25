@@ -12,6 +12,7 @@ import {
 } from "@/src/interfaces/problem.interface";
 import { BaseUser, GetUserResponse } from "@/src/interfaces/user.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
+import { errorToast } from "@/src/utils/toast.util";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
@@ -69,7 +70,7 @@ const Dashboard = () => {
           setAchievements(achievementsResolve.data.achievements);
         }
       } catch (error) {
-        console.error(getErrorMessage(error));
+        errorToast(getErrorMessage(error));
       }
     };
 

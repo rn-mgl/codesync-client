@@ -3,9 +3,9 @@ import Input from "@/src/components/ui/fields/Input";
 import { BaseForm } from "@/src/interfaces/form.interface";
 import { UpdateUserResponse } from "@/src/interfaces/user.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
+import { successToast, errorToast } from "@/src/utils/toast.util";
 import React from "react";
 import { FaEye, FaEyeSlash, FaXmark } from "react-icons/fa6";
-import { toast } from "sonner";
 
 const ChangePassword = (props: BaseForm) => {
   const [password, setPassword] = React.useState({
@@ -64,13 +64,11 @@ const ChangePassword = (props: BaseForm) => {
 
       const { message } = resolve.data;
 
-      toast(message);
+      successToast(message);
 
       props.closeForm();
     } catch (error) {
-      console.log(error);
-      const message = getErrorMessage(error);
-      toast(message);
+      errorToast(getErrorMessage(error));
     }
   };
 

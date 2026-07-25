@@ -10,6 +10,7 @@ import {
   GetSubmissionResponse,
 } from "@/src/interfaces/problem.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
+import { errorToast } from "@/src/utils/toast.util";
 import { normalizeString } from "@/src/utils/normalizer.util";
 import { DateTime } from "luxon";
 import { useParams } from "next/navigation";
@@ -107,7 +108,7 @@ const ProblemSubmissions = (props: {
 
         setSubmissions(submissions);
       } catch (error) {
-        console.log(error);
+        errorToast(getErrorMessage(error));
       }
     };
 

@@ -2,6 +2,8 @@
 
 import Input from "@/src/components/ui/fields/Input";
 import { ResetPayload, ResetResponse } from "@/src/interfaces/auth.interface";
+import { getErrorMessage } from "@/src/utils/general.util";
+import { errorToast } from "@/src/utils/toast.util";
 import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
@@ -69,7 +71,7 @@ const ResetForm = () => {
 
       router.push("/auth/login");
     } catch (error) {
-      console.log(error);
+      errorToast(getErrorMessage(error));
     } finally {
       setLoading(false);
     }

@@ -8,6 +8,8 @@ import {
   HintDetails,
   ProblemHintProperties,
 } from "@/src/interfaces/hint.interface";
+import { getErrorMessage } from "@/src/utils/general.util";
+import { errorToast } from "@/src/utils/toast.util";
 import { normalizeString } from "@/src/utils/normalizer.util";
 import Link from "next/link";
 import React from "react";
@@ -67,7 +69,7 @@ const ProblemHints = (props: ProblemHintProperties) => {
         setHints(hints[props.selectedProblem]);
         handlePages(pagination.pages);
       } catch (error) {
-        console.log(error);
+        errorToast(getErrorMessage(error));
       } finally {
         setLoading(false);
       }

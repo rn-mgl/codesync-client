@@ -4,6 +4,8 @@ import unverified from "@/assets/auth/unverified.svg";
 import verified from "@/assets/auth/verified.svg";
 import verifying from "@/assets/auth/verifying.svg";
 import { VerifyResponse } from "@/src/interfaces/auth.interface";
+import { getErrorMessage } from "@/src/utils/general.util";
+import { errorToast } from "@/src/utils/toast.util";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -73,7 +75,7 @@ const VerificationState = () => {
 
         setStatus(data.verified ? "verified" : "unverified");
       } catch (error) {
-        console.error(error);
+        errorToast(getErrorMessage(error));
 
         setStatus("unverified");
       }

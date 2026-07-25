@@ -1,6 +1,8 @@
 "use client";
 
 import { BaseUser, GetUserResponse } from "@/src/interfaces/user.interface";
+import { getErrorMessage } from "@/src/utils/general.util";
+import { errorToast } from "@/src/utils/toast.util";
 import { useSession } from "next-auth/react";
 import React from "react";
 import { FaEdit } from "react-icons/fa";
@@ -56,7 +58,7 @@ const UserDetails = () => {
     try {
       setUser(await fetchUser());
     } catch (error) {
-      console.log(error);
+      errorToast(getErrorMessage(error));
     }
   }, []);
 
@@ -69,7 +71,7 @@ const UserDetails = () => {
           setUser(user);
         }
       })
-      .catch((error) => console.log(error));
+      .catch((error) => errorToast(getErrorMessage(error)));
 
     return () => {
       isCurrent = false;

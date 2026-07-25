@@ -4,9 +4,9 @@ import useFile from "@/src/hooks/useFile";
 import { UpdateForm } from "@/src/interfaces/form.interface";
 import { UpdateUserResponse, UserForm } from "@/src/interfaces/user.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
+import { successToast, errorToast } from "@/src/utils/toast.util";
 import React from "react";
 import { FaA, FaXmark } from "react-icons/fa6";
-import { toast } from "sonner";
 
 const UpdateUserDetails = (props: UpdateForm & { user: UserForm }) => {
   const [userDetails, setUserDetails] = React.useState<UserForm>({
@@ -60,7 +60,7 @@ const UpdateUserDetails = (props: UpdateForm & { user: UserForm }) => {
 
       const { message } = resolve.data;
 
-      toast(message);
+      successToast(message);
 
       if (props.postUpdateAction) {
         props.postUpdateAction();
@@ -68,9 +68,7 @@ const UpdateUserDetails = (props: UpdateForm & { user: UserForm }) => {
 
       props.closeForm();
     } catch (error) {
-      console.log(error);
-      const message = getErrorMessage(error);
-      toast(message);
+      errorToast(getErrorMessage(error));
     }
   };
 

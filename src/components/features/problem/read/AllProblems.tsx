@@ -8,6 +8,8 @@ import {
   GetAllProblemsResponse,
   ProblemList,
 } from "@/src/interfaces/problem.interface";
+import { getErrorMessage } from "@/src/utils/general.util";
+import { errorToast } from "@/src/utils/toast.util";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
@@ -108,7 +110,7 @@ const AllProblems = () => {
         setProblems(problems);
         handlePages(pagination.pages);
       } catch (err) {
-        console.error(err);
+        errorToast(getErrorMessage(err));
       } finally {
         setLoading(false);
       }

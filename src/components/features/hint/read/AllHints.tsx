@@ -7,6 +7,8 @@ import {
   GetHintsCountResponse,
   ProblemHintCount,
 } from "@/src/interfaces/hint.interface";
+import { getErrorMessage } from "@/src/utils/general.util";
+import { errorToast } from "@/src/utils/toast.util";
 import { normalizeString } from "@/src/utils/normalizer.util";
 import React from "react";
 import ProblemHints from "./ProblemHints";
@@ -84,7 +86,7 @@ const AllHints = (props: { problem?: string }) => {
         setHints(hints);
         handlePages(pagination.pages);
       } catch (error) {
-        console.log(error);
+        errorToast(getErrorMessage(error));
       } finally {
         setLoading(false);
       }
