@@ -19,6 +19,8 @@ const RegisterForm = () => {
   });
   const [showPassword, setShowPassword] = React.useState(false);
 
+  const [loading, setLoading] = React.useState(false);
+
   const router = useRouter();
 
   const handleCredentials = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,6 +40,7 @@ const RegisterForm = () => {
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const response = await fetch("/api/auth/register", {
@@ -63,6 +66,8 @@ const RegisterForm = () => {
       router.push("/auth/sending?type=verification");
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -71,75 +76,78 @@ const RegisterForm = () => {
       onSubmit={(e) => handleRegister(e)}
       className="w-full flex flex-col items-center justify-center gap-2"
     >
-      <Input
-        id="first_name"
-        name="first_name"
-        onChange={handleCredentials}
-        type="text"
-        value={credentials.first_name}
-        icon={<FaUser />}
-        label="First Name"
-        required={true}
-      />
+      <fieldset disabled={loading} className="w-full flex flex-col items-center justify-center gap-2">
+        <Input
+          id="first_name"
+          name="first_name"
+          onChange={handleCredentials}
+          type="text"
+          value={credentials.first_name}
+          icon={<FaUser />}
+          label="First Name"
+          required={true}
+        />
 
-      <Input
-        id="last_name"
-        name="last_name"
-        onChange={handleCredentials}
-        type="text"
-        value={credentials.last_name}
-        icon={<FaUser />}
-        label="Last Name"
-        required={true}
-      />
+        <Input
+          id="last_name"
+          name="last_name"
+          onChange={handleCredentials}
+          type="text"
+          value={credentials.last_name}
+          icon={<FaUser />}
+          label="Last Name"
+          required={true}
+        />
 
-      <Input
-        id="username"
-        name="username"
-        onChange={handleCredentials}
-        type="text"
-        value={credentials.username}
-        icon={<FaUser />}
-        label="Username"
-        required={true}
-      />
+        <Input
+          id="username"
+          name="username"
+          onChange={handleCredentials}
+          type="text"
+          value={credentials.username}
+          icon={<FaUser />}
+          label="Username"
+          required={true}
+        />
 
-      <Input
-        id="email"
-        name="email"
-        onChange={handleCredentials}
-        type="email"
-        value={credentials.email}
-        icon={<FaEnvelope />}
-        label="Email"
-        required={true}
-      />
+        <Input
+          id="email"
+          name="email"
+          onChange={handleCredentials}
+          type="email"
+          value={credentials.email}
+          icon={<FaEnvelope />}
+          label="Email"
+          required={true}
+        />
 
-      <Input
-        id="password"
-        name="password"
-        onChange={handleCredentials}
-        type={showPassword ? "text" : "password"}
-        value={credentials.password}
-        label="Password"
-        required={true}
-        icon={
-          showPassword ? (
-            <FaEyeSlash
-              onClick={handleShowPassword}
-              className="cursor-pointer"
-            />
-          ) : (
-            <FaEye onClick={handleShowPassword} className="cursor-pointer" />
-          )
-        }
-      />
+        <Input
+          id="password"
+          name="password"
+          onChange={handleCredentials}
+          type={showPassword ? "text" : "password"}
+          value={credentials.password}
+          label="Password"
+          required={true}
+          icon={
+            showPassword ? (
+              <FaEyeSlash
+                onClick={handleShowPassword}
+                className="cursor-pointer"
+              />
+            ) : (
+              <FaEye onClick={handleShowPassword} className="cursor-pointer" />
+            )
+          }
+        />
+      </fieldset>
 
       <button
         type="submit"
-        className="mt-4 bg-primary text-secondary font-bold w-full p-2 rounded-md"
+        disabled={loading}
+        className="mt-4 bg-primary text-secondary font-bold w-full p-2 rounded-md disabled:opacity-50"
       >
-        Sign Up
+        {loading ? "Signing Up..." : "Sign Up"}
       </button>
     </form>
   );

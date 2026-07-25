@@ -15,6 +15,8 @@ const LoginForm = () => {
 
   const [showPassword, setShowPassword] = React.useState(false);
 
+  const [loading, setLoading] = React.useState(false);
+
   const router = useRouter();
 
   const handleCredentials = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,6 +36,7 @@ const LoginForm = () => {
 
   const handleLogin = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const response = await fetch("/api/auth/login/", {
@@ -73,6 +76,8 @@ const LoginForm = () => {
       }
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -81,36 +86,38 @@ const LoginForm = () => {
       onSubmit={(e) => handleLogin(e)}
       className="w-full flex flex-col items-center justify-center gap-2"
     >
-      <Input
-        id="email"
-        name="email"
-        onChange={handleCredentials}
-        type="email"
-        value={credentials.email}
-        icon={<FaEnvelope />}
-        label="Email"
-        required={true}
-      />
+      <fieldset disabled={loading} className="w-full flex flex-col items-center justify-center gap-2">
+        <Input
+          id="email"
+          name="email"
+          onChange={handleCredentials}
+          type="email"
+          value={credentials.email}
+          icon={<FaEnvelope />}
+          label="Email"
+          required={true}
+        />
 
-      <Input
-        id="password"
-        name="password"
-        onChange={handleCredentials}
-        type={showPassword ? "text" : "password"}
-        value={credentials.password}
-        label="Password"
-        required={true}
-        icon={
-          showPassword ? (
-            <FaEyeSlash
-              onClick={handleShowPassword}
-              className="cursor-pointer"
-            />
-          ) : (
-            <FaEye onClick={handleShowPassword} className="cursor-pointer" />
-          )
-        }
-      />
+        <Input
+          id="password"
+          name="password"
+          onChange={handleCredentials}
+          type={showPassword ? "text" : "password"}
+          value={credentials.password}
+          label="Password"
+          required={true}
+          icon={
+            showPassword ? (
+              <FaEyeSlash
+                onClick={handleShowPassword}
+                className="cursor-pointer"
+              />
+            ) : (
+              <FaEye onClick={handleShowPassword} className="cursor-pointer" />
+            )
+          }
+        />
+      </fieldset>
 
       <div className="w-full flex flex-row text-xs gap-1">
         <Link
@@ -123,9 +130,10 @@ const LoginForm = () => {
 
       <button
         type="submit"
-        className="mt-4 bg-primary text-secondary font-bold w-full p-2 rounded-md"
+        disabled={loading}
+        className="mt-4 bg-primary text-secondary font-bold w-full p-2 rounded-md disabled:opacity-50"
       >
-        Log In
+        {loading ? "Logging In..." : "Log In"}
       </button>
     </form>
   );

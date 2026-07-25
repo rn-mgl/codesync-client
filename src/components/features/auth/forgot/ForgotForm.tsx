@@ -12,6 +12,8 @@ const ForgotForm = () => {
     email: "",
   });
 
+  const [loading, setLoading] = React.useState(false);
+
   const router = useRouter();
 
   const handleCredentials = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,6 +29,8 @@ const ForgotForm = () => {
 
   const handleForgot = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
+
     try {
       const response = await fetch(`/api/auth/forgot`, {
         method: "POST",
@@ -51,6 +55,8 @@ const ForgotForm = () => {
       router.push("/auth/sending?type=reset");
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -59,33 +65,36 @@ const ForgotForm = () => {
       onSubmit={(e) => handleForgot(e)}
       className="w-full flex flex-col items-center justify-center gap-2"
     >
-      <Input
-        id="username"
-        name="username"
-        onChange={handleCredentials}
-        type="username"
-        value={credentials.username}
-        icon={<FaEnvelope />}
-        label="Username"
-        required={true}
-      />
+      <fieldset disabled={loading} className="w-full flex flex-col items-center justify-center gap-2">
+        <Input
+          id="username"
+          name="username"
+          onChange={handleCredentials}
+          type="username"
+          value={credentials.username}
+          icon={<FaEnvelope />}
+          label="Username"
+          required={true}
+        />
 
-      <Input
-        id="email"
-        name="email"
-        onChange={handleCredentials}
-        type="email"
-        value={credentials.email}
-        icon={<FaEnvelope />}
-        label="Email"
-        required={true}
-      />
+        <Input
+          id="email"
+          name="email"
+          onChange={handleCredentials}
+          type="email"
+          value={credentials.email}
+          icon={<FaEnvelope />}
+          label="Email"
+          required={true}
+        />
+      </fieldset>
 
       <button
         type="submit"
-        className="mt-4 bg-primary text-secondary font-bold w-full p-2 rounded-md"
+        disabled={loading}
+        className="mt-4 bg-primary text-secondary font-bold w-full p-2 rounded-md disabled:opacity-50"
       >
-        Submit
+        {loading ? "Submitting..." : "Submit"}
       </button>
     </form>
   );
