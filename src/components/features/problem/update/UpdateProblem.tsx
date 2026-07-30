@@ -62,7 +62,7 @@ const UpdateProblem = () => {
   } = usePaginate();
 
   const topicOptions = topics.map((topic) => ({
-    label: topic.name,
+    label: `${topic.icon} ${topic.name}`,
     value: topic.slug,
   }));
 

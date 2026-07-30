@@ -5,6 +5,8 @@ import Input from "@/src/components/ui/fields/Input";
 import RichTextEditor from "@/src/components/ui/fields/RichTextEditor";
 import Select from "@/src/components/ui/fields/Select";
 import TextArea from "@/src/components/ui/fields/TextArea";
+import Paginate from "@/src/components/ui/filters/Paginate";
+import usePaginate from "@/src/hooks/usePaginate";
 import useSelect from "@/src/hooks/useSelect";
 import {
   CreateProblemResponse,
@@ -44,8 +46,19 @@ const CreateProblem = () => {
 
   useSession({ required: true });
 
+  const {
+    page,
+    pages,
+    limit,
+    canSelectLimit,
+    handlePages,
+    handleCanSelectLimit,
+    handleLimit,
+    handlePage,
+  } = usePaginate();
+
   const topicOptions = topics.map((topic) => {
-    return { label: topic.name, value: topic.slug };
+    return { label: `${topic.icon} ${topic.name}`, value: topic.slug };
   });
 
   const handleCheck = (value: string | number) => {
@@ -107,7 +120,14 @@ const CreateProblem = () => {
   React.useEffect(() => {
     const getTopics = async () => {
       try {
-        const response = await fetch(`/api/topic`, {
+        const searchParams = {
+          limit: String(limit),
+          page: String(page),
+        };
+
+        const query = new URLSearchParams(searchParams).toString();
+
+        const response = await fetch(`/api/topic?${query}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -120,16 +140,17 @@ const CreateProblem = () => {
           throw new Error(resolve.message);
         }
 
-        const { topics } = resolve.data;
+        const { topics, pagination } = resolve.data;
 
         setTopics(topics);
+        handlePages(pagination.pages);
       } catch (error) {
         errorToast(getErrorMessage(error));
       }
     };
 
     getTopics();
-  }, []);
+  }, [handlePages, page, limit]);
 
   return (
     <form
@@ -193,6 +214,16 @@ const CreateProblem = () => {
             label="Topics"
             selectedOptions={selectedTopics}
             handleCheck={handleCheck}
+          />
+
+          <Paginate
+            limit={limit}
+            page={page}
+            pages={pages}
+            canSelectLimit={canSelectLimit}
+            handleCanSelectLimit={handleCanSelectLimit}
+            handleLimit={handleLimit}
+            handlePage={handlePage}
           />
         </div>
       </div>
