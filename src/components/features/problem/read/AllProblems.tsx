@@ -27,7 +27,7 @@ const AllProblems = () => {
     handleCanSelectLimit,
     handleLimit,
     handlePage,
-  } = usePaginate();
+  } = usePaginate(10);
 
   useSession({ required: true });
 
