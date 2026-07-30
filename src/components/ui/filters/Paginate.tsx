@@ -4,6 +4,7 @@ const Paginate = (props: PaginateProperties) => {
   const mappedPages = new Array(props.pages).fill(0).map((_, i) => {
     return (
       <button
+        type="button"
         key={i}
         onClick={() => props.handlePage(i)}
         className={`p-2 rounded-sm border aspect-square w-10 min-w-10 text-xs 
@@ -17,6 +18,7 @@ const Paginate = (props: PaginateProperties) => {
   const mappedLimits = [10, 25, 50, 100].map((l) => {
     return (
       <button
+        type="button"
         key={l}
         onClick={() => props.handleLimit(l)}
         className={`p-2 rounded-sm border aspect-square w-10 text-xs 

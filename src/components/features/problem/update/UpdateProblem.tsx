@@ -5,6 +5,8 @@ import Input from "@/src/components/ui/fields/Input";
 import RichTextEditor from "@/src/components/ui/fields/RichTextEditor";
 import Select from "@/src/components/ui/fields/Select";
 import TextArea from "@/src/components/ui/fields/TextArea";
+import Paginate from "@/src/components/ui/filters/Paginate";
+import usePaginate from "@/src/hooks/usePaginate";
 import useSelect from "@/src/hooks/useSelect";
 import {
   GetProblemResponse,
@@ -47,6 +49,17 @@ const UpdateProblem = () => {
   useSession({ required: true });
 
   const params: { slug?: string } | null = useParams();
+
+  const {
+    page,
+    pages,
+    limit,
+    canSelectLimit,
+    handlePages,
+    handleCanSelectLimit,
+    handleLimit,
+    handlePage,
+  } = usePaginate();
 
   const topicOptions = topics.map((topic) => ({
     label: topic.name,
@@ -154,7 +167,14 @@ const UpdateProblem = () => {
   React.useEffect(() => {
     const getTopics = async () => {
       try {
-        const response = await fetch(`/api/topic`, {
+        const searchParams = {
+          limit: String(limit),
+          page: String(page),
+        };
+
+        const query = new URLSearchParams(searchParams).toString();
+
+        const response = await fetch(`/api/topic?${query}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -167,16 +187,17 @@ const UpdateProblem = () => {
           throw new Error(resolve.message);
         }
 
-        const { topics } = resolve.data;
+        const { topics, pagination } = resolve.data;
 
         setTopics(topics);
+        handlePages(pagination.pages);
       } catch (err) {
         errorToast(getErrorMessage(err));
       }
     };
 
     getTopics();
-  }, []);
+  }, [handlePages, limit, page]);
 
   return (
     <form
@@ -240,6 +261,16 @@ const UpdateProblem = () => {
             label="Topics"
             selectedOptions={selectedTopics}
             handleCheck={handleCheck}
+          />
+
+          <Paginate
+            limit={limit}
+            page={page}
+            pages={pages}
+            canSelectLimit={canSelectLimit}
+            handleCanSelectLimit={handleCanSelectLimit}
+            handleLimit={handleLimit}
+            handlePage={handlePage}
           />
         </div>
       </div>
