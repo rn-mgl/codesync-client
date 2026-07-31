@@ -15,6 +15,7 @@ const UpdateUserDetails = (props: UpdateForm & { user: UserForm }) => {
     username: props.user.username,
     image: props.user.image,
   });
+  const [loading, setLoading] = React.useState(false);
 
   const {
     fileRef,
@@ -37,6 +38,8 @@ const UpdateUserDetails = (props: UpdateForm & { user: UserForm }) => {
 
   const handleUpdate = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    setLoading(true);
 
     try {
       const formData = new FormData();
@@ -69,6 +72,8 @@ const UpdateUserDetails = (props: UpdateForm & { user: UserForm }) => {
       props.closeForm();
     } catch (error) {
       errorToast(getErrorMessage(error));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -93,67 +98,73 @@ const UpdateUserDetails = (props: UpdateForm & { user: UserForm }) => {
             onSubmit={(e) => handleUpdate(e)}
             className="flex flex-col items-center justify-start gap-2"
           >
-            <File
-              name="image"
-              id="image"
-              file={
-                localFile.file
-                  ? localFile
-                  : typeof userDetails.image === "string" &&
-                      userDetails.image !== ""
-                    ? userDetails.image
-                    : ""
-              }
-              fileRef={fileRef}
-              handleFile={handleLocalFile}
-              removeFile={
-                localFile.file
-                  ? removeLocalFile
-                  : () => removeUploadedFile("image")
-              }
-            />
+            <fieldset
+              disabled={loading}
+              className="w-full flex flex-col items-center justify-start gap-2"
+            >
+              <File
+                name="image"
+                id="image"
+                file={
+                  localFile.file
+                    ? localFile
+                    : typeof userDetails.image === "string" &&
+                        userDetails.image !== ""
+                      ? userDetails.image
+                      : ""
+                }
+                fileRef={fileRef}
+                handleFile={handleLocalFile}
+                removeFile={
+                  localFile.file
+                    ? removeLocalFile
+                    : () => removeUploadedFile("image")
+                }
+              />
 
-            <Input
-              id="first_name"
-              name="first_name"
-              onChange={handleUserDetails}
-              type="text"
-              value={userDetails.first_name}
-              icon={<FaA />}
-              label="First Name"
-              placeholder="First Name"
-              required={true}
-            />
+              <Input
+                id="first_name"
+                name="first_name"
+                onChange={handleUserDetails}
+                type="text"
+                value={userDetails.first_name}
+                icon={<FaA />}
+                label="First Name"
+                placeholder="First Name"
+                required={true}
+              />
 
-            <Input
-              id="last_name"
-              name="last_name"
-              onChange={handleUserDetails}
-              type="text"
-              value={userDetails.last_name}
-              icon={<FaA />}
-              label="Last Name"
-              placeholder="Last Name"
-              required={true}
-            />
+              <Input
+                id="last_name"
+                name="last_name"
+                onChange={handleUserDetails}
+                type="text"
+                value={userDetails.last_name}
+                icon={<FaA />}
+                label="Last Name"
+                placeholder="Last Name"
+                required={true}
+              />
 
-            <Input
-              id="username"
-              name="username"
-              onChange={handleUserDetails}
-              type="text"
-              value={userDetails.username}
-              icon={<FaA />}
-              label="Username"
-              placeholder="Username"
-              required={true}
-            />
+              <Input
+                id="username"
+                name="username"
+                onChange={handleUserDetails}
+                type="text"
+                value={userDetails.username}
+                icon={<FaA />}
+                label="Username"
+                placeholder="Username"
+                required={true}
+              />
+            </fieldset>
 
             <button
               type="submit"
-              className="w-full p-2 rounded-md bg-primary text-secondary font-bold mt-2"
+              disabled={loading}
+              className="w-full p-2 rounded-md bg-primary text-secondary font-bold mt-2 disabled:opacity-50"
             >
-              Update
+              {loading ? "Updating..." : "Update"}
             </button>
           </form>
         </div>

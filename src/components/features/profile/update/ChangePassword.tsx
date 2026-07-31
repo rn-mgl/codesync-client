@@ -18,6 +18,7 @@ const ChangePassword = (props: BaseForm) => {
     new_password: false,
     confirm_new_password: false,
   });
+  const [loading, setLoading] = React.useState(false);
 
   const handleShowPassword = (name: string) => {
     setShowPassword((prev) => {
@@ -41,6 +42,8 @@ const ChangePassword = (props: BaseForm) => {
 
   const handleUpdate = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    setLoading(true);
 
     try {
       const formData = new FormData();
@@ -69,6 +72,8 @@ const ChangePassword = (props: BaseForm) => {
       props.closeForm();
     } catch (error) {
       errorToast(getErrorMessage(error));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -93,83 +98,89 @@ const ChangePassword = (props: BaseForm) => {
             onSubmit={(e) => handleUpdate(e)}
             className="flex flex-col items-center justify-start gap-2"
           >
-            <Input
-              id="current_password"
-              name="current_password"
-              onChange={handlePassword}
-              type={showPassword.current_password ? "text" : "password"}
-              value={password.current_password}
-              icon={
-                showPassword.current_password ? (
-                  <FaEyeSlash
-                    className="cursor-pointer"
-                    onClick={() => handleShowPassword("current_password")}
-                  />
-                ) : (
-                  <FaEye
-                    className="cursor-pointer"
-                    onClick={() => handleShowPassword("current_password")}
-                  />
-                )
-              }
-              label="Current Password"
-              placeholder="Current Password"
-              required={true}
-            />
+            <fieldset
+              disabled={loading}
+              className="w-full flex flex-col items-center justify-start gap-2"
+            >
+              <Input
+                id="current_password"
+                name="current_password"
+                onChange={handlePassword}
+                type={showPassword.current_password ? "text" : "password"}
+                value={password.current_password}
+                icon={
+                  showPassword.current_password ? (
+                    <FaEyeSlash
+                      className="cursor-pointer"
+                      onClick={() => handleShowPassword("current_password")}
+                    />
+                  ) : (
+                    <FaEye
+                      className="cursor-pointer"
+                      onClick={() => handleShowPassword("current_password")}
+                    />
+                  )
+                }
+                label="Current Password"
+                placeholder="Current Password"
+                required={true}
+              />
 
-            <Input
-              id="new_password"
-              name="new_password"
-              onChange={handlePassword}
-              type={showPassword.new_password ? "text" : "password"}
-              value={password.new_password}
-              icon={
-                showPassword.new_password ? (
-                  <FaEyeSlash
-                    className="cursor-pointer"
-                    onClick={() => handleShowPassword("new_password")}
-                  />
-                ) : (
-                  <FaEye
-                    className="cursor-pointer"
-                    onClick={() => handleShowPassword("new_password")}
-                  />
-                )
-              }
-              label="New Password"
-              placeholder="New Password"
-              required={true}
-            />
+              <Input
+                id="new_password"
+                name="new_password"
+                onChange={handlePassword}
+                type={showPassword.new_password ? "text" : "password"}
+                value={password.new_password}
+                icon={
+                  showPassword.new_password ? (
+                    <FaEyeSlash
+                      className="cursor-pointer"
+                      onClick={() => handleShowPassword("new_password")}
+                    />
+                  ) : (
+                    <FaEye
+                      className="cursor-pointer"
+                      onClick={() => handleShowPassword("new_password")}
+                    />
+                  )
+                }
+                label="New Password"
+                placeholder="New Password"
+                required={true}
+              />
 
-            <Input
-              id="confirm_new_password"
-              name="confirm_new_password"
-              onChange={handlePassword}
-              type={showPassword.confirm_new_password ? "text" : "password"}
-              value={password.confirm_new_password}
-              icon={
-                showPassword.confirm_new_password ? (
-                  <FaEyeSlash
-                    className="cursor-pointer"
-                    onClick={() => handleShowPassword("confirm_new_password")}
-                  />
-                ) : (
-                  <FaEye
-                    className="cursor-pointer"
-                    onClick={() => handleShowPassword("confirm_new_password")}
-                  />
-                )
-              }
-              label="Confirm New Password"
-              placeholder="Confirm New Password"
-              required={true}
-            />
+              <Input
+                id="confirm_new_password"
+                name="confirm_new_password"
+                onChange={handlePassword}
+                type={showPassword.confirm_new_password ? "text" : "password"}
+                value={password.confirm_new_password}
+                icon={
+                  showPassword.confirm_new_password ? (
+                    <FaEyeSlash
+                      className="cursor-pointer"
+                      onClick={() => handleShowPassword("confirm_new_password")}
+                    />
+                  ) : (
+                    <FaEye
+                      className="cursor-pointer"
+                      onClick={() => handleShowPassword("confirm_new_password")}
+                    />
+                  )
+                }
+                label="Confirm New Password"
+                placeholder="Confirm New Password"
+                required={true}
+              />
+            </fieldset>
 
             <button
               type="submit"
-              className="w-full p-2 rounded-md bg-primary text-secondary font-bold mt-2"
+              disabled={loading}
+              className="w-full p-2 rounded-md bg-primary text-secondary font-bold mt-2 disabled:opacity-50"
             >
-              Update
+              {loading ? "Updating..." : "Update"}
             </button>
           </form>
         </div>
