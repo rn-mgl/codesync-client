@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react";
 import React from "react";
 import { FaEdit } from "react-icons/fa";
 import { FaLock } from "react-icons/fa6";
+import ProfileLoader from "@/src/components/ui/loader/ProfileLoader";
 import UpdateUserDetails from "../update/UpdateUserDetails";
 import ChangePassword from "../update/ChangePassword";
 
@@ -43,6 +44,7 @@ const UserDetails = () => {
   });
   const [canEditDetails, setCanEditDetails] = React.useState(false);
   const [canChangePassword, setCanChangePassword] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
 
   useSession({ required: true });
 
@@ -71,7 +73,12 @@ const UserDetails = () => {
           setUser(user);
         }
       })
-      .catch((error) => errorToast(getErrorMessage(error)));
+      .catch((error) => errorToast(getErrorMessage(error)))
+      .finally(() => {
+        if (isCurrent) {
+          setLoading(false);
+        }
+      });
 
     return () => {
       isCurrent = false;
@@ -98,37 +105,43 @@ const UserDetails = () => {
         <ChangePassword closeForm={handleCanChangePassword} />
       )}
 
-      <div className="w-full flex flex-col gap-4 t:flex-row">
-        <div
-          style={{ backgroundImage: `url(${user.image})` }}
-          className={`w-full h-full bg-primary rounded-lg aspect-square t:max-w-60 bg-center bg-contain`}
-        ></div>
-        <div className="w-full rounded-lg bg-neutral-200 p-4 flex flex-col items-center justify-center gap-2">
-          <p>
-            <span className="font-bold">
-              {user.first_name} {user.last_name}
-            </span>{" "}
-            | <span>{user.username}</span>
-          </p>
-          <p className="text-sm">{user.email}</p>
-        </div>
-      </div>
+      {loading ? (
+        <ProfileLoader />
+      ) : (
+        <>
+          <div className="w-full flex flex-col gap-4 t:flex-row">
+            <div
+              style={{ backgroundImage: `url(${user.image})` }}
+              className={`w-full h-full bg-primary rounded-lg aspect-square t:max-w-60 bg-center bg-contain`}
+            ></div>
+            <div className="w-full rounded-lg bg-neutral-200 p-4 flex flex-col items-center justify-center gap-2">
+              <p>
+                <span className="font-bold">
+                  {user.first_name} {user.last_name}
+                </span>{" "}
+                | <span>{user.username}</span>
+              </p>
+              <p className="text-sm">{user.email}</p>
+            </div>
+          </div>
 
-      <div className="w-full flex flex-row justify-between text-neutral-600">
-        <button
-          onClick={handleCanEditDetails}
-          className="p-2 rounded-full flex flex-col items-center justify-center hover:text-primary"
-        >
-          <FaEdit />
-        </button>
+          <div className="w-full flex flex-row justify-between text-neutral-600">
+            <button
+              onClick={handleCanEditDetails}
+              className="p-2 rounded-full flex flex-col items-center justify-center hover:text-primary"
+            >
+              <FaEdit />
+            </button>
 
-        <button
-          onClick={handleCanChangePassword}
-          className="p-2 rounded-full flex flex-col items-center justify-center hover:text-primary"
-        >
-          <FaLock />
-        </button>
-      </div>
+            <button
+              onClick={handleCanChangePassword}
+              className="p-2 rounded-full flex flex-col items-center justify-center hover:text-primary"
+            >
+              <FaLock />
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 };
