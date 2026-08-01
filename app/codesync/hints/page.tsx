@@ -8,8 +8,8 @@ const Page = async ({
 }: {
   searchParams: Promise<{ page: number; limit: number; problem?: string }>;
 }) => {
-  const page = Number((await searchParams).page);
-  const limit = Number((await searchParams).limit);
+  const page = Number((await searchParams).page) || 0;
+  const limit = Number((await searchParams).limit) || 25;
   const problem = (await searchParams).problem;
 
   return (

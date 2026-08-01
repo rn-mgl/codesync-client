@@ -115,6 +115,8 @@ const AllTestCases = (props: {
         <ProblemTestCases
           selectedProblem={selectedProblem}
           handleSelectedProblem={handleSelectedProblem}
+          limit={limit}
+          page={page}
         />
       )}
 

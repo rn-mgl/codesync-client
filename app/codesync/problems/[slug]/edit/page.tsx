@@ -3,7 +3,14 @@ import Link from "next/link";
 import { FaArrowLeft } from "react-icons/fa6";
 import { Toaster } from "sonner";
 
-const Page = async () => {
+const Page = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ page: number; limit: number }>;
+}) => {
+  const page = Number((await searchParams).page) || 0;
+  const limit = Number((await searchParams).limit) || 25;
+
   return (
     <div className="w-full flex flex-col items-center justify-start min-h-full h-auto">
       <Toaster style={{ fontFamily: "var(--font-onest)" }} />
@@ -22,7 +29,7 @@ const Page = async () => {
             Edit Problem
           </div>
 
-          <UpdateProblem />
+          <UpdateProblem limit={limit} page={page} />
         </div>
       </div>
     </div>

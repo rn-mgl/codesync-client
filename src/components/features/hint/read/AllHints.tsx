@@ -113,6 +113,8 @@ const AllHints = (props: {
         <ProblemHints
           selectedProblem={selectedProblem}
           handleSelectedProblem={handleSelectedProblem}
+          limit={limit}
+          page={page}
         />
       )}
 

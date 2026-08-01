@@ -1,8 +1,6 @@
 "use client";
 
 import BlockLoader from "@/src/components/ui/loader/BlockLoader";
-import Paginate from "@/src/components/ui/filters/Paginate";
-import usePaginate from "@/src/hooks/usePaginate";
 import {
   GetAllHintsResponse,
   HintDetails,
@@ -12,7 +10,6 @@ import { getErrorMessage } from "@/src/utils/general.util";
 import { errorToast } from "@/src/utils/toast.util";
 import { normalizeString } from "@/src/utils/normalizer.util";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import React from "react";
 
 import {
@@ -23,26 +20,13 @@ import {
   FaXmark,
 } from "react-icons/fa6";
 
-const ProblemHints = (props: ProblemHintProperties) => {
+const ProblemHints = (
+  props: ProblemHintProperties & { page: number; limit: number },
+) => {
   const [hints, setHints] = React.useState<HintDetails[]>([]);
   const [loading, setLoading] = React.useState(true);
 
-  const searchParams = useSearchParams();
-
-  const urlPage = searchParams?.get("page");
-  const urlLimit = searchParams?.get("limit");
-
-  const page = urlPage ? Number(urlPage) : 0;
-  const limit = urlLimit ? Number(urlLimit) : 25;
-
-  const {
-    pages,
-    canSelectLimit,
-    handleCanSelectLimit,
-    handleLimit,
-    handlePage,
-    handlePages,
-  } = usePaginate({ page, limit });
+  const { page, limit } = props;
 
   React.useEffect(() => {
     const getHints = async () => {
@@ -71,10 +55,9 @@ const ProblemHints = (props: ProblemHintProperties) => {
           throw new Error(resolve.message);
         }
 
-        const { hints, pagination } = resolve.data;
+        const { hints } = resolve.data;
 
         setHints(hints[props.selectedProblem]);
-        handlePages(pagination.pages);
       } catch (error) {
         errorToast(getErrorMessage(error));
       } finally {
@@ -83,7 +66,7 @@ const ProblemHints = (props: ProblemHintProperties) => {
     };
 
     getHints();
-  }, [handlePages, props.selectedProblem, limit, page]);
+  }, [props.selectedProblem, limit, page]);
 
   const mappedHints = hints.map((hint) => (
     <Link
@@ -166,18 +149,6 @@ const ProblemHints = (props: ProblemHintProperties) => {
             <div className="grid grid-cols-1 items-start justify-start gap-4 t:grid-cols-2 l-s:grid-cols-3 l-l:grid-cols-4">
               {mappedHints}
             </div>
-          )}
-
-          {!loading && (
-            <Paginate
-              limit={limit}
-              pages={pages}
-              page={page}
-              canSelectLimit={canSelectLimit}
-              handleCanSelectLimit={handleCanSelectLimit}
-              handleLimit={handleLimit}
-              handlePage={handlePage}
-            />
           )}
         </div>
       </div>

@@ -11,7 +11,6 @@ import { getErrorMessage } from "@/src/utils/general.util";
 import { errorToast } from "@/src/utils/toast.util";
 import { normalizeString } from "@/src/utils/normalizer.util";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import React from "react";
 import { FaPlus } from "react-icons/fa";
 import {
@@ -25,19 +24,15 @@ import {
 const ProblemTestCases = (props: {
   selectedProblem: string;
   handleSelectedProblem: (problem: string) => void;
+  page: number;
+  limit: number;
 }) => {
   const [testCases, setTestCases] = React.useState<ProblemTestCaseProperties[]>(
     [],
   );
   const [loading, setLoading] = React.useState(true);
 
-  const searchParams = useSearchParams();
-
-  const urlPage = searchParams?.get("page");
-  const urlLimit = searchParams?.get("limit");
-
-  const page = urlPage ? Number(urlPage) : 0;
-  const limit = urlLimit ? Number(urlLimit) : 25;
+  const { page, limit } = props;
 
   const {
     pages,

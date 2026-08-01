@@ -8,8 +8,8 @@ const Page = async ({
 }: {
   searchParams: Promise<{ page: number; limit: number }>;
 }) => {
-  const page = Number((await searchParams).page);
-  const limit = Number((await searchParams).limit);
+  const page = Number((await searchParams).page) || 0;
+  const limit = Number((await searchParams).limit) || 25;
 
   return (
     <div className="w-full flex flex-col items-center justify-start min-h-full h-auto">

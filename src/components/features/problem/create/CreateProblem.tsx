@@ -21,11 +21,12 @@ import { getErrorMessage } from "@/src/utils/general.util";
 import { successToast, errorToast } from "@/src/utils/toast.util";
 import { Editor } from "@tiptap/react";
 import { useSession } from "next-auth/react";
-import { useSearchParams } from "next/navigation";
 import React from "react";
 import { FaCode, FaLink, FaPuzzlePiece } from "react-icons/fa6";
 
-const CreateProblem = () => {
+const CreateProblem = (paginate: { page: number; limit: number }) => {
+  const { page, limit } = paginate;
+
   const [problem, setProblem] = React.useState<ProblemForm>({
     title: "",
     constraints: "",
@@ -47,14 +48,6 @@ const CreateProblem = () => {
 
   useSession({ required: true });
 
-  const searchParams = useSearchParams();
-
-  const urlPage = searchParams?.get("page");
-  const urlLimit = searchParams?.get("limit");
-
-  const page = urlPage ? Number(urlPage) : 0;
-  const limit = urlLimit ? Number(urlLimit) : 25;
-
   const {
     pages,
     canSelectLimit,
@@ -62,7 +55,7 @@ const CreateProblem = () => {
     handleCanSelectLimit,
     handleLimit,
     handlePage,
-  } = usePaginate({ page, limit });
+  } = usePaginate(paginate);
 
   const topicOptions = topics.map((topic) => {
     return { label: `${topic.icon} ${topic.name}`, value: topic.slug };
