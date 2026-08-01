@@ -82,6 +82,8 @@ const ProblemHints = (props: ProblemHintProperties) => {
     <Link
       key={hint.id}
       href={`/codesync/hints/${hint.id}`}
+      target="_blank"
+      rel="noopener noreferrer"
       className="w-full flex flex-col items-start justify-center gap-2 p-4 bg-neutral-200 rounded-md hover:bg-neutral-300 transition-all"
     >
       <p className="font-bold text-base">Hint {hint.id}</p>

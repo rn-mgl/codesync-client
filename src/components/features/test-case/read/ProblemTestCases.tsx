@@ -91,6 +91,8 @@ const ProblemTestCases = (props: {
         <div className="w-full flex flex-col items-start justify-center text-sm">
           <Link
             href={`/codesync/test-cases/${tc.id}`}
+            target="_blank"
+            rel="noopener noreferrer"
             className="w-full p-4 border-b border-b-neutral-300 bg-neutral-200 rounded-t-md group"
           >
             <p className="font-bold text-base group-hover:underline underline-offset-2">

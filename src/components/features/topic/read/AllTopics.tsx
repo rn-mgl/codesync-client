@@ -35,6 +35,8 @@ const AllTopics = () => {
       <Link
         href={`/codesync/topics/${topic.slug}`}
         key={topic.id}
+        target="_blank"
+        rel="noopener noreferrer"
         className="w-full bg-neutral-200 rounded-lg p-2 flex flex-row gap-2 group group hover:bg-neutral-300 transition-all"
       >
         <div className="aspect-square max-w-12 w-12 h-12 bg-secondary rounded-sm p-2 text-lg flex flex-col items-center justify-center">
