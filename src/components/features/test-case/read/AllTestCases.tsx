@@ -13,7 +13,11 @@ import { normalizeString } from "@/src/utils/normalizer.util";
 import React from "react";
 import ProblemTestCases from "./ProblemTestCases";
 
-const AllTestCases = (props: { problem?: string }) => {
+const AllTestCases = (props: {
+  problem?: string;
+  page: number;
+  limit: number;
+}) => {
   const [testCases, setTestCases] = React.useState<ProblemTestCaseCount>({});
   const [selectedProblem, setSelectedProblem] = React.useState<string | null>(
     props.problem ?? null,
@@ -29,7 +33,7 @@ const AllTestCases = (props: { problem?: string }) => {
     handleLimit,
     handlePage,
     handlePages,
-  } = usePaginate();
+  } = usePaginate({ page: props.page, limit: props.limit });
 
   const handleSelectedProblem = (problem: string) => {
     setSelectedProblem((prev) => (prev === problem ? null : problem));

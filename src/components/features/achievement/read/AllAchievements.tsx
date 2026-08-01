@@ -14,7 +14,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
 
-const AllAchievements = () => {
+const AllAchievements = (paginate: { page: number; limit: number }) => {
   const [achievements, setAchievements] = React.useState<
     Omit<BaseAchievement, "unlock_criteria">[]
   >([]);
@@ -29,7 +29,7 @@ const AllAchievements = () => {
     handleLimit,
     handlePage,
     handlePages,
-  } = usePaginate();
+  } = usePaginate(paginate);
 
   useSession({ required: true });
 

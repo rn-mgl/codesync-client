@@ -22,7 +22,7 @@ import { getErrorMessage } from "@/src/utils/general.util";
 import { successToast, errorToast } from "@/src/utils/toast.util";
 import { Editor } from "@tiptap/react";
 import { useSession } from "next-auth/react";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import React from "react";
 import { FaCode, FaLink, FaPuzzlePiece } from "react-icons/fa6";
 
@@ -50,16 +50,22 @@ const UpdateProblem = () => {
 
   const params: { slug?: string } | null = useParams();
 
+  const searchParams = useSearchParams();
+
+  const urlPage = searchParams?.get("page");
+  const urlLimit = searchParams?.get("limit");
+
+  const page = urlPage ? Number(urlPage) : 0;
+  const limit = urlLimit ? Number(urlLimit) : 25;
+
   const {
-    page,
     pages,
-    limit,
     canSelectLimit,
     handlePages,
     handleCanSelectLimit,
     handleLimit,
     handlePage,
-  } = usePaginate();
+  } = usePaginate({ page, limit });
 
   const topicOptions = topics.map((topic) => ({
     label: `${topic.icon} ${topic.name}`,

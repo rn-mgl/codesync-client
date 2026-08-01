@@ -3,7 +3,14 @@ import Link from "next/link";
 import { FaPlus } from "react-icons/fa";
 import { Toaster } from "sonner";
 
-const Page = async () => {
+const Page = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ page: number; limit: number }>;
+}) => {
+  const page = Number((await searchParams).page);
+  const limit = Number((await searchParams).limit);
+
   return (
     <div className="w-full flex flex-col items-center justify-start min-h-full h-auto">
       <Toaster style={{ fontFamily: "var(--font-onest)" }} />
@@ -17,7 +24,7 @@ const Page = async () => {
           <FaPlus />
         </Link>
 
-        <AllAchievements />
+        <AllAchievements limit={limit} page={page} />
       </div>
     </div>
   );

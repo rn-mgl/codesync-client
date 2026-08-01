@@ -6,8 +6,10 @@ import { Toaster } from "sonner";
 const Page = async ({
   searchParams,
 }: {
-  searchParams: Promise<{ problem?: string }>;
+  searchParams: Promise<{ page: number; limit: number; problem?: string }>;
 }) => {
+  const page = Number((await searchParams).page);
+  const limit = Number((await searchParams).limit);
   const problem = (await searchParams).problem;
 
   return (
@@ -27,7 +29,7 @@ const Page = async ({
           <FaPlus />
         </Link>
 
-        <AllTestCases problem={problem} />
+        <AllTestCases problem={problem} limit={limit} page={page} />
       </div>
     </div>
   );

@@ -13,7 +13,11 @@ import { normalizeString } from "@/src/utils/normalizer.util";
 import React from "react";
 import ProblemHints from "./ProblemHints";
 
-const AllHints = (props: { problem?: string }) => {
+const AllHints = (props: {
+  problem?: string;
+  page: number;
+  limit: number;
+}) => {
   const [hints, setHints] = React.useState<ProblemHintCount>({});
   const [selectedProblem, setSelectedProblem] = React.useState<string | null>(
     null,
@@ -29,7 +33,7 @@ const AllHints = (props: { problem?: string }) => {
     handleLimit,
     handlePage,
     handlePages,
-  } = usePaginate();
+  } = usePaginate({ page: props.page, limit: props.limit });
 
   const problemParam = props.problem;
 

@@ -13,7 +13,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
 
-const AllTopics = () => {
+const AllTopics = (paginate: { page: number; limit: number }) => {
   const [topics, setTopics] = React.useState<BaseTopic[]>([]);
   const [loading, setLoading] = React.useState(true);
 
@@ -26,7 +26,7 @@ const AllTopics = () => {
     handleCanSelectLimit,
     handleLimit,
     handlePage,
-  } = usePaginate();
+  } = usePaginate(paginate);
 
   useSession({ required: true });
 

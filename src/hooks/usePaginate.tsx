@@ -1,7 +1,7 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 
-export default function usePaginate(initialLimit?: number) {
+export default function usePaginate(paginate: { page: number; limit: number }) {
   const [pages, setPages] = React.useState(0);
   const [canSelectLimit, setCanSelectLimit] = React.useState(false);
 
@@ -9,12 +9,8 @@ export default function usePaginate(initialLimit?: number) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const urlPage = searchParams?.get("page");
-  const urlLimit = searchParams?.get("limit");
-
-  const page = urlPage ? Number(urlPage) : 0;
-
-  const limit = urlLimit ? Number(urlLimit) : (initialLimit ?? 25);
+  const page = Number.isNaN(paginate.page) ? 0 : paginate.page;
+  const limit = Number.isNaN(paginate.limit) ? 25 : paginate.limit;
 
   const syncPaginateChange = React.useCallback(
     (page: number, limit: number) => {
