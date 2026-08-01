@@ -94,9 +94,7 @@ const Dashboard = () => {
       >
         <div className="grid grid-cols-4 w-full p-4 gap-4 text-sm items-center">
           <p>{problem.id}</p>
-          <p className="hover:underline underline-offset-2 truncate">
-            {problem.title}
-          </p>
+          <p className="truncate">{problem.title}</p>
           <p
             style={{
               background: `var(--color-${problem.difficulty === "easy" ? "green" : problem.difficulty === "medium" ? "amber" : "red"}-600)`,

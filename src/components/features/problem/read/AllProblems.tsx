@@ -60,9 +60,7 @@ const AllProblems = () => {
       >
         <div className="grid grid-cols-4 w-full p-4 gap-4 text-sm items-center">
           <p>{problem.id}</p>
-          <p className="hover:underline underline-offset-2 truncate">
-            {problem.title}
-          </p>
+          <p className="truncate">{problem.title}</p>
           <p
             style={{ background: DIFFICULTY_COLOR[problem.difficulty] }}
             className="w-fit rounded-full px-2 py-0.5 text-secondary text-xs capitalize"
