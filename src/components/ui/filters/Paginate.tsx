@@ -31,7 +31,7 @@ const Paginate = (props: PaginateProperties) => {
 
   return (
     <div className="flex flex-col w-full justify-between gap-4 t:flex-row-reverse">
-      <div className="w-full max-w-(--breakpoint-m-l) flex items-center justify-center overflow-x-auto gap-1 t:w-fit">
+      <div className="w-full max-w-(--breakpoint-m-l) flex items-center justify-start overflow-x-auto gap-1 t:w-fit">
         {mappedPages}
       </div>
 
