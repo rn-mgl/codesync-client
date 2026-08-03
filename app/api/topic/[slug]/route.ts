@@ -17,7 +17,7 @@ export async function GET(
 
     if (!isJWTCookie(cookies)) {
       throw new APIError(
-        `You are unauthorized to proceed.`,
+        `You are not authorized to perform this action.`,
         StatusCodes.UNAUTHORIZED,
       );
     }
@@ -27,7 +27,10 @@ export async function GET(
     const slug = (await params).slug;
 
     if (!slug) {
-      throw new APIError(`Invalid request`, StatusCodes.UNAUTHORIZED);
+      throw new APIError(
+        `The topic reference is missing or invalid.`,
+        StatusCodes.BAD_REQUEST,
+      );
     }
 
     const searchParams = {
@@ -75,7 +78,7 @@ export async function PATCH(
 
     if (!isJWTCookie(cookies)) {
       throw new APIError(
-        `You are unauthorized to proceed.`,
+        `You are not authorized to perform this action.`,
         StatusCodes.UNAUTHORIZED,
       );
     }
@@ -85,7 +88,10 @@ export async function PATCH(
     const slug = (await params).slug;
 
     if (!slug) {
-      throw new APIError(`Invalid request.`, StatusCodes.BAD_REQUEST);
+      throw new APIError(
+        `The topic reference is missing or invalid.`,
+        StatusCodes.BAD_REQUEST,
+      );
     }
 
     const searchParams = {
@@ -97,7 +103,10 @@ export async function PATCH(
     const body = await req.json();
 
     if (!("topic" in body)) {
-      throw new APIError(`Invalid request.`, StatusCodes.BAD_REQUEST);
+      throw new APIError(
+        `The topic details are required to update the topic.`,
+        StatusCodes.BAD_REQUEST,
+      );
     }
 
     const topic = body.topic;
@@ -150,7 +159,7 @@ export async function DELETE(
 
     if (!isJWTCookie(cookies)) {
       throw new APIError(
-        `You are unauthorized to proceed.`,
+        `You are not authorized to perform this action.`,
         StatusCodes.UNAUTHORIZED,
       );
     }

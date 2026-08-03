@@ -16,7 +16,7 @@ export async function PATCH(req: NextRequest) {
 
     if (!("token" in body) || typeof body.token !== "string") {
       throw new APIError(
-        `You are not allowed to perform this operation.`,
+        `The verification token is missing or invalid. Please request a new verification link.`,
         StatusCodes.BAD_REQUEST,
       );
     }

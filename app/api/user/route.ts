@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
 
     if (!isJWTCookie(cookies)) {
       throw new APIError(
-        `You are unauthorized to proceed.`,
+        `You are not authorized to perform this action.`,
         StatusCodes.UNAUTHORIZED,
       );
     }
@@ -57,7 +57,7 @@ export async function PATCH(req: NextRequest) {
 
     if (!isJWTCookie(cookies)) {
       throw new APIError(
-        `You are unauthorized to proceed.`,
+        `You are not authorized to perform this action.`,
         StatusCodes.UNAUTHORIZED,
       );
     }

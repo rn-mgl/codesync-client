@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
 
     if (parser.error) {
       const prettifyError = z.prettifyError(parser.error);
-      throw new APIError(prettifyError, StatusCodes.FORBIDDEN);
+      throw new APIError(prettifyError, StatusCodes.BAD_REQUEST);
     }
 
     const response = await fetch(`${url}/auth/login`, {

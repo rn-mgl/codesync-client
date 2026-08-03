@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
 
     if (!isJWTCookie(cookies)) {
       throw new APIError(
-        `You are unauthorized to proceed.`,
+        `You are not authorized to perform this action.`,
         StatusCodes.UNAUTHORIZED,
       );
     }
@@ -24,7 +24,10 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
 
     if (!("topic" in body)) {
-      throw new APIError(`Invalid request.`, StatusCodes.BAD_REQUEST);
+      throw new APIError(
+        `The topic details are required to create a topic.`,
+        StatusCodes.BAD_REQUEST,
+      );
     }
 
     const topic = body.topic;
@@ -74,7 +77,7 @@ export async function GET(req: NextRequest) {
 
     if (!isJWTCookie(cookies)) {
       throw new APIError(
-        `You are unauthorized to proceed.`,
+        `You are not authorized to perform this action.`,
         StatusCodes.UNAUTHORIZED,
       );
     }

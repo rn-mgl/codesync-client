@@ -17,7 +17,7 @@ export async function GET(
 
     if (!isJWTCookie(cookies)) {
       throw new APIError(
-        `You are unauthorized to proceed.`,
+        `You are not authorized to perform this action.`,
         StatusCodes.UNAUTHORIZED,
       );
     }
@@ -26,7 +26,7 @@ export async function GET(
 
     if (!param.slug) {
       throw new APIError(
-        `Invalid request, missing slug.`,
+        `The problem reference is missing or invalid.`,
         StatusCodes.BAD_REQUEST,
       );
     }
@@ -80,7 +80,7 @@ export async function PATCH(
 
     if (!isJWTCookie(cookies)) {
       throw new APIError(
-        `You are unauthorized to proceed.`,
+        `You are not authorized to perform this action.`,
         StatusCodes.UNAUTHORIZED,
       );
     }
@@ -89,7 +89,7 @@ export async function PATCH(
 
     if (!param.slug) {
       throw new APIError(
-        `Invalid request, missing slug.`,
+        `The problem reference is missing or invalid.`,
         StatusCodes.BAD_REQUEST,
       );
     }
@@ -97,7 +97,10 @@ export async function PATCH(
     const body = await req.json();
 
     if (!("problem" in body)) {
-      throw new APIError(`Invalid data passed.`, StatusCodes.BAD_REQUEST);
+      throw new APIError(
+        `The problem details are required to update the problem.`,
+        StatusCodes.BAD_REQUEST,
+      );
     }
 
     const { problem } = body;
@@ -153,7 +156,7 @@ export async function DELETE(
 
     if (!isJWTCookie(cookies)) {
       throw new APIError(
-        `You are unauthenticated to proceed.`,
+        `You are not authorized to perform this action.`,
         StatusCodes.UNAUTHORIZED,
       );
     }

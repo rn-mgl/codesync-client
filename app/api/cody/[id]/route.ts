@@ -15,7 +15,7 @@ export async function PATCH(
 
     if (!isJWTCookie(cookies)) {
       throw new APIError(
-        `You are unauthorized to proceed.`,
+        `You are not authorized to perform this action.`,
         StatusCodes.UNAUTHORIZED,
       );
     }
@@ -36,7 +36,7 @@ export async function PATCH(
     });
 
     if (!response.ok) {
-      throw new APIError(`Failed to create stream.`, response.status);
+      throw new APIError(`Unable to continue the chat. Please try again.`, response.status);
     }
 
     const stream = response.body;
@@ -68,7 +68,7 @@ export async function GET(
 
     if (!isJWTCookie(cookies)) {
       throw new APIError(
-        `You are unauthorized to proceed.`,
+        `You are not authorized to perform this action.`,
         StatusCodes.UNAUTHORIZED,
       );
     }

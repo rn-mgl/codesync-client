@@ -17,7 +17,7 @@ export async function GET(
 
     if (!isJWTCookie(cookies)) {
       throw new APIError(
-        `You are unauthorized to proceed.`,
+        `You are not authorized to perform this action.`,
         StatusCodes.UNAUTHORIZED,
       );
     }
@@ -27,7 +27,10 @@ export async function GET(
     const slug = (await params).slug;
 
     if (!slug) {
-      throw new APIError(`Invalid parameter passed.`, StatusCodes.BAD_REQUEST);
+      throw new APIError(
+        `The achievement reference is missing or invalid.`,
+        StatusCodes.BAD_REQUEST,
+      );
     }
 
     const searchParams = {
@@ -75,7 +78,7 @@ export async function PATCH(
 
     if (!isJWTCookie(cookies)) {
       throw new APIError(
-        `You are unauthorized to proceed.`,
+        `You are not authorized to perform this action.`,
         StatusCodes.UNAUTHORIZED,
       );
     }
@@ -85,13 +88,19 @@ export async function PATCH(
     const slug = (await params).slug;
 
     if (!slug) {
-      throw new APIError(`Invalid request.`, StatusCodes.BAD_REQUEST);
+      throw new APIError(
+        `The achievement reference is missing or invalid.`,
+        StatusCodes.BAD_REQUEST,
+      );
     }
 
     const body = await req.json();
 
     if (!("achievement" in body)) {
-      throw new APIError(`Invalid request.`, StatusCodes.BAD_REQUEST);
+      throw new APIError(
+        `The achievement details are required to update the achievement.`,
+        StatusCodes.BAD_REQUEST,
+      );
     }
 
     const achievement = body.achievement;
@@ -150,7 +159,7 @@ export async function DELETE(
 
     if (!isJWTCookie(cookies)) {
       throw new APIError(
-        `You are unauthorized to proceed.`,
+        `You are not authorized to perform this action.`,
         StatusCodes.UNAUTHORIZED,
       );
     }
@@ -161,7 +170,10 @@ export async function DELETE(
     const slug = (await params).slug;
 
     if (!slug) {
-      throw new APIError(`Invalid request.`, StatusCodes.BAD_REQUEST);
+      throw new APIError(
+        `The achievement reference is missing or invalid.`,
+        StatusCodes.BAD_REQUEST,
+      );
     }
 
     const searchParams = {

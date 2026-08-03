@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
 
     if (!isJWTCookie(cookies)) {
       throw new APIError(
-        `You are unauthorized to proceed.`,
+        `You are not authorized to perform this action.`,
         StatusCodes.UNAUTHORIZED,
       );
     }
@@ -23,7 +23,10 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
 
     if (!("chat" in body)) {
-      throw new APIError(`Invalid payload.`, StatusCodes.BAD_REQUEST);
+      throw new APIError(
+        `The chat message is missing or invalid.`,
+        StatusCodes.BAD_REQUEST,
+      );
     }
 
     const response = await fetch(`${url}/cody`, {
@@ -37,7 +40,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (!response.ok) {
-      throw new APIError(`Failed to create stream.`, response.status);
+      throw new APIError(`Unable to start the chat. Please try again.`, response.status);
     }
 
     const stream = response.body;
@@ -65,7 +68,7 @@ export async function GET(req: NextRequest) {
 
     if (!isJWTCookie(cookies)) {
       throw new APIError(
-        `You are unauthorized to proceed.`,
+        `You are not authorized to perform this action.`,
         StatusCodes.UNAUTHORIZED,
       );
     }

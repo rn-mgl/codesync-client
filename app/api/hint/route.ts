@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
 
     if (!isJWTCookie(cookies)) {
       throw new APIError(
-        `You are unauthorized to proceed.`,
+        `You are not authorized to perform this action.`,
         StatusCodes.UNAUTHORIZED,
       );
     }
@@ -22,7 +22,10 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
 
     if (!("hint" in body)) {
-      throw new APIError("Invalid request.", StatusCodes.BAD_REQUEST);
+      throw new APIError(
+        `The hint details are required to create a hint.`,
+        StatusCodes.BAD_REQUEST,
+      );
     }
 
     const response = await fetch(`${url}/hint`, {
@@ -62,7 +65,7 @@ export async function GET(req: NextRequest, {}) {
 
     if (!isJWTCookie(cookies)) {
       throw new APIError(
-        `You are unauthorized to proceed.`,
+        `You are not authorized to perform this action.`,
         StatusCodes.UNAUTHORIZED,
       );
     }

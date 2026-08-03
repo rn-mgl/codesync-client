@@ -17,7 +17,7 @@ export async function GET(
 
     if (!isJWTCookie(cookies)) {
       throw new APIError(
-        `You are unauthorized to proceed.`,
+        `You are not authorized to perform this action.`,
         StatusCodes.UNAUTHORIZED,
       );
     }
@@ -73,7 +73,7 @@ export async function PATCH(
 
     if (!isJWTCookie(cookies)) {
       throw new APIError(
-        `You are unauthorized to proceed.`,
+        `You are not authorized to perform this action.`,
         StatusCodes.UNAUTHORIZED,
       );
     }
@@ -81,7 +81,10 @@ export async function PATCH(
     const body = await req.json();
 
     if (!("testCase" in body)) {
-      throw new APIError(`Invalid test case data.`, StatusCodes.BAD_REQUEST);
+      throw new APIError(
+        `The test case details are required to update the test case.`,
+        StatusCodes.BAD_REQUEST,
+      );
     }
 
     const testCase = body.testCase;
@@ -99,7 +102,10 @@ export async function PATCH(
     const param = (await params).id;
 
     if (!param) {
-      throw new APIError(`Invalid test case data.`, StatusCodes.BAD_REQUEST);
+      throw new APIError(
+        `The test case reference is missing or invalid.`,
+        StatusCodes.BAD_REQUEST,
+      );
     }
 
     const response = await fetch(`${url}/test-case/${param}`, {
@@ -142,7 +148,7 @@ export async function DELETE(
 
     if (!isJWTCookie(cookies)) {
       throw new APIError(
-        `You are unauthorized to proceed.`,
+        `You are not authorized to perform this action.`,
         StatusCodes.UNAUTHORIZED,
       );
     }
@@ -152,7 +158,10 @@ export async function DELETE(
     const param = (await params).id;
 
     if (!param) {
-      throw new APIError(`Invalid test case data.`, StatusCodes.BAD_REQUEST);
+      throw new APIError(
+        `The test case reference is missing or invalid.`,
+        StatusCodes.BAD_REQUEST,
+      );
     }
 
     const response = await fetch(`${url}/test-case/${param}`, {

@@ -15,7 +15,7 @@ export async function GET(
 
     if (!isJWTCookie(cookies)) {
       throw new APIError(
-        `You are unauthorized to proceed.`,
+        `You are not authorized to perform this action.`,
         StatusCodes.UNAUTHORIZED,
       );
     }
@@ -56,6 +56,6 @@ export async function GET(
 
     const APIResponse: APIResponse = handleErrorResponse(error);
 
-    return NextResponse.json(APIResponse);
+    return NextResponse.json(APIResponse, { status: APIResponse.status });
   }
 }

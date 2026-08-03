@@ -13,7 +13,10 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
 
     if (!("problem" in body)) {
-      throw new APIError(`Invalid data passed.`, StatusCodes.BAD_REQUEST);
+      throw new APIError(
+        `The problem details are required to create a problem.`,
+        StatusCodes.BAD_REQUEST,
+      );
     }
 
     const { problem } = body;
@@ -30,7 +33,7 @@ export async function POST(req: NextRequest) {
 
     if (!isJWTCookie(cookies)) {
       throw new APIError(
-        `You are unauthorized to proceed.`,
+        `You are not authorized to perform this action.`,
         StatusCodes.UNAUTHORIZED,
       );
     }
@@ -72,7 +75,7 @@ export async function GET(req: NextRequest) {
 
     if (!isJWTCookie(cookies)) {
       throw new APIError(
-        `You are not allowed to proceed with this request.`,
+        `You are not authorized to perform this action.`,
         StatusCodes.UNAUTHORIZED,
       );
     }
