@@ -1,8 +1,8 @@
 import { env } from "@/src/configs/env.config";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
+import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
 import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
-import { StatusCodes } from "http-status-codes";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -14,10 +14,7 @@ export async function PATCH(
     const cookies = await getToken({ req });
 
     if (!isJWTCookie(cookies)) {
-      throw new APIError(
-        `You are not authorized to perform this action.`,
-        StatusCodes.UNAUTHORIZED,
-      );
+      throw new UnauthorizedError();
     }
 
     const token = cookies.user.token;
@@ -67,10 +64,7 @@ export async function GET(
     const cookies = await getToken({ req });
 
     if (!isJWTCookie(cookies)) {
-      throw new APIError(
-        `You are not authorized to perform this action.`,
-        StatusCodes.UNAUTHORIZED,
-      );
+      throw new UnauthorizedError();
     }
 
     const token = cookies.user.token;

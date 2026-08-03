@@ -1,6 +1,7 @@
 import { env } from "@/src/configs/env.config";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
+import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
 import { TopicSchema } from "@/src/schemas/topic.schema";
 import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
 import { StatusCodes } from "http-status-codes";
@@ -16,10 +17,7 @@ export async function GET(
     const cookies = await getToken({ req });
 
     if (!isJWTCookie(cookies)) {
-      throw new APIError(
-        `You are not authorized to perform this action.`,
-        StatusCodes.UNAUTHORIZED,
-      );
+      throw new UnauthorizedError();
     }
 
     const token = cookies.user.token;
@@ -77,10 +75,7 @@ export async function PATCH(
     const cookies = await getToken({ req });
 
     if (!isJWTCookie(cookies)) {
-      throw new APIError(
-        `You are not authorized to perform this action.`,
-        StatusCodes.UNAUTHORIZED,
-      );
+      throw new UnauthorizedError();
     }
 
     const token = cookies.user.token;
@@ -158,10 +153,7 @@ export async function DELETE(
     const cookies = await getToken({ req });
 
     if (!isJWTCookie(cookies)) {
-      throw new APIError(
-        `You are not authorized to perform this action.`,
-        StatusCodes.UNAUTHORIZED,
-      );
+      throw new UnauthorizedError();
     }
 
     const token = cookies.user.token;

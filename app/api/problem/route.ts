@@ -1,5 +1,6 @@
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
+import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
 import { ProblemSchema } from "@/src/schemas/problem.schema";
 import { StatusCodes } from "http-status-codes";
 import { NextRequest, NextResponse } from "next/server";
@@ -32,10 +33,7 @@ export async function POST(req: NextRequest) {
     const cookies = await getToken({ req });
 
     if (!isJWTCookie(cookies)) {
-      throw new APIError(
-        `You are not authorized to perform this action.`,
-        StatusCodes.UNAUTHORIZED,
-      );
+      throw new UnauthorizedError();
     }
 
     const response = await fetch(`${url}/problem`, {
@@ -74,10 +72,7 @@ export async function GET(req: NextRequest) {
     const cookies = await getToken({ req });
 
     if (!isJWTCookie(cookies)) {
-      throw new APIError(
-        `You are not authorized to perform this action.`,
-        StatusCodes.UNAUTHORIZED,
-      );
+      throw new UnauthorizedError();
     }
 
     const url = env.SERVER_URL;
