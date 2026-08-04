@@ -13,10 +13,26 @@ import { errorToast } from "@/src/utils/toast.util";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
+import SearchFilter from "@/src/components/ui/filters/SearchFilter";
+import useSearch from "@/src/hooks/useSearch";
+
+const SEARCH_OPTIONS: { label: string; value: string }[] = [
+  { label: "Title", value: "title" },
+  { label: "Difficulty", value: "difficulty" },
+];
 
 const AllProblems = (paginate: { page: number; limit: number }) => {
   const [problems, setProblems] = React.useState<ProblemList[]>([]);
   const [loading, setLoading] = React.useState(true);
+
+  const {
+    searchKey,
+    searchValue,
+    activeLabel,
+    handleSearchKey,
+    handleSearchValue,
+    filter,
+  } = useSearch(SEARCH_OPTIONS, "title");
 
   const {
     page,
@@ -43,7 +59,7 @@ const AllProblems = (paginate: { page: number; limit: number }) => {
     high: "var(--color-green-600)",
   };
 
-  const mappedProblems = problems.map((problem) => {
+  const mappedProblems = filter(problems).map((problem) => {
     const rate =
       problem.acceptance_rate < 50
         ? "low"
@@ -124,10 +140,21 @@ const AllProblems = (paginate: { page: number; limit: number }) => {
       {loading ? (
         <TableLoader />
       ) : (
-        <Table<ProblemList>
-          headers={["id", "title", "difficulty", "acceptance_rate"]}
-          data={mappedProblems}
-        />
+        <React.Fragment>
+          <SearchFilter
+            searchKey={searchKey}
+            searchValue={searchValue}
+            activeLabel={activeLabel}
+            options={SEARCH_OPTIONS}
+            handleSearchKey={handleSearchKey}
+            handleSearchValue={handleSearchValue}
+          />
+
+          <Table<ProblemList>
+            headers={["id", "title", "difficulty", "acceptance_rate"]}
+            data={mappedProblems}
+          />
+        </React.Fragment>
       )}
 
       <Paginate

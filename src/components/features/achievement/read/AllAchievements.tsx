@@ -13,12 +13,30 @@ import { errorToast } from "@/src/utils/toast.util";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
+import SearchFilter from "@/src/components/ui/filters/SearchFilter";
+import useSearch from "@/src/hooks/useSearch";
+
+const SEARCH_OPTIONS: { label: string; value: string }[] = [
+  { label: "Name", value: "name" },
+  { label: "Description", value: "description" },
+  { label: "Category", value: "category" },
+  { label: "Points", value: "points" },
+];
 
 const AllAchievements = (paginate: { page: number; limit: number }) => {
   const [achievements, setAchievements] = React.useState<
     Omit<BaseAchievement, "unlock_criteria">[]
   >([]);
   const [loading, setLoading] = React.useState(true);
+
+  const {
+    searchKey,
+    searchValue,
+    activeLabel,
+    handleSearchKey,
+    handleSearchValue,
+    filter,
+  } = useSearch(SEARCH_OPTIONS, "name");
 
   const {
     pages,
@@ -33,7 +51,7 @@ const AllAchievements = (paginate: { page: number; limit: number }) => {
 
   useSession({ required: true });
 
-  const mappedAchievements = achievements.map((achievement) => {
+  const mappedAchievements = filter(achievements).map((achievement) => {
     return (
       <Link
         href={`/codesync/achievements/${achievement.slug}`}
@@ -108,9 +126,20 @@ const AllAchievements = (paginate: { page: number; limit: number }) => {
       {loading ? (
         <BlockLoader />
       ) : (
-        <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-2 l-l:grid-cols-3 gap-4">
-          {mappedAchievements}
-        </div>
+        <React.Fragment>
+          <SearchFilter
+            searchKey={searchKey}
+            searchValue={searchValue}
+            activeLabel={activeLabel}
+            options={SEARCH_OPTIONS}
+            handleSearchKey={handleSearchKey}
+            handleSearchValue={handleSearchValue}
+          />
+
+          <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-2 l-l:grid-cols-3 gap-4">
+            {mappedAchievements}
+          </div>
+        </React.Fragment>
       )}
 
       <Paginate

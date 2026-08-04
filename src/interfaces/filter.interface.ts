@@ -1,3 +1,6 @@
+import React from "react";
+import { OptionValue } from "@/interfaces/field.interface";
+
 export interface PaginateProperties {
   limit: number;
   canSelectLimit: boolean;
@@ -6,4 +9,19 @@ export interface PaginateProperties {
   handleLimit: (limit: number) => void;
   handlePage: (page: number) => void;
   handleCanSelectLimit: () => void;
+}
+
+export interface SearchFilterOption {
+  label: string;
+  value: string;
+}
+
+export interface SearchFilterProperties {
+  searchKey: string;
+  searchValue: string;
+  activeLabel: string;
+  options: SearchFilterOption[];
+  placeholder?: string;
+  handleSearchValue: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSearchKey: (option: OptionValue) => void;
 }

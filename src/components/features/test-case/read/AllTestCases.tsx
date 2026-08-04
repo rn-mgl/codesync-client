@@ -12,6 +12,15 @@ import { errorToast } from "@/src/utils/toast.util";
 import { normalizeString } from "@/src/utils/normalizer.util";
 import React from "react";
 import ProblemTestCases from "./ProblemTestCases";
+import useSearch from "@/src/hooks/useSearch";
+import SearchFilter from "@/src/components/ui/filters/SearchFilter";
+
+const SEARCH_OPTIONS = [
+  {
+    label: "Problem",
+    value: "problem",
+  },
+];
 
 const AllTestCases = (props: {
   problem?: string;
@@ -23,6 +32,15 @@ const AllTestCases = (props: {
     props.problem ?? null,
   );
   const [loading, setLoading] = React.useState(true);
+
+  const {
+    searchKey,
+    searchValue,
+    activeLabel,
+    handleSearchKey,
+    handleSearchValue,
+    filter,
+  } = useSearch(SEARCH_OPTIONS, "problem");
 
   const {
     pages,
@@ -41,25 +59,27 @@ const AllTestCases = (props: {
 
   const problemParam = props?.problem;
 
-  const mappedProblems = Object.entries(testCases ?? {}).map(
-    ([problem, count]) => {
-      return (
-        <button
-          key={problem}
-          onClick={() => handleSelectedProblem(problem)}
-          className="w-full text-left bg-neutral-200 rounded-lg p-4 flex flex-col items-start justify-start gap-2 cursor-pointer hover:bg-neutral-300 transition-all"
-        >
-          <p className="text-sm font-bold capitalize truncate w-full">
-            {normalizeString(problem)}
-          </p>
-
-          <p className="text-xs text-neutral-500">
-            {count} {count === 1 ? "test case" : "test cases"}
-          </p>
-        </button>
-      );
-    },
+  const restructuredProblem = Object.entries(testCases ?? {}).map(
+    ([problem, count]) => ({ problem, count }),
   );
+
+  const mappedProblems = filter(restructuredProblem).map((tc) => {
+    return (
+      <button
+        key={tc.problem}
+        onClick={() => handleSelectedProblem(tc.problem)}
+        className="w-full text-left bg-neutral-200 rounded-lg p-4 flex flex-col items-start justify-start gap-2 cursor-pointer hover:bg-neutral-300 transition-all"
+      >
+        <p className="text-sm font-bold capitalize truncate w-full">
+          {normalizeString(tc.problem)}
+        </p>
+
+        <p className="text-xs text-neutral-500">
+          {tc.count} {tc.count === 1 ? "test case" : "test cases"}
+        </p>
+      </button>
+    );
+  });
 
   React.useEffect(() => {
     const getTestCases = async () => {
@@ -107,9 +127,19 @@ const AllTestCases = (props: {
       {loading ? (
         <BlockLoader />
       ) : (
-        <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-3 l-l:grid-cols-4 gap-4">
-          {mappedProblems}
-        </div>
+        <React.Fragment>
+          <SearchFilter
+            searchKey={searchKey}
+            searchValue={searchValue}
+            activeLabel={activeLabel}
+            options={SEARCH_OPTIONS}
+            handleSearchKey={handleSearchKey}
+            handleSearchValue={handleSearchValue}
+          />
+          <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-3 l-l:grid-cols-4 gap-4">
+            {mappedProblems}
+          </div>
+        </React.Fragment>
       )}
       {selectedProblem && (
         <ProblemTestCases

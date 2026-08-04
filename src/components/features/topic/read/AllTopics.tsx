@@ -12,10 +12,26 @@ import {
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
+import SearchFilter from "@/src/components/ui/filters/SearchFilter";
+import useSearch from "@/src/hooks/useSearch";
+
+const SEARCH_OPTIONS: { label: string; value: string }[] = [
+  { label: "Name", value: "name" },
+  { label: "Description", value: "description" },
+];
 
 const AllTopics = (paginate: { page: number; limit: number }) => {
   const [topics, setTopics] = React.useState<BaseTopic[]>([]);
   const [loading, setLoading] = React.useState(true);
+
+  const {
+    searchKey,
+    searchValue,
+    activeLabel,
+    handleSearchKey,
+    handleSearchValue,
+    filter,
+  } = useSearch(SEARCH_OPTIONS, "name");
 
   const {
     pages,
@@ -30,7 +46,7 @@ const AllTopics = (paginate: { page: number; limit: number }) => {
 
   useSession({ required: true });
 
-  const mappedTopics = topics.map((topic) => {
+  const mappedTopics = filter(topics).map((topic) => {
     return (
       <Link
         href={`/codesync/topics/${topic.slug}`}
@@ -97,9 +113,20 @@ const AllTopics = (paginate: { page: number; limit: number }) => {
       {loading ? (
         <BlockLoader />
       ) : (
-        <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-3 l-l:grid-cols-4 gap-4">
-          {mappedTopics}
-        </div>
+        <React.Fragment>
+          <SearchFilter
+            searchKey={searchKey}
+            searchValue={searchValue}
+            activeLabel={activeLabel}
+            options={SEARCH_OPTIONS}
+            handleSearchKey={handleSearchKey}
+            handleSearchValue={handleSearchValue}
+          />
+
+          <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-3 l-l:grid-cols-4 gap-4">
+            {mappedTopics}
+          </div>
+        </React.Fragment>
       )}
 
       <Paginate

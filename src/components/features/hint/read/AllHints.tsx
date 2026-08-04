@@ -12,17 +12,31 @@ import { errorToast } from "@/src/utils/toast.util";
 import { normalizeString } from "@/src/utils/normalizer.util";
 import React from "react";
 import ProblemHints from "./ProblemHints";
+import useSearch from "@/src/hooks/useSearch";
+import SearchFilter from "@/src/components/ui/filters/SearchFilter";
 
-const AllHints = (props: {
-  problem?: string;
-  page: number;
-  limit: number;
-}) => {
+const SEARCH_OPTIONS = [
+  {
+    label: "Problem",
+    value: "problem",
+  },
+];
+
+const AllHints = (props: { problem?: string; page: number; limit: number }) => {
   const [hints, setHints] = React.useState<ProblemHintCount>({});
   const [selectedProblem, setSelectedProblem] = React.useState<string | null>(
     null,
   );
   const [loading, setLoading] = React.useState(true);
+
+  const {
+    searchKey,
+    searchValue,
+    activeLabel,
+    handleSearchKey,
+    handleSearchValue,
+    filter,
+  } = useSearch(SEARCH_OPTIONS, "problem");
 
   const {
     pages,
@@ -41,18 +55,23 @@ const AllHints = (props: {
     setSelectedProblem((prev) => (prev === problem ? null : problem));
   };
 
-  const mappedProblems = Object.entries(hints).map(([problem, count]) => {
+  const restructuredProblem = Object.entries(hints).map(([problem, count]) => ({
+    problem,
+    count,
+  }));
+
+  const mappedProblems = filter(restructuredProblem).map((hint) => {
     return (
       <button
-        key={problem}
-        onClick={() => handleSelectedProblem(problem)}
+        key={hint.problem}
+        onClick={() => handleSelectedProblem(hint.problem)}
         className="w-full text-left bg-neutral-200 rounded-lg p-4 flex flex-col items-start justify-start gap-2 cursor-pointer hover:bg-neutral-300 transition-all"
       >
         <p className="text-sm font-bold capitalize truncate w-full">
-          {normalizeString(problem)}
+          {normalizeString(hint.problem)}
         </p>
         <p className="text-xs text-neutral-500">
-          {count} {count === 1 ? "hint" : "hints"}
+          {hint.count} {hint.count === 1 ? "hint" : "hints"}
         </p>
       </button>
     );
@@ -104,9 +123,19 @@ const AllHints = (props: {
       {loading ? (
         <BlockLoader />
       ) : (
-        <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-3 l-l:grid-cols-4 gap-4">
-          {mappedProblems}
-        </div>
+        <React.Fragment>
+          <SearchFilter
+            searchKey={searchKey}
+            searchValue={searchValue}
+            activeLabel={activeLabel}
+            options={SEARCH_OPTIONS}
+            handleSearchKey={handleSearchKey}
+            handleSearchValue={handleSearchValue}
+          />
+          <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-3 l-l:grid-cols-4 gap-4">
+            {mappedProblems}
+          </div>
+        </React.Fragment>
       )}
 
       {selectedProblem && (
