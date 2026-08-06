@@ -12,7 +12,7 @@ const SearchFilter = (props: SearchFilterProperties) => {
   };
 
   return (
-    <div className="w-full flex flex-col items-stretch gap-2 t:flex-row t:items-center">
+    <div className="w-fit flex flex-col items-stretch gap-2 t:flex-row t:items-center">
       <div className="w-full t:w-72 relative flex flex-row items-center justify-start gap-2">
         <div className="w-full flex flex-col items-center justify-start relative">
           <Input
@@ -26,7 +26,7 @@ const SearchFilter = (props: SearchFilterProperties) => {
           />
 
           {showOptions && (
-            <div className="absolute top-12 z-10 w-full p-1 rounded-md bg-primary/20 backdrop-blur-md">
+            <div className="absolute top-12 z-20 w-full p-1 rounded-md bg-primary/50 backdrop-blur-md animate-fade">
               <Select
                 id="searchKey"
                 name="searchKey"

@@ -15,8 +15,10 @@ import Link from "next/link";
 import React from "react";
 import SearchFilter from "@/src/components/ui/filters/SearchFilter";
 import useSearch from "@/src/hooks/useSearch";
+import useSort from "@/src/hooks/useSort";
+import SortFilter from "@/src/components/ui/filters/SortFilter";
 
-const SEARCH_OPTIONS: { label: string; value: string }[] = [
+const FILTER_OPTIONS: { label: string; value: string }[] = [
   { label: "Title", value: "title" },
   { label: "Difficulty", value: "difficulty" },
 ];
@@ -28,11 +30,19 @@ const AllProblems = (paginate: { page: number; limit: number }) => {
   const {
     searchKey,
     searchValue,
-    activeLabel,
+    activeLabel: activeSearchLabel,
     handleSearchKey,
     handleSearchValue,
     filter,
-  } = useSearch(SEARCH_OPTIONS, "title");
+  } = useSearch(FILTER_OPTIONS, "title");
+
+  const {
+    activeLabel: activeSortLabel,
+    isAsc,
+    sortKey,
+    handleIsAsc,
+    handleSortKey,
+  } = useSort(FILTER_OPTIONS, "title");
 
   const {
     page,
@@ -141,14 +151,25 @@ const AllProblems = (paginate: { page: number; limit: number }) => {
         <TableLoader />
       ) : (
         <React.Fragment>
-          <SearchFilter
-            searchKey={searchKey}
-            searchValue={searchValue}
-            activeLabel={activeLabel}
-            options={SEARCH_OPTIONS}
-            handleSearchKey={handleSearchKey}
-            handleSearchValue={handleSearchValue}
-          />
+          <div className="w-full flex flex-col items-center justify-start gap-2 t:flex-row t:justify-between">
+            <SearchFilter
+              searchKey={searchKey}
+              searchValue={searchValue}
+              activeLabel={activeSearchLabel}
+              options={FILTER_OPTIONS}
+              handleSearchKey={handleSearchKey}
+              handleSearchValue={handleSearchValue}
+            />
+
+            <SortFilter
+              activeLabel={activeSortLabel}
+              handleIsAsc={handleIsAsc}
+              handleSortKey={handleSortKey}
+              isAsc={isAsc}
+              options={FILTER_OPTIONS}
+              sortKey={sortKey}
+            />
+          </div>
 
           <Table<ProblemList>
             headers={["id", "title", "difficulty", "acceptance_rate"]}
