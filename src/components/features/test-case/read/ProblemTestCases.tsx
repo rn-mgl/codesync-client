@@ -24,19 +24,10 @@ import {
   FaMemory,
   FaXmark,
 } from "react-icons/fa6";
-
-const SEARCH_OPTIONS: { label: string; value: string }[] = [
-  { label: "Title", value: "title" },
-  { label: "Expected Output", value: "expected_output" },
-  { label: "ID", value: "id" },
-];
-
-const SORT_OPTIONS: { label: string; value: string }[] = [
-  { label: "Title", value: "title" },
-  { label: "ID", value: "id" },
-  { label: "Time Limit", value: "time_limit_ms" },
-  { label: "Memory Limit", value: "memory_limit_mb" },
-];
+import {
+  PROBLEM_TEST_CASE_SEARCH_OPTIONS,
+  PROBLEM_TEST_CASE_SORT_OPTIONS,
+} from "@/src/configs/filter.config";
 
 const ProblemTestCases = (props: {
   selectedProblem: string;
@@ -52,20 +43,20 @@ const ProblemTestCases = (props: {
   const {
     searchKey,
     searchValue,
-    activeLabel,
+    searchLabel,
     handleSearchKey,
     handleSearchValue,
     filter,
-  } = useSearch(SEARCH_OPTIONS, "title");
+  } = useSearch(PROBLEM_TEST_CASE_SEARCH_OPTIONS, "title");
 
   const {
-    activeLabel: activeSortLabel,
+    sortLabel,
     isAsc,
     sortKey,
     handleIsAsc,
     handleSortKey,
     sort,
-  } = useSort(SORT_OPTIONS, "title");
+  } = useSort(PROBLEM_TEST_CASE_SORT_OPTIONS, "title");
 
   const { page, limit } = props;
 
@@ -208,18 +199,18 @@ const ProblemTestCases = (props: {
               <SearchFilter
                 searchKey={searchKey}
                 searchValue={searchValue}
-                activeLabel={activeLabel}
-                options={SEARCH_OPTIONS}
+                searchLabel={searchLabel}
+                options={PROBLEM_TEST_CASE_SEARCH_OPTIONS}
                 handleSearchKey={handleSearchKey}
                 handleSearchValue={handleSearchValue}
               />
 
               <SortFilter
-                activeLabel={activeSortLabel}
+                sortLabel={sortLabel}
                 handleIsAsc={handleIsAsc}
                 handleSortKey={handleSortKey}
                 isAsc={isAsc}
-                options={SORT_OPTIONS}
+                options={PROBLEM_TEST_CASE_SORT_OPTIONS}
                 sortKey={sortKey}
               />
             </div>

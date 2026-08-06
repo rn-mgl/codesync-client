@@ -23,19 +23,10 @@ import {
   FaPlus,
   FaXmark,
 } from "react-icons/fa6";
-
-const SEARCH_OPTIONS: { label: string; value: string }[] = [
-  { label: "Hint", value: "hint" },
-  { label: "ID", value: "id" },
-  { label: "Level", value: "level" },
-];
-
-const SORT_OPTIONS: { label: string; value: string }[] = [
-  { label: "Hint", value: "hint" },
-  { label: "ID", value: "id" },
-  { label: "Level", value: "level" },
-  { label: "Order Index", value: "order_index" },
-];
+import {
+  PROBLEM_HINT_SEARCH_OPTIONS,
+  PROBLEM_HINT_SORT_OPTIONS,
+} from "@/src/configs/filter.config";
 
 const ProblemHints = (
   props: ProblemHintProperties & { page: number; limit: number },
@@ -46,20 +37,20 @@ const ProblemHints = (
   const {
     searchKey,
     searchValue,
-    activeLabel,
+    searchLabel,
     handleSearchKey,
     handleSearchValue,
     filter,
-  } = useSearch(SEARCH_OPTIONS, "hint");
+  } = useSearch(PROBLEM_HINT_SEARCH_OPTIONS, "hint");
 
   const {
-    activeLabel: activeSortLabel,
+    sortLabel,
     isAsc,
     sortKey,
     handleIsAsc,
     handleSortKey,
     sort,
-  } = useSort(SORT_OPTIONS, "hint");
+  } = useSort(PROBLEM_HINT_SORT_OPTIONS, "hint");
 
   const { page, limit } = props;
 
@@ -170,18 +161,18 @@ const ProblemHints = (
               <SearchFilter
                 searchKey={searchKey}
                 searchValue={searchValue}
-                activeLabel={activeLabel}
-                options={SEARCH_OPTIONS}
+                searchLabel={searchLabel}
+                options={PROBLEM_HINT_SEARCH_OPTIONS}
                 handleSearchKey={handleSearchKey}
                 handleSearchValue={handleSearchValue}
               />
 
               <SortFilter
-                activeLabel={activeSortLabel}
+                sortLabel={sortLabel}
                 handleIsAsc={handleIsAsc}
                 handleSortKey={handleSortKey}
                 isAsc={isAsc}
-                options={SORT_OPTIONS}
+                options={PROBLEM_HINT_SORT_OPTIONS}
                 sortKey={sortKey}
               />
             </div>

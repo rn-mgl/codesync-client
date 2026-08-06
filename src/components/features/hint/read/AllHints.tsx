@@ -16,18 +16,10 @@ import useSearch from "@/src/hooks/useSearch";
 import SearchFilter from "@/src/components/ui/filters/SearchFilter";
 import SortFilter from "@/src/components/ui/filters/SortFilter";
 import useSort from "@/src/hooks/useSort";
-
-const SEARCH_OPTIONS = [
-  {
-    label: "Problem",
-    value: "problem",
-  },
-];
-
-const SORT_OPTIONS: { label: string; value: string }[] = [
-  { label: "Problem", value: "problem" },
-  { label: "Count", value: "count" },
-];
+import {
+  HINT_SEARCH_OPTIONS,
+  HINT_SORT_OPTIONS,
+} from "@/src/configs/filter.config";
 
 const AllHints = (props: { problem?: string; page: number; limit: number }) => {
   const [hints, setHints] = React.useState<ProblemHintCount>({});
@@ -39,20 +31,20 @@ const AllHints = (props: { problem?: string; page: number; limit: number }) => {
   const {
     searchKey,
     searchValue,
-    activeLabel,
+    searchLabel,
     handleSearchKey,
     handleSearchValue,
     filter,
-  } = useSearch(SEARCH_OPTIONS, "problem");
+  } = useSearch(HINT_SEARCH_OPTIONS, "problem");
 
   const {
-    activeLabel: activeSortLabel,
+    sortLabel,
     isAsc,
     sortKey,
     handleIsAsc,
     handleSortKey,
     sort,
-  } = useSort(SORT_OPTIONS, "problem");
+  } = useSort(HINT_SORT_OPTIONS, "problem");
 
   const {
     pages,
@@ -144,18 +136,18 @@ const AllHints = (props: { problem?: string; page: number; limit: number }) => {
             <SearchFilter
               searchKey={searchKey}
               searchValue={searchValue}
-              activeLabel={activeLabel}
-              options={SEARCH_OPTIONS}
+              searchLabel={searchLabel}
+              options={HINT_SEARCH_OPTIONS}
               handleSearchKey={handleSearchKey}
               handleSearchValue={handleSearchValue}
             />
 
             <SortFilter
-              activeLabel={activeSortLabel}
+              sortLabel={sortLabel}
               handleIsAsc={handleIsAsc}
               handleSortKey={handleSortKey}
               isAsc={isAsc}
-              options={SORT_OPTIONS}
+              options={HINT_SORT_OPTIONS}
               sortKey={sortKey}
             />
           </div>

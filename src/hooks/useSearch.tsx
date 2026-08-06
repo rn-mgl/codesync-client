@@ -41,7 +41,7 @@ export default function useSearch(
   return {
     searchKey,
     searchValue,
-    activeLabel: activeOption.label,
+    searchLabel: activeOption.label,
     handleSearchKey,
     handleSearchValue,
     filter,

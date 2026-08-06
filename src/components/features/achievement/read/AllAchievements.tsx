@@ -17,20 +17,10 @@ import SearchFilter from "@/src/components/ui/filters/SearchFilter";
 import useSearch from "@/src/hooks/useSearch";
 import SortFilter from "@/src/components/ui/filters/SortFilter";
 import useSort from "@/src/hooks/useSort";
-
-const SEARCH_OPTIONS: { label: string; value: string }[] = [
-  { label: "Name", value: "name" },
-  { label: "Description", value: "description" },
-  { label: "Category", value: "category" },
-  { label: "Points", value: "points" },
-];
-
-const SORT_OPTIONS: { label: string; value: string }[] = [
-  { label: "Name", value: "name" },
-  { label: "Category", value: "category" },
-  { label: "Points", value: "points" },
-  { label: "ID", value: "id" },
-];
+import {
+  ACHIEVEMENT_SEARCH_OPTIONS,
+  ACHIEVEMENT_SORT_OPTIONS,
+} from "@/src/configs/filter.config";
 
 const AllAchievements = (paginate: { page: number; limit: number }) => {
   const [achievements, setAchievements] = React.useState<
@@ -41,20 +31,20 @@ const AllAchievements = (paginate: { page: number; limit: number }) => {
   const {
     searchKey,
     searchValue,
-    activeLabel,
+    searchLabel,
     handleSearchKey,
     handleSearchValue,
     filter,
-  } = useSearch(SEARCH_OPTIONS, "name");
+  } = useSearch(ACHIEVEMENT_SEARCH_OPTIONS, "name");
 
   const {
-    activeLabel: activeSortLabel,
+    sortLabel,
     isAsc,
     sortKey,
     handleIsAsc,
     handleSortKey,
     sort,
-  } = useSort(SORT_OPTIONS, "name");
+  } = useSort(ACHIEVEMENT_SORT_OPTIONS, "name");
 
   const {
     pages,
@@ -149,18 +139,18 @@ const AllAchievements = (paginate: { page: number; limit: number }) => {
             <SearchFilter
               searchKey={searchKey}
               searchValue={searchValue}
-              activeLabel={activeLabel}
-              options={SEARCH_OPTIONS}
+              searchLabel={searchLabel}
+              options={ACHIEVEMENT_SEARCH_OPTIONS}
               handleSearchKey={handleSearchKey}
               handleSearchValue={handleSearchValue}
             />
 
             <SortFilter
-              activeLabel={activeSortLabel}
+              sortLabel={sortLabel}
               handleIsAsc={handleIsAsc}
               handleSortKey={handleSortKey}
               isAsc={isAsc}
-              options={SORT_OPTIONS}
+              options={ACHIEVEMENT_SORT_OPTIONS}
               sortKey={sortKey}
             />
           </div>

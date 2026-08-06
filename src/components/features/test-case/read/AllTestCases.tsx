@@ -16,18 +16,10 @@ import useSearch from "@/src/hooks/useSearch";
 import SearchFilter from "@/src/components/ui/filters/SearchFilter";
 import SortFilter from "@/src/components/ui/filters/SortFilter";
 import useSort from "@/src/hooks/useSort";
-
-const SEARCH_OPTIONS = [
-  {
-    label: "Problem",
-    value: "problem",
-  },
-];
-
-const SORT_OPTIONS: { label: string; value: string }[] = [
-  { label: "Problem", value: "problem" },
-  { label: "Count", value: "count" },
-];
+import {
+  TEST_CASE_SEARCH_OPTIONS,
+  TEST_CASE_SORT_OPTIONS,
+} from "@/src/configs/filter.config";
 
 const AllTestCases = (props: {
   problem?: string;
@@ -43,20 +35,20 @@ const AllTestCases = (props: {
   const {
     searchKey,
     searchValue,
-    activeLabel,
+    searchLabel,
     handleSearchKey,
     handleSearchValue,
     filter,
-  } = useSearch(SEARCH_OPTIONS, "problem");
+  } = useSearch(TEST_CASE_SEARCH_OPTIONS, "problem");
 
   const {
-    activeLabel: activeSortLabel,
+    sortLabel,
     isAsc,
     sortKey,
     handleIsAsc,
     handleSortKey,
     sort,
-  } = useSort(SORT_OPTIONS, "problem");
+  } = useSort(TEST_CASE_SORT_OPTIONS, "problem");
 
   const {
     pages,
@@ -148,18 +140,18 @@ const AllTestCases = (props: {
             <SearchFilter
               searchKey={searchKey}
               searchValue={searchValue}
-              activeLabel={activeLabel}
-              options={SEARCH_OPTIONS}
+              searchLabel={searchLabel}
+              options={TEST_CASE_SEARCH_OPTIONS}
               handleSearchKey={handleSearchKey}
               handleSearchValue={handleSearchValue}
             />
 
             <SortFilter
-              activeLabel={activeSortLabel}
+              sortLabel={sortLabel}
               handleIsAsc={handleIsAsc}
               handleSortKey={handleSortKey}
               isAsc={isAsc}
-              options={SORT_OPTIONS}
+              options={TEST_CASE_SORT_OPTIONS}
               sortKey={sortKey}
             />
           </div>

@@ -24,7 +24,7 @@ export interface SortFilterOption {
 export interface SearchFilterProperties {
   searchKey: string;
   searchValue: string;
-  activeLabel: string;
+  searchLabel: string;
   options: SearchFilterOption[];
   placeholder?: string;
   handleSearchValue: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -34,7 +34,7 @@ export interface SearchFilterProperties {
 export interface SortFilterProperties {
   sortKey: string;
   isAsc: boolean;
-  activeLabel: string;
+  sortLabel: string;
   options: SortFilterOption[];
   handleSortKey: (option: OptionValue) => void;
   handleIsAsc: () => void;

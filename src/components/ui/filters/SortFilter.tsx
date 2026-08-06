@@ -10,7 +10,7 @@ const SortFilter = (props: SortFilterProperties) => {
           id="sortKey"
           name="sortKey"
           value={props.sortKey}
-          activeLabel={props.activeLabel}
+          activeLabel={props.sortLabel}
           onChange={props.handleSortKey}
           options={props.options}
         />

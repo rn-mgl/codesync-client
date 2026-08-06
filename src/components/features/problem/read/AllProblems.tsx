@@ -17,11 +17,7 @@ import SearchFilter from "@/src/components/ui/filters/SearchFilter";
 import useSearch from "@/src/hooks/useSearch";
 import useSort from "@/src/hooks/useSort";
 import SortFilter from "@/src/components/ui/filters/SortFilter";
-
-const FILTER_OPTIONS: { label: string; value: string }[] = [
-  { label: "Title", value: "title" },
-  { label: "Difficulty", value: "difficulty" },
-];
+import { PROBLEM_FILTER_OPTIONS } from "@/src/configs/filter.config";
 
 const AllProblems = (paginate: { page: number; limit: number }) => {
   const [problems, setProblems] = React.useState<ProblemList[]>([]);
@@ -30,20 +26,20 @@ const AllProblems = (paginate: { page: number; limit: number }) => {
   const {
     searchKey,
     searchValue,
-    activeLabel: activeSearchLabel,
+    searchLabel,
     handleSearchKey,
     handleSearchValue,
     filter,
-  } = useSearch(FILTER_OPTIONS, "title");
+  } = useSearch(PROBLEM_FILTER_OPTIONS, "title");
 
   const {
-    activeLabel: activeSortLabel,
+    sortLabel,
     isAsc,
     sortKey,
     handleIsAsc,
     handleSortKey,
     sort,
-  } = useSort(FILTER_OPTIONS, "title");
+  } = useSort(PROBLEM_FILTER_OPTIONS, "title");
 
   const {
     page,
@@ -156,18 +152,18 @@ const AllProblems = (paginate: { page: number; limit: number }) => {
             <SearchFilter
               searchKey={searchKey}
               searchValue={searchValue}
-              activeLabel={activeSearchLabel}
-              options={FILTER_OPTIONS}
+              searchLabel={searchLabel}
+              options={PROBLEM_FILTER_OPTIONS}
               handleSearchKey={handleSearchKey}
               handleSearchValue={handleSearchValue}
             />
 
             <SortFilter
-              activeLabel={activeSortLabel}
+              sortLabel={sortLabel}
               handleIsAsc={handleIsAsc}
               handleSortKey={handleSortKey}
               isAsc={isAsc}
-              options={FILTER_OPTIONS}
+              options={PROBLEM_FILTER_OPTIONS}
               sortKey={sortKey}
             />
           </div>

@@ -16,17 +16,10 @@ import SearchFilter from "@/src/components/ui/filters/SearchFilter";
 import useSearch from "@/src/hooks/useSearch";
 import SortFilter from "@/src/components/ui/filters/SortFilter";
 import useSort from "@/src/hooks/useSort";
-
-const SEARCH_OPTIONS: { label: string; value: string }[] = [
-  { label: "Name", value: "name" },
-  { label: "Description", value: "description" },
-];
-
-const SORT_OPTIONS: { label: string; value: string }[] = [
-  { label: "Name", value: "name" },
-  { label: "Description", value: "description" },
-  { label: "ID", value: "id" },
-];
+import {
+  TOPIC_SEARCH_OPTIONS,
+  TOPIC_SORT_OPTIONS,
+} from "@/src/configs/filter.config";
 
 const AllTopics = (paginate: { page: number; limit: number }) => {
   const [topics, setTopics] = React.useState<BaseTopic[]>([]);
@@ -35,20 +28,20 @@ const AllTopics = (paginate: { page: number; limit: number }) => {
   const {
     searchKey,
     searchValue,
-    activeLabel,
+    searchLabel,
     handleSearchKey,
     handleSearchValue,
     filter,
-  } = useSearch(SEARCH_OPTIONS, "name");
+  } = useSearch(TOPIC_SEARCH_OPTIONS, "name");
 
   const {
-    activeLabel: activeSortLabel,
+    sortLabel,
     isAsc,
     sortKey,
     handleIsAsc,
     handleSortKey,
     sort,
-  } = useSort(SORT_OPTIONS, "name");
+  } = useSort(TOPIC_SORT_OPTIONS, "name");
 
   const {
     pages,
@@ -135,18 +128,18 @@ const AllTopics = (paginate: { page: number; limit: number }) => {
             <SearchFilter
               searchKey={searchKey}
               searchValue={searchValue}
-              activeLabel={activeLabel}
-              options={SEARCH_OPTIONS}
+              searchLabel={searchLabel}
+              options={TOPIC_SEARCH_OPTIONS}
               handleSearchKey={handleSearchKey}
               handleSearchValue={handleSearchValue}
             />
 
             <SortFilter
-              activeLabel={activeSortLabel}
+              sortLabel={sortLabel}
               handleIsAsc={handleIsAsc}
               handleSortKey={handleSortKey}
               isAsc={isAsc}
-              options={SORT_OPTIONS}
+              options={TOPIC_SORT_OPTIONS}
               sortKey={sortKey}
             />
           </div>

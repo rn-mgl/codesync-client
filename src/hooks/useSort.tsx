@@ -36,7 +36,7 @@ export default function useSort(
   return {
     sortKey,
     isAsc,
-    activeLabel: activeOption.label,
+    sortLabel: activeOption.label,
     handleSortKey,
     handleIsAsc,
     sort,

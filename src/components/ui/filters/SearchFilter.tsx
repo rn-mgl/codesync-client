@@ -31,7 +31,7 @@ const SearchFilter = (props: SearchFilterProperties) => {
                 id="searchKey"
                 name="searchKey"
                 value={props.searchKey}
-                activeLabel={props.activeLabel}
+                activeLabel={props.searchLabel}
                 onChange={props.handleSearchKey}
                 options={props.options}
               />
