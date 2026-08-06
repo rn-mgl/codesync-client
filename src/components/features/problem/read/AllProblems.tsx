@@ -17,7 +17,10 @@ import SearchFilter from "@/src/components/ui/filters/SearchFilter";
 import useSearch from "@/src/hooks/useSearch";
 import useSort from "@/src/hooks/useSort";
 import SortFilter from "@/src/components/ui/filters/SortFilter";
-import { PROBLEM_FILTER_OPTIONS } from "@/src/configs/filter.config";
+import {
+  PROBLEM_SEARCH_OPTIONS,
+  PROBLEM_SORT_OPTIONS,
+} from "@/src/configs/filter.config";
 
 const AllProblems = (paginate: { page: number; limit: number }) => {
   const [problems, setProblems] = React.useState<ProblemList[]>([]);
@@ -30,7 +33,7 @@ const AllProblems = (paginate: { page: number; limit: number }) => {
     handleSearchKey,
     handleSearchValue,
     filter,
-  } = useSearch(PROBLEM_FILTER_OPTIONS, "title");
+  } = useSearch(PROBLEM_SEARCH_OPTIONS, "title");
 
   const {
     sortLabel,
@@ -39,7 +42,7 @@ const AllProblems = (paginate: { page: number; limit: number }) => {
     handleIsAsc,
     handleSortKey,
     sort,
-  } = useSort(PROBLEM_FILTER_OPTIONS, "title");
+  } = useSort(PROBLEM_SORT_OPTIONS, "title");
 
   const {
     page,
@@ -153,7 +156,7 @@ const AllProblems = (paginate: { page: number; limit: number }) => {
               searchKey={searchKey}
               searchValue={searchValue}
               searchLabel={searchLabel}
-              options={PROBLEM_FILTER_OPTIONS}
+              options={PROBLEM_SEARCH_OPTIONS}
               handleSearchKey={handleSearchKey}
               handleSearchValue={handleSearchValue}
             />
@@ -163,7 +166,7 @@ const AllProblems = (paginate: { page: number; limit: number }) => {
               handleIsAsc={handleIsAsc}
               handleSortKey={handleSortKey}
               isAsc={isAsc}
-              options={PROBLEM_FILTER_OPTIONS}
+              options={PROBLEM_SORT_OPTIONS}
               sortKey={sortKey}
             />
           </div>

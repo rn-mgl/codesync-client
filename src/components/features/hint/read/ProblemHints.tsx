@@ -11,10 +11,6 @@ import { errorToast } from "@/src/utils/toast.util";
 import { normalizeString } from "@/src/utils/normalizer.util";
 import Link from "next/link";
 import React from "react";
-import SearchFilter from "@/src/components/ui/filters/SearchFilter";
-import useSearch from "@/src/hooks/useSearch";
-import SortFilter from "@/src/components/ui/filters/SortFilter";
-import useSort from "@/src/hooks/useSort";
 
 import {
   FaArrowDown19,
@@ -23,34 +19,12 @@ import {
   FaPlus,
   FaXmark,
 } from "react-icons/fa6";
-import {
-  PROBLEM_HINT_SEARCH_OPTIONS,
-  PROBLEM_HINT_SORT_OPTIONS,
-} from "@/src/configs/filter.config";
 
 const ProblemHints = (
   props: ProblemHintProperties & { page: number; limit: number },
 ) => {
   const [hints, setHints] = React.useState<HintDetails[]>([]);
   const [loading, setLoading] = React.useState(true);
-
-  const {
-    searchKey,
-    searchValue,
-    searchLabel,
-    handleSearchKey,
-    handleSearchValue,
-    filter,
-  } = useSearch(PROBLEM_HINT_SEARCH_OPTIONS, "hint");
-
-  const {
-    sortLabel,
-    isAsc,
-    sortKey,
-    handleIsAsc,
-    handleSortKey,
-    sort,
-  } = useSort(PROBLEM_HINT_SORT_OPTIONS, "hint");
 
   const { page, limit } = props;
 
@@ -94,7 +68,7 @@ const ProblemHints = (
     getHints();
   }, [props.selectedProblem, limit, page]);
 
-  const mappedHints = sort(filter(hints)).map((hint) => (
+  const mappedHints = hints.map((hint) => (
     <Link
       key={hint.id}
       href={`/codesync/hints/${hint.id}`}
@@ -157,26 +131,6 @@ const ProblemHints = (
 
         <div className="w-full h-auto max-h-full bg-secondary rounded-lg p-4 flex flex-col items-start justify-start gap-4 overflow-y-auto">
           <div className="w-full flex flex-col gap-4 t:flex-row t:items-center t:justify-between">
-            <div className="w-full flex flex-col gap-2 t:flex-row t:items-center">
-              <SearchFilter
-                searchKey={searchKey}
-                searchValue={searchValue}
-                searchLabel={searchLabel}
-                options={PROBLEM_HINT_SEARCH_OPTIONS}
-                handleSearchKey={handleSearchKey}
-                handleSearchValue={handleSearchValue}
-              />
-
-              <SortFilter
-                sortLabel={sortLabel}
-                handleIsAsc={handleIsAsc}
-                handleSortKey={handleSortKey}
-                isAsc={isAsc}
-                options={PROBLEM_HINT_SORT_OPTIONS}
-                sortKey={sortKey}
-              />
-            </div>
-
             <Link
               href={`/codesync/hints/create?problem=${props.selectedProblem}`}
               className="text-primary font-normal flex flex-row items-center

@@ -47,16 +47,10 @@ const ProblemTestCases = (props: {
     handleSearchKey,
     handleSearchValue,
     filter,
-  } = useSearch(PROBLEM_TEST_CASE_SEARCH_OPTIONS, "title");
+  } = useSearch(PROBLEM_TEST_CASE_SEARCH_OPTIONS, "id");
 
-  const {
-    sortLabel,
-    isAsc,
-    sortKey,
-    handleIsAsc,
-    handleSortKey,
-    sort,
-  } = useSort(PROBLEM_TEST_CASE_SORT_OPTIONS, "title");
+  const { sortLabel, isAsc, sortKey, handleIsAsc, handleSortKey, sort } =
+    useSort(PROBLEM_TEST_CASE_SORT_OPTIONS, "id");
 
   const { page, limit } = props;
 
@@ -220,7 +214,7 @@ const ProblemTestCases = (props: {
               className="text-primary font-normal flex flex-row items-center
                             justify-center gap-2 hover:bg-secondary/20 p-1 text-sm hover:border-b px-1"
             >
-              <span>Add Test Case</span>
+              <span className="text-nowrap">Add Test Case</span>
               <FaPlus />
             </Link>
           </div>
