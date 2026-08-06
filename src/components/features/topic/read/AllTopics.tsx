@@ -14,10 +14,18 @@ import Link from "next/link";
 import React from "react";
 import SearchFilter from "@/src/components/ui/filters/SearchFilter";
 import useSearch from "@/src/hooks/useSearch";
+import SortFilter from "@/src/components/ui/filters/SortFilter";
+import useSort from "@/src/hooks/useSort";
 
 const SEARCH_OPTIONS: { label: string; value: string }[] = [
   { label: "Name", value: "name" },
   { label: "Description", value: "description" },
+];
+
+const SORT_OPTIONS: { label: string; value: string }[] = [
+  { label: "Name", value: "name" },
+  { label: "Description", value: "description" },
+  { label: "ID", value: "id" },
 ];
 
 const AllTopics = (paginate: { page: number; limit: number }) => {
@@ -34,6 +42,15 @@ const AllTopics = (paginate: { page: number; limit: number }) => {
   } = useSearch(SEARCH_OPTIONS, "name");
 
   const {
+    activeLabel: activeSortLabel,
+    isAsc,
+    sortKey,
+    handleIsAsc,
+    handleSortKey,
+    sort,
+  } = useSort(SORT_OPTIONS, "name");
+
+  const {
     pages,
     page,
     limit,
@@ -46,7 +63,7 @@ const AllTopics = (paginate: { page: number; limit: number }) => {
 
   useSession({ required: true });
 
-  const mappedTopics = filter(topics).map((topic) => {
+  const mappedTopics = sort(filter(topics)).map((topic) => {
     return (
       <Link
         href={`/codesync/topics/${topic.slug}`}
@@ -114,14 +131,25 @@ const AllTopics = (paginate: { page: number; limit: number }) => {
         <BlockLoader />
       ) : (
         <React.Fragment>
-          <SearchFilter
-            searchKey={searchKey}
-            searchValue={searchValue}
-            activeLabel={activeLabel}
-            options={SEARCH_OPTIONS}
-            handleSearchKey={handleSearchKey}
-            handleSearchValue={handleSearchValue}
-          />
+          <div className="w-full flex flex-col items-center justify-start gap-2 t:flex-row t:justify-between">
+            <SearchFilter
+              searchKey={searchKey}
+              searchValue={searchValue}
+              activeLabel={activeLabel}
+              options={SEARCH_OPTIONS}
+              handleSearchKey={handleSearchKey}
+              handleSearchValue={handleSearchValue}
+            />
+
+            <SortFilter
+              activeLabel={activeSortLabel}
+              handleIsAsc={handleIsAsc}
+              handleSortKey={handleSortKey}
+              isAsc={isAsc}
+              options={SORT_OPTIONS}
+              sortKey={sortKey}
+            />
+          </div>
 
           <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-3 l-l:grid-cols-4 gap-4">
             {mappedTopics}

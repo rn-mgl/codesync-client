@@ -13,6 +13,8 @@ import Link from "next/link";
 import React from "react";
 import SearchFilter from "@/src/components/ui/filters/SearchFilter";
 import useSearch from "@/src/hooks/useSearch";
+import SortFilter from "@/src/components/ui/filters/SortFilter";
+import useSort from "@/src/hooks/useSort";
 
 import {
   FaArrowDown19,
@@ -26,6 +28,13 @@ const SEARCH_OPTIONS: { label: string; value: string }[] = [
   { label: "Hint", value: "hint" },
   { label: "ID", value: "id" },
   { label: "Level", value: "level" },
+];
+
+const SORT_OPTIONS: { label: string; value: string }[] = [
+  { label: "Hint", value: "hint" },
+  { label: "ID", value: "id" },
+  { label: "Level", value: "level" },
+  { label: "Order Index", value: "order_index" },
 ];
 
 const ProblemHints = (
@@ -42,6 +51,15 @@ const ProblemHints = (
     handleSearchValue,
     filter,
   } = useSearch(SEARCH_OPTIONS, "hint");
+
+  const {
+    activeLabel: activeSortLabel,
+    isAsc,
+    sortKey,
+    handleIsAsc,
+    handleSortKey,
+    sort,
+  } = useSort(SORT_OPTIONS, "hint");
 
   const { page, limit } = props;
 
@@ -85,7 +103,7 @@ const ProblemHints = (
     getHints();
   }, [props.selectedProblem, limit, page]);
 
-  const mappedHints = filter(hints).map((hint) => (
+  const mappedHints = sort(filter(hints)).map((hint) => (
     <Link
       key={hint.id}
       href={`/codesync/hints/${hint.id}`}
@@ -148,14 +166,25 @@ const ProblemHints = (
 
         <div className="w-full h-auto max-h-full bg-secondary rounded-lg p-4 flex flex-col items-start justify-start gap-4 overflow-y-auto">
           <div className="w-full flex flex-col gap-4 t:flex-row t:items-center t:justify-between">
-            <SearchFilter
-              searchKey={searchKey}
-              searchValue={searchValue}
-              activeLabel={activeLabel}
-              options={SEARCH_OPTIONS}
-              handleSearchKey={handleSearchKey}
-              handleSearchValue={handleSearchValue}
-            />
+            <div className="w-full flex flex-col gap-2 t:flex-row t:items-center">
+              <SearchFilter
+                searchKey={searchKey}
+                searchValue={searchValue}
+                activeLabel={activeLabel}
+                options={SEARCH_OPTIONS}
+                handleSearchKey={handleSearchKey}
+                handleSearchValue={handleSearchValue}
+              />
+
+              <SortFilter
+                activeLabel={activeSortLabel}
+                handleIsAsc={handleIsAsc}
+                handleSortKey={handleSortKey}
+                isAsc={isAsc}
+                options={SORT_OPTIONS}
+                sortKey={sortKey}
+              />
+            </div>
 
             <Link
               href={`/codesync/hints/create?problem=${props.selectedProblem}`}

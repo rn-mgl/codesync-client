@@ -14,12 +14,19 @@ import React from "react";
 import ProblemTestCases from "./ProblemTestCases";
 import useSearch from "@/src/hooks/useSearch";
 import SearchFilter from "@/src/components/ui/filters/SearchFilter";
+import SortFilter from "@/src/components/ui/filters/SortFilter";
+import useSort from "@/src/hooks/useSort";
 
 const SEARCH_OPTIONS = [
   {
     label: "Problem",
     value: "problem",
   },
+];
+
+const SORT_OPTIONS: { label: string; value: string }[] = [
+  { label: "Problem", value: "problem" },
+  { label: "Count", value: "count" },
 ];
 
 const AllTestCases = (props: {
@@ -43,6 +50,15 @@ const AllTestCases = (props: {
   } = useSearch(SEARCH_OPTIONS, "problem");
 
   const {
+    activeLabel: activeSortLabel,
+    isAsc,
+    sortKey,
+    handleIsAsc,
+    handleSortKey,
+    sort,
+  } = useSort(SORT_OPTIONS, "problem");
+
+  const {
     pages,
     page,
     limit,
@@ -63,7 +79,7 @@ const AllTestCases = (props: {
     ([problem, count]) => ({ problem, count }),
   );
 
-  const mappedProblems = filter(restructuredProblem).map((tc) => {
+  const mappedProblems = sort(filter(restructuredProblem)).map((tc) => {
     return (
       <button
         key={tc.problem}
@@ -128,14 +144,26 @@ const AllTestCases = (props: {
         <BlockLoader />
       ) : (
         <React.Fragment>
-          <SearchFilter
-            searchKey={searchKey}
-            searchValue={searchValue}
-            activeLabel={activeLabel}
-            options={SEARCH_OPTIONS}
-            handleSearchKey={handleSearchKey}
-            handleSearchValue={handleSearchValue}
-          />
+          <div className="w-full flex flex-col items-center justify-start gap-2 t:flex-row t:justify-between">
+            <SearchFilter
+              searchKey={searchKey}
+              searchValue={searchValue}
+              activeLabel={activeLabel}
+              options={SEARCH_OPTIONS}
+              handleSearchKey={handleSearchKey}
+              handleSearchValue={handleSearchValue}
+            />
+
+            <SortFilter
+              activeLabel={activeSortLabel}
+              handleIsAsc={handleIsAsc}
+              handleSortKey={handleSortKey}
+              isAsc={isAsc}
+              options={SORT_OPTIONS}
+              sortKey={sortKey}
+            />
+          </div>
+
           <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-3 l-l:grid-cols-4 gap-4">
             {mappedProblems}
           </div>

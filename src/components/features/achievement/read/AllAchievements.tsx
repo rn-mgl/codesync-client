@@ -15,12 +15,21 @@ import Link from "next/link";
 import React from "react";
 import SearchFilter from "@/src/components/ui/filters/SearchFilter";
 import useSearch from "@/src/hooks/useSearch";
+import SortFilter from "@/src/components/ui/filters/SortFilter";
+import useSort from "@/src/hooks/useSort";
 
 const SEARCH_OPTIONS: { label: string; value: string }[] = [
   { label: "Name", value: "name" },
   { label: "Description", value: "description" },
   { label: "Category", value: "category" },
   { label: "Points", value: "points" },
+];
+
+const SORT_OPTIONS: { label: string; value: string }[] = [
+  { label: "Name", value: "name" },
+  { label: "Category", value: "category" },
+  { label: "Points", value: "points" },
+  { label: "ID", value: "id" },
 ];
 
 const AllAchievements = (paginate: { page: number; limit: number }) => {
@@ -39,6 +48,15 @@ const AllAchievements = (paginate: { page: number; limit: number }) => {
   } = useSearch(SEARCH_OPTIONS, "name");
 
   const {
+    activeLabel: activeSortLabel,
+    isAsc,
+    sortKey,
+    handleIsAsc,
+    handleSortKey,
+    sort,
+  } = useSort(SORT_OPTIONS, "name");
+
+  const {
     pages,
     page,
     limit,
@@ -51,7 +69,7 @@ const AllAchievements = (paginate: { page: number; limit: number }) => {
 
   useSession({ required: true });
 
-  const mappedAchievements = filter(achievements).map((achievement) => {
+  const mappedAchievements = sort(filter(achievements)).map((achievement) => {
     return (
       <Link
         href={`/codesync/achievements/${achievement.slug}`}
@@ -127,14 +145,25 @@ const AllAchievements = (paginate: { page: number; limit: number }) => {
         <BlockLoader />
       ) : (
         <React.Fragment>
-          <SearchFilter
-            searchKey={searchKey}
-            searchValue={searchValue}
-            activeLabel={activeLabel}
-            options={SEARCH_OPTIONS}
-            handleSearchKey={handleSearchKey}
-            handleSearchValue={handleSearchValue}
-          />
+          <div className="w-full flex flex-col items-center justify-start gap-2 t:flex-row t:justify-between">
+            <SearchFilter
+              searchKey={searchKey}
+              searchValue={searchValue}
+              activeLabel={activeLabel}
+              options={SEARCH_OPTIONS}
+              handleSearchKey={handleSearchKey}
+              handleSearchValue={handleSearchValue}
+            />
+
+            <SortFilter
+              activeLabel={activeSortLabel}
+              handleIsAsc={handleIsAsc}
+              handleSortKey={handleSortKey}
+              isAsc={isAsc}
+              options={SORT_OPTIONS}
+              sortKey={sortKey}
+            />
+          </div>
 
           <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-2 l-l:grid-cols-3 gap-4">
             {mappedAchievements}
