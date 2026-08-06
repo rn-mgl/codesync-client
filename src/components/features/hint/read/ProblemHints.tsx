@@ -11,6 +11,8 @@ import { errorToast } from "@/src/utils/toast.util";
 import { normalizeString } from "@/src/utils/normalizer.util";
 import Link from "next/link";
 import React from "react";
+import SearchFilter from "@/src/components/ui/filters/SearchFilter";
+import useSearch from "@/src/hooks/useSearch";
 
 import {
   FaArrowDown19,
@@ -20,11 +22,26 @@ import {
   FaXmark,
 } from "react-icons/fa6";
 
+const SEARCH_OPTIONS: { label: string; value: string }[] = [
+  { label: "Hint", value: "hint" },
+  { label: "ID", value: "id" },
+  { label: "Level", value: "level" },
+];
+
 const ProblemHints = (
   props: ProblemHintProperties & { page: number; limit: number },
 ) => {
   const [hints, setHints] = React.useState<HintDetails[]>([]);
   const [loading, setLoading] = React.useState(true);
+
+  const {
+    searchKey,
+    searchValue,
+    activeLabel,
+    handleSearchKey,
+    handleSearchValue,
+    filter,
+  } = useSearch(SEARCH_OPTIONS, "hint");
 
   const { page, limit } = props;
 
@@ -68,7 +85,7 @@ const ProblemHints = (
     getHints();
   }, [props.selectedProblem, limit, page]);
 
-  const mappedHints = hints.map((hint) => (
+  const mappedHints = filter(hints).map((hint) => (
     <Link
       key={hint.id}
       href={`/codesync/hints/${hint.id}`}
@@ -130,7 +147,16 @@ const ProblemHints = (
         </div>
 
         <div className="w-full h-auto max-h-full bg-secondary rounded-lg p-4 flex flex-col items-start justify-start gap-4 overflow-y-auto">
-          <div className="w-full flex items-center justify-end">
+          <div className="w-full flex flex-col gap-4 t:flex-row t:items-center t:justify-between">
+            <SearchFilter
+              searchKey={searchKey}
+              searchValue={searchValue}
+              activeLabel={activeLabel}
+              options={SEARCH_OPTIONS}
+              handleSearchKey={handleSearchKey}
+              handleSearchValue={handleSearchValue}
+            />
+
             <Link
               href={`/codesync/hints/create?problem=${props.selectedProblem}`}
               className="text-primary font-normal flex flex-row items-center

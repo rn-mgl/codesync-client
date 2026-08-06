@@ -35,8 +35,7 @@ export interface SortFilterProperties {
   sortKey: string;
   isAsc: boolean;
   activeLabel: string;
-  options: SearchFilterOption[];
-  placeholder?: string;
+  options: SortFilterOption[];
   handleSortKey: (option: OptionValue) => void;
   handleIsAsc: () => void;
 }

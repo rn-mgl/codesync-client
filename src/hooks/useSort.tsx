@@ -22,15 +22,12 @@ export default function useSort(
 
   const sort = React.useCallback(
     <T,>(items: T[]) => {
-      return items.sort((a, b) => {
+      return [...items].sort((a, b) => {
         const aVal = a[sortKey as keyof T];
         const bVal = b[sortKey as keyof T];
 
-        if (isAsc) {
-          return aVal > bVal ? 1 : -1;
-        } else {
-          return aVal > bVal ? -1 : 1;
-        }
+        const cmp = aVal > bVal ? 1 : aVal < bVal ? -1 : 0;
+        return isAsc ? cmp : -cmp;
       });
     },
     [isAsc, sortKey],

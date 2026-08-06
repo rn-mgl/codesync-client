@@ -12,6 +12,8 @@ import { errorToast } from "@/src/utils/toast.util";
 import { normalizeString } from "@/src/utils/normalizer.util";
 import Link from "next/link";
 import React from "react";
+import SearchFilter from "@/src/components/ui/filters/SearchFilter";
+import useSearch from "@/src/hooks/useSearch";
 import { FaPlus } from "react-icons/fa";
 import {
   FaArrowLeft,
@@ -20,6 +22,12 @@ import {
   FaMemory,
   FaXmark,
 } from "react-icons/fa6";
+
+const SEARCH_OPTIONS: { label: string; value: string }[] = [
+  { label: "Title", value: "title" },
+  { label: "Expected Output", value: "expected_output" },
+  { label: "ID", value: "id" },
+];
 
 const ProblemTestCases = (props: {
   selectedProblem: string;
@@ -31,6 +39,15 @@ const ProblemTestCases = (props: {
     [],
   );
   const [loading, setLoading] = React.useState(true);
+
+  const {
+    searchKey,
+    searchValue,
+    activeLabel,
+    handleSearchKey,
+    handleSearchValue,
+    filter,
+  } = useSearch(SEARCH_OPTIONS, "title");
 
   const { page, limit } = props;
 
@@ -84,7 +101,7 @@ const ProblemTestCases = (props: {
     getTestCases();
   }, [props.selectedProblem, page, limit, handlePages]);
 
-  const mappedTestCases = testCases.map((tc) => {
+  const mappedTestCases = filter(testCases).map((tc) => {
     return (
       <div
         key={tc.id}
@@ -168,7 +185,16 @@ const ProblemTestCases = (props: {
         </div>
 
         <div className="w-full h-auto max-h-full bg-secondary rounded-lg p-4 flex flex-col items-start justify-start gap-8 overflow-y-auto">
-          <div className="w-full flex items-center justify-end">
+          <div className="w-full flex flex-col gap-4 t:flex-row t:items-center t:justify-between">
+            <SearchFilter
+              searchKey={searchKey}
+              searchValue={searchValue}
+              activeLabel={activeLabel}
+              options={SEARCH_OPTIONS}
+              handleSearchKey={handleSearchKey}
+              handleSearchValue={handleSearchValue}
+            />
+
             <Link
               href={`/codesync/test-cases/create?problem=${props.selectedProblem}`}
               className="text-primary font-normal flex flex-row items-center
