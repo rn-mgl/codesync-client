@@ -42,6 +42,7 @@ const AllProblems = (paginate: { page: number; limit: number }) => {
     sortKey,
     handleIsAsc,
     handleSortKey,
+    sort,
   } = useSort(FILTER_OPTIONS, "title");
 
   const {
@@ -69,7 +70,7 @@ const AllProblems = (paginate: { page: number; limit: number }) => {
     high: "var(--color-green-600)",
   };
 
-  const mappedProblems = filter(problems).map((problem) => {
+  const mappedProblems = sort(filter(problems)).map((problem) => {
     const rate =
       problem.acceptance_rate < 50
         ? "low"

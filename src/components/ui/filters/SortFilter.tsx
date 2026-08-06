@@ -1,16 +1,6 @@
-import Input from "@/components/ui/fields/Input";
 import Select from "@/components/ui/fields/Select";
-import {
-  SearchFilterProperties,
-  SortFilterProperties,
-} from "@/interfaces/filter.interface";
-import React from "react";
-import {
-  FaSortAlphaDown,
-  FaSortAmountDown,
-  FaSortAmountUp,
-} from "react-icons/fa";
-import { FaGears, FaMagnifyingGlass, FaXmark } from "react-icons/fa6";
+import { SortFilterProperties } from "@/interfaces/filter.interface";
+import { FaSortAmountDown, FaSortAmountUp } from "react-icons/fa";
 
 const SortFilter = (props: SortFilterProperties) => {
   return (

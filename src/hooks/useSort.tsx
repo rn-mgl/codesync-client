@@ -13,12 +13,28 @@ export default function useSort(
     options.find((option) => option.value === sortKey) ?? options[0];
 
   const handleSortKey = (option: OptionValue) => {
-    setSortKey(String(option));
+    setSortKey(String(option.value));
   };
 
   const handleIsAsc = () => {
     setIsAsc((prev) => !prev);
   };
+
+  const sort = React.useCallback(
+    <T,>(items: T[]) => {
+      return items.sort((a, b) => {
+        const aVal = a[sortKey as keyof T];
+        const bVal = b[sortKey as keyof T];
+
+        if (isAsc) {
+          return aVal > bVal ? 1 : -1;
+        } else {
+          return aVal > bVal ? -1 : 1;
+        }
+      });
+    },
+    [isAsc, sortKey],
+  );
 
   return {
     sortKey,
@@ -26,5 +42,6 @@ export default function useSort(
     activeLabel: activeOption.label,
     handleSortKey,
     handleIsAsc,
+    sort,
   };
 }
