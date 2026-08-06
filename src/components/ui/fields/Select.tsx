@@ -48,26 +48,26 @@ const Select = (props: SelectField) => {
     });
 
   return (
-    <div className="w-full flex flex-col items-start justify-center bg-secondary gap-1">
+    <div className="w-full flex flex-col items-start justify-center  gap-1">
       {props.label ? (
         <label htmlFor="email" className="text-xs text-primary/80 font-medium">
           {props.label}
         </label>
       ) : null}
 
-      <div className="w-full flex flex-col items-center justify-center relative">
-        <div className="w-full">
+      <div className="w-full flex flex-col items-center justify-center relative bg-secondary rounded-md">
+        <div className="w-full z-10">
           <button
             onClick={handleIsVisibleOptions}
             type="button"
-            className="w-full p-2 text-left rounded-md bg-inherit text-primary border-2 border-neutral-400 outline-none"
+            className="w-full p-2 text-left rounded-md text-primary border-2 border-neutral-400 outline-none"
           >
             {props.activeLabel}
           </button>
 
           <Activity mode={isVisibleOptions ? "visible" : "hidden"}>
             <div
-              className="w-full absolute top-0 flex flex-col items-start justify-start bg-neutral-200 rounded-md z-30 translate-y-11 p-2
+              className="w-full absolute top-2 flex flex-col items-start justify-start bg-neutral-200 rounded-md z-30 translate-y-11 p-2
                         animate-fade shadow-md gap-2 max-h-60 overflow-y-hidden"
             >
               <Input
@@ -79,6 +79,7 @@ const Select = (props: SelectField) => {
                 value={searchTerm}
                 required={false}
               />
+
               <div className="w-full h-full flex flex-col items-start justify-start overflow-y-auto gap-2">
                 {mappedOptions}
               </div>

@@ -16,6 +16,11 @@ export interface SearchFilterOption {
   value: string;
 }
 
+export interface SortFilterOption {
+  label: string;
+  value: string;
+}
+
 export interface SearchFilterProperties {
   searchKey: string;
   searchValue: string;
