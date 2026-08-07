@@ -103,6 +103,7 @@ export default function useSingleProblem() {
   const [topics, setTopics] = React.useState<BaseTopic[]>([]);
   const [hints, setHints] = React.useState<BaseHint[]>([]);
   const [loading, setLoading] = React.useState(true);
+  const [usedHints, setUsedHints] = React.useState<number[]>([]);
 
   const params: { slug?: string } | null = useParams();
   const editorRef = React.useRef<Monaco.editor.IStandaloneCodeEditor | null>(
@@ -165,6 +166,7 @@ export default function useSingleProblem() {
           code: code,
           language: currentLanguage,
           problem: params.slug,
+          hints_used: usedHints.length,
         };
 
         const response = await fetch(`/api/submission/`, {
@@ -212,7 +214,7 @@ export default function useSingleProblem() {
         });
       }
     },
-    [currentLanguage, user, params],
+    [currentLanguage, user, params, usedHints],
   );
 
   const handleCanDelete = () => {
@@ -243,6 +245,10 @@ export default function useSingleProblem() {
 
   const handleSubmissionState = (action: SubmissionAction) => {
     submissionDispatch(action);
+  };
+
+  const handleUsedHints = (hintId: number) => {
+    setUsedHints((prev) => (prev.includes(hintId) ? prev : [...prev, hintId]));
   };
 
   // check type to handle errors
@@ -337,5 +343,6 @@ export default function useSingleProblem() {
     handleActiveChart,
     handleActiveDetailsPanel,
     handleSubmissionState,
+    handleUsedHints,
   };
 }

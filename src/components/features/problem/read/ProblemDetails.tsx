@@ -8,6 +8,7 @@ const ProblemDetails = (props: {
   problem: BaseProblem;
   topics: BaseTopic[];
   hints: BaseHint[];
+  handleUsedHints: (hintId: number) => void;
 }) => {
   const [activeHints, setActiveHints] = React.useState<number[]>([]);
 
@@ -65,7 +66,10 @@ const ProblemDetails = (props: {
                   rounded-md border border-neutral-400 transition-all gap-2"
       >
         <button
-          onClick={() => handleActiveHints(hint.id)}
+          onClick={() => {
+            handleActiveHints(hint.id);
+            props.handleUsedHints(hint.id);
+          }}
           className="flex flex-row items-center justify-center gap-2 hover:shadow-none"
         >
           <FaChevronRight

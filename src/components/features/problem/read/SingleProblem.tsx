@@ -47,6 +47,7 @@ const SingleProblem = () => {
     handleActiveChart,
     handleActiveDetailsPanel,
     handleSubmissionState,
+    handleUsedHints,
   } = useSingleProblem();
 
   React.useEffect(() => {
@@ -137,6 +138,7 @@ const SingleProblem = () => {
                       problem={problem}
                       topics={topics}
                       hints={hints}
+                      handleUsedHints={handleUsedHints}
                     />
                   ) : activeDetailsPanel === "editorial" ? (
                     <article className="prose max-w-none text-primary leading-snug">
