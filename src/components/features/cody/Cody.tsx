@@ -10,7 +10,7 @@ import { getErrorMessage } from "@/src/utils/general.util";
 import { errorToast } from "@/src/utils/toast.util";
 import React from "react";
 import { FaHistory } from "react-icons/fa";
-import { FaMessage, FaXmark } from "react-icons/fa6";
+import { FaMessage, FaPlus, FaXmark } from "react-icons/fa6";
 import Logo from "../../global/Logo";
 import History from "./read/History";
 import { marked } from "marked";
@@ -215,7 +215,6 @@ const Cody = () => {
 
   const startChat = () => {
     dispatch({ type: "new_session" });
-    handleCanSeePanel();
   };
 
   const handleInput = (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -326,12 +325,19 @@ const Cody = () => {
           </div>
 
           <div className="w-full flex flex-col items-start bg-secondary h-full rounded-md gap-4 overflow-hidden p-2">
-            <div className="text-xs w-full flex justify-end relative">
+            <div className="text-xs w-full flex justify-between relative">
+              <button
+                onClick={startChat}
+                className="flex items-center justify-center gap-2 p-1 px-2 rounded-full"
+              >
+                <FaPlus /> <span>New Chat</span>
+              </button>
+
               <button
                 onClick={handleCanSeeHistory}
                 className={`flex items-center justify-center gap-2 p-1 px-2 rounded-full ${canSeeHistory ? "text-secondary bg-primary" : "text-primary bg-secondary"}`}
               >
-                <FaHistory /> <span>Chats</span>
+                <FaHistory /> <span>History</span>
               </button>
 
               {canSeeHistory && <History getHistory={getHistory} />}
@@ -340,15 +346,16 @@ const Cody = () => {
             <div className="w-full h-full flex flex-col items-center justify-start overflow-y-auto gap-4">
               {mappedChats}
 
-              {loading && state.chats[state.chats.length - 1]?.sender === "user" && (
-                <div className="w-full flex justify-start">
-                  <div className="w-fit p-2 rounded-md bg-neutral-300 flex gap-1">
-                    <span className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-pulse" />
-                    <span className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-pulse [animation-delay:150ms]" />
-                    <span className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-pulse [animation-delay:300ms]" />
+              {loading &&
+                state.chats[state.chats.length - 1]?.sender === "user" && (
+                  <div className="w-full flex justify-start">
+                    <div className="w-fit p-2 rounded-md bg-neutral-300 flex gap-1">
+                      <span className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-pulse" />
+                      <span className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-pulse [animation-delay:150ms]" />
+                      <span className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-pulse [animation-delay:300ms]" />
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
             </div>
           </div>
 
@@ -374,7 +381,7 @@ const Cody = () => {
         </div>
       ) : (
         <button
-          onClick={startChat}
+          onClick={handleCanSeePanel}
           className="rounded-full bg-primary max-w-10 w-10 p-2"
         >
           <Logo isTransparent type="light" />
