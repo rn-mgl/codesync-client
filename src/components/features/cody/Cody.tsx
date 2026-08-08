@@ -381,7 +381,10 @@ const Cody = () => {
         </div>
       ) : (
         <button
-          onClick={handleCanSeePanel}
+          onClick={() => {
+            handleCanSeePanel();
+            startChat();
+          }}
           className="rounded-full bg-primary max-w-10 w-10 p-2"
         >
           <Logo isTransparent type="light" />
