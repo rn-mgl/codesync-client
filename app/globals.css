@@ -113,6 +113,15 @@
   .prose {
     color: var(--color-primary);
   }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 [contenteditable]:empty::before,
