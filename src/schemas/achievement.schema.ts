@@ -33,12 +33,16 @@ const VALID_SCOPE: NonNullable<UnlockCriteria["scope"]>[] = [
 
 const VALID_MATCH: NonNullable<UnlockCriteria["match"]>[] = ["all", "any"];
 
+const BADGE_COLORS = ["diamond", "gold", "silver", "bronze"] as const;
+
+const CATEGORIES = ["problems", "streak", "social", "skill", "special"] as const;
+
 const FiltersSchema = z.object({
   difficulty: z.array(z.enum(VALID_DIFFICULTIES)).optional(),
   topic_slugs: z.array(z.string()).optional(),
   session_type: z.array(z.enum(VALID_SESSIONS)).optional(),
   role: z.array(z.string()).optional(),
-  hints_used_max: z.number().optional(),
+  hints_used_max: z.number().nonnegative().optional(),
   language: z.array(z.string()).optional(),
   is_public: z.boolean().optional(),
 });
@@ -49,13 +53,13 @@ const UnlockSchema: z.ZodType<UnlockCriteria> = z.lazy(() =>
       version: z.number(),
       type: z.enum(VALID_TYPES),
       match: z.enum(VALID_MATCH).optional(),
-      metric: z.string().optional(),
+      metric: z.string().min(1, { error: "Required" }).optional(),
       operator: z.enum(VALID_OPERATOR).optional(),
-      value: z.number().optional(),
+      value: z.number().nonnegative().optional(),
       scope: z.enum(VALID_SCOPE).optional(),
       filters: FiltersSchema.optional(),
       conditions: z.array(UnlockSchema).optional(),
-      progress_label: z.string().optional(),
+      progress_label: z.string().min(1, { error: "Required" }).optional(),
     })
     .superRefine((val, ctx) => {
       if (val.conditions !== undefined && val.match === undefined) {
@@ -68,15 +72,30 @@ const UnlockSchema: z.ZodType<UnlockCriteria> = z.lazy(() =>
     }),
 );
 
+const points = z
+  .union([z.number(), z.string()])
+  .transform((val) => Number(val))
+  .refine((val) => Number.isInteger(val) && val >= 0, {
+    error: "Points must be a non-negative integer.",
+  });
+
 export const AchievementSchema = z.object({
-  name: z.string().min(1, { error: "Required" }),
-  slug: z.string().min(1, { error: "Required" }),
-  description: z.string().min(1, { error: "Required" }),
-  points: z.string().refine((val) => !Number.isNaN(Number(val)), {
-    error: "Points must be a number.",
-  }),
+  name: z.string().trim().min(1, { error: "Required" }),
+  slug: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .min(1, { error: "Required" })
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, {
+      error: "Slug must be lowercase alphanumeric with hyphens.",
+    }),
+  description: z.string().trim().min(1, { error: "Required" }),
+  points,
+  badge_color: z.enum(BADGE_COLORS),
+  category: z.enum(CATEGORIES),
   unlock_criteria: z
     .string()
+    .min(1, { error: "Required" })
     .transform((val, ctx) => {
       try {
         return JSON.parse(val);
