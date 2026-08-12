@@ -3,8 +3,11 @@ import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
 import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
 import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
+import { StatusCodes } from "http-status-codes";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
+import { HintSchema } from "@/src/schemas/hint.schema";
+import z from "zod";
 
 export async function GET(
   req: NextRequest,
@@ -66,6 +69,23 @@ export async function PATCH(
     const url = env.SERVER_URL;
     const id = (await params).id;
     const body = await req.json();
+
+    if (!("hint" in body)) {
+      throw new APIError(
+        `The hint details are required to update the hint.`,
+        StatusCodes.BAD_REQUEST,
+      );
+    }
+
+    const hint = body.hint;
+
+    const parser = HintSchema.safeParse(hint);
+
+    if (parser.error) {
+      const prettifyError = z.prettifyError(parser.error);
+
+      throw new APIError(prettifyError, StatusCodes.BAD_REQUEST);
+    }
 
     const response = await fetch(`${url}/hint/${id}`, {
       method: "PATCH",

@@ -6,6 +6,8 @@ import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
 import { StatusCodes } from "http-status-codes";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
+import { HintSchema } from "@/src/schemas/hint.schema";
+import z from "zod";
 
 export async function POST(req: NextRequest) {
   try {
@@ -24,6 +26,16 @@ export async function POST(req: NextRequest) {
         `The hint details are required to create a hint.`,
         StatusCodes.BAD_REQUEST,
       );
+    }
+
+    const hint = body.hint;
+
+    const parser = HintSchema.safeParse(hint);
+
+    if (parser.error) {
+      const prettifyError = z.prettifyError(parser.error);
+
+      throw new APIError(prettifyError, StatusCodes.BAD_REQUEST);
     }
 
     const response = await fetch(`${url}/hint`, {
