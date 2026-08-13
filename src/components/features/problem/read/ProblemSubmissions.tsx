@@ -87,6 +87,7 @@ const ProblemSubmissions = (props: {
 
         const searchParams = {
           problem: params.slug,
+          source: "problem",
         };
 
         const query = new URLSearchParams(searchParams).toString();

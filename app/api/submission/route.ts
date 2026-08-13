@@ -80,9 +80,16 @@ export async function GET(req: NextRequest) {
     const request = new URL(req.url);
     const token = cookies.user.token;
     const url = env.SERVER_URL;
-    const searchParams = {
-      problem: request.searchParams.get("problem") ?? "",
+
+    const searchParams: Record<string, string> = {
+      source: request.searchParams.get("source") ?? "",
     };
+
+    const problemParams = request.searchParams.get("problem");
+
+    if (problemParams) {
+      searchParams.problem = problemParams;
+    }
 
     const query = new URLSearchParams(searchParams).toString();
 

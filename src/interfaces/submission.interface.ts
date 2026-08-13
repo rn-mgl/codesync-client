@@ -70,6 +70,10 @@ export type GetAllSubmissionsResponse = APIResponse<{
   submissions: BaseSubmission[];
 }>;
 
+export type GetAllSubmissionCounts = APIResponse<{
+  submissions: Record<string, number>;
+}>;
+
 export type SubmissionState = {
   run?:
     | (SubmissionResponse & {

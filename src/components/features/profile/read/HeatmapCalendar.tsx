@@ -1,5 +1,8 @@
 "use client";
 
+import { GetAllSubmissionCounts } from "@/src/interfaces/submission.interface";
+import { getErrorMessage } from "@/src/utils/general.util";
+import { errorToast } from "@/src/utils/toast.util";
 import { DateTime } from "luxon";
 import React from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
@@ -22,11 +25,15 @@ const getLevel = (count: number): number => {
   return 4;
 };
 
-const HeatmapCalendar = (props: { activity?: Record<string, number> }) => {
-  const activity = props.activity ?? {};
+const HeatmapCalendar = () => {
   const [currentMonth, setCurrentMonth] = React.useState(0);
 
   const [today] = React.useState(() => DateTime.now().startOf("day"));
+
+  const [activity, setActivity] = React.useState<Record<string, number>>(
+    {},
+  );
+  const [loading, setLoading] = React.useState(true);
 
   const months = React.useMemo(() => {
     return Array.from({ length: today.month }, (_, i) =>
@@ -35,24 +42,22 @@ const HeatmapCalendar = (props: { activity?: Record<string, number> }) => {
   }, [today]);
 
   const yearMonths = React.useMemo(() => {
-    return Array.from(
-      { length: 12 },
-      (_, i) => today.startOf("month").set({ month: i + 1 }),
+    return Array.from({ length: 12 }, (_, i) =>
+      today.startOf("month").set({ month: i + 1 }),
     );
   }, [today]);
 
   const yearPrefix = `${today.year}-`;
 
-  const yearActivity = Object.entries(activity).reduce<Record<string, number>>(
-    (acc, [key, count]) => {
-      if (key.startsWith(yearPrefix)) {
-        acc[key] = count;
-      }
+  const yearActivity = Object.entries(activity).reduce<
+    Record<string, number>
+  >((acc, [key, count]) => {
+    if (key.startsWith(yearPrefix)) {
+      acc[key] = count;
+    }
 
-      return acc;
-    },
-    {},
-  );
+    return acc;
+  }, {});
 
   const totalSubmissions = Object.values(yearActivity).reduce(
     (sum, count) => sum + count,
@@ -93,6 +98,7 @@ const HeatmapCalendar = (props: { activity?: Record<string, number> }) => {
         />
       );
     });
+
     const mappedBlanks = Array.from({ length: offset }, (_, index) => {
       return <div key={`blank-${index}`} className="aspect-square w-full" />;
     });
@@ -132,6 +138,7 @@ const HeatmapCalendar = (props: { activity?: Record<string, number> }) => {
         />
       );
     });
+
     const mappedBlanks = Array.from({ length: offset }, (_, index) => {
       return <div key={`blank-${index}`} className="h-4 w-4" />;
     });
@@ -154,6 +161,50 @@ const HeatmapCalendar = (props: { activity?: Record<string, number> }) => {
     return <div key={index} className={`h-2.5 w-2.5 rounded-[3px] ${level}`} />;
   });
 
+  React.useEffect(() => {
+    const abortController = new AbortController();
+
+    const getSubmissions = async () => {
+      try {
+        const searchParams = {
+          source: "profile",
+        };
+
+        const query = new URLSearchParams(searchParams).toString();
+
+        const response = await fetch(`/api/submission?${query}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          signal: abortController.signal,
+        });
+
+        const resolve: GetAllSubmissionCounts = await response.json();
+
+        if (!resolve.success) {
+          throw new Error(resolve.message);
+        }
+
+        const { submissions } = resolve.data;
+
+        setActivity(submissions);
+      } catch (error) {
+        if (error instanceof Error && error.name === "AbortError") return;
+
+        errorToast(getErrorMessage(error));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getSubmissions();
+
+    return () => {
+      abortController.abort();
+    };
+  }, []);
+
   return (
     <div className="w-full flex flex-col gap-4">
       <div className="w-full flex flex-col gap-2">
@@ -164,45 +215,51 @@ const HeatmapCalendar = (props: { activity?: Record<string, number> }) => {
         </p>
       </div>
 
-      <div className="hidden t:flex flex-col gap-3">
-        <div className="w-full grid grid-cols-4 l-s:grid-cols-6 l-l:grid-cols-6 gap-4">
-          {mappedYearMonths}
-        </div>
-      </div>
+      {loading ? (
+        <div className="w-full h-40 bg-neutral-200 rounded-lg animate-pulse" />
+      ) : (
+        <>
+          <div className="hidden t:flex flex-col gap-3">
+            <div className="w-full grid grid-cols-4 l-s:grid-cols-6 l-l:grid-cols-6 gap-4">
+              {mappedYearMonths}
+            </div>
+          </div>
 
-      <div className="flex t:hidden flex-col items-center gap-2">
-        <div className="w-full flex flex-row items-center justify-between">
-          <button
-            onClick={handlePreviousMonth}
-            disabled={currentMonth === 0}
-            className="p-2 rounded-full text-neutral-600 hover:text-primary"
-          >
-            <FaChevronLeft />
-          </button>
+          <div className="flex t:hidden flex-col items-center gap-2">
+            <div className="w-full flex flex-row items-center justify-between">
+              <button
+                onClick={handlePreviousMonth}
+                disabled={currentMonth === 0}
+                className="p-2 rounded-full text-neutral-600 hover:text-primary"
+              >
+                <FaChevronLeft />
+              </button>
 
-          <p className="text-sm font-bold capitalize">
-            {months[currentMonth]?.toFormat("LLLL yyyy")}
-          </p>
+              <p className="text-sm font-bold capitalize">
+                {months[currentMonth]?.toFormat("LLLL yyyy")}
+              </p>
 
-          <button
-            onClick={handleNextMonth}
-            disabled={currentMonth === months.length - 1}
-            className="p-2 rounded-full text-neutral-600 hover:text-primary"
-          >
-            <FaChevronRight />
-          </button>
-        </div>
+              <button
+                onClick={handleNextMonth}
+                disabled={currentMonth === months.length - 1}
+                className="p-2 rounded-full text-neutral-600 hover:text-primary"
+              >
+                <FaChevronRight />
+              </button>
+            </div>
 
-        {mappedMonths[currentMonth]}
-      </div>
+            {mappedMonths[currentMonth]}
+          </div>
 
-      <div className="w-full flex flex-row items-center gap-2 text-xs text-neutral-500">
-        <span>Less</span>
+          <div className="w-full flex flex-row items-center gap-2 text-xs text-neutral-500">
+            <span>Less</span>
 
-        {mappedLegend}
+            {mappedLegend}
 
-        <span>More</span>
-      </div>
+            <span>More</span>
+          </div>
+        </>
+      )}
     </div>
   );
 };
