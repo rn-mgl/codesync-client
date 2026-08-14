@@ -21,13 +21,7 @@ export async function GET(
     const url = env.SERVER_URL;
     const id = (await params).id;
 
-    const searchParams = {
-      lookup: "id",
-    };
-
-    const query = new URLSearchParams(searchParams).toString();
-
-    const response = await fetch(`${url}/submission/${id}?${query}`, {
+    const response = await fetch(`${url}/submission/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

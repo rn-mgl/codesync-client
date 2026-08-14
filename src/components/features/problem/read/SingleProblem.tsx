@@ -40,27 +40,20 @@ const SingleProblem = () => {
     hints,
     loading,
     getProblem,
+    getSubmission,
     handleSubmission,
     handleCanDelete,
     handleCurrentLanguage,
     handleClearSubmissionState,
     handleActiveChart,
     handleActiveDetailsPanel,
-    handleSubmissionState,
     handleUsedHints,
   } = useSingleProblem();
 
+  // Keyboard shortcuts: Ctrl+S save, Ctrl+' test, Ctrl+Enter run.
   React.useEffect(() => {
     const handler = async (e: KeyboardEvent) => {
-      if (!user?.id) {
-        toast(
-          <span className="flex gap-1 items-center justify-center">
-            Log In First <FaXmark />
-          </span>,
-        );
-      } else if (e.ctrlKey && e.key === "s" && params?.slug) {
-        e.preventDefault();
-
+      const saveCode = () => {
         localStorage.setItem(
           `${params?.slug}_${user?.id}_${currentLanguage}`,
           editorRef.current?.getValue() ?? "",
@@ -71,6 +64,17 @@ const SingleProblem = () => {
             Code Saved <FaCheck />
           </span>,
         );
+      };
+
+      if (!user?.id) {
+        toast(
+          <span className="flex gap-1 items-center justify-center">
+            Log In First <FaXmark />
+          </span>,
+        );
+      } else if (e.ctrlKey && e.key === "s" && params?.slug) {
+        e.preventDefault();
+        saveCode();
       } else if (e.ctrlKey && e.key === "'") {
         await handleSubmission("test");
       } else if (e.ctrlKey && e.key === "Enter") {
@@ -106,6 +110,7 @@ const SingleProblem = () => {
         <ProblemLoader />
       ) : (
         <>
+          {/* Left column: problem description / editorial / submissions / results. */}
           <div className="w-full h-full flex flex-col l-s:overflow-hidden gap-4">
             <Link
               href="/codesync/problems"
@@ -124,8 +129,8 @@ const SingleProblem = () => {
                 handleClearSubmissionState={handleClearSubmissionState}
               />
 
-              <div className="w-full h-full flex overflow-y-auto flex-col l-s:overflow-hidden border rounded-md border-neutral-400 bg-secondary">
-                <div className="w-full h-full flex flex-col gap-8 p-2 overflow-y-auto l-s:max-h-full">
+              <div className="w-full h-fit flex overflow-y-auto flex-col l-s:h-full l-s:overflow-hidden border rounded-md border-neutral-400 bg-secondary">
+                <div className="w-full h-fit flex flex-col gap-8 p-2 overflow-y-auto l-s:h-full l-s:max-h-full">
                   {submittedRunOutput && activeDetailsPanel === "result" ? (
                     <RunResults
                       runOutput={submittedRunOutput}
@@ -147,16 +152,14 @@ const SingleProblem = () => {
                       />
                     </article>
                   ) : activeDetailsPanel === "submission" ? (
-                    <ProblemSubmissions
-                      handleSubmissionState={handleSubmissionState}
-                      handleActiveDetailsPanel={handleActiveDetailsPanel}
-                    />
+                    <ProblemSubmissions getSubmission={getSubmission} />
                   ) : null}
                 </div>
               </div>
             </div>
           </div>
 
+          {/* Right column: editor + test cases. */}
           <div className="w-full h-full flex flex-col items-start justify-start gap-2 l-s:h-full l-s:overflow-y-hidden">
             <ProblemActions
               language={currentLanguage}

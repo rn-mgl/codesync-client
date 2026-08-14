@@ -1,70 +1,93 @@
 "use client";
 
-import { SupportedLanguages } from "@/src/interfaces/language.interface";
+import { BaseHint } from "@/interfaces/hint.interface";
+import { SupportedLanguages } from "@/interfaces/language.interface";
 import {
   BaseProblem,
   DetailsPanel,
   GetProblemResponse,
-} from "@/src/interfaces/problem.interface";
+  GetSubmissionResponse,
+} from "@/interfaces/problem.interface";
 import {
   CreateSubmissionResponse,
-  RunSummary,
+  RunSubmissionResult,
   SubmissionAction,
-  SubmissionResponse,
   SubmissionState,
-  SubmissionStatistics,
   SubmissionType,
-} from "@/src/interfaces/submission.interface";
-import { BaseTestCase } from "@/src/interfaces/test-case.interface";
-import { getErrorMessage } from "@/src/utils/general.util";
-import { errorToast } from "@/src/utils/toast.util";
-import { generateBoilerPlate } from "@/src/utils/problem.util";
+  TestSubmissionResult,
+} from "@/interfaces/submission.interface";
+import { BaseTestCase } from "@/interfaces/test-case.interface";
+import { BaseTopic } from "@/interfaces/topic.interface";
+import { getErrorMessage } from "@/utils/general.util";
+import { generateBoilerPlate } from "@/utils/problem.util";
+import { errorToast } from "@/utils/toast.util";
 import * as Monaco from "monaco-editor";
+import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import React from "react";
-import { BaseTopic } from "@/interfaces/topic.interface";
-import { BaseHint } from "../interfaces/hint.interface";
-import { useSession } from "next-auth/react";
 
+// A "test"/"run" result is stored as either a judge object or an error string.
+// One reducer keeps both outputs in a single source of truth.
 const submissionReducer = (
   state: SubmissionState,
   action: SubmissionAction,
-) => {
+): SubmissionState => {
   switch (action.type) {
     case "submit_test_success":
-      return {
-        ...state,
-        test: action.output,
-      };
-    case "submit_run_success":
-      return {
-        ...state,
-        run: action.output,
-      };
     case "submit_test_error":
-      return {
-        ...state,
-        test: action.output,
-      };
+      return { ...state, test: action.output };
+    case "submit_run_success":
     case "submit_run_error":
-      return {
-        ...state,
-        run: action.output,
-      };
-    case "clear_run":
-      const removedRun = { ...state };
-      delete removedRun.run;
-      return removedRun;
-    case "clear_test":
-      const removedTest = { ...state };
-      delete removedTest.test;
-      return removedTest;
+      return { ...state, run: action.output };
+    case "clear_run": {
+      const nextState = { ...state };
+      delete nextState.run;
+      return nextState;
+    }
+    case "clear_test": {
+      const nextState = { ...state };
+      delete nextState.test;
+      return nextState;
+    }
     default:
       return state;
   }
 };
 
+// Collapses a raw reducer entry (result object | error string) into the shape
+// the UI renders (success flag + message + normalized output).
+const normalizeTestOutput = (
+  test: NonNullable<SubmissionState>["test"],
+): TestSubmissionResult => {
+  if (!test) return null;
+
+  const hasError = typeof test === "string";
+
+  return {
+    success: !hasError,
+    error: hasError ? test : "",
+    output: hasError ? { judge: {} } : { judge: test.judge },
+  };
+};
+
+const normalizeRunOutput = (
+  run: NonNullable<SubmissionState>["run"],
+): RunSubmissionResult => {
+  if (!run) return null;
+
+  const hasError = typeof run === "string";
+
+  return {
+    success: !hasError,
+    error: hasError ? run : "",
+    output: hasError ? { judge: {} } : { judge: run.judge },
+    summary: hasError ? null : run.summary,
+    statistics: hasError ? null : run.statistics,
+  };
+};
+
 export default function useSingleProblem() {
+  // Problem data fetched from the API.
   const [problem, setProblem] = React.useState<BaseProblem>({
     id: 0,
     title: "",
@@ -87,32 +110,38 @@ export default function useSingleProblem() {
     acceptance_rate: 0,
     total_submissions: 0,
   });
-  const [currentLanguage, setCurrentLanguage] =
-    React.useState<SupportedLanguages>("javascript");
   const [testCases, setTestCases] = React.useState<BaseTestCase[]>([]);
-  const [canDelete, setCanDelete] = React.useState(false);
-  const [activeChart, setActiveChart] = React.useState<"runtime" | "memory">(
-    "runtime",
-  );
-  const [submissionState, submissionDispatch] = React.useReducer(
-    submissionReducer,
-    null,
-  );
-  const [activeDetailsPanel, setActiveDetailsPanel] =
-    React.useState<DetailsPanel>("description");
   const [topics, setTopics] = React.useState<BaseTopic[]>([]);
   const [hints, setHints] = React.useState<BaseHint[]>([]);
   const [loading, setLoading] = React.useState(true);
-  const [usedHints, setUsedHints] = React.useState<number[]>([]);
 
-  const params: { slug?: string } | null = useParams();
+  // Code editor + current language.
+  const [currentLanguage, setCurrentLanguage] =
+    React.useState<SupportedLanguages>("javascript");
   const editorRef = React.useRef<Monaco.editor.IStandaloneCodeEditor | null>(
     null,
   );
 
+  // Test/run submission outputs (normalized below before reaching the UI).
+  const [submissionState, submissionDispatch] = React.useReducer(
+    submissionReducer,
+    null,
+  );
+
+  // UI state.
+  const [activeChart, setActiveChart] = React.useState<"runtime" | "memory">(
+    "runtime",
+  );
+  const [activeDetailsPanel, setActiveDetailsPanel] =
+    React.useState<DetailsPanel>("description");
+  const [canDelete, setCanDelete] = React.useState(false);
+  const [usedHints, setUsedHints] = React.useState<number[]>([]);
+
+  const params: { slug?: string } | null = useParams();
   const { data: session } = useSession({ required: true });
   const user = session?.user;
 
+  // Fetches the problem, its test cases, topics and hints.
   const getProblem = React.useCallback(async () => {
     setLoading(true);
 
@@ -145,36 +174,34 @@ export default function useSingleProblem() {
     }
   }, [params]);
 
+  // Submits the current editor code as either a "test" or a full "run".
   const handleSubmission = React.useCallback(
     async (type: SubmissionType) => {
+      if (!params?.slug || !editorRef.current || !user?.id) return;
+
+      const code = editorRef.current.getValue();
+
+      // Persist the code so it survives a refresh.
+      localStorage.setItem(
+        `${params.slug}_${user.id}_${currentLanguage}`,
+        code,
+      );
+
       try {
-        if (!params?.slug) return;
-
-        if (!editorRef.current) return;
-
-        if (!user?.id) return;
-
-        const code = editorRef.current.getValue();
-
-        localStorage.setItem(
-          `${params.slug}_${user.id}_${currentLanguage}`,
-          code,
-        );
-
-        const submission = {
-          type,
-          code: code,
-          language: currentLanguage,
-          problem: params.slug,
-          hints_used: usedHints.length,
-        };
-
         const response = await fetch(`/api/submission/`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ submission }),
+          body: JSON.stringify({
+            submission: {
+              type,
+              code,
+              language: currentLanguage,
+              problem: params.slug,
+              hints_used: usedHints.length,
+            },
+          }),
         });
 
         const resolve: CreateSubmissionResponse<typeof type> =
@@ -194,7 +221,7 @@ export default function useSingleProblem() {
           setActiveDetailsPanel("result");
 
           submissionDispatch({
-            type: `submit_run_success`,
+            type: "submit_run_success",
             output: {
               judge: { ...data.judge },
               summary: data.summary,
@@ -203,7 +230,7 @@ export default function useSingleProblem() {
           });
         } else {
           submissionDispatch({
-            type: `submit_test_success`,
+            type: "submit_test_success",
             output: { judge: { ...data.judge } },
           });
         }
@@ -217,22 +244,48 @@ export default function useSingleProblem() {
     [currentLanguage, user, params, usedHints],
   );
 
+  // Loads a past submission's judge output into the result panel.
+  const getSubmission = async (id: number) => {
+    try {
+      const response = await fetch(`/api/submission/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const resolve: GetSubmissionResponse = await response.json();
+
+      if (!resolve.success) {
+        throw new Error(resolve.message);
+      }
+
+      const data = resolve.data;
+
+      submissionDispatch({
+        type: "submit_run_success",
+        output: {
+          judge: { ...data.judge },
+          statistics: data.statistics,
+          summary: data.summary,
+        },
+      });
+    } catch (error) {
+      submissionDispatch({
+        type: "submit_run_error",
+        output: getErrorMessage(error),
+      });
+    } finally {
+      setActiveDetailsPanel("result");
+    }
+  };
+
   const handleCanDelete = () => {
     setCanDelete((prev) => !prev);
   };
 
   const handleCurrentLanguage = (language: SupportedLanguages) => {
     setCurrentLanguage(language);
-  };
-
-  const handleClearSubmissionState = (type: SubmissionType) => {
-    submissionDispatch({
-      type: `clear_${type}`,
-    });
-
-    if (type === "run") {
-      setActiveDetailsPanel("description");
-    }
   };
 
   const handleActiveChart = (chart: "runtime" | "memory") => {
@@ -243,76 +296,37 @@ export default function useSingleProblem() {
     setActiveDetailsPanel(panel);
   };
 
-  const handleSubmissionState = (action: SubmissionAction) => {
-    submissionDispatch(action);
-  };
-
   const handleUsedHints = (hintId: number) => {
-    setUsedHints((prev) => (prev.includes(hintId) ? prev : [...prev, hintId]));
+    setUsedHints((prev) =>
+      prev.includes(hintId) ? prev : [...prev, hintId],
+    );
   };
 
-  // check type to handle errors
-  const didSubmitTest = submissionState && !!submissionState.test;
+  // Clears a stored submission output; clearing "run" also leaves the result tab.
+  const handleClearSubmissionState = (type: SubmissionType) => {
+    submissionDispatch({ type: `clear_${type}` });
 
-  const didSubmitRun = submissionState && !!submissionState.run;
+    if (type === "run") {
+      setActiveDetailsPanel("description");
+    }
+  };
 
-  const submittedTestOutput: {
-    success: boolean;
-    error: string;
-    output: SubmissionResponse;
-  } | null = didSubmitTest
-    ? {
-        success: typeof submissionState.test === "object",
-        error:
-          typeof submissionState.test === "string" ? submissionState.test : "",
-        output:
-          typeof submissionState.test === "object"
-            ? { judge: submissionState.test.judge }
-            : { judge: {} },
-      }
-    : null;
-
-  const submittedRunOutput: {
-    success: boolean;
-    error: string;
-    output: SubmissionResponse;
-    summary: RunSummary | null;
-    statistics: SubmissionStatistics | null;
-  } | null = didSubmitRun
-    ? {
-        success: typeof submissionState.run === "object",
-        error:
-          typeof submissionState.run === "string" ? submissionState.run : "",
-        statistics:
-          typeof submissionState.run === "object"
-            ? submissionState.run.statistics
-            : null,
-        summary:
-          typeof submissionState.run === "object"
-            ? submissionState.run.summary
-            : null,
-        output:
-          typeof submissionState.run === "object"
-            ? { judge: submissionState.run.judge }
-            : { judge: {} },
-      }
-    : null;
-
+  // Key used to persist the current code (per problem + user + language).
   const startingCodeKey = `${params?.slug ?? ""}_${user?.id}_${currentLanguage}`;
 
-  // use this hook to get localstorage without tripping lint and undefined localstorage
+  // Reads the last saved code for this problem/language. useSyncExternalStore
+  // lets us snapshot localStorage during render without hydration mismatches
+  // (and re-reads whenever the language changes).
   const storedCode = React.useSyncExternalStore(
     () => () => {},
-    () => {
-      if (typeof window === undefined || !params?.slug) {
-        return "";
-      }
-
-      return localStorage.getItem(startingCodeKey);
-    },
+    () =>
+      typeof window === "undefined" || !params?.slug
+        ? ""
+        : (localStorage.getItem(startingCodeKey) ?? ""),
     () => "",
   );
 
+  // The editor starts from the saved code, falling back to the boilerplate.
   const startingCode =
     storedCode ||
     generateBoilerPlate(
@@ -320,6 +334,10 @@ export default function useSingleProblem() {
       problem.output_format,
       currentLanguage,
     );
+
+  // Normalized judge outputs for the test-case and result panels.
+  const submittedTestOutput = normalizeTestOutput(submissionState?.test);
+  const submittedRunOutput = normalizeRunOutput(submissionState?.run);
 
   return {
     problem,
@@ -335,6 +353,7 @@ export default function useSingleProblem() {
     topics,
     hints,
     loading,
+    getSubmission,
     getProblem,
     handleSubmission,
     handleCanDelete,
@@ -342,7 +361,6 @@ export default function useSingleProblem() {
     handleClearSubmissionState,
     handleActiveChart,
     handleActiveDetailsPanel,
-    handleSubmissionState,
     handleUsedHints,
   };
 }

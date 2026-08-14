@@ -1,8 +1,8 @@
 import { APIResponse, APIPaginateResponse } from "@/interfaces/api.interface";
 import {
   RunSubmissionResponse,
-  SubmissionResponse,
   SubmissionType,
+  TestSubmissionResult,
 } from "@/interfaces/submission.interface";
 import { BaseTestCase } from "@/interfaces/test-case.interface";
 import { BaseTopic } from "@/interfaces/topic.interface";
@@ -91,16 +91,7 @@ export type GetSubmissionResponse = RunSubmissionResponse;
 export interface TestCaseSectionProps {
   testCases: BaseTestCase[];
   handleClearSubmissionState: (type: SubmissionType) => void;
-  submittedTestOutput:
-    | {
-        success: false;
-        error: string;
-      }
-    | {
-        success: true;
-        output: SubmissionResponse;
-      }
-    | null;
+  submittedTestOutput: TestSubmissionResult;
 }
 
 export type DetailsPanel =

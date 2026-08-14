@@ -1,6 +1,7 @@
 import React from "react";
 import { FaMemory, FaClock } from "react-icons/fa";
 
+// Toggles the statistics chart between runtime and memory views.
 const RunMetricsToggle = (props: {
   handleActiveChart: (chart: "runtime" | "memory") => void;
   activeChart: "runtime" | "memory";

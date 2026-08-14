@@ -3,6 +3,7 @@ import CodeEditor from "@/src/components/ui/fields/CodeEditor";
 import React from "react";
 import * as Monaco from "monaco-editor";
 
+// Read-only snapshot of the code that was submitted for a run.
 const SubmittedCodePreview = (props: {
   code: string;
   language: SupportedLanguages;
@@ -11,7 +12,7 @@ const SubmittedCodePreview = (props: {
     React.useRef<Monaco.editor.IStandaloneCodeEditor | null>(null);
 
   return (
-    <div className="w-full p-2 rounded-md bg-[#1e1e1e] text-secondary max-h-80 resize-y h-full min-h-72">
+    <div className="w-full p-2 rounded-md bg-[#1e1e1e] text-secondary max-h-80 resize-y h-full min-h-96 t:min-h-72">
       <CodeEditor
         ref={readonlyEditor}
         boilerPlate={props.code}

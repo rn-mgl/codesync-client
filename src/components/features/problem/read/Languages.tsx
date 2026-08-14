@@ -4,6 +4,7 @@ import {
 } from "@/src/interfaces/language.interface";
 import React from "react";
 
+// Language picker overlay shown next to the editor toolbar.
 const Languages = (props: LanguageModal) => {
   const languages: SupportedLanguages[] = React.useMemo(
     () => ["javascript", "php", "java"],

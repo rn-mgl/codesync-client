@@ -4,6 +4,8 @@ import { BaseTopic } from "@/src/interfaces/topic.interface";
 import React from "react";
 import { FaChevronRight } from "react-icons/fa6";
 
+// Renders the problem statement: title, topics, description, constraints
+// and an expandable list of hints.
 const ProblemDetails = (props: {
   problem: BaseProblem;
   topics: BaseTopic[];
@@ -12,6 +14,7 @@ const ProblemDetails = (props: {
 }) => {
   const [activeHints, setActiveHints] = React.useState<number[]>([]);
 
+  // Toggles a hint open/closed.
   const handleActiveHints = (id: number) => {
     setActiveHints((prev) =>
       prev.includes(id)

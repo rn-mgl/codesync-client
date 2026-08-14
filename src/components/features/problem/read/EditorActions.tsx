@@ -1,6 +1,8 @@
 import { SubmissionType } from "@/src/interfaces/submission.interface";
 import React from "react";
 
+// Buttons under the editor: "Test" runs against the sample cases,
+// "Run" executes the full suite and shows statistics.
 const EditorActions = (props: {
   handleSubmission: (type: SubmissionType) => void;
 }) => {

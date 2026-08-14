@@ -1,3 +1,4 @@
+// Pass/fail badge shown at the top of the run result.
 const RunStatusBadge = (props: { passed: number; total: number }) => {
   return (
     <div

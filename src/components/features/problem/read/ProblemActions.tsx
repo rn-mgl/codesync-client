@@ -6,6 +6,8 @@ import { FaEdit } from "react-icons/fa";
 import { FaCode, FaFileCode, FaLightbulb, FaTrashCan } from "react-icons/fa6";
 import Languages from "@/components/features/problem/read/Languages";
 
+// Toolbar above the code editor: links to the problem's test cases/hints,
+// a language picker, and edit/delete actions.
 const ProblemActions = (props: {
   language: SupportedLanguages;
   handleCanDelete: () => void;
@@ -19,23 +21,34 @@ const ProblemActions = (props: {
     setCanSelectLanguage((prev) => !prev);
   };
 
+  // Content links that take the user to the per-problem pages.
+  const contentLinks = [
+    {
+      href: `/codesync/test-cases?problem=${params?.slug}`,
+      title: "Test Cases",
+      icon: <FaFileCode />,
+    },
+    {
+      href: `/codesync/hints?problem=${params?.slug}`,
+      title: "Hints",
+      icon: <FaLightbulb />,
+    },
+  ];
+
   return (
     <div className="w-full flex flex-row items-center justify-between gap-2 h-fit relative">
       <div className="flex gap-2 relative">
-        <Link
-          href={`/codesync/test-cases?problem=${params?.slug}`}
-          title="Test Case"
-          className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
-        >
-          <FaFileCode />
-        </Link>
-        <Link
-          href={`/codesync/hints?problem=${params?.slug}`}
-          title="Test Case"
-          className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
-        >
-          <FaLightbulb />
-        </Link>
+        {contentLinks.map((link) => (
+          <Link
+            key={link.title}
+            href={link.href}
+            title={link.title}
+            className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
+          >
+            {link.icon}
+          </Link>
+        ))}
+
         <button
           title="Language"
           onClick={handleCanSelectLanguage}
