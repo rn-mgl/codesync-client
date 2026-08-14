@@ -30,9 +30,7 @@ const HeatmapCalendar = () => {
 
   const [today] = React.useState(() => DateTime.now().startOf("day"));
 
-  const [activity, setActivity] = React.useState<Record<string, number>>(
-    {},
-  );
+  const [activity, setActivity] = React.useState<Record<string, number>>({});
   const [loading, setLoading] = React.useState(true);
 
   const months = React.useMemo(() => {
@@ -49,15 +47,16 @@ const HeatmapCalendar = () => {
 
   const yearPrefix = `${today.year}-`;
 
-  const yearActivity = Object.entries(activity).reduce<
-    Record<string, number>
-  >((acc, [key, count]) => {
-    if (key.startsWith(yearPrefix)) {
-      acc[key] = count;
-    }
+  const yearActivity = Object.entries(activity).reduce<Record<string, number>>(
+    (acc, [key, count]) => {
+      if (key.startsWith(yearPrefix)) {
+        acc[key] = count;
+      }
 
-    return acc;
-  }, {});
+      return acc;
+    },
+    {},
+  );
 
   const totalSubmissions = Object.values(yearActivity).reduce(
     (sum, count) => sum + count,
@@ -94,25 +93,25 @@ const HeatmapCalendar = () => {
         <div
           key={key}
           title={`${count} submission${count === 1 ? "" : "s"} on ${day.toFormat("DDD")}`}
-          className={`aspect-square w-full rounded-[3px] ${LEVELS[getLevel(count)]}`}
+          className={`h-3 w-3 rounded-[3px] ${LEVELS[getLevel(count)]}`}
         />
       );
     });
 
     const mappedBlanks = Array.from({ length: offset }, (_, index) => {
-      return <div key={`blank-${index}`} className="aspect-square w-full" />;
+      return <div key={`blank-${index}`} className="h-3 w-3" />;
     });
 
     return (
       <div
         key={month.toFormat("yyyy-LL")}
-        className="w-full flex flex-col gap-1"
+        className="w-full bg-neutral-100 border-neutral-200 border-2 rounded-lg p-2 flex flex-col items-center gap-1"
       >
-        <p className="text-[11px] font-bold text-neutral-500 capitalize">
+        <p className="text-[11px] font-bold text-neutral-500 text-center capitalize">
           {month.toFormat("LLL")}
         </p>
 
-        <div className="w-full grid grid-cols-7 gap-1">
+        <div className="w-fit grid grid-cols-7 gap-2">
           {mappedWeekdays}
           {mappedBlanks}
           {mappedDays}
@@ -134,13 +133,13 @@ const HeatmapCalendar = () => {
         <div
           key={key}
           title={`${count} submission${count === 1 ? "" : "s"} on ${day.toFormat("DDD")}`}
-          className={`h-4 w-4 rounded-sm ${LEVELS[getLevel(count)]}`}
+          className={`h-3 w-3 rounded-sm ${LEVELS[getLevel(count)]}`}
         />
       );
     });
 
     const mappedBlanks = Array.from({ length: offset }, (_, index) => {
-      return <div key={`blank-${index}`} className="h-4 w-4" />;
+      return <div key={`blank-${index}`} className="h-3 w-3" />;
     });
 
     return (
@@ -148,7 +147,7 @@ const HeatmapCalendar = () => {
         key={month.toFormat("yyyy-LL")}
         className="w-full flex flex-col items-center"
       >
-        <div className="w-fit grid grid-cols-7 gap-1.5">
+        <div className="w-fit grid grid-cols-7 gap-2">
           {mappedWeekdays}
           {mappedBlanks}
           {mappedDays}
@@ -207,7 +206,7 @@ const HeatmapCalendar = () => {
 
   return (
     <div className="w-full flex flex-col gap-4">
-      <div className="w-full flex flex-col gap-2">
+      <div className="w-full flex flex-col gap-2 t:flex-row t:justify-between">
         <p className="font-bold">Contribution heatmap</p>
 
         <p className="text-sm text-neutral-500">
@@ -220,7 +219,7 @@ const HeatmapCalendar = () => {
       ) : (
         <>
           <div className="hidden t:flex flex-col gap-3">
-            <div className="w-full grid grid-cols-4 l-s:grid-cols-6 l-l:grid-cols-6 gap-4">
+            <div className="w-full grid grid-cols-4 l-l:grid-cols-6 gap-4">
               {mappedYearMonths}
             </div>
           </div>
