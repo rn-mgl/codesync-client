@@ -16,6 +16,7 @@ export type GetHistoryResponse = APIResponse<{
   chats: Chat[];
   interaction: string;
 }>;
+export type OpenCodyResponse = APIResponse<{ response: string }>;
 
 export interface Chat {
   input: string;

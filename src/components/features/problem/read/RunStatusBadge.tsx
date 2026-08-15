@@ -2,7 +2,7 @@
 const RunStatusBadge = (props: { passed: number; total: number }) => {
   return (
     <div
-      className={`w-full flex items-center justify-center rounded-md
+      className={`w-full flex items-center justify-center rounded-md t:w-fit t:px-4
                 ${props.passed === props.total ? "bg-success/50" : "bg-danger/50"} `}
     >
       <p className="p-2 rounded-md text-xs font-bold">

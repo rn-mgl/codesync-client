@@ -137,6 +137,8 @@ export default function useSingleProblem() {
   const [canDelete, setCanDelete] = React.useState(false);
   const [usedHints, setUsedHints] = React.useState<number[]>([]);
 
+  const [openedSubmission, setOpenedSubmission] = React.useState(0);
+
   const params: { slug?: string } | null = useParams();
   const { data: session } = useSession({ required: true });
   const user = session?.user;
@@ -188,7 +190,7 @@ export default function useSingleProblem() {
       );
 
       try {
-        const response = await fetch(`/api/submission/`, {
+        const response = await fetch(`/api/submission`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -280,6 +282,10 @@ export default function useSingleProblem() {
     }
   };
 
+  const handleOpenedSubmission = (id: number) => {
+    setOpenedSubmission((prev) => (prev === id ? 0 : id));
+  };
+
   const handleCanDelete = () => {
     setCanDelete((prev) => !prev);
   };
@@ -297,9 +303,7 @@ export default function useSingleProblem() {
   };
 
   const handleUsedHints = (hintId: number) => {
-    setUsedHints((prev) =>
-      prev.includes(hintId) ? prev : [...prev, hintId],
-    );
+    setUsedHints((prev) => (prev.includes(hintId) ? prev : [...prev, hintId]));
   };
 
   // Clears a stored submission output; clearing "run" also leaves the result tab.
@@ -353,6 +357,7 @@ export default function useSingleProblem() {
     topics,
     hints,
     loading,
+    openedSubmission,
     getSubmission,
     getProblem,
     handleSubmission,
@@ -362,5 +367,6 @@ export default function useSingleProblem() {
     handleActiveChart,
     handleActiveDetailsPanel,
     handleUsedHints,
+    handleOpenedSubmission,
   };
 }

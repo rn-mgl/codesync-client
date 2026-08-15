@@ -39,6 +39,7 @@ const SingleProblem = () => {
     topics,
     hints,
     loading,
+    openedSubmission,
     getProblem,
     getSubmission,
     handleSubmission,
@@ -48,6 +49,7 @@ const SingleProblem = () => {
     handleActiveChart,
     handleActiveDetailsPanel,
     handleUsedHints,
+    handleOpenedSubmission,
   } = useSingleProblem();
 
   // Keyboard shortcuts: Ctrl+S save, Ctrl+' test, Ctrl+Enter run.
@@ -136,6 +138,7 @@ const SingleProblem = () => {
                       runOutput={submittedRunOutput}
                       language={currentLanguage}
                       activeChart={activeChart}
+                      openedSubmission={openedSubmission}
                       handleActiveChart={handleActiveChart}
                     />
                   ) : activeDetailsPanel === "description" ? (
@@ -152,7 +155,10 @@ const SingleProblem = () => {
                       />
                     </article>
                   ) : activeDetailsPanel === "submission" ? (
-                    <ProblemSubmissions getSubmission={getSubmission} />
+                    <ProblemSubmissions
+                      handleOpenedSubmission={handleOpenedSubmission}
+                      getSubmission={getSubmission}
+                    />
                   ) : null}
                 </div>
               </div>

@@ -13,6 +13,7 @@ import React from "react";
 // Lists the problem's submission history; clicking a row loads its result.
 const ProblemSubmissions = (props: {
   getSubmission: (id: number) => Promise<void>;
+  handleOpenedSubmission: (id: number) => void;
 }) => {
   const [submissions, setSubmissions] = React.useState<SubmissionList[]>([]);
 
@@ -57,7 +58,10 @@ const ProblemSubmissions = (props: {
     return (
       <button
         key={submission.id}
-        onClick={() => props.getSubmission(submission.id)}
+        onClick={() => {
+          props.getSubmission(submission.id);
+          props.handleOpenedSubmission(submission.id);
+        }}
         className="w-full not-last:border-b-2 border-neutral-400 transition-all
                   hover:bg-neutral-200 first:rounded-t-md last:rounded-b-md text-left"
       >
