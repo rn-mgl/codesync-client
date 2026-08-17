@@ -1,6 +1,7 @@
 import { BaseHint } from "@/src/interfaces/hint.interface";
 import { BaseProblem } from "@/src/interfaces/problem.interface";
 import { BaseTopic } from "@/src/interfaces/topic.interface";
+import Link from "next/link";
 import React from "react";
 import { FaChevronRight } from "react-icons/fa6";
 
@@ -49,13 +50,16 @@ const ProblemDetails = (props: {
 
   const mappedTopics = props.topics.map((topic) => {
     return (
-      <div
+      <Link
+        href={`/codesync/topics/${topic.slug}`}
+        target="_blank"
+        rel="noopener noreferrer"
         key={topic.id}
         className="w-fit px-1.5 py-0.5 rounded-full bg-neutral-300 text-xs flex flex-row items-center justify-between gap-1"
       >
         <span>{topic.icon}</span>
         <span>{topic.name}</span>
-      </div>
+      </Link>
     );
   });
 
