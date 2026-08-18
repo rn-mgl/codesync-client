@@ -39,6 +39,15 @@ export const generateBoilerPlate = (
           ? `static class ${name} {\n\tpublic ${getJavaType(outputFormat.type)} ${methodName}(${parameters}) {\n\t\t\n\t}\n}`
           : `static ${getJavaType(outputFormat.type)} ${name}(${parameters}) {\n\t\n}`;
       break;
+    case "python":
+      parameters = style === "class"
+        ? `self` + (inputFormat.params.length ? `, ${inputFormat.params.map((param) => param.name).join(", ")}` : "")
+        : inputFormat.params.map((param) => param.name).join(", ");
+      boilerPlate =
+        style === "class"
+          ? `class ${name}:\n\tdef ${methodName}(${parameters}):\n\t\tpass`
+          : `def ${name}(${parameters}):\n\tpass`;
+      break;
   }
 
   return boilerPlate;

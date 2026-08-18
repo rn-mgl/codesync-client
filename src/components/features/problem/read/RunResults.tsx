@@ -86,7 +86,7 @@ const RunResults = (props: {
               total={runOutput.summary?.total ?? 0}
             />
 
-            {openedSubmission && (
+            {!!openedSubmission && (
               <button
                 onClick={analyze}
                 disabled={loading}

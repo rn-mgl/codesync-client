@@ -12,7 +12,7 @@ export const SubmissionSchema = z.object({
     error: "Submission type must be \"run\" or \"test\".",
   }),
   code: z.string().min(1, { error: "Please write some code before submitting." }),
-  language: z.enum(["javascript", "php", "java"], {
+  language: z.enum(["javascript", "php", "java", "python"], {
     error: "Please choose a supported language.",
   }),
   problem: z
