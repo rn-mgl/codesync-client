@@ -17,7 +17,7 @@ const Action = () => {
     >
       <div className="w-full items-center justify-center flex flex-col gap-8 h-full max-w-(--breakpoint-l-s) z-10">
         <div className="flex flex-col items-center justify-center text-center gap-2">
-          <h1 className="text-3xl font-black t:text-5xl l-l:text-7xl bg-linear-to-r from-blue-400 via-green-400 to-red-400 p-2 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-black t:text-5xl l-l:text-7xl bg-linear-to-r from-secondary via-neutral-300 to-secondary p-2 bg-clip-text text-transparent">
             Practice with signal
           </h1>
           <p className="text-secondary/80 t:text-base l-l:text-lg">
@@ -28,15 +28,15 @@ const Action = () => {
 
         <div className="grid grid-cols-1 gap-3 w-full max-w-(--breakpoint-t) t:grid-cols-3">
           <div className="rounded-md border border-secondary/20 bg-secondary/5 p-4 text-center">
-            <p className="text-xl font-black text-success t:text-2xl">Run</p>
+            <p className="text-xl font-black text-secondary t:text-2xl">Run</p>
             <p className="text-xs text-secondary/60 t:text-sm">test cases</p>
           </div>
           <div className="rounded-md border border-secondary/20 bg-secondary/5 p-4 text-center">
-            <p className="text-xl font-black text-info t:text-2xl">Review</p>
+            <p className="text-xl font-black text-secondary t:text-2xl">Review</p>
             <p className="text-xs text-secondary/60 t:text-sm">submissions</p>
           </div>
           <div className="rounded-md border border-secondary/20 bg-secondary/5 p-4 text-center">
-            <p className="text-xl font-black text-warning t:text-2xl">Grow</p>
+            <p className="text-xl font-black text-secondary t:text-2xl">Grow</p>
             <p className="text-xs text-secondary/60 t:text-sm">achievements</p>
           </div>
         </div>

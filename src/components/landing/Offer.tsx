@@ -33,18 +33,23 @@ const Offer = () => {
               Problem Workspace
             </h2>
             <p className=" text-xs text-neutral-600 t:text-sm l-l:text-base">
-              Browse, create, edit, and solve problems with rich statements,
-              constraints, editorials, topics, and difficulty filters.
+              Browse a searchable problem library with topic filters and
+              difficulty sorting. Create and edit problems with rich
+              descriptions, constraints, editorials, and topic tags. Open any
+              problem in a split-panel workspace with a description tab,
+              editorial tab, and full submission history.
             </p>
           </div>
 
           <div className="w-full p-4 t:p-8 rounded-md bg-neutral-200 border-neutral-300 border-2 flex flex-col items-end justify-center gap-4 text-right">
             <h2 className="text-primary font-bold t:text-lg l-l:text-xl">
-              Code Runs & Submissions
+              In-Browser Code Editor
             </h2>
             <p className="text-xs text-neutral-600 t:text-sm l-l:text-base">
-              Write code in the in-browser editor, run test cases, inspect
-              failures, and review submitted solutions with runtime details.
+              Write code directly in the browser with Monaco — the same editor
+              powering VS Code. Run your solution against test cases instantly,
+              see pass or fail results with runtime and memory metrics, and
+              review past submissions with detailed run statistics and charts.
             </p>
           </div>
 
@@ -53,18 +58,46 @@ const Offer = () => {
               Hints, Topics & Test Cases
             </h2>
             <p className="text-xs text-neutral-600 t:text-sm l-l:text-base">
-              Manage topic collections, progressive hints, sample cases, hidden
-              cases, memory limits, and execution time limits from one flow.
+              Organize problems by topic collections. Add progressive hints with
+              rich text formatting to guide solvers step by step. Define sample
+              and hidden test cases with custom memory limits and execution time
+              constraints — all managed from a single flow.
             </p>
           </div>
 
           <div className=" w-full p-4 t:p-8 rounded-md bg-neutral-200 border-neutral-300 border-2 flex flex-col items-end justify-center gap-4 text-right">
             <h2 className="text-primary font-bold t:text-lg l-l:text-xl">
-              Cody & Achievements
+              Cody AI Assistant
             </h2>
             <p className="text-xs text-neutral-600 t:text-sm l-l:text-base">
-              Ask Cody for help while practicing, then keep momentum with
-              achievement pages, progress signals, and profile controls.
+              A floating chatbot you can open anytime while practicing. Cody
+              streams responses in real time, keeps a full chat history you can
+              revisit, and lets you start new sessions — so you always have help
+              nearby without leaving the workspace.
+            </p>
+          </div>
+
+          <div className="w-full p-4 t:p-8 rounded-md bg-neutral-200 border-neutral-300 border-2 flex flex-col items-start justify-center gap-4">
+            <h2 className="text-primary font-bold t:text-lg l-l:text-xl">
+              Achievements & Progress
+            </h2>
+            <p className="text-xs text-neutral-600 t:text-sm l-l:text-base">
+              Earn badges across bronze, silver, gold, and diamond tiers.
+              Achievements track categories like problems solved, submissions
+              made, and streaks maintained — each with point values and unlock
+              criteria so you can see exactly what to aim for next.
+            </p>
+          </div>
+
+          <div className=" w-full p-4 t:p-8 rounded-md bg-neutral-200 border-neutral-300 border-2 flex flex-col items-end justify-center gap-4 text-right">
+            <h2 className="text-primary font-bold t:text-lg l-l:text-xl">
+              Dashboard & Profile
+            </h2>
+            <p className="text-xs text-neutral-600 t:text-sm l-l:text-base">
+              A dashboard that surfaces problems solved, submissions today, and
+              achievements earned at a glance. Your profile includes a
+              GitHub-style contribution heatmap, account settings, password
+              management, and a summary of your overall progress.
             </p>
           </div>
         </div>
