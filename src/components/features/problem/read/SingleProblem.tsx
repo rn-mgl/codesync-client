@@ -95,6 +95,8 @@ const SingleProblem = () => {
     getProblem();
   }, [getProblem]);
 
+  const hasSubmission = !!(submittedTestOutput || submittedRunOutput);
+
   return (
     <div className="w-full grid grid-cols-1 gap-4 items-start justify-start l-s:grid-cols-2 l-s:h-full">
       {canDelete && (
@@ -173,7 +175,10 @@ const SingleProblem = () => {
               handleCanDelete={handleCanDelete}
             />
 
-            <div className="w-full grid grid-cols-1 grid-rows-2 items-start justify-start gap-4 h-screen l-s:h-full rounded-md overflow-hidden">
+            <div
+              className={`w-full grid grid-cols-1 items-start justify-start gap-4 h-screen l-s:h-full rounded-md overflow-hidden
+                        ${hasSubmission ? "grid-rows-2" : "grid-rows-1"}`}
+            >
               <div className="w-full h-full grid-rows-1 p-2 rounded-md bg-[#1e1e1e] flex flex-col items-center justify-center">
                 <CodeEditor
                   language={currentLanguage}
@@ -183,15 +188,17 @@ const SingleProblem = () => {
                 <EditorActions handleSubmission={handleSubmission} />
               </div>
 
-              <div className="w-full flex flex-col items-end justify-start grid-rows-1 h-full overflow-y-hidden">
-                <div className="w-full h-full rounded-md flex flex-col items-start justify-start overflow-y-hidden">
-                  <ProblemTestCases
-                    testCases={testCases}
-                    submittedTestOutput={submittedTestOutput}
-                    handleClearSubmissionState={handleClearSubmissionState}
-                  />
+              {hasSubmission && (
+                <div className="w-full flex flex-col items-end justify-start grid-rows-1 h-full overflow-y-hidden">
+                  <div className="w-full h-full rounded-md flex flex-col items-start justify-start overflow-y-hidden">
+                    <ProblemTestCases
+                      testCases={testCases}
+                      submittedTestOutput={submittedTestOutput}
+                      handleClearSubmissionState={handleClearSubmissionState}
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </>
