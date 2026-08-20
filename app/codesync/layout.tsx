@@ -4,7 +4,9 @@ import { Metadata } from "next";
 import React from "react";
 
 export const metadata: Metadata = {
-  title: "Dashboard | CodeSync",
+  title: "Dashboard",
+  description:
+    "Your CodeSync dashboard — track problems solved, submissions, achievements, and daily progress.",
 };
 
 export default function RootLayout({

@@ -2,7 +2,7 @@ import React from "react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Create | Topic",
+  title: "Create Topic",
 };
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {

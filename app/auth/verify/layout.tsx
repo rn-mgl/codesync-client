@@ -2,7 +2,9 @@ import React from "react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Verify | CodeSync",
+  title: "Verify Email",
+  description:
+    "Verify your email address to activate your CodeSync account.",
 };
 
 export default function RootLayout({
