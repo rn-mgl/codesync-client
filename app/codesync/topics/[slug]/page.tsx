@@ -1,5 +1,4 @@
 import SingleTopic from "@/src/components/features/topic/read/SingleTopic";
-import React from "react";
 import { Toaster } from "sonner";
 
 const Page = () => {
