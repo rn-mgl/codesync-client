@@ -1,5 +1,5 @@
 import { IconType } from "react-icons";
-import { FaChartBar, FaFlag, FaStar, FaTags, FaTasks } from "react-icons/fa";
+import { FaChartBar, FaFlag, FaStar, FaTags } from "react-icons/fa";
 import { FaFileCode, FaLightbulb } from "react-icons/fa6";
 
 export const BASE_NAVIGATIONS: { name: string; url: string; icon: IconType }[] =
@@ -33,11 +33,6 @@ export const BASE_NAVIGATIONS: { name: string; url: string; icon: IconType }[] =
       name: "Achievements",
       url: "/codesync/achievements",
       icon: FaStar,
-    },
-    {
-      name: "Queue",
-      url: "/codesync/queue",
-      icon: FaTasks,
     },
     // {
     //   name: "Sessions",

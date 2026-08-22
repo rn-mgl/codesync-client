@@ -1,16 +1,7 @@
-import AllJobsCount from "@/src/components/features/queue/read/AllJobsCount";
 import React from "react";
-import { Toaster } from "sonner";
 
 const Page = () => {
-  return (
-    <div className="w-full flex flex-col items-center justify-start h-auto">
-      <Toaster style={{ fontFamily: "var(--font-onest)" }} />
-      <div className="w-full flex flex-col max-w-(--breakpoint-l-l) gap-8">
-        <AllJobsCount />
-      </div>
-    </div>
-  );
+  return <div>Page</div>;
 };
 
 export default Page;
