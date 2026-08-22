@@ -1,6 +1,6 @@
 import { APIResponse } from "./api.interface";
 
-type JOB_STATUSES =
+export type JOB_STATUSES =
   | "active"
   | "completed"
   | "delayed"
@@ -9,6 +9,10 @@ type JOB_STATUSES =
   | "prioritized"
   | "waiting"
   | "waiting-children";
+
+export type JOB_TYPES = "listener" | "background";
+
+export type JOB_ACTIONS = "list" | "count";
 
 export type JobStatusCount = Record<JOB_STATUSES, number>;
 

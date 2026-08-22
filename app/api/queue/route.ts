@@ -17,8 +17,8 @@ export async function GET(req: NextRequest) {
 
     const searchParams = new URL(req.url).searchParams;
 
-    if (!searchParams.get("type")) {
-      throw new APIError(`Missing job type.`, StatusCodes.BAD_REQUEST);
+    if (!searchParams.get("action")) {
+      throw new APIError(`Missing job action.`, StatusCodes.BAD_REQUEST);
     }
 
     const token = cookies.user.token;

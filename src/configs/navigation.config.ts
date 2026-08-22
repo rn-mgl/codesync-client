@@ -36,7 +36,7 @@ export const BASE_NAVIGATIONS: { name: string; url: string; icon: IconType }[] =
     },
     {
       name: "Queue",
-      url: "/codesync/queue",
+      url: "/codesync/queue?action=count",
       icon: FaTasks,
     },
     // {

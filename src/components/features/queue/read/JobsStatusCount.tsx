@@ -8,7 +8,7 @@ import { normalizeString } from "@/src/utils/normalizer.util";
 import Link from "next/link";
 import React from "react";
 
-const AllJobs = () => {
+const JobsStatusCount = () => {
   const [jobs, setJobs] = React.useState<JobsTypeCount>({
     background: {
       active: 1,
@@ -35,7 +35,7 @@ const AllJobs = () => {
   React.useEffect(() => {
     const getJobs = async () => {
       try {
-        const response = await fetch(`/api/queue?type=all`, {
+        const response = await fetch(`/api/queue?action=count`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -71,7 +71,7 @@ const AllJobs = () => {
       <div className="w-full grid grid-cols-1 items-start justify-start gap-4 t:grid-cols-2 l-s:grid-cols-4">
         {Object.entries(statuses as JobStatusCount).map(([status, count]) => (
           <Link
-            href={`/codesync/queue/${status}?type=${jobType}`}
+            href={`/codesync/queue?action=list&status=${status}&type=${jobType}`}
             key={status}
             className="w-full flex flex-col items-start justify-center gap-2 p-4 bg-neutral-200 rounded-md"
           >
@@ -92,4 +92,4 @@ const AllJobs = () => {
   );
 };
 
-export default AllJobs;
+export default JobsStatusCount;
