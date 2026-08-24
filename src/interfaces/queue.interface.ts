@@ -16,9 +16,38 @@ export type JOB_ACTIONS = "list" | "count";
 
 export type JobStatusCount = Record<JOB_STATUSES, number>;
 
-export interface JobsTypeCount {
+export type JobsTypeCount = {
   background: JobStatusCount;
   listener: JobStatusCount;
+};
+
+export interface JobOptions {
+  attempts: number;
+  delay: number;
+  jobId: string;
+  prevMillis: number;
+  repeat: { pattern: string; count: number };
+  timestamp: number;
 }
 
+export type JobData = {
+  id: string;
+  name: string;
+  data: unknown;
+  status: string;
+  progress: number | object;
+  attemptsMade: number;
+  timestamp: number;
+  processedOn?: number | null;
+  finishedOn?: number | null;
+  returnvalue?: unknown;
+  failedReason?: string | null;
+  stacktrace?: string[];
+  delay?: number;
+  parent?: { id: string; queue: string };
+  repeatJobKey?: string;
+  opts: JobOptions;
+};
+
 export type GetAllJobsCount = APIResponse<{ counts: JobsTypeCount }>;
+export type GetAllJobsList = APIResponse<{ jobs: JobData[] }>;

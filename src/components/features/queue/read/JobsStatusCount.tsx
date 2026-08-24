@@ -1,7 +1,6 @@
 "use client";
 import {
   GetAllJobsCount,
-  JobStatusCount,
   JobsTypeCount,
 } from "@/src/interfaces/queue.interface";
 import { normalizeString } from "@/src/utils/normalizer.util";
@@ -69,7 +68,7 @@ const JobsStatusCount = () => {
       </div>
 
       <div className="w-full grid grid-cols-1 items-start justify-start gap-4 t:grid-cols-2 l-s:grid-cols-4">
-        {Object.entries(statuses as JobStatusCount).map(([status, count]) => (
+        {Object.entries(statuses).map(([status, count]) => (
           <Link
             href={`/codesync/queue?action=list&status=${status}&type=${jobType}`}
             key={status}

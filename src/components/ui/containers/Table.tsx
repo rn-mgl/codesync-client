@@ -28,7 +28,13 @@ const Table = <T extends Record<string, unknown>>(
         </div>
 
         <div className="bg-secondary border-2 border-neutral-400 rounded-md grid grid-cols-1 w-full">
-          {props.data}
+          {props.data.length > 0 ? (
+            props.data
+          ) : (
+            <p className="w-full text-center italic text-neutral-500 p-4 text-sm">
+              No Data Available
+            </p>
+          )}
         </div>
       </div>
     </div>

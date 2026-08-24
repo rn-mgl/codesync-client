@@ -20,8 +20,6 @@ const Page = async ({
   const status: JOB_STATUSES = (await searchParams).status ?? "active";
   const type: JOB_TYPES = (await searchParams).type ?? "listener";
 
-  console.log(`ACTION: ${action}`);
-
   return (
     <div className="w-full flex flex-col items-center justify-start h-auto">
       <Toaster style={{ fontFamily: "var(--font-onest)" }} />

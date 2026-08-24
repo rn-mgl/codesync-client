@@ -65,3 +65,14 @@ export const PROBLEM_TEST_CASE_SORT_OPTIONS: SortFilterOption[] = [
   { label: "Time Limit", value: "time_limit_ms" },
   { label: "Memory Limit", value: "memory_limit_mb" },
 ];
+
+export const JOB_SEARCH_OPTIONS: SearchFilterOption[] = [
+  { label: "Name", value: "name" },
+  { label: "ID", value: "id" },
+];
+
+export const JOB_SORT_OPTIONS: SortFilterOption[] = [
+  { label: "Name", value: "name" },
+  { label: "Timestamp", value: "timestamp" },
+  { label: "Processed On", value: "processedOn" },
+];
