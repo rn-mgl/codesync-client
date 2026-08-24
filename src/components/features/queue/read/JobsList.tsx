@@ -4,7 +4,7 @@ import Table from "@/src/components/ui/containers/Table";
 import SearchFilter from "@/src/components/ui/filters/SearchFilter";
 import SortFilter from "@/src/components/ui/filters/SortFilter";
 import {
-  GetAllJobsList,
+  GetAllJobsListResponse,
   JOB_STATUSES,
   JOB_TYPES,
   JobData,
@@ -14,14 +14,19 @@ import { normalizeString } from "@/src/utils/normalizer.util";
 import { errorToast } from "@/src/utils/toast.util";
 import useSearch from "@/src/hooks/useSearch";
 import useSort from "@/src/hooks/useSort";
-import { JOB_SEARCH_OPTIONS, JOB_SORT_OPTIONS } from "@/src/configs/filter.config";
+import {
+  JOB_SEARCH_OPTIONS,
+  JOB_SORT_OPTIONS,
+} from "@/src/configs/filter.config";
 import { DateTime } from "luxon";
 import Link from "next/link";
 import { FaArrowLeft, FaEllipsis } from "react-icons/fa6";
 import React from "react";
+import SingleJob from "./SingleJob";
 
 const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
   const [jobs, setJobs] = React.useState<JobData[]>([]);
+  const [selectedJob, setSelectedJob] = React.useState("");
 
   const {
     searchKey,
@@ -32,14 +37,12 @@ const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
     filter,
   } = useSearch(JOB_SEARCH_OPTIONS, "name");
 
-  const {
-    sortLabel,
-    isAsc,
-    sortKey,
-    handleIsAsc,
-    handleSortKey,
-    sort,
-  } = useSort(JOB_SORT_OPTIONS, "timestamp");
+  const { sortLabel, isAsc, sortKey, handleIsAsc, handleSortKey, sort } =
+    useSort(JOB_SORT_OPTIONS, "timestamp");
+
+  const handleSelectedJob = (id: string) => {
+    setSelectedJob((prev) => (id === prev ? "" : id));
+  };
 
   React.useEffect(() => {
     const getJobs = async () => {
@@ -59,7 +62,7 @@ const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
           },
         });
 
-        const resolve: GetAllJobsList = await response.json();
+        const resolve: GetAllJobsListResponse = await response.json();
 
         if (!resolve.success) {
           throw new Error(resolve.message);
@@ -96,6 +99,7 @@ const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
         </span>
         <span className="flex items-center justify-start">
           <button
+            onClick={() => handleSelectedJob(job.id)}
             className="p-2 rounded-md bg-neutral-200"
             aria-label="More"
           >
@@ -108,6 +112,14 @@ const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
 
   return (
     <div className="w-full flex flex-col items-start justify-start gap-8">
+      {selectedJob && (
+        <SingleJob
+          type={props.type}
+          id={selectedJob}
+          closeModal={() => handleSelectedJob(selectedJob)}
+        />
+      )}
+
       <div className="w-full flex justify-between items-center">
         <Link
           href="/codesync/queue"
@@ -144,7 +156,14 @@ const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
       </div>
 
       <Table<JobData>
-        headers={["id", "name", "progress", "timestamp", "processedOn", "action"]}
+        headers={[
+          "id",
+          "name",
+          "progress",
+          "timestamp",
+          "processedOn",
+          "action",
+        ]}
         data={mappedJobs}
       />
     </div>

@@ -1,6 +1,6 @@
 "use client";
 import {
-  GetAllJobsCount,
+  GetAllJobsCountResponse,
   JobsTypeCount,
 } from "@/src/interfaces/queue.interface";
 import { normalizeString } from "@/src/utils/normalizer.util";
@@ -41,7 +41,7 @@ const JobsStatusCount = () => {
           },
         });
 
-        const resolve: GetAllJobsCount = await response.json();
+        const resolve: GetAllJobsCountResponse = await response.json();
 
         if (!resolve.success) {
           throw new Error(resolve.message);

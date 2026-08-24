@@ -49,5 +49,6 @@ export type JobData = {
   opts: JobOptions;
 };
 
-export type GetAllJobsCount = APIResponse<{ counts: JobsTypeCount }>;
-export type GetAllJobsList = APIResponse<{ jobs: JobData[] }>;
+export type GetAllJobsCountResponse = APIResponse<{ counts: JobsTypeCount }>;
+export type GetAllJobsListResponse = APIResponse<{ jobs: JobData[] }>;
+export type GetJobResponse = APIResponse<{ job: JobData }>;

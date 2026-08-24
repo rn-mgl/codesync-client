@@ -1,8 +1,12 @@
 import { normalizeString } from "@/utils/normalizer.util";
 
-const LABEL_STYLE = "text-primary/60 font-medium whitespace-nowrap";
+const LABEL_STYLE = "text-primary/60 font-medium whitespace-nowrap capitalize";
 
 const renderArray = (array: unknown[], depth: number) => {
+  if (array.length === 0) {
+    return <span className="text-sm">-</span>;
+  }
+
   const hasObjects = array.some(
     (item) => typeof item === "object" && item !== null && !Array.isArray(item),
   );
@@ -40,16 +44,20 @@ const renderArray = (array: unknown[], depth: number) => {
 };
 
 const renderValue = (key: string, value: unknown, depth: number) => {
+  if (value === null || value === undefined || value === "") {
+    return "-";
+  }
+
   if (Array.isArray(value)) {
     return renderArray(value, depth);
   }
 
-  if (typeof value === "object" && value !== null) {
+  if (typeof value === "object") {
     return renderJSON(value, depth + 1);
   }
 
   if (typeof value === "string") {
-    return normalizeString(value);
+    return value;
   }
 
   return JSON.stringify(value);
@@ -63,12 +71,12 @@ const renderEntries = (entries: [string, unknown][], depth: number) =>
     return (
       <div
         key={key}
-        className="flex flex-col gap-1"
-        style={depth > 0 ? { paddingLeft: depth * 0.75 + "rem" } : undefined}
+        className="flex flex-col gap-1 not-last:border-b border-neutral-400 justify-center py-2"
+        style={depth > 0 ? { paddingLeft: depth * 2 + "rem" } : undefined}
       >
         <div className="flex flex-row items-start gap-2 text-sm">
-          <span className={LABEL_STYLE}>{normalizeString(key)}:</span>
-          {!isObject && <span>{renderValue(key, value, depth)}</span>}
+          <pre className={LABEL_STYLE}>{normalizeString(key)}:</pre>
+          {!isObject && <pre>{renderValue(key, value, depth)}</pre>}
         </div>
         {isObject && renderValue(key, value, depth)}
       </div>
@@ -76,13 +84,13 @@ const renderEntries = (entries: [string, unknown][], depth: number) =>
   });
 
 export const renderObject = (object: object, depth: number) => (
-  <div className="flex flex-col gap-1">
+  <div className="flex flex-col gap-1 w-full">
     {renderEntries(Object.entries(object), depth)}
   </div>
 );
 
 export const renderJSON = (json: object, depth = 0) => (
-  <div className="flex flex-col gap-1">
+  <div className="flex flex-col gap-1 w-full">
     {renderEntries(Object.entries(json), depth)}
   </div>
 );
