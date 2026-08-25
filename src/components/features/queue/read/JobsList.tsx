@@ -154,7 +154,7 @@ const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
           All Jobs
         </Link>
 
-        <p className="font-bold capitalize">
+        <p className="font-bold capitalize text-right">
           {normalizeString(props.status)} {props.type} Jobs
         </p>
       </div>
