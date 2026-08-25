@@ -4,6 +4,12 @@ import Table from "@/src/components/ui/containers/Table";
 import SearchFilter from "@/src/components/ui/filters/SearchFilter";
 import SortFilter from "@/src/components/ui/filters/SortFilter";
 import {
+  JOB_SEARCH_OPTIONS,
+  JOB_SORT_OPTIONS,
+} from "@/src/configs/filter.config";
+import useSearch from "@/src/hooks/useSearch";
+import useSort from "@/src/hooks/useSort";
+import {
   GetAllJobsListResponse,
   JOB_STATUSES,
   JOB_TYPES,
@@ -12,21 +18,18 @@ import {
 import { getErrorMessage } from "@/src/utils/general.util";
 import { normalizeString } from "@/src/utils/normalizer.util";
 import { errorToast } from "@/src/utils/toast.util";
-import useSearch from "@/src/hooks/useSearch";
-import useSort from "@/src/hooks/useSort";
-import {
-  JOB_SEARCH_OPTIONS,
-  JOB_SORT_OPTIONS,
-} from "@/src/configs/filter.config";
 import { DateTime } from "luxon";
 import Link from "next/link";
-import { FaArrowLeft, FaEllipsis } from "react-icons/fa6";
 import React from "react";
+import { FaEdit } from "react-icons/fa";
+import { FaArrowLeft, FaEllipsis, FaTrash } from "react-icons/fa6";
 import SingleJob from "./SingleJob";
 
 const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
   const [jobs, setJobs] = React.useState<JobData[]>([]);
   const [selectedJob, setSelectedJob] = React.useState("");
+  const [canEditJob, setCanEditJob] = React.useState("");
+  const [canDeleteJob, setCanDeleteJob] = React.useState("");
 
   const {
     searchKey,
@@ -42,6 +45,14 @@ const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
 
   const handleSelectedJob = (id: string) => {
     setSelectedJob((prev) => (id === prev ? "" : id));
+  };
+
+  const handleCanEditJob = (id: string) => {
+    setCanEditJob((prev) => (id === prev ? "" : id));
+  };
+
+  const handleCanDeleteJob = (id: string) => {
+    setCanDeleteJob((prev) => (id === prev ? "" : id));
   };
 
   React.useEffect(() => {
@@ -97,13 +108,26 @@ const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
             ? DateTime.fromMillis(job.processedOn).toFormat("DDD")
             : "-"}
         </span>
-        <span className="flex items-center justify-start">
+        <span className="flex items-center justify-start gap-2">
           <button
             onClick={() => handleSelectedJob(job.id)}
-            className="p-2 rounded-md bg-neutral-200"
-            aria-label="More"
+            className="p-2 rounded-md bg-secondary"
           >
             <FaEllipsis />
+          </button>
+
+          <button
+            onClick={() => handleCanEditJob(job.id)}
+            className="p-2 rounded-md bg-secondary hover:text-green-600"
+          >
+            <FaEdit />
+          </button>
+
+          <button
+            onClick={() => handleCanDeleteJob(job.id)}
+            className="p-2 rounded-md bg-secondary hover:text-red-600"
+          >
+            <FaTrash />
           </button>
         </span>
       </p>
