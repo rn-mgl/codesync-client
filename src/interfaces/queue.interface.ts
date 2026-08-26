@@ -14,6 +14,13 @@ export type JOB_TYPES = "listener" | "background";
 
 export type JOB_ACTIONS = "list" | "count";
 
+export type JOB_MODIFY_ACTIONS =
+  | "update_data"
+  | "change_priority"
+  | "discard"
+  | "promote"
+  | "retry";
+
 export type JobStatusCount = Record<JOB_STATUSES, number>;
 
 export type JobsTypeCount = {
@@ -37,6 +44,7 @@ export type JobData = {
   status: string;
   progress: number | object;
   attemptsMade: number;
+  priority?: number;
   timestamp: number;
   processedOn?: number | null;
   finishedOn?: number | null;
@@ -52,3 +60,4 @@ export type JobData = {
 export type GetAllJobsCountResponse = APIResponse<{ counts: JobsTypeCount }>;
 export type GetAllJobsListResponse = APIResponse<{ jobs: JobData[] }>;
 export type GetJobResponse = APIResponse<{ job: JobData }>;
+export type JobModifyResponse = APIResponse<{ message: string }>;

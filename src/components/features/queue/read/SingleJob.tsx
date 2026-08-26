@@ -1,6 +1,6 @@
 "use client";
 
-import BlockLoader from "@/src/components/ui/loader/BlockLoader";
+import ListLoader from "@/src/components/ui/loader/ListLoader";
 import { renderJSON } from "@/src/components/features/achievement/read/JsonRenderer";
 import { GetJobResponse, JobData } from "@/src/interfaces/queue.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
@@ -73,7 +73,7 @@ const SingleJob = (props: {
         </div>
 
         <div className="w-full h-auto max-h-full bg-secondary rounded-lg p-8 flex flex-col items-start justify-start overflow-y-auto">
-          {!job ? <BlockLoader count={5} /> : renderJSON(job)}
+          {!job ? <ListLoader /> : renderJSON(job)}
         </div>
       </div>
     </div>

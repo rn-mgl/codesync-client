@@ -24,6 +24,7 @@ import React from "react";
 import { FaEdit } from "react-icons/fa";
 import { FaArrowLeft, FaEllipsis, FaTrash } from "react-icons/fa6";
 import SingleJob from "./SingleJob";
+import EditJob from "../update/EditJob";
 
 const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
   const [jobs, setJobs] = React.useState<JobData[]>([]);
@@ -141,6 +142,14 @@ const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
           type={props.type}
           id={selectedJob}
           closeModal={() => handleSelectedJob(selectedJob)}
+        />
+      )}
+
+      {canEditJob && (
+        <EditJob
+          id={canEditJob}
+          type={props.type}
+          closeModal={() => handleCanEditJob(canEditJob)}
         />
       )}
 
