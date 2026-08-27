@@ -14,6 +14,7 @@ const Delete = (props: DeleteForm) => {
         headers: {
           "Content-Type": "application/json",
         },
+        body: JSON.stringify(props.body),
       });
 
       const resolve: DeleteResponse = await response.json();

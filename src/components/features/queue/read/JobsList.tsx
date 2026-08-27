@@ -25,12 +25,14 @@ import { FaEdit } from "react-icons/fa";
 import { FaArrowLeft, FaEllipsis, FaTrash } from "react-icons/fa6";
 import SingleJob from "./SingleJob";
 import EditJob from "../update/EditJob";
+import Delete from "@/src/components/ui/forms/Delete";
 
 const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
   const [jobs, setJobs] = React.useState<JobData[]>([]);
   const [selectedJob, setSelectedJob] = React.useState("");
   const [canEditJob, setCanEditJob] = React.useState("");
   const [canDeleteJob, setCanDeleteJob] = React.useState("");
+  const [reload, setReload] = React.useState(0);
 
   const {
     searchKey,
@@ -89,7 +91,7 @@ const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
     };
 
     getJobs();
-  }, [props.type, props.status]);
+  }, [props.type, props.status, reload]);
 
   const mappedJobs = sort(filter(jobs)).map((job) => (
     <div
@@ -150,6 +152,19 @@ const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
           id={canEditJob}
           type={props.type}
           closeModal={() => handleCanEditJob(canEditJob)}
+        />
+      )}
+
+      {canDeleteJob && (
+        <Delete
+          label={`Job ${canDeleteJob}`}
+          closeForm={() => handleCanDeleteJob(canDeleteJob)}
+          endpoint={`queue/${canDeleteJob}`}
+          postDeleteAction={() => {
+            handleCanDeleteJob(canDeleteJob);
+            setReload((prev) => prev + 1);
+          }}
+          body={{ queue: { type: props.type } }}
         />
       )}
 
