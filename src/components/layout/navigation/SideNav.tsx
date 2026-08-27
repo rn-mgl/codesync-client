@@ -11,11 +11,11 @@ const SideNav = (props: {
   showSideNav: boolean;
   handleShowSideNav: (source?: "link" | "button") => void;
 }) => {
-  const path = usePathname();
+  const path = usePathname() ?? "";
 
   const mappedNavigations = BASE_NAVIGATIONS.map((nav) => {
     const isSelected =
-      nav.url === "/codesync" ? path === nav.url : path?.startsWith(nav.url);
+      path === "/codesync" ? nav.url === path : nav.url.startsWith(path);
 
     return (
       <Link

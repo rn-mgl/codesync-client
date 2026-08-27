@@ -12,7 +12,7 @@ const SearchFilter = (props: SearchFilterProperties) => {
   };
 
   return (
-    <div className="w-fit flex flex-col items-stretch gap-2 t:flex-row t:items-center">
+    <div className="w-full flex flex-col items-stretch gap-2 t:flex-row t:items-center">
       <div className="w-full t:w-72 relative flex flex-row items-center justify-start gap-2">
         <div className="w-full flex flex-col items-center justify-start relative">
           <Input

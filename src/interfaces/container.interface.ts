@@ -1,7 +1,7 @@
 import { JSX } from "react";
 
 export interface TableProps<T extends Record<string, unknown>> {
-  headers: (keyof T & string)[];
+  headers: ((keyof T & string) | "action")[];
   data: JSX.Element[];
 }
 

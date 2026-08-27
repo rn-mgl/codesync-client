@@ -6,7 +6,8 @@ type endpoints =
   | "test-case"
   | "achievement"
   | "topic"
-  | "hint";
+  | "hint"
+  | "queue";
 type identifier = string;
 
 export interface BaseForm {
@@ -20,6 +21,7 @@ export interface UpdateForm extends BaseForm {
 
 export interface DeleteForm extends BaseForm {
   endpoint: `${endpoints}/${identifier}`;
+  body?: object;
   postDeleteAction?: () => void;
 }
 
