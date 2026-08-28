@@ -31,9 +31,9 @@ import Delete from "@/src/components/ui/forms/Delete";
 const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
   const [jobs, setJobs] = React.useState<JobData[]>([]);
   const [selectedJob, setSelectedJob] = React.useState("");
-  const [canViewLogs, setCanViewLogs] = React.useState("");
-  const [editJob, setCanEditJob] = React.useState("");
-  const [deleteJob, setCanDeleteJob] = React.useState("");
+  const [viewLogs, setViewLogs] = React.useState("");
+  const [editJob, setEditJob] = React.useState("");
+  const [deleteJob, setDeleteJob] = React.useState("");
   const [reload, setReload] = React.useState(0);
 
   const {
@@ -52,16 +52,16 @@ const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
     setSelectedJob((prev) => (id === prev ? "" : id));
   };
 
-  const handleCanViewLogs = (id: string) => {
-    setCanViewLogs((prev) => (id === prev ? "" : id));
+  const handleViewLogs = (id: string) => {
+    setViewLogs((prev) => (id === prev ? "" : id));
   };
 
   const handleEditJob = (id: string) => {
-    setCanEditJob((prev) => (id === prev ? "" : id));
+    setEditJob((prev) => (id === prev ? "" : id));
   };
 
   const handleDeleteJob = (id: string) => {
-    setCanDeleteJob((prev) => (id === prev ? "" : id));
+    setDeleteJob((prev) => (id === prev ? "" : id));
   };
 
   React.useEffect(() => {
@@ -126,7 +126,7 @@ const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
           </button>
 
           <button
-            onClick={() => handleCanViewLogs(job.id)}
+            onClick={() => handleViewLogs(job.id)}
             className="p-2 rounded-md bg-secondary hover:text-primary"
           >
             <FaTerminal />
@@ -160,11 +160,11 @@ const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
         />
       )}
 
-      {canViewLogs && (
+      {viewLogs && (
         <JobLogs
           type={props.type}
-          id={canViewLogs}
-          closeModal={() => handleCanViewLogs(canViewLogs)}
+          id={viewLogs}
+          closeModal={() => handleViewLogs(viewLogs)}
         />
       )}
 
