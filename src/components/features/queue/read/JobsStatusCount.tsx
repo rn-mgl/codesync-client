@@ -1,7 +1,9 @@
 "use client";
+import BlockLoader from "@/src/components/ui/loader/BlockLoader";
 import {
   GetAllJobsCountResponse,
   JOB_TYPES,
+  JobStatusCount,
   JobsTypeCount,
 } from "@/src/interfaces/queue.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
@@ -12,32 +14,28 @@ import React from "react";
 
 const JOB_TYPES_ORDER: JOB_TYPES[] = ["background", "listener"];
 
+const EMPTY_COUNTS: JobStatusCount = {
+  active: 0,
+  completed: 0,
+  delayed: 0,
+  failed: 0,
+  paused: 0,
+  prioritized: 0,
+  waiting: 0,
+  "waiting-children": 0,
+};
+
 const JobsStatusCount = () => {
   const [jobs, setJobs] = React.useState<JobsTypeCount>({
-    background: {
-      active: 1,
-      completed: 0,
-      delayed: 11,
-      failed: 0,
-      paused: 0,
-      prioritized: 0,
-      waiting: 0,
-      "waiting-children": 0,
-    },
-    listener: {
-      active: 1,
-      completed: 0,
-      delayed: 11,
-      failed: 0,
-      paused: 0,
-      prioritized: 0,
-      waiting: 0,
-      "waiting-children": 0,
-    },
+    background: EMPTY_COUNTS,
+    listener: EMPTY_COUNTS,
   });
+  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     const getJobs = async () => {
+      setLoading(true);
+
       try {
         const response = await fetch(`/api/queue?action=count`, {
           method: "GET",
@@ -57,6 +55,8 @@ const JobsStatusCount = () => {
         setJobs(counts);
       } catch (error) {
         errorToast(getErrorMessage(error));
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -91,7 +91,7 @@ const JobsStatusCount = () => {
 
   return (
     <div className="w-full flex flex-col items-start justify-start gap-4">
-      {mappedJobs}
+      {loading ? <BlockLoader count={8} /> : mappedJobs}
     </div>
   );
 };

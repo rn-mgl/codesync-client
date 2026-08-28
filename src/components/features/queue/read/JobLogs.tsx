@@ -97,7 +97,7 @@ const JobLogs = (props: {
           </button>
         </div>
 
-        <div className="w-full h-auto max-h-full bg-secondary rounded-lg p-4 flex flex-col items-start justify-start gap-4 overflow-y-auto">
+        <div className="w-full h-auto max-h-full bg-secondary rounded-lg p-4 flex flex-col items-start justify-start gap-4">
           <div className="w-full flex flex-col items-start justify-start">
             <div className="p-4 bg-primary/80 w-full rounded-t-md font-medium text-secondary flex items-center justify-between">
               Logs
@@ -116,19 +116,21 @@ const JobLogs = (props: {
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
               />
-
-              {loading ? (
-                <ListLoader />
-              ) : mappedLogs.length > 0 ? (
-                mappedLogs
-              ) : (
-                <p className="text-sm italic text-center w-full">
-                  {searchTerm
-                    ? "No logs match your search."
-                    : "No logs to display yet."}
-                </p>
-              )}
             </div>
+          </div>
+
+          <div className="w-full min-h-40 max-h-full flex flex-col items-start justify-start overflow-y-auto">
+            {loading ? (
+              <ListLoader />
+            ) : mappedLogs.length > 0 ? (
+              mappedLogs
+            ) : (
+              <p className="text-sm italic text-center w-full py-2">
+                {searchTerm
+                  ? "No logs match your search."
+                  : "No logs to display yet."}
+              </p>
+            )}
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import Table from "@/src/components/ui/containers/Table";
+import TableLoader from "@/src/components/ui/loader/TableLoader";
 import SearchFilter from "@/src/components/ui/filters/SearchFilter";
 import SortFilter from "@/src/components/ui/filters/SortFilter";
 import {
@@ -35,6 +36,7 @@ const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
   const [editJob, setEditJob] = React.useState("");
   const [deleteJob, setDeleteJob] = React.useState("");
   const [reload, setReload] = React.useState(0);
+  const [loading, setLoading] = React.useState(true);
 
   const {
     searchKey,
@@ -66,6 +68,8 @@ const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
 
   React.useEffect(() => {
     const getJobs = async () => {
+      setLoading(true);
+
       try {
         const searchParams = {
           action: "list",
@@ -93,6 +97,8 @@ const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
         setJobs(jobs);
       } catch (error) {
         errorToast(getErrorMessage(error));
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -224,17 +230,21 @@ const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
         />
       </div>
 
-      <Table<JobData>
-        headers={[
-          "id",
-          "name",
-          "progress",
-          "timestamp",
-          "processedOn",
-          "action",
-        ]}
-        data={mappedJobs}
-      />
+      {loading ? (
+        <TableLoader rows={6} columns={6} />
+      ) : (
+        <Table<JobData>
+          headers={[
+            "id",
+            "name",
+            "progress",
+            "timestamp",
+            "processedOn",
+            "action",
+          ]}
+          data={mappedJobs}
+        />
+      )}
     </div>
   );
 };
