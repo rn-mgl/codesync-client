@@ -1,11 +1,16 @@
 "use client";
 import {
   GetAllJobsCountResponse,
+  JOB_TYPES,
   JobsTypeCount,
 } from "@/src/interfaces/queue.interface";
+import { getErrorMessage } from "@/src/utils/general.util";
 import { normalizeString } from "@/src/utils/normalizer.util";
+import { errorToast } from "@/src/utils/toast.util";
 import Link from "next/link";
 import React from "react";
+
+const JOB_TYPES_ORDER: JOB_TYPES[] = ["background", "listener"];
 
 const JobsStatusCount = () => {
   const [jobs, setJobs] = React.useState<JobsTypeCount>({
@@ -51,14 +56,14 @@ const JobsStatusCount = () => {
 
         setJobs(counts);
       } catch (error) {
-        console.log(error);
+        errorToast(getErrorMessage(error));
       }
     };
 
     getJobs();
   }, []);
 
-  const mappedJobs = Object.entries(jobs).map(([jobType, statuses]) => (
+  const mappedJobs = JOB_TYPES_ORDER.map((jobType) => (
     <section
       key={jobType}
       className="w-full flex flex-col items-start justify-start gap-4"
@@ -68,7 +73,7 @@ const JobsStatusCount = () => {
       </div>
 
       <div className="w-full grid grid-cols-1 items-start justify-start gap-4 t:grid-cols-2 l-s:grid-cols-4">
-        {Object.entries(statuses).map(([status, count]) => (
+        {Object.entries(jobs[jobType]).map(([status, count]) => (
           <Link
             href={`/codesync/queue?action=list&status=${status}&type=${jobType}`}
             key={status}

@@ -53,6 +53,7 @@ const EditJob = (props: {
       try {
         const searchParams = {
           type: props.type,
+          action: "details",
         };
 
         const query = new URLSearchParams(searchParams).toString();

@@ -7,6 +7,7 @@ import { getErrorMessage } from "@/src/utils/general.util";
 import { normalizeString } from "@/src/utils/normalizer.util";
 import { errorToast } from "@/src/utils/toast.util";
 import { FaXmark } from "react-icons/fa6";
+import { DateTime } from "luxon";
 import React from "react";
 
 const SingleJob = (props: {
@@ -16,6 +17,25 @@ const SingleJob = (props: {
 }) => {
   const [job, setJob] = React.useState<JobData | null>(null);
 
+  const renderJob = (job: JobData) => {
+    const displayableJob = {
+      ...job,
+      timestamp: DateTime.fromMillis(job.timestamp).toFormat("DDD HH:mm:ss"),
+      processedOn: job.processedOn
+        ? DateTime.fromMillis(job.processedOn).toFormat("DDD HH:mm:ss")
+        : job.processedOn,
+      finishedOn: job.finishedOn
+        ? DateTime.fromMillis(job.finishedOn).toFormat("DDD HH:mm:ss")
+        : job.finishedOn,
+      opts: {
+        ...job.opts,
+        timestamp: DateTime.fromMillis(job.opts.timestamp).toFormat("DDD HH:mm:ss"),
+      },
+    };
+
+    return renderJSON(displayableJob);
+  };
+
   React.useEffect(() => {
     if (!props.id) return;
 
@@ -23,6 +43,7 @@ const SingleJob = (props: {
       try {
         const searchParams = {
           type: props.type,
+          action: "details",
         };
 
         const query = new URLSearchParams(searchParams).toString();
@@ -73,7 +94,7 @@ const SingleJob = (props: {
         </div>
 
         <div className="w-full h-auto max-h-full bg-secondary rounded-lg p-8 flex flex-col items-start justify-start overflow-y-auto">
-          {!job ? <ListLoader /> : renderJSON(job)}
+          {!job ? <ListLoader /> : renderJob(job)}
         </div>
       </div>
     </div>

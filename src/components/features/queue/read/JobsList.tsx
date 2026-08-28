@@ -22,16 +22,18 @@ import { DateTime } from "luxon";
 import Link from "next/link";
 import React from "react";
 import { FaEdit } from "react-icons/fa";
-import { FaArrowLeft, FaEllipsis, FaTrash } from "react-icons/fa6";
+import { FaArrowLeft, FaEllipsis, FaTerminal, FaTrash } from "react-icons/fa6";
 import SingleJob from "./SingleJob";
+import JobLogs from "./JobLogs";
 import EditJob from "../update/EditJob";
 import Delete from "@/src/components/ui/forms/Delete";
 
 const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
   const [jobs, setJobs] = React.useState<JobData[]>([]);
   const [selectedJob, setSelectedJob] = React.useState("");
-  const [canEditJob, setCanEditJob] = React.useState("");
-  const [canDeleteJob, setCanDeleteJob] = React.useState("");
+  const [canViewLogs, setCanViewLogs] = React.useState("");
+  const [editJob, setCanEditJob] = React.useState("");
+  const [deleteJob, setCanDeleteJob] = React.useState("");
   const [reload, setReload] = React.useState(0);
 
   const {
@@ -50,11 +52,15 @@ const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
     setSelectedJob((prev) => (id === prev ? "" : id));
   };
 
-  const handleCanEditJob = (id: string) => {
+  const handleCanViewLogs = (id: string) => {
+    setCanViewLogs((prev) => (id === prev ? "" : id));
+  };
+
+  const handleEditJob = (id: string) => {
     setCanEditJob((prev) => (id === prev ? "" : id));
   };
 
-  const handleCanDeleteJob = (id: string) => {
+  const handleDeleteJob = (id: string) => {
     setCanDeleteJob((prev) => (id === prev ? "" : id));
   };
 
@@ -120,14 +126,21 @@ const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
           </button>
 
           <button
-            onClick={() => handleCanEditJob(job.id)}
+            onClick={() => handleCanViewLogs(job.id)}
+            className="p-2 rounded-md bg-secondary hover:text-primary"
+          >
+            <FaTerminal />
+          </button>
+
+          <button
+            onClick={() => handleEditJob(job.id)}
             className="p-2 rounded-md bg-secondary hover:text-green-600"
           >
             <FaEdit />
           </button>
 
           <button
-            onClick={() => handleCanDeleteJob(job.id)}
+            onClick={() => handleDeleteJob(job.id)}
             className="p-2 rounded-md bg-secondary hover:text-red-600"
           >
             <FaTrash />
@@ -147,21 +160,29 @@ const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
         />
       )}
 
-      {canEditJob && (
-        <EditJob
-          id={canEditJob}
+      {canViewLogs && (
+        <JobLogs
           type={props.type}
-          closeModal={() => handleCanEditJob(canEditJob)}
+          id={canViewLogs}
+          closeModal={() => handleCanViewLogs(canViewLogs)}
         />
       )}
 
-      {canDeleteJob && (
+      {editJob && (
+        <EditJob
+          id={editJob}
+          type={props.type}
+          closeModal={() => handleEditJob(editJob)}
+        />
+      )}
+
+      {deleteJob && (
         <Delete
-          label={`Job ${canDeleteJob}`}
-          closeForm={() => handleCanDeleteJob(canDeleteJob)}
-          endpoint={`queue/${canDeleteJob}`}
+          label={`Job ${deleteJob}`}
+          closeForm={() => handleDeleteJob(deleteJob)}
+          endpoint={`queue/${deleteJob}`}
           postDeleteAction={() => {
-            handleCanDeleteJob(canDeleteJob);
+            handleDeleteJob(deleteJob);
             setReload((prev) => prev + 1);
           }}
           body={{ queue: { type: props.type } }}
