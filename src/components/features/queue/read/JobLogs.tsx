@@ -83,9 +83,9 @@ const JobLogs = (props: {
   return (
     <div
       className="w-full h-full flex flex-col items-center justify-center fixed top-0 
-                      left-0 z-30 backdrop-blur-md bg-linear-to-b from-primary/20 to-accent/20 animate-fade"
+                      left-0 z-30 backdrop-blur-md bg-linear-to-b from-primary/20 to-accent/20 animate-fade overflow-hidden"
     >
-      <div className="w-full h-full flex flex-col items-center justify-center max-w-(--breakpoint-l-l) p-4 gap-2">
+      <div className="w-full h-full flex flex-col items-center max-w-(--breakpoint-l-l) p-4 gap-2">
         <div className="w-full rounded-lg capitalize bg-primary text-secondary font-bold flex items-center justify-between p-4">
           <h1>Job Logs - {normalizeString(props.id)}</h1>
 
@@ -97,8 +97,8 @@ const JobLogs = (props: {
           </button>
         </div>
 
-        <div className="w-full h-auto max-h-full bg-secondary rounded-lg p-4 flex flex-col items-start justify-start gap-4">
-          <div className="w-full flex flex-col items-start justify-start">
+        <div className="w-full flex-1 min-h-0 bg-secondary rounded-lg p-4 flex flex-col items-start justify-start gap-4 overflow-hidden">
+          <div className="w-full flex flex-col items-start justify-start shrink-0">
             <div className="p-4 bg-primary/80 w-full rounded-t-md font-medium text-secondary flex items-center justify-between">
               Logs
               <span>
@@ -119,7 +119,7 @@ const JobLogs = (props: {
             </div>
           </div>
 
-          <div className="w-full min-h-40 max-h-full flex flex-col items-start justify-start overflow-y-auto">
+          <div className="w-full flex-1 min-h-0 flex flex-col items-start justify-start overflow-y-auto">
             {loading ? (
               <ListLoader />
             ) : mappedLogs.length > 0 ? (
