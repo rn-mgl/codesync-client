@@ -30,6 +30,8 @@ const SingleJob = (props: {
       opts: {
         ...job.opts,
         timestamp: DateTime.fromMillis(job.opts.timestamp).toFormat("DDD HH:mm:ss"),
+        prevMillis: DateTime.fromMillis(job.opts.prevMillis).toFormat("DDD HH:mm:ss"),
+        delay: DateTime.fromMillis(job.opts.delay).toFormat("DDD HH:mm:ss"),
       },
     };
 
