@@ -33,7 +33,7 @@ export interface JobOptions {
   delay: number;
   jobId: string;
   prevMillis: number;
-  repeat: { pattern: string; count: number };
+  repeat: { pattern: string; count: number; delay?: number };
   timestamp: number;
 }
 

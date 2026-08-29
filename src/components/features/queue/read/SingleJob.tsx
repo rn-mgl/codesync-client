@@ -17,6 +17,30 @@ const SingleJob = (props: {
 }) => {
   const [job, setJob] = React.useState<JobData | null>(null);
 
+  const formatDelay = (delay: number | null | undefined) => {
+    if (typeof delay !== "number") return delay;
+
+    const totalSeconds = Math.max(0, Math.round(delay / 1000));
+
+    const days = Math.floor(totalSeconds / 86400);
+    const hours = Math.floor((totalSeconds % 86400) / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    const units: [number, string][] = [
+      [days, "day"],
+      [hours, "hour"],
+      [minutes, "minute"],
+      [seconds, "second"],
+    ];
+
+    const parts = units
+      .filter(([value]) => value > 0)
+      .map(([value, unit]) => `${value} ${unit}${value > 1 ? "s" : ""}`);
+
+    return parts.length > 0 ? parts.join(", ") : "0 seconds";
+  };
+
   const renderJob = (job: JobData) => {
     const displayableJob = {
       ...job,
@@ -27,11 +51,16 @@ const SingleJob = (props: {
       finishedOn: job.finishedOn
         ? DateTime.fromMillis(job.finishedOn).toFormat("DDD HH:mm:ss")
         : job.finishedOn,
+      delay: formatDelay(job.delay),
       opts: {
         ...job.opts,
         timestamp: DateTime.fromMillis(job.opts.timestamp).toFormat("DDD HH:mm:ss"),
         prevMillis: DateTime.fromMillis(job.opts.prevMillis).toFormat("DDD HH:mm:ss"),
-        delay: DateTime.fromMillis(job.opts.delay).toFormat("DDD HH:mm:ss"),
+        delay: formatDelay(job.opts.delay),
+        repeat: {
+          ...job.opts.repeat,
+          delay: formatDelay(job.opts.repeat.delay),
+        },
       },
     };
 
