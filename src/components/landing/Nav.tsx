@@ -11,16 +11,16 @@ const Nav = (props: { hide?: boolean }) => {
         <Link className="p-1 max-w-8 t:max-w-10" href="#hero">
           <Logo type="dark" />
         </Link>
-        <Link className="p-1" href="#offer">
+        <Link className="p-1 hover:text-accent transition-all" href="#offer">
           Features
         </Link>
-        <Link className="p-1" href="#action">
+        <Link className="p-1 hover:text-accent transition-all" href="#action">
           Start
         </Link>
 
         <Link
           href="/auth/login"
-          className="ml-auto border p-1 px-2 rounded-sm hover:bg-secondary hover:text-primary transition-all"
+          className="ml-auto border border-accent/40 p-1 px-2 rounded-sm text-accent hover:bg-accent hover:text-secondary transition-all"
         >
           Log In
         </Link>

@@ -20,7 +20,8 @@ const Offer = () => {
       className="w-full h-auto bg-secondary flex flex-col items-center justify-center min-h-screen p-4 t:p-8 relative"
     >
       <div className="w-full items-center justify-center flex flex-col gap-8 h-full max-w-(--breakpoint-l-s) z-10">
-        <div className="text-center">
+        <div className="text-center flex flex-col items-center justify-center gap-1">
+          <div className="w-10 h-1 rounded-full bg-linear-to-r from-accent via-success to-accent" />
           <p className="text-neutral-600 l-l:text-lg">available right now</p>
           <h1 className="text-2xl font-black text-primary t:text-5xl l-l:text-7xl">
             Current Feature Set
@@ -29,7 +30,7 @@ const Offer = () => {
 
         <div className="grid grid-cols-1 gap-4 t:grid-cols-2">
           <div className="w-full p-4 t:p-8 rounded-md bg-neutral-200 border-neutral-300 border-2 flex flex-col items-start justify-center gap-4">
-            <h2 className="text-primary font-bold t:text-lg l-l:text-xl">
+            <h2 className="bg-linear-to-br from-accent to-success bg-clip-text text-transparent font-bold t:text-lg l-l:text-xl">
               Problem Workspace
             </h2>
             <p className=" text-xs text-neutral-600 t:text-sm l-l:text-base">
@@ -42,7 +43,7 @@ const Offer = () => {
           </div>
 
           <div className="w-full p-4 t:p-8 rounded-md bg-neutral-200 border-neutral-300 border-2 flex flex-col items-end justify-center gap-4 text-right">
-            <h2 className="text-primary font-bold t:text-lg l-l:text-xl">
+            <h2 className="bg-linear-to-br from-accent to-success bg-clip-text text-transparent font-bold t:text-lg l-l:text-xl">
               In-Browser Code Editor
             </h2>
             <p className="text-xs text-neutral-600 t:text-sm l-l:text-base">
@@ -54,7 +55,7 @@ const Offer = () => {
           </div>
 
           <div className="w-full p-4 t:p-8 rounded-md bg-neutral-200 border-neutral-300 border-2 flex flex-col items-start justify-center gap-4">
-            <h2 className="text-primary font-bold t:text-lg l-l:text-xl">
+            <h2 className="bg-linear-to-br from-accent to-success bg-clip-text text-transparent font-bold t:text-lg l-l:text-xl">
               Hints, Topics & Test Cases
             </h2>
             <p className="text-xs text-neutral-600 t:text-sm l-l:text-base">
@@ -66,7 +67,7 @@ const Offer = () => {
           </div>
 
           <div className=" w-full p-4 t:p-8 rounded-md bg-neutral-200 border-neutral-300 border-2 flex flex-col items-end justify-center gap-4 text-right">
-            <h2 className="text-primary font-bold t:text-lg l-l:text-xl">
+            <h2 className="bg-linear-to-br from-accent to-success bg-clip-text text-transparent font-bold t:text-lg l-l:text-xl">
               Cody AI Assistant
             </h2>
             <p className="text-xs text-neutral-600 t:text-sm l-l:text-base">
@@ -78,7 +79,7 @@ const Offer = () => {
           </div>
 
           <div className="w-full p-4 t:p-8 rounded-md bg-neutral-200 border-neutral-300 border-2 flex flex-col items-start justify-center gap-4">
-            <h2 className="text-primary font-bold t:text-lg l-l:text-xl">
+            <h2 className="bg-linear-to-br from-accent to-success bg-clip-text text-transparent font-bold t:text-lg l-l:text-xl">
               Achievements & Progress
             </h2>
             <p className="text-xs text-neutral-600 t:text-sm l-l:text-base">
@@ -90,7 +91,7 @@ const Offer = () => {
           </div>
 
           <div className=" w-full p-4 t:p-8 rounded-md bg-neutral-200 border-neutral-300 border-2 flex flex-col items-end justify-center gap-4 text-right">
-            <h2 className="text-primary font-bold t:text-lg l-l:text-xl">
+            <h2 className="bg-linear-to-br from-accent to-success bg-clip-text text-transparent font-bold t:text-lg l-l:text-xl">
               Dashboard & Profile
             </h2>
             <p className="text-xs text-neutral-600 t:text-sm l-l:text-base">

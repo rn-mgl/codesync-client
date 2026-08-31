@@ -12,17 +12,21 @@ const Hero = () => {
                     bg-linear-to-b from-primary/10 from-60% to-secondary/20"
       />
 
+      <div className="absolute z-0 -bottom-16 -left-16 w-72 t:w-96 aspect-square rounded-full bg-accent/25 blur-3xl" />
+      <div className="absolute z-0 -top-16 -right-16 w-72 t:w-96 aspect-square rounded-full bg-success/25 blur-3xl" />
+      <div className="absolute z-0 bottom-1/4 -right-24 w-64 t:w-80 aspect-square rounded-full bg-accent/15 blur-3xl" />
+
       <div
         className="w-full h-full text-center flex flex-col items-center justify-center max-w-(--breakpoint-l-s)
                 gap-4 t:gap-8 z-10"
       >
         <div className="w-full flex flex-col items-center justify-center gap-2">
           <h1 className="text-3xl font-black text-secondary t:text-5xl l-l:text-7xl">
-            <span className="bg-linear-to-br from-secondary to-neutral-400 bg-clip-text text-transparent">
+            <span className="bg-linear-to-br from-accent to-success bg-clip-text text-transparent">
               Practice
             </span>{" "}
             problems; <br />{" "}
-            <span className="bg-linear-to-br from-secondary to-neutral-400 bg-clip-text text-transparent">
+            <span className="bg-linear-to-br from-success to-accent bg-clip-text text-transparent">
               track
             </span>{" "}
             every run.
@@ -35,10 +39,10 @@ const Hero = () => {
           </h2>
         </div>
 
-        <div className="w-full hover:bg-linear-to-br hover:from-secondary/80 hover:to-neutral-400/80 hover:p-1 transition-all rounded-md t:w-fit">
+        <div className="w-full hover:bg-linear-to-br hover:from-accent/80 hover:to-success/80 hover:p-1 transition-all rounded-md t:w-fit">
           <Link
             href="/auth/register"
-            className="bg-linear-to-br from-secondary to-neutral-400 p-2 rounded-md t:max-w-fit t:px-4 font-bold text-primary w-full
+            className="bg-linear-to-br from-accent to-success p-2 rounded-md t:max-w-fit t:px-4 font-bold text-secondary w-full
                     flex flex-row items-center justify-center gap-2"
           >
             Start Practicing <FaArrowRightLong />
@@ -48,9 +52,9 @@ const Hero = () => {
         <div className="w-full flex flex-col items-center justify-center max-w-(--breakpoint-t)">
           <div className="w-full p-4 rounded-t-md bg-neutral-800 border border-neutral-600 flex flex-row items-center justify-between">
             <div className="flex flex-row items-center justify-center gap-2">
-              <div className="bg-neutral-400 rounded-full p-1"></div>
-              <div className="bg-neutral-500 rounded-full p-1"></div>
-              <div className="bg-neutral-600 rounded-full p-1"></div>
+              <div className="bg-accent rounded-full p-1"></div>
+              <div className="bg-success rounded-full p-1"></div>
+              <div className="bg-accent/50 rounded-full p-1"></div>
             </div>
 
             <div>
@@ -61,39 +65,39 @@ const Hero = () => {
           </div>
           <div className="w-full p-4 font-mono rounded-b-md bg-neutral-900 border border-neutral-600 border-t-0 text-left">
             <p>
-              <span className="text-neutral-400">const</span>{" "}
+              <span className="text-success">const</span>{" "}
               <span className="text-secondary">practiceLoop</span>{" "}
-              <span className="text-neutral-400">=</span>{" "}
+              <span className="text-success">=</span>{" "}
               <span className="text-neutral-300">(</span>
               <span className="text-secondary">problem</span>
               <span className="text-neutral-300">)</span>
-              <span className="text-neutral-400">:</span>
+              <span className="text-success">:</span>
               <span className="text-neutral-300"> Progress </span>{" "}
-              <span className="text-neutral-400">=&gt;</span>{" "}
+              <span className="text-success">=&gt;</span>{" "}
               <span className="text-neutral-300">&#123;</span> <br />
             </p>
             <p className="indent-4">
-              <span className="text-neutral-400 indent-4">const</span>{" "}
-              <span className="text-secondary">submission</span>{" "}
-              <span className="text-neutral-400">=</span>{" "}
-              <span className="text-neutral-300">run</span>
+              <span className="text-success indent-4">const</span>{" "}
+              <span className="text-accent">submission</span>{" "}
+              <span className="text-success">=</span>{" "}
+              <span className="text-success">run</span>
               <span className="text-neutral-300">(</span>
               <span className="text-secondary">problem</span>
               <span className="text-neutral-300">)</span>
               <span className="text-white">;</span>
             </p>
             <p className="indent-8">
-              <span className="text-neutral-400 indent-4">return</span>{" "}
-              <span className="text-neutral-300">Cody</span>
+              <span className="text-success indent-4">return</span>{" "}
+              <span className="text-accent">Cody</span>
               <span className="text-white">.</span>
-              <span className="text-secondary">review</span>
+              <span className="text-success">review</span>
               <span className="text-neutral-300">(</span>
-              <span className="text-secondary">submission</span>
+              <span className="text-accent">submission</span>
               <span className="text-neutral-300">)</span>
               <span className="text-white">;</span>
             </p>
             <p className="indent-4">
-              <span className="text-neutral-500">
+              <span className="text-success/80">
                 {"// problems, hints, tests, wins"}
               </span>
             </p>
