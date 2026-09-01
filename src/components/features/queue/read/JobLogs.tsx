@@ -2,6 +2,7 @@
 
 import Input from "@/src/components/ui/fields/Input";
 import ListLoader from "@/src/components/ui/loader/ListLoader";
+import Paginate from "@/src/components/ui/filters/Paginate";
 import {
   GetJobLogsResponse,
   JOB_TYPES,
@@ -21,9 +22,14 @@ const JobLogs = (props: {
   const [logs, setLogs] = React.useState<QueueJobLogs>({
     count: 0,
     logs: [],
+    pages: 0,
   });
   const [loading, setLoading] = React.useState(true);
   const [searchValue, setSearchValue] = React.useState("");
+  const [pages, setPages] = React.useState(0);
+  const [page, setPage] = React.useState(0);
+  const [limit, setLimit] = React.useState(25);
+  const [canSelectLimit, setCanSelectLimit] = React.useState(false);
 
   React.useEffect(() => {
     if (!props.id) return;
@@ -35,6 +41,8 @@ const JobLogs = (props: {
         const searchParams = {
           action: "logs",
           type: props.type,
+          page: String(page),
+          limit: String(limit),
         };
 
         const query = new URLSearchParams(searchParams).toString();
@@ -52,9 +60,10 @@ const JobLogs = (props: {
           throw new Error(resolve.message);
         }
 
-        const { logs } = resolve.data;
+        const { logs, pagination } = resolve.data;
 
         setLogs(logs);
+        setPages(pagination.pages ?? 0);
       } catch (error) {
         errorToast(getErrorMessage(error));
       } finally {
@@ -63,7 +72,7 @@ const JobLogs = (props: {
     };
 
     getLogs();
-  }, [props.id, props.type]);
+  }, [props.id, props.type, page, limit]);
 
   const searchTerm = searchValue.trim().toLowerCase();
 
@@ -71,14 +80,32 @@ const JobLogs = (props: {
     ? logs.logs.filter((log) => log.toLowerCase().includes(searchTerm))
     : logs.logs;
 
+  const levelClass = (log: string) => {
+    const value = log.toLowerCase();
+
+    if (value.includes("error")) return "text-red-600";
+    if (value.includes("warn")) return "text-yellow-600";
+
+    return "";
+  };
+
   const mappedLogs = filteredLogs.map((log, index) => (
     <p
       key={index}
-      className="w-full not-last:border-b-2 border-neutral-400 text-sm p-2"
+      className={`w-full not-last:border-b-2 border-neutral-400 text-sm p-2 ${levelClass(log)}`}
     >
       {log}
     </p>
   ));
+
+  const handleLimit = (limit: number) => {
+    setLimit(limit);
+    setPage(0);
+  };
+
+  const handlePage = (page: number) => {
+    setPage(page);
+  };
 
   return (
     <div
@@ -102,7 +129,9 @@ const JobLogs = (props: {
             <div className="p-4 bg-primary/80 w-full rounded-t-md font-medium text-secondary flex items-center justify-between">
               Logs
               <span>
-                {searchTerm ? `${filteredLogs.length} / ${logs.count}` : logs.count}
+                {searchTerm
+                  ? `${filteredLogs.length} / ${logs.count}`
+                  : logs.count}
               </span>
             </div>
 
@@ -132,6 +161,20 @@ const JobLogs = (props: {
               </p>
             )}
           </div>
+
+          {!loading && (
+            <div className="w-full shrink-0">
+              <Paginate
+                limit={limit}
+                pages={pages}
+                page={page}
+                canSelectLimit={canSelectLimit}
+                handleCanSelectLimit={() => setCanSelectLimit((prev) => !prev)}
+                handleLimit={handleLimit}
+                handlePage={handlePage}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

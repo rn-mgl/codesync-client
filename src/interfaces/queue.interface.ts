@@ -1,4 +1,4 @@
-import { APIResponse } from "./api.interface";
+import { APIPaginateResponse, APIResponse } from "./api.interface";
 
 export type JOB_STATUSES =
   | "active"
@@ -60,10 +60,13 @@ export type JobData = {
 export interface QueueJobLogs {
   logs: string[];
   count: number;
+  pages: number;
 }
 
 export type GetAllJobsCountResponse = APIResponse<{ counts: JobsTypeCount }>;
 export type GetAllJobsListResponse = APIResponse<{ jobs: JobData[] }>;
 export type GetJobResponse = APIResponse<{ job: JobData }>;
-export type GetJobLogsResponse = APIResponse<{ logs: QueueJobLogs }>;
+export type GetJobLogsResponse = APIResponse<
+  { logs: QueueJobLogs } & APIPaginateResponse
+>;
 export type JobModifyResponse = APIResponse<{ message: string }>;
