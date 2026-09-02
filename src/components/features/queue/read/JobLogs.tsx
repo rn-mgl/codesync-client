@@ -92,7 +92,7 @@ const JobLogs = (props: {
   const mappedLogs = filteredLogs.map((log, index) => (
     <p
       key={index}
-      className={`w-full not-last:border-b-2 border-neutral-400 text-sm p-2 ${levelClass(log)}`}
+      className={`w-full not-last:border-b-2 border-neutral-400 text-sm p-2 ${levelClass(log)} whitespace-pre-wrap`}
     >
       {log}
     </p>
