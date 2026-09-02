@@ -1,16 +1,68 @@
+import React from "react";
 import { PaginateProperties } from "@/src/interfaces/filter.interface";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 
 const Paginate = (props: PaginateProperties) => {
-  const mappedPages = new Array(props.pages).fill(0).map((_, i) => {
+  const [inputValue, setInputValue] = React.useState(String(props.page));
+
+  React.useEffect(() => {
+    setInputValue(String(props.page));
+  }, [props.page]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+
+    setInputValue(value);
+  };
+
+  const handleInputSubmit = () => {
+    const num = Number(inputValue);
+
+    if (!Number.isNaN(num) && num >= 0 && num < props.pages) {
+      props.handlePage(num);
+    } else {
+      setInputValue(String(props.page));
+    }
+  };
+
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") handleInputSubmit();
+  };
+
+  const mappedBoxes = [-2, -1, 0, 1, 2].map((offset) => {
+    if (offset === 0) {
+      return (
+        <input
+          key="page-input"
+          type="text"
+          value={inputValue}
+          onChange={handleInputChange}
+          onBlur={handleInputSubmit}
+          onKeyDown={handleInputKeyDown}
+          className="p-2 border-b aspect-square w-10 min-w-10 text-xs text-center bg-secondary text-primary outline-none"
+        />
+      );
+    }
+
+    const pageNum = props.page + offset;
+
+    if (pageNum < 0 || pageNum >= props.pages)
+      return (
+        <div
+          key={`page-${pageNum}`}
+          className="p-2 rounded-sm border aspect-square w-10 min-w-10 text-xs bg-neutral-300"
+        ></div>
+      );
+
     return (
       <button
         type="button"
-        key={i}
-        onClick={() => props.handlePage(i)}
+        key={`page-${pageNum}`}
+        onClick={() => props.handlePage(pageNum)}
         className={`p-2 rounded-sm border aspect-square w-10 min-w-10 text-xs 
-                  ${props.page === i ? "bg-primary text-secondary" : "bg-secondary text-primary"}`}
+                  ${props.page === pageNum ? "bg-primary text-secondary" : "bg-secondary text-primary"}`}
       >
-        {i}
+        {pageNum}
       </button>
     );
   });
@@ -31,8 +83,28 @@ const Paginate = (props: PaginateProperties) => {
 
   return (
     <div className="flex flex-col w-full justify-between gap-4 t:flex-row-reverse">
-      <div className="w-full max-w-(--breakpoint-m-l) flex items-center justify-start overflow-x-auto gap-1 t:w-fit">
-        {mappedPages}
+      <div className="w-full flex items-center justify-center gap-1 t:w-fit">
+        <button
+          type="button"
+          onClick={() => props.handlePage(Math.max(0, props.page - 1))}
+          disabled={props.page === 0}
+          className="p-1.5 flex flex-col items-center justify-center rounded-sm border aspect-square w-10 min-w-10 text-xs bg-secondary text-primary disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <FaChevronLeft className="text-xs p-0.5" />
+        </button>
+
+        {mappedBoxes}
+
+        <button
+          type="button"
+          onClick={() =>
+            props.handlePage(Math.min(props.pages - 1, props.page + 1))
+          }
+          disabled={props.page >= props.pages - 1}
+          className="p-1.5 flex flex-col items-center justify-center rounded-sm border aspect-square w-10 min-w-10 text-xs bg-secondary text-primary disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <FaChevronRight className="text-xs p-0.5" />
+        </button>
       </div>
 
       <div className="relative flex flex-row items-start justify-start gap-2">
