@@ -41,26 +41,31 @@ const SingleJob = (props: {
     return parts.length > 0 ? parts.join(", ") : "0 seconds";
   };
 
+  const formatTimestamp = (timestamp: number | null | undefined) => {
+    return typeof timestamp === "number"
+      ? DateTime.fromMillis(timestamp).toFormat("DDD HH:mm:ss")
+      : timestamp;
+  };
+
   const renderJob = (job: JobData) => {
     const displayableJob = {
       ...job,
-      timestamp: DateTime.fromMillis(job.timestamp).toFormat("DDD HH:mm:ss"),
-      processedOn: job.processedOn
-        ? DateTime.fromMillis(job.processedOn).toFormat("DDD HH:mm:ss")
-        : job.processedOn,
-      finishedOn: job.finishedOn
-        ? DateTime.fromMillis(job.finishedOn).toFormat("DDD HH:mm:ss")
-        : job.finishedOn,
+      timestamp: formatTimestamp(job.timestamp),
+      processedOn: formatTimestamp(job.processedOn),
+      finishedOn: formatTimestamp(job.finishedOn),
       delay: formatDelay(job.delay),
       opts: {
         ...job.opts,
-        timestamp: DateTime.fromMillis(job.opts.timestamp).toFormat("DDD HH:mm:ss"),
-        prevMillis: DateTime.fromMillis(job.opts.prevMillis).toFormat("DDD HH:mm:ss"),
+        timestamp: formatTimestamp(job.opts.timestamp),
+        prevMillis: formatTimestamp(job.opts.prevMillis),
         delay: formatDelay(job.opts.delay),
-        repeat: {
-          ...job.opts.repeat,
-          delay: formatDelay(job.opts.repeat.delay),
-        },
+        repeat: job.opts.repeat
+          ? {
+              ...job.opts.repeat,
+              delay: formatDelay(job.opts.repeat.delay),
+              prevMillis: formatTimestamp(job.opts.repeat.prevMillis),
+            }
+          : undefined,
       },
     };
 

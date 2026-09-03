@@ -28,13 +28,27 @@ export type JobsTypeCount = {
   listener: JobStatusCount;
 };
 
+export interface JobRepeatOptions {
+  pattern?: string;
+  every?: number;
+  count?: number;
+  limit?: number;
+  offset?: number;
+  immediately?: boolean;
+  jobId?: string;
+  prevMillis?: number;
+  delay?: number;
+}
+
 export interface JobOptions {
-  attempts: number;
-  delay: number;
-  jobId: string;
-  prevMillis: number;
-  repeat: { pattern: string; count: number; delay?: number };
-  timestamp: number;
+  attempts?: number;
+  delay?: number;
+  jobId?: string;
+  prevMillis?: number;
+  priority?: number;
+  repeat?: JobRepeatOptions;
+  repeatJobKey?: string;
+  timestamp?: number;
 }
 
 export type JobData = {

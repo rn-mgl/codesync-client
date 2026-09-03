@@ -112,7 +112,7 @@ const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
                 hover:bg-neutral-200 first:rounded-t-md last:rounded-b-md text-left"
     >
       <p className="w-full grid grid-cols-6 items-center p-2 gap-4 text-sm *:p-2">
-        <span>{job.opts.prevMillis}</span>
+        <span>{job.opts.prevMillis ?? job.id}</span>
         <span className="capitalize">{normalizeString(job.name)}</span>
         <span className="capitalize">
           {typeof job.progress === "number" ? job.progress : "-"}
