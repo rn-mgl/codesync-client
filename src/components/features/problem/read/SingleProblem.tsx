@@ -1,6 +1,8 @@
 "use client";
 
 import ProblemLoader from "@/src/components/ui/loader/ProblemLoader";
+import RunResultLoader from "@/src/components/ui/loader/RunResultLoader";
+import TestRunLoader from "@/src/components/ui/loader/TestRunLoader";
 import CodeEditor from "@/src/components/ui/fields/CodeEditor";
 import Delete from "@/src/components/ui/forms/Delete";
 import useSingleProblem from "@/src/hooks/useSingleProblem";
@@ -40,6 +42,7 @@ const SingleProblem = () => {
     hints,
     loading,
     openedSubmission,
+    submitting,
     getProblem,
     getSubmission,
     handleSubmission,
@@ -95,7 +98,11 @@ const SingleProblem = () => {
     getProblem();
   }, [getProblem]);
 
-  const hasSubmission = !!(submittedTestOutput || submittedRunOutput);
+  const hasSubmission = !!(
+    submittedTestOutput ||
+    submittedRunOutput ||
+    submitting
+  );
 
   return (
     <div className="w-full grid grid-cols-1 gap-4 items-start justify-start l-s:grid-cols-2 l-s:h-full">
@@ -135,7 +142,9 @@ const SingleProblem = () => {
 
               <div className="w-full h-fit flex overflow-y-auto flex-col l-s:h-full l-s:overflow-hidden border rounded-md border-neutral-400 bg-secondary">
                 <div className="w-full h-fit flex flex-col gap-8 p-2 overflow-y-auto l-s:h-full l-s:max-h-full">
-                  {submittedRunOutput && activeDetailsPanel === "result" ? (
+                  {submitting === "run" ? (
+                    <RunResultLoader />
+                  ) : submittedRunOutput && activeDetailsPanel === "result" ? (
                     <RunResults
                       runOutput={submittedRunOutput}
                       language={currentLanguage}
@@ -185,17 +194,24 @@ const SingleProblem = () => {
                   boilerPlate={startingCode}
                   ref={editorRef}
                 />
-                <EditorActions handleSubmission={handleSubmission} />
+                <EditorActions
+                  submitting={submitting}
+                  handleSubmission={handleSubmission}
+                />
               </div>
 
               {hasSubmission && (
                 <div className="w-full flex flex-col items-end justify-start grid-rows-1 h-full overflow-y-hidden">
                   <div className="w-full h-full rounded-md flex flex-col items-start justify-start overflow-y-hidden">
-                    <ProblemTestCases
-                      testCases={testCases}
-                      submittedTestOutput={submittedTestOutput}
-                      handleClearSubmissionState={handleClearSubmissionState}
-                    />
+                    {submitting === "test" ? (
+                      <TestRunLoader />
+                    ) : (
+                      <ProblemTestCases
+                        testCases={testCases}
+                        submittedTestOutput={submittedTestOutput}
+                        handleClearSubmissionState={handleClearSubmissionState}
+                      />
+                    )}
                   </div>
                 </div>
               )}

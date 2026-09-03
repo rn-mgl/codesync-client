@@ -138,6 +138,9 @@ export default function useSingleProblem() {
   const [usedHints, setUsedHints] = React.useState<number[]>([]);
 
   const [openedSubmission, setOpenedSubmission] = React.useState(0);
+  const [submitting, setSubmitting] = React.useState<SubmissionType | null>(
+    null,
+  );
 
   const params: { slug?: string } | null = useParams();
   const { data: session } = useSession({ required: true });
@@ -180,6 +183,8 @@ export default function useSingleProblem() {
   const handleSubmission = React.useCallback(
     async (type: SubmissionType) => {
       if (!params?.slug || !editorRef.current || !user?.id) return;
+
+      setSubmitting(type);
 
       const code = editorRef.current.getValue();
 
@@ -241,6 +246,8 @@ export default function useSingleProblem() {
           type: `submit_${type}_error`,
           output: getErrorMessage(err),
         });
+      } finally {
+        setSubmitting(null);
       }
     },
     [currentLanguage, user, params, usedHints],
@@ -358,6 +365,7 @@ export default function useSingleProblem() {
     hints,
     loading,
     openedSubmission,
+    submitting,
     getSubmission,
     getProblem,
     handleSubmission,
