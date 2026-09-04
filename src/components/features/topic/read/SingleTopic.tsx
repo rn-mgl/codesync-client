@@ -4,6 +4,7 @@ import TopicLoader from "@/src/components/ui/loader/TopicLoader";
 import DisplayInputField from "@/src/components/ui/containers/DisplayInputField";
 import DisplayTextArea from "@/src/components/ui/containers/DisplayTextArea";
 import Delete from "@/src/components/ui/forms/Delete";
+import Validate from "@/src/components/ui/forms/Validate";
 import { BaseTopic, GetTopicResponse } from "@/src/interfaces/topic.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
 import { errorToast } from "@/src/utils/toast.util";
@@ -18,6 +19,7 @@ import {
   FaNoteSticky,
   FaTag,
   FaTrashCan,
+  FaWandMagicSparkles,
 } from "react-icons/fa6";
 
 const SingleTopic = () => {
@@ -29,6 +31,7 @@ const SingleTopic = () => {
     slug: "",
   });
   const [canDelete, setCanDelete] = React.useState(false);
+  const [canValidate, setCanValidate] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
 
   const params: { slug?: string } | null = useParams();
@@ -37,6 +40,10 @@ const SingleTopic = () => {
 
   const handleCanDelete = () => {
     setCanDelete((prev) => !prev);
+  };
+
+  const handleCanValidate = () => {
+    setCanValidate((prev) => !prev);
   };
 
   React.useEffect(() => {
@@ -83,6 +90,15 @@ const SingleTopic = () => {
         />
       )}
 
+      {canValidate && (
+        <Validate
+          closeForm={handleCanValidate}
+          endpoint="topic"
+          label="Topic"
+          body={{ id: topic.id }}
+        />
+      )}
+
       {loading ? (
         <TopicLoader />
       ) : (
@@ -99,6 +115,14 @@ const SingleTopic = () => {
 
             <div>
               <div className="flex gap-2">
+                <button
+                  title="Validate"
+                  onClick={handleCanValidate}
+                  className="p-2 rounded-full bg-inherit hover:text-info flex flex-col items-center justify-center"
+                >
+                  <FaWandMagicSparkles />
+                </button>
+
                 <Link
                   title="Edit"
                   href={`/codesync/topics/${params?.slug}/edit`}

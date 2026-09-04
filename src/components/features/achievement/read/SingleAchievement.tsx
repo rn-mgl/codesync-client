@@ -18,7 +18,8 @@ import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import AchievementLoader from "@/src/components/ui/loader/AchievementLoader";
 import { FaArrowLeft, FaEdit } from "react-icons/fa";
-import { FaTrashCan } from "react-icons/fa6";
+import { FaTrashCan, FaWandMagicSparkles } from "react-icons/fa6";
+import Validate from "@/src/components/ui/forms/Validate";
 
 const SingleAchievement = () => {
   const [achievement, setAchievement] = React.useState<BaseAchievement>({
@@ -37,6 +38,7 @@ const SingleAchievement = () => {
   });
   const [loading, setLoading] = React.useState(true);
   const [canDelete, setCanDelete] = React.useState(false);
+  const [canValidate, setCanValidate] = React.useState(false);
 
   useSession({ required: true });
 
@@ -46,6 +48,10 @@ const SingleAchievement = () => {
 
   const handleCanDelete = () => {
     setCanDelete((prev) => !prev);
+  };
+
+  const handleCanValidate = () => {
+    setCanValidate((prev) => !prev);
   };
 
   React.useEffect(() => {
@@ -96,30 +102,49 @@ const SingleAchievement = () => {
         />
       ) : null}
 
-      <Link
-        href="/codesync/achievements"
-        className="text-primary font-bold flex flex-row items-center 
-                    justify-center gap-2 hover:border-b px-1 w-fit"
-      >
-        <FaArrowLeft />
-        All Achievements
-      </Link>
+      {canValidate ? (
+        <Validate
+          closeForm={handleCanValidate}
+          endpoint={`achievement`}
+          label="achievement"
+          body={{ id: achievement.id }}
+        />
+      ) : null}
 
-      <div className="w-full flex flex-row gap-2 justify-end">
+      <div className="w-full flex flex-row not-last-of-type:justify-between">
         <Link
-          href={`/codesync/achievements/${params?.slug}/edit`}
-          type="button"
-          className="hover:text-accent transition-all p-2"
+          href="/codesync/achievements"
+          className="text-primary font-bold flex flex-row items-center 
+                    justify-center gap-2 hover:border-b px-1 w-fit"
         >
-          <FaEdit />
+          <FaArrowLeft />
+          All Achievements
         </Link>
-        <button
-          onClick={handleCanDelete}
-          type="button"
-          className="p-2 rounded-full hover:text-danger transition-all"
-        >
-          <FaTrashCan />
-        </button>
+
+        <div className="flex flex-row gap-2">
+          <button
+            onClick={handleCanValidate}
+            type="button"
+            className="p-2 rounded-full hover:text-info transition-all"
+          >
+            <FaWandMagicSparkles />
+          </button>
+
+          <Link
+            href={`/codesync/achievements/${params?.slug}/edit`}
+            type="button"
+            className="hover:text-accent transition-all p-2"
+          >
+            <FaEdit />
+          </Link>
+          <button
+            onClick={handleCanDelete}
+            type="button"
+            className="p-2 rounded-full hover:text-danger transition-all"
+          >
+            <FaTrashCan />
+          </button>
+        </div>
       </div>
 
       <div className="flex flex-col gap-4 items-center justify-center w-full overflow-auto">

@@ -1,6 +1,6 @@
 import { APIResponse } from "@/interfaces/api.interface";
 
-type endpoints =
+type ENDPOINTS =
   | "problem"
   | "submission"
   | "test-case"
@@ -8,6 +8,11 @@ type endpoints =
   | "topic"
   | "hint"
   | "queue";
+
+type DELETE_ENDPOINTS = ENDPOINTS;
+
+type VALIDATE_ENDPOINTS = Exclude<ENDPOINTS, "submission" | "queue">;
+
 type identifier = string;
 
 export interface BaseForm {
@@ -20,9 +25,17 @@ export interface UpdateForm extends BaseForm {
 }
 
 export interface DeleteForm extends BaseForm {
-  endpoint: `${endpoints}/${identifier}`;
+  endpoint: `${DELETE_ENDPOINTS}/${identifier}`;
   body?: object;
   postDeleteAction?: () => void;
 }
 
+export interface ValidateForm extends BaseForm {
+  endpoint: VALIDATE_ENDPOINTS;
+  body: { id: string | number };
+  postValidateAction?: () => void;
+}
+
 export type DeleteResponse = APIResponse<{ message: string }>;
+
+export type ValidateResponse = APIResponse<{ message: string }>;

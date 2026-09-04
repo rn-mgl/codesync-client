@@ -5,6 +5,7 @@ import RunResultLoader from "@/src/components/ui/loader/RunResultLoader";
 import TestRunLoader from "@/src/components/ui/loader/TestRunLoader";
 import CodeEditor from "@/src/components/ui/fields/CodeEditor";
 import Delete from "@/src/components/ui/forms/Delete";
+import Validate from "@/src/components/ui/forms/Validate";
 import useSingleProblem from "@/src/hooks/useSingleProblem";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -26,6 +27,12 @@ const SingleProblem = () => {
 
   const params: { slug?: string } | null = useParams();
   const router = useRouter();
+
+  const [canValidate, setCanValidate] = React.useState(false);
+
+  const handleCanValidate = () => {
+    setCanValidate((prev) => !prev);
+  };
 
   const {
     problem,
@@ -117,6 +124,15 @@ const SingleProblem = () => {
         />
       )}
 
+      {canValidate && (
+        <Validate
+          closeForm={handleCanValidate}
+          endpoint="problem"
+          label="Problem"
+          body={{ id: problem.id }}
+        />
+      )}
+
       {loading ? (
         <ProblemLoader />
       ) : (
@@ -182,6 +198,7 @@ const SingleProblem = () => {
               language={currentLanguage}
               handleCurrentLanguage={handleCurrentLanguage}
               handleCanDelete={handleCanDelete}
+              handleCanValidate={handleCanValidate}
             />
 
             <div

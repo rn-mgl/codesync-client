@@ -4,6 +4,7 @@ import DisplayInputField from "@/src/components/ui/containers/DisplayInputField"
 import DisplayTextArea from "@/src/components/ui/containers/DisplayTextArea";
 import DisplayToggle from "@/src/components/ui/containers/DisplayToggle";
 import Delete from "@/src/components/ui/forms/Delete";
+import Validate from "@/src/components/ui/forms/Validate";
 import {
   GetTestCaseResponse,
   TestCaseDetails,
@@ -14,7 +15,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import { FaArrowLeft, FaCode, FaClock, FaEdit } from "react-icons/fa";
-import { FaLink, FaMemory, FaTrashCan } from "react-icons/fa6";
+import { FaLink, FaMemory, FaTrashCan, FaWandMagicSparkles } from "react-icons/fa6";
 import TestCaseLoader from "@/src/components/ui/loader/TestCaseLoader";
 
 const SingleTestCase = () => {
@@ -35,6 +36,7 @@ const SingleTestCase = () => {
   const [loading, setLoading] = React.useState(true);
 
   const [canDelete, setCanDelete] = React.useState(false);
+  const [canValidate, setCanValidate] = React.useState(false);
 
   const params: { id?: string } | null = useParams();
 
@@ -42,6 +44,10 @@ const SingleTestCase = () => {
 
   const handleCanDelete = () => {
     setCanDelete((prev) => !prev);
+  };
+
+  const handleCanValidate = () => {
+    setCanValidate((prev) => !prev);
   };
 
   React.useEffect(() => {
@@ -89,6 +95,16 @@ const SingleTestCase = () => {
           postDeleteAction={() => router.push("/codesync/test-cases")}
         />
       )}
+
+      {canValidate && (
+        <Validate
+          closeForm={handleCanValidate}
+          endpoint="test-case"
+          label="Test Case"
+          body={{ id: testCase.id }}
+        />
+      )}
+
       <div className="w-full flex justify-between">
         <Link
           href="/codesync/test-cases"
@@ -101,6 +117,14 @@ const SingleTestCase = () => {
 
         <div>
           <div className="flex gap-2">
+            <button
+              title="Validate"
+              onClick={handleCanValidate}
+              className="p-2 rounded-full bg-inherit hover:text-info flex flex-col items-center justify-center"
+            >
+              <FaWandMagicSparkles />
+            </button>
+
             <Link
               title="Edit"
               href={`/codesync/test-cases/${params?.id}/edit`}

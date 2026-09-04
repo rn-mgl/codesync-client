@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import React from "react";
 import { FaEdit } from "react-icons/fa";
-import { FaCode, FaFileCode, FaLightbulb, FaTrashCan } from "react-icons/fa6";
+import { FaCode, FaFileCode, FaLightbulb, FaTrashCan, FaWandMagicSparkles } from "react-icons/fa6";
 import Languages from "@/components/features/problem/read/Languages";
 
 // Toolbar above the code editor: links to the problem's test cases/hints,
@@ -11,6 +11,7 @@ import Languages from "@/components/features/problem/read/Languages";
 const ProblemActions = (props: {
   language: SupportedLanguages;
   handleCanDelete: () => void;
+  handleCanValidate: () => void;
   handleCurrentLanguage: (language: SupportedLanguages) => void;
 }) => {
   const [canSelectLanguage, setCanSelectLanguage] = React.useState(false);
@@ -61,6 +62,14 @@ const ProblemActions = (props: {
       </div>
 
       <div className="flex gap-2">
+        <button
+          title="Validate"
+          onClick={props.handleCanValidate}
+          className="p-2 rounded-full bg-inherit hover:text-info flex flex-col items-center justify-center"
+        >
+          <FaWandMagicSparkles />
+        </button>
+
         <Link
           title="Edit"
           href={`/codesync/problems/${params?.slug}/edit`}
