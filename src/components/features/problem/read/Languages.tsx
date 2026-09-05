@@ -30,7 +30,7 @@ const Languages = (props: LanguageModal) => {
   return (
     <div
       className="w-full rounded-md flex flex-col items-center justify-center absolute top-0 translate-y-10
-                  left-0 z-30 backdrop-blur-md bg-linear-to-b from-secondary/20 to-secondary/50 animate-fade"
+                  left-0 z-40 backdrop-blur-md bg-linear-to-b from-secondary/20 to-secondary/50 animate-fade"
     >
       <div className="w-full h-full flex flex-col items-center justify-center p-4 gap-2">
         <div className="w-full h-fit bg-secondary rounded-lg p-4 gap-2 flex">
