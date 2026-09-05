@@ -1,6 +1,6 @@
 import React from "react";
 import { SortFilterOption } from "../interfaces/filter.interface";
-import { OptionValue } from "../interfaces/field.interface";
+import { SelectOptionValue } from "../interfaces/field.interface";
 
 export default function useSort(
   options: SortFilterOption[],
@@ -12,7 +12,7 @@ export default function useSort(
   const activeOption =
     options.find((option) => option.value === sortKey) ?? options[0];
 
-  const handleSortKey = (option: OptionValue) => {
+  const handleSortKey = (option: SelectOptionValue) => {
     setSortKey(String(option.value));
   };
 

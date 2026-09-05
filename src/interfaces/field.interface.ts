@@ -18,7 +18,7 @@ export interface InputField extends BaseFieldProperties {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export interface OptionValue {
+export interface SelectOptionValue {
   label: string;
   value: string | number;
   target: string;
@@ -27,7 +27,22 @@ export interface OptionValue {
 export interface SelectField extends BaseFieldProperties {
   options: Array<{ label: string; value: string | number }>;
   activeLabel: string;
-  onChange: (option: OptionValue) => void;
+  onChange: (option: SelectOptionValue) => void;
+}
+
+export interface MultiSelectOptionValue {
+  label: string;
+  value: string | number;
+}
+
+export interface MultiSelectField extends Pick<
+  BaseFieldProperties,
+  "name" | "id" | "label" | "icon"
+> {
+  options: Array<{ label: string; value: string | number }>;
+  selectedValues: MultiSelectOptionValue[];
+  activeLabel: string;
+  onChange: (option: MultiSelectOptionValue) => void;
 }
 
 export interface TextAreaField extends BaseFieldProperties {

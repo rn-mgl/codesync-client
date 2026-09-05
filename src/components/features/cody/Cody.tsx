@@ -304,7 +304,7 @@ const Cody = () => {
 
   return (
     <div
-      className={`fixed flex flex-col items-start justify-start z-20 
+      className={`fixed flex flex-col items-start justify-start z-40 
                 ${
                   canSeePanel
                     ? "w-full h-full top-0 right-0 l-s:max-w-(--breakpoint-m-l) shadow-md backdrop-blur-md bg-neutral-600/20"

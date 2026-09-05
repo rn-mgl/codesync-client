@@ -57,6 +57,7 @@ const CheckBox = (props: CheckBoxField) => {
             id="searchCheckbox"
             name="searchCheckbox"
             onChange={handleSearchTerm}
+            icon={props.icon}
             value={searchTerm}
             placeholder="Search"
             required={false}

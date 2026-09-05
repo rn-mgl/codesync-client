@@ -74,7 +74,7 @@ export type ProblemList = Pick<
 export type CreateProblemResponse = APIResponse<{ message: string }>;
 
 export type GetAllProblemsResponse = APIResponse<
-  { problems: ProblemList[] } & APIPaginateResponse
+  { problems: ProblemList[]; topics: BaseTopic[] } & APIPaginateResponse
 >;
 
 export type GetProblemResponse = APIResponse<{

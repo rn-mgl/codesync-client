@@ -4,10 +4,12 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 
 const Paginate = (props: PaginateProperties) => {
   const [inputValue, setInputValue] = React.useState(String(props.page));
+  const [prevPage, setPrevPage] = React.useState(props.page);
 
-  React.useEffect(() => {
+  if (prevPage !== props.page) {
+    setPrevPage(props.page);
     setInputValue(String(props.page));
-  }, [props.page]);
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;

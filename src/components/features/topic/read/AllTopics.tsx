@@ -120,34 +120,32 @@ const AllTopics = (paginate: { page: number; limit: number }) => {
 
   return (
     <div className="w-full flex flex-col items-start justify-start h-auto gap-8">
+      <div className="w-full flex flex-col items-center justify-start gap-2 t:flex-row t:justify-between">
+        <SearchFilter
+          searchKey={searchKey}
+          searchValue={searchValue}
+          searchLabel={searchLabel}
+          options={TOPIC_SEARCH_OPTIONS}
+          handleSearchKey={handleSearchKey}
+          handleSearchValue={handleSearchValue}
+        />
+
+        <SortFilter
+          sortLabel={sortLabel}
+          handleIsAsc={handleIsAsc}
+          handleSortKey={handleSortKey}
+          isAsc={isAsc}
+          options={TOPIC_SORT_OPTIONS}
+          sortKey={sortKey}
+        />
+      </div>
+
       {loading ? (
         <BlockLoader />
       ) : (
-        <React.Fragment>
-          <div className="w-full flex flex-col items-center justify-start gap-2 t:flex-row t:justify-between">
-            <SearchFilter
-              searchKey={searchKey}
-              searchValue={searchValue}
-              searchLabel={searchLabel}
-              options={TOPIC_SEARCH_OPTIONS}
-              handleSearchKey={handleSearchKey}
-              handleSearchValue={handleSearchValue}
-            />
-
-            <SortFilter
-              sortLabel={sortLabel}
-              handleIsAsc={handleIsAsc}
-              handleSortKey={handleSortKey}
-              isAsc={isAsc}
-              options={TOPIC_SORT_OPTIONS}
-              sortKey={sortKey}
-            />
-          </div>
-
-          <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-3 l-l:grid-cols-4 gap-4">
-            {mappedTopics}
-          </div>
-        </React.Fragment>
+        <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-3 l-l:grid-cols-4 gap-4">
+          {mappedTopics}
+        </div>
       )}
 
       <Paginate

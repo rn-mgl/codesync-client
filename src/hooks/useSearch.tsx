@@ -1,4 +1,4 @@
-import { OptionValue } from "@/interfaces/field.interface";
+import { SelectOptionValue } from "@/interfaces/field.interface";
 import { SearchFilterOption } from "@/interfaces/filter.interface";
 import React from "react";
 import { normalizeString } from "../utils/normalizer.util";
@@ -13,7 +13,7 @@ export default function useSearch(
   const activeOption =
     options.find((option) => option.value === searchKey) ?? options[0];
 
-  const handleSearchKey = (option: OptionValue) => {
+  const handleSearchKey = (option: SelectOptionValue) => {
     setSearchKey(String(option.value));
   };
 

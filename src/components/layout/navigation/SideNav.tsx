@@ -50,7 +50,7 @@ const SideNav = (props: {
   return (
     <div
       className={`h-full flex-row items-start justify-start fixed top-0 left-0 overflow-hidden
-               l-s:max-w-(--breakpoint-m-s) l-s:static animate-fade p-1 gap-1 z-30
+               l-s:max-w-(--breakpoint-m-s) l-s:static animate-fade p-1 gap-1 z-50
                ${props.showSideNav ? "flex w-full t:backdrop-blur-md l-s:backdrop-blur-[0px] l-s:min-w-(--breakpoint-m-s)" : "hidden l-s:flex l-s:w-20"}`}
     >
       <div className="w-full h-full flex flex-col items-start justify-start t:w-1/2 l-s:w-full gap-1">

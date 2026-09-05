@@ -1,5 +1,5 @@
 import React from "react";
-import { OptionValue } from "@/interfaces/field.interface";
+import { SelectOptionValue } from "@/interfaces/field.interface";
 
 export interface PaginateProperties {
   limit: number;
@@ -28,7 +28,7 @@ export interface SearchFilterProperties {
   options: SearchFilterOption[];
   placeholder?: string;
   handleSearchValue: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleSearchKey: (option: OptionValue) => void;
+  handleSearchKey: (option: SelectOptionValue) => void;
 }
 
 export interface SortFilterProperties {
@@ -36,6 +36,6 @@ export interface SortFilterProperties {
   isAsc: boolean;
   sortLabel: string;
   options: SortFilterOption[];
-  handleSortKey: (option: OptionValue) => void;
+  handleSortKey: (option: SelectOptionValue) => void;
   handleIsAsc: () => void;
 }

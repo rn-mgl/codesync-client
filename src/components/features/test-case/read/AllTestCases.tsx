@@ -132,34 +132,32 @@ const AllTestCases = (props: {
 
   return (
     <div className="flex flex-col items-center justify-start gap-8 w-full">
+      <div className="w-full flex flex-col items-center justify-start gap-2 t:flex-row t:justify-between">
+        <SearchFilter
+          searchKey={searchKey}
+          searchValue={searchValue}
+          searchLabel={searchLabel}
+          options={TEST_CASE_SEARCH_OPTIONS}
+          handleSearchKey={handleSearchKey}
+          handleSearchValue={handleSearchValue}
+        />
+
+        <SortFilter
+          sortLabel={sortLabel}
+          handleIsAsc={handleIsAsc}
+          handleSortKey={handleSortKey}
+          isAsc={isAsc}
+          options={TEST_CASE_SORT_OPTIONS}
+          sortKey={sortKey}
+        />
+      </div>
+
       {loading ? (
         <BlockLoader />
       ) : (
-        <React.Fragment>
-          <div className="w-full flex flex-col items-center justify-start gap-2 t:flex-row t:justify-between">
-            <SearchFilter
-              searchKey={searchKey}
-              searchValue={searchValue}
-              searchLabel={searchLabel}
-              options={TEST_CASE_SEARCH_OPTIONS}
-              handleSearchKey={handleSearchKey}
-              handleSearchValue={handleSearchValue}
-            />
-
-            <SortFilter
-              sortLabel={sortLabel}
-              handleIsAsc={handleIsAsc}
-              handleSortKey={handleSortKey}
-              isAsc={isAsc}
-              options={TEST_CASE_SORT_OPTIONS}
-              sortKey={sortKey}
-            />
-          </div>
-
-          <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-3 l-l:grid-cols-4 gap-4">
-            {mappedProblems}
-          </div>
-        </React.Fragment>
+        <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-3 l-l:grid-cols-4 gap-4">
+          {mappedProblems}
+        </div>
       )}
       {selectedProblem && (
         <ProblemTestCases

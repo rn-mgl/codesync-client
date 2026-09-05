@@ -66,15 +66,17 @@ const UpdateProblem = (paginate: { page: number; limit: number }) => {
     value: topic.slug,
   }));
 
-  const handleCheck = (value: string | number) => {
-    setSelectedTopics((prev) =>
-      prev.includes(String(value))
-        ? [
-            ...prev.slice(0, prev.indexOf(String(value))),
-            ...prev.slice(prev.indexOf(String(value)) + 1),
-          ]
-        : [...prev, String(value)],
-    );
+  const handleCheck = (selected: string | number) => {
+    setSelectedTopics((prev) => {
+      const index = prev.indexOf(String(selected));
+
+      const value =
+        index === -1
+          ? [...prev, String(selected)]
+          : [...prev.slice(0, index), ...prev.slice(index + 1)];
+
+      return value;
+    });
   };
 
   const handleProblem = (

@@ -1,15 +1,15 @@
 "use client";
 
+import Input from "@/components/ui/fields/Input";
 import {
-  SelectOptionValue,
-  SelectField,
+  MultiSelectField,
+  MultiSelectOptionValue,
 } from "@/src/interfaces/field.interface";
 import React, { Activity } from "react";
 import { FaChevronUp } from "react-icons/fa";
 import { FaChevronDown } from "react-icons/fa6";
-import Input from "@/components/ui/fields/Input";
 
-const Select = (props: SelectField) => {
+const MultiSelect = (props: MultiSelectField) => {
   const [isVisibleOptions, setIsVisibleOptions] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState("");
 
@@ -28,11 +28,13 @@ const Select = (props: SelectField) => {
       option.label.toLowerCase().includes(searchTerm.toLowerCase()),
     )
     .map((option) => {
-      const optionValue: SelectOptionValue = {
+      const optionValue: MultiSelectOptionValue = {
         label: option.label,
         value: option.value,
-        target: props.id ?? props.name,
       };
+
+      const selected =
+        props.selectedValues.findIndex((v) => v.value === option.value) !== -1;
 
       return (
         <button
@@ -40,10 +42,9 @@ const Select = (props: SelectField) => {
           key={option.label}
           onClick={() => {
             props.onChange(optionValue);
-            handleIsVisibleOptions();
           }}
           className={`p-2 rounded-md hover:bg-primary/50 hover:text-secondary w-full text-left transition-allz
-                    ${option.value === props.value ? "bg-primary text-secondary font-medium" : "bg-neutral-300"}`}
+                    ${selected ? "bg-primary text-secondary font-medium" : "bg-neutral-300"}`}
         >
           {option.label}
         </button>
@@ -51,9 +52,9 @@ const Select = (props: SelectField) => {
     });
 
   return (
-    <div className="w-full flex flex-col items-start justify-center  gap-1">
+    <div className="w-full flex flex-col items-start justify-center gap-1">
       {props.label ? (
-        <label htmlFor="email" className="text-xs text-primary/80 font-medium">
+        <label htmlFor={props.id} className="text-xs text-primary/80 font-medium">
           {props.label}
         </label>
       ) : null}
@@ -63,7 +64,7 @@ const Select = (props: SelectField) => {
           <button
             onClick={handleIsVisibleOptions}
             type="button"
-            className="w-full p-2 text-left rounded-md text-primary border-2 border-neutral-400 outline-none"
+            className="w-full p-2 text-left rounded-md text-neutral-500 border-2 border-neutral-400 outline-none"
           >
             {props.activeLabel}
           </button>
@@ -105,4 +106,4 @@ const Select = (props: SelectField) => {
   );
 };
 
-export default Select;
+export default MultiSelect;

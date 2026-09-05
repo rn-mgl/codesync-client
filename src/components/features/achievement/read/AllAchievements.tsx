@@ -131,34 +131,32 @@ const AllAchievements = (paginate: { page: number; limit: number }) => {
 
   return (
     <div className="w-full flex flex-col items-start justify-start gap-8">
+      <div className="w-full flex flex-col items-center justify-start gap-2 t:flex-row t:justify-between">
+        <SearchFilter
+          searchKey={searchKey}
+          searchValue={searchValue}
+          searchLabel={searchLabel}
+          options={ACHIEVEMENT_SEARCH_OPTIONS}
+          handleSearchKey={handleSearchKey}
+          handleSearchValue={handleSearchValue}
+        />
+
+        <SortFilter
+          sortLabel={sortLabel}
+          handleIsAsc={handleIsAsc}
+          handleSortKey={handleSortKey}
+          isAsc={isAsc}
+          options={ACHIEVEMENT_SORT_OPTIONS}
+          sortKey={sortKey}
+        />
+      </div>
+
       {loading ? (
         <BlockLoader />
       ) : (
-        <React.Fragment>
-          <div className="w-full flex flex-col items-center justify-start gap-2 t:flex-row t:justify-between">
-            <SearchFilter
-              searchKey={searchKey}
-              searchValue={searchValue}
-              searchLabel={searchLabel}
-              options={ACHIEVEMENT_SEARCH_OPTIONS}
-              handleSearchKey={handleSearchKey}
-              handleSearchValue={handleSearchValue}
-            />
-
-            <SortFilter
-              sortLabel={sortLabel}
-              handleIsAsc={handleIsAsc}
-              handleSortKey={handleSortKey}
-              isAsc={isAsc}
-              options={ACHIEVEMENT_SORT_OPTIONS}
-              sortKey={sortKey}
-            />
-          </div>
-
-          <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-2 l-l:grid-cols-3 gap-4">
-            {mappedAchievements}
-          </div>
-        </React.Fragment>
+        <div className="w-full grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-2 l-l:grid-cols-3 gap-4">
+          {mappedAchievements}
+        </div>
       )}
 
       <Paginate
