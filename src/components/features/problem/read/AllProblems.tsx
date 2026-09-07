@@ -10,10 +10,10 @@ import {
   PROBLEM_SEARCH_OPTIONS,
   PROBLEM_SORT_OPTIONS,
 } from "@/src/configs/filter.config";
+import useMultiSelect from "@/src/hooks/useMultiSelect";
 import usePaginate from "@/src/hooks/usePaginate";
 import useSearch from "@/src/hooks/useSearch";
 import useSort from "@/src/hooks/useSort";
-import { MultiSelectOptionValue } from "@/src/interfaces/field.interface";
 import {
   GetAllProblemsResponse,
   ProblemList,
@@ -30,9 +30,6 @@ const AllProblems = (paginate: { page: number; limit: number }) => {
   const [problems, setProblems] = React.useState<ProblemList[]>([]);
   const [topics, setTopics] = React.useState<BaseTopic[]>([]);
   const [loading, setLoading] = React.useState(true);
-  const [selectedTopics, setSelectedTopics] = React.useState<
-    MultiSelectOptionValue[]
-  >([]);
 
   const {
     searchKey,
@@ -46,20 +43,13 @@ const AllProblems = (paginate: { page: number; limit: number }) => {
   const { sortLabel, isAsc, sortKey, handleIsAsc, handleSortKey, sort } =
     useSort(PROBLEM_SORT_OPTIONS, "title");
 
-  const handleSelect = (option: MultiSelectOptionValue) => {
-    setLoading(true);
+  const { selected: selectedTopics, handleSelected: handleSelectedTopics } =
+    useMultiSelect();
 
-    setSelectedTopics((prev) => {
-      const index = prev.findIndex((t) => option.value === t.value);
-
-      const value =
-        index === -1
-          ? [...prev, option]
-          : [...prev.slice(0, index), ...prev.slice(index + 1)];
-
-      return value;
-    });
-  };
+  const {
+    selected: selectedDifficulty,
+    handleSelected: handleSelectedDifficulty,
+  } = useMultiSelect();
 
   const handlePageRequest = (page: number) => {
     setLoading(true);
@@ -101,19 +91,41 @@ const AllProblems = (paginate: { page: number; limit: number }) => {
     value: t.slug,
   }));
 
-  const mappedSelectedTopics = selectedTopics.map((st) => {
+  const mappedSelectedTopics = selectedTopics.map((topic) => {
     return (
       <div
-        key={st.value}
+        key={topic.value}
         className="text-xs p-1 px-2 rounded-full bg-neutral-300 flex flex-row items-center justify-center gap-1"
       >
         <button
-          onClick={() => handleSelect(st)}
+          onClick={() => handleSelectedTopics(topic)}
           className="text-[0.6rem] text-neutral-600 rounded-full p-1"
         >
           <FaXmark />
         </button>
-        {st.label}
+        {topic.label}
+      </div>
+    );
+  });
+
+  const difficultyOptions = ["easy", "medium", "hard"].map((difficulty) => ({
+    label: `${difficulty[0].toUpperCase()}${difficulty.slice(1)}`,
+    value: difficulty,
+  }));
+
+  const mappedSelectedDifficulty = selectedDifficulty.map((difficulty) => {
+    return (
+      <div
+        key={difficulty.value}
+        className="text-xs p-1 px-2 rounded-full bg-neutral-300 flex flex-row items-center justify-center gap-1"
+      >
+        <button
+          onClick={() => handleSelectedDifficulty(difficulty)}
+          className="text-[0.6rem] text-neutral-600 rounded-full p-1"
+        >
+          <FaXmark />
+        </button>
+        {difficulty.label}
       </div>
     );
   });
@@ -162,11 +174,13 @@ const AllProblems = (paginate: { page: number; limit: number }) => {
     const getProblems = async () => {
       try {
         const mappedTopics = selectedTopics.map((t) => t.value);
+        const mappedDifficulty = selectedDifficulty.map((d) => d.value);
 
         const searchParams = {
           limit: String(limit),
           page: String(page),
           topics: btoa(JSON.stringify(mappedTopics)),
+          difficulty: btoa(JSON.stringify(mappedDifficulty)),
         };
 
         const query = new URLSearchParams(searchParams).toString();
@@ -197,7 +211,7 @@ const AllProblems = (paginate: { page: number; limit: number }) => {
     };
 
     getProblems();
-  }, [handlePages, limit, page, selectedTopics]);
+  }, [handlePages, limit, page, selectedTopics, selectedDifficulty]);
 
   return (
     <div className="w-full flex flex-col items-start justify-start gap-4 h-auto">
@@ -222,20 +236,33 @@ const AllProblems = (paginate: { page: number; limit: number }) => {
           />
         </div>
 
-        <div className="w-full z-20 ">
+        <div className="w-full z-20 flex flex-col items-center justify-between gap-2 t:flex-row">
           <MultiSelect
             activeLabel="Select a Topic"
             id="topics"
             name="topics"
-            onChange={handleSelect}
+            onChange={handleSelectedTopics}
             options={topicOptions}
             selectedValues={selectedTopics}
             icon={<FaTags />}
+          />
+
+          <MultiSelect
+            activeLabel="Select a Difficulty"
+            id="difficulty"
+            name="difficulty"
+            onChange={handleSelectedDifficulty}
+            options={difficultyOptions}
+            selectedValues={selectedDifficulty}
           />
         </div>
 
         <div className="w-full flex flex-row gap-2 flex-wrap">
           {mappedSelectedTopics}
+        </div>
+
+        <div className="w-full flex flex-row gap-2 flex-wrap">
+          {mappedSelectedDifficulty}
         </div>
       </div>
 

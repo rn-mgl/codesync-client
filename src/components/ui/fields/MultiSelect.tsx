@@ -52,9 +52,12 @@ const MultiSelect = (props: MultiSelectField) => {
     });
 
   return (
-    <div className="w-full flex flex-col items-start justify-center gap-1">
+    <div className="w-full flex flex-col items-start justify-center gap-1 t:w-72">
       {props.label ? (
-        <label htmlFor={props.id} className="text-xs text-primary/80 font-medium">
+        <label
+          htmlFor={props.id}
+          className="text-xs text-primary/80 font-medium"
+        >
           {props.label}
         </label>
       ) : null}
