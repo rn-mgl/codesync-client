@@ -15,7 +15,12 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import { FaArrowLeft, FaCode, FaClock, FaEdit } from "react-icons/fa";
-import { FaLink, FaMemory, FaTrashCan, FaWandMagicSparkles } from "react-icons/fa6";
+import {
+  FaLink,
+  FaMemory,
+  FaTrashCan,
+  FaWandMagicSparkles,
+} from "react-icons/fa6";
 import TestCaseLoader from "@/src/components/ui/loader/TestCaseLoader";
 
 const SingleTestCase = () => {

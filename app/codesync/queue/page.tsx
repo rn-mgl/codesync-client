@@ -14,20 +14,24 @@ const Page = async ({
     action: JOB_ACTIONS;
     status: JOB_STATUSES;
     type: JOB_TYPES;
+    page: number;
+    limit: number;
   }>;
 }) => {
   const action: JOB_ACTIONS = (await searchParams).action ?? "count";
   const status: JOB_STATUSES = (await searchParams).status ?? "active";
   const type: JOB_TYPES = (await searchParams).type ?? "listener";
+  const page: number = (await searchParams).page ?? 0;
+  const limit: number = (await searchParams).limit ?? 10;
 
   return (
-    <div className="w-full flex flex-col items-center justify-start h-auto">
+    <div className="w-full h-full flex flex-col items-center justify-start">
       <Toaster style={{ fontFamily: "var(--font-onest)" }} />
       <div className="w-full flex flex-col max-w-(--breakpoint-l-l) gap-8">
         {action === "count" ? (
           <JobsStatusCount />
         ) : action === "list" ? (
-          <JobsList status={status} type={type} />
+          <JobsList status={status} type={type} page={page} limit={limit} />
         ) : null}
       </div>
     </div>

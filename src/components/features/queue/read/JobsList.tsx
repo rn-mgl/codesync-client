@@ -4,6 +4,8 @@ import Table from "@/src/components/ui/containers/Table";
 import TableLoader from "@/src/components/ui/loader/TableLoader";
 import SearchFilter from "@/src/components/ui/filters/SearchFilter";
 import SortFilter from "@/src/components/ui/filters/SortFilter";
+import Paginate from "@/src/components/ui/filters/Paginate";
+import usePaginate from "@/src/hooks/usePaginate";
 import {
   JOB_SEARCH_OPTIONS,
   JOB_SORT_OPTIONS,
@@ -29,7 +31,12 @@ import JobLogs from "./JobLogs";
 import EditJob from "../update/EditJob";
 import Delete from "@/src/components/ui/forms/Delete";
 
-const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
+const JobsList = (props: {
+  type: JOB_TYPES;
+  status: JOB_STATUSES;
+  page: number;
+  limit: number;
+}) => {
   const [jobs, setJobs] = React.useState<JobData[]>([]);
   const [selectedJob, setSelectedJob] = React.useState("");
   const [viewLogs, setViewLogs] = React.useState("");
@@ -49,6 +56,16 @@ const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
 
   const { sortLabel, isAsc, sortKey, handleIsAsc, handleSortKey, sort } =
     useSort(JOB_SORT_OPTIONS, "timestamp");
+
+  const {
+    pages,
+    page,
+    limit,
+    canSelectLimit,
+    handleCanSelectLimit,
+    handleLimit,
+    handlePage,
+  } = usePaginate({ page: props.page, limit: props.limit });
 
   const handleSelectedJob = (id: string) => {
     setSelectedJob((prev) => (id === prev ? "" : id));
@@ -75,6 +92,8 @@ const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
           action: "list",
           type: props.type,
           status: props.status,
+          page: String(props.page),
+          limit: String(props.limit),
         };
 
         const query = new URLSearchParams(searchParams).toString();
@@ -103,7 +122,7 @@ const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
     };
 
     getJobs();
-  }, [props.type, props.status, reload]);
+  }, [props.type, props.status, props.page, props.limit, reload]);
 
   const mappedJobs = sort(filter(jobs)).map((job) => (
     <div
@@ -157,7 +176,7 @@ const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
   ));
 
   return (
-    <div className="w-full flex flex-col items-start justify-start gap-8">
+    <div className="w-full h-full flex flex-col items-start justify-start gap-8">
       {selectedJob && (
         <SingleJob
           type={props.type}
@@ -230,21 +249,33 @@ const JobsList = (props: { type: JOB_TYPES; status: JOB_STATUSES }) => {
         />
       </div>
 
-      {loading ? (
-        <TableLoader rows={6} columns={6} />
-      ) : (
-        <Table<JobData>
-          headers={[
-            "id",
-            "name",
-            "progress",
-            "timestamp",
-            "processedOn",
-            "action",
-          ]}
-          data={mappedJobs}
-        />
-      )}
+      <div className="w-full flex-1 min-h-0">
+        {loading ? (
+          <TableLoader rows={6} columns={6} />
+        ) : (
+          <Table<JobData>
+            headers={[
+              "id",
+              "name",
+              "progress",
+              "timestamp",
+              "processedOn",
+              "action",
+            ]}
+            data={mappedJobs}
+          />
+        )}
+      </div>
+
+      <Paginate
+        limit={limit}
+        pages={pages}
+        page={page}
+        canSelectLimit={canSelectLimit}
+        handleCanSelectLimit={handleCanSelectLimit}
+        handleLimit={handleLimit}
+        handlePage={handlePage}
+      />
     </div>
   );
 };
