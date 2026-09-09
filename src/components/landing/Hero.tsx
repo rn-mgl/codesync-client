@@ -22,14 +22,8 @@ const Hero = () => {
       >
         <div className="w-full flex flex-col items-center justify-center gap-2">
           <h1 className="text-3xl font-black text-secondary t:text-5xl l-l:text-7xl">
-            <span className="bg-linear-to-br from-accent to-success bg-clip-text text-transparent">
-              Practice
-            </span>{" "}
-            problems; <br />{" "}
-            <span className="bg-linear-to-br from-success to-accent bg-clip-text text-transparent">
-              track
-            </span>{" "}
-            every run.
+            <span className="text-accent">Practice</span> problems; <br />{" "}
+            <span className="text-success">track</span> every run.
           </h1>
 
           <h2 className="text-secondary/80 t:text-base max-w-(--breakpoint-t) l-l:text-lg">
@@ -39,11 +33,11 @@ const Hero = () => {
           </h2>
         </div>
 
-        <div className="w-full hover:bg-linear-to-br hover:from-accent/80 hover:to-success/80 hover:p-1 transition-all rounded-md t:w-fit">
+        <div className="w-full transition-all rounded-md t:w-fit">
           <Link
             href="/auth/register"
-            className="bg-linear-to-br from-accent to-success p-2 rounded-md t:max-w-fit t:px-4 font-bold text-secondary w-full
-                    flex flex-row items-center justify-center gap-2"
+            className="bg-accent p-2 rounded-md t:max-w-fit t:px-4 font-bold text-secondary w-full
+                    flex flex-row items-center justify-center gap-2 hover:brightness-110"
           >
             Start Practicing <FaArrowRightLong />
           </Link>

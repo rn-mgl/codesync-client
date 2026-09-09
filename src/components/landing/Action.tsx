@@ -27,7 +27,7 @@ const Action = () => {
     >
       <div className="w-full items-center justify-center flex flex-col gap-8 h-full max-w-(--breakpoint-l-s) z-10">
         <div className="flex flex-col items-center justify-center text-center gap-2">
-          <h1 className="text-3xl font-black t:text-5xl l-l:text-7xl bg-linear-to-r from-accent via-success to-accent p-2 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-black t:text-5xl l-l:text-7xl text-accent p-2">
             Practice with signal
           </h1>
           <p className="text-secondary/80 t:text-base l-l:text-lg">
