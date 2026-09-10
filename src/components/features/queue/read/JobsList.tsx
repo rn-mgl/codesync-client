@@ -65,6 +65,7 @@ const JobsList = (props: {
     handleCanSelectLimit,
     handleLimit,
     handlePage,
+    handlePages,
   } = usePaginate({ page: props.page, limit: props.limit });
 
   const handleSelectedJob = (id: string) => {
@@ -111,9 +112,10 @@ const JobsList = (props: {
           throw new Error(resolve.message);
         }
 
-        const { jobs } = resolve.data;
+        const { jobs, pagination } = resolve.data;
 
         setJobs(jobs);
+        handlePages(pagination.pages);
       } catch (error) {
         errorToast(getErrorMessage(error));
       } finally {
@@ -122,7 +124,7 @@ const JobsList = (props: {
     };
 
     getJobs();
-  }, [props.type, props.status, props.page, props.limit, reload]);
+  }, [props.type, props.status, props.page, props.limit, handlePages, reload]);
 
   const mappedJobs = sort(filter(jobs)).map((job) => (
     <div
