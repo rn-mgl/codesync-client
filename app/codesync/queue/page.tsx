@@ -21,8 +21,8 @@ const Page = async ({
   const action: JOB_ACTIONS = (await searchParams).action ?? "count";
   const status: JOB_STATUSES = (await searchParams).status ?? "active";
   const type: JOB_TYPES = (await searchParams).type ?? "listener";
-  const page: number = (await searchParams).page ?? 0;
-  const limit: number = (await searchParams).limit ?? 10;
+  const page: number = Number((await searchParams).page) || 0;
+  const limit: number = Number((await searchParams).limit) || 10;
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-start">
