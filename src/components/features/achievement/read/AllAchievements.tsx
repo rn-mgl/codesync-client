@@ -37,14 +37,8 @@ const AllAchievements = (paginate: { page: number; limit: number }) => {
     filter,
   } = useSearch(ACHIEVEMENT_SEARCH_OPTIONS, "name");
 
-  const {
-    sortLabel,
-    isAsc,
-    sortKey,
-    handleIsAsc,
-    handleSortKey,
-    sort,
-  } = useSort(ACHIEVEMENT_SORT_OPTIONS, "name");
+  const { sortLabel, isAsc, sortKey, handleIsAsc, handleSortKey, sort } =
+    useSort(ACHIEVEMENT_SORT_OPTIONS, "name");
 
   const {
     pages,
@@ -132,23 +126,27 @@ const AllAchievements = (paginate: { page: number; limit: number }) => {
   return (
     <div className="w-full flex flex-col items-start justify-start gap-8">
       <div className="w-full flex flex-col items-center justify-start gap-2 t:flex-row t:justify-between">
-        <SearchFilter
-          searchKey={searchKey}
-          searchValue={searchValue}
-          searchLabel={searchLabel}
-          options={ACHIEVEMENT_SEARCH_OPTIONS}
-          handleSearchKey={handleSearchKey}
-          handleSearchValue={handleSearchValue}
-        />
+        <div className="w-full t:w-fit z-20 flex">
+          <SearchFilter
+            searchKey={searchKey}
+            searchValue={searchValue}
+            searchLabel={searchLabel}
+            options={ACHIEVEMENT_SEARCH_OPTIONS}
+            handleSearchKey={handleSearchKey}
+            handleSearchValue={handleSearchValue}
+          />
+        </div>
 
-        <SortFilter
-          sortLabel={sortLabel}
-          handleIsAsc={handleIsAsc}
-          handleSortKey={handleSortKey}
-          isAsc={isAsc}
-          options={ACHIEVEMENT_SORT_OPTIONS}
-          sortKey={sortKey}
-        />
+        <div className="w-full t:w-fit z-10 flex">
+          <SortFilter
+            sortLabel={sortLabel}
+            handleIsAsc={handleIsAsc}
+            handleSortKey={handleSortKey}
+            isAsc={isAsc}
+            options={ACHIEVEMENT_SORT_OPTIONS}
+            sortKey={sortKey}
+          />
+        </div>
       </div>
 
       {loading ? (

@@ -37,14 +37,8 @@ const AllHints = (props: { problem?: string; page: number; limit: number }) => {
     filter,
   } = useSearch(HINT_SEARCH_OPTIONS, "problem");
 
-  const {
-    sortLabel,
-    isAsc,
-    sortKey,
-    handleIsAsc,
-    handleSortKey,
-    sort,
-  } = useSort(HINT_SORT_OPTIONS, "problem");
+  const { sortLabel, isAsc, sortKey, handleIsAsc, handleSortKey, sort } =
+    useSort(HINT_SORT_OPTIONS, "problem");
 
   const {
     pages,
@@ -129,23 +123,27 @@ const AllHints = (props: { problem?: string; page: number; limit: number }) => {
   return (
     <div className="w-full flex flex-col gap-8 itemsce justify-start">
       <div className="w-full flex flex-col items-center justify-start gap-2 t:flex-row t:justify-between">
-        <SearchFilter
-          searchKey={searchKey}
-          searchValue={searchValue}
-          searchLabel={searchLabel}
-          options={HINT_SEARCH_OPTIONS}
-          handleSearchKey={handleSearchKey}
-          handleSearchValue={handleSearchValue}
-        />
+        <div className="w-full t:w-fit z-20 flex">
+          <SearchFilter
+            searchKey={searchKey}
+            searchValue={searchValue}
+            searchLabel={searchLabel}
+            options={HINT_SEARCH_OPTIONS}
+            handleSearchKey={handleSearchKey}
+            handleSearchValue={handleSearchValue}
+          />
+        </div>
 
-        <SortFilter
-          sortLabel={sortLabel}
-          handleIsAsc={handleIsAsc}
-          handleSortKey={handleSortKey}
-          isAsc={isAsc}
-          options={HINT_SORT_OPTIONS}
-          sortKey={sortKey}
-        />
+        <div className="w-full t:w-fit z-10 flex">
+          <SortFilter
+            sortLabel={sortLabel}
+            handleIsAsc={handleIsAsc}
+            handleSortKey={handleSortKey}
+            isAsc={isAsc}
+            options={HINT_SORT_OPTIONS}
+            sortKey={sortKey}
+          />
+        </div>
       </div>
 
       {loading ? (

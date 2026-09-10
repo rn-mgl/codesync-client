@@ -216,45 +216,53 @@ const AllProblems = (paginate: { page: number; limit: number }) => {
   return (
     <div className="w-full flex flex-col items-start justify-start gap-4 h-auto">
       <div className="w-full flex flex-col items-center justify-start gap-2">
-        <div className="w-full flex flex-col items-center justify-start gap-2 t:flex-row t:justify-between z-30">
-          <SearchFilter
-            searchKey={searchKey}
-            searchValue={searchValue}
-            searchLabel={searchLabel}
-            options={PROBLEM_SEARCH_OPTIONS}
-            handleSearchKey={handleSearchKey}
-            handleSearchValue={handleSearchValue}
-          />
+        <div className="w-full flex flex-col items-center justify-start gap-2 t:flex-row t:justify-between">
+          <div className="w-full t:w-fit z-30 flex">
+            <SearchFilter
+              searchKey={searchKey}
+              searchValue={searchValue}
+              searchLabel={searchLabel}
+              options={PROBLEM_SEARCH_OPTIONS}
+              handleSearchKey={handleSearchKey}
+              handleSearchValue={handleSearchValue}
+            />
+          </div>
 
-          <SortFilter
-            sortLabel={sortLabel}
-            handleIsAsc={handleIsAsc}
-            handleSortKey={handleSortKey}
-            isAsc={isAsc}
-            options={PROBLEM_SORT_OPTIONS}
-            sortKey={sortKey}
-          />
+          <div className="w-full t:w-fit z-20 flex">
+            <SortFilter
+              sortLabel={sortLabel}
+              handleIsAsc={handleIsAsc}
+              handleSortKey={handleSortKey}
+              isAsc={isAsc}
+              options={PROBLEM_SORT_OPTIONS}
+              sortKey={sortKey}
+            />
+          </div>
         </div>
 
-        <div className="w-full z-20 flex flex-col items-center justify-between gap-2 t:flex-row">
-          <MultiSelect
-            activeLabel="Select a Topic"
-            id="topics"
-            name="topics"
-            onChange={handleSelectedTopics}
-            options={topicOptions}
-            selectedValues={selectedTopics}
-            icon={<FaTags />}
-          />
+        <div className="w-full flex flex-col items-center justify-between gap-2 t:flex-row">
+          <div className="w-full t:w-fit z-10 flex">
+            <MultiSelect
+              activeLabel="Select a Topic"
+              id="topics"
+              name="topics"
+              onChange={handleSelectedTopics}
+              options={topicOptions}
+              selectedValues={selectedTopics}
+              icon={<FaTags />}
+            />
+          </div>
 
-          <MultiSelect
-            activeLabel="Select a Difficulty"
-            id="difficulty"
-            name="difficulty"
-            onChange={handleSelectedDifficulty}
-            options={difficultyOptions}
-            selectedValues={selectedDifficulty}
-          />
+          <div className="w-full t:w-fit z-0 flex">
+            <MultiSelect
+              activeLabel="Select a Difficulty"
+              id="difficulty"
+              name="difficulty"
+              onChange={handleSelectedDifficulty}
+              options={difficultyOptions}
+              selectedValues={selectedDifficulty}
+            />
+          </div>
         </div>
 
         <div className="w-full flex flex-row gap-2 flex-wrap">

@@ -216,7 +216,7 @@ const JobsList = (props: {
         />
       )}
 
-      <div className="w-full flex justify-between items-center">
+      <div className="w-full flex flex-col items-start justify-between gap-8 t:flex-row t:gap-0">
         <Link
           href="/codesync/queue"
           className="text-primary font-bold flex flex-row items-center
@@ -226,29 +226,33 @@ const JobsList = (props: {
           All Jobs
         </Link>
 
-        <p className="font-bold capitalize text-right">
+        <p className="font-bold capitalize text-center w-full t:text-right t:w-fit">
           {normalizeString(props.status)} {props.type} Jobs
         </p>
       </div>
 
       <div className="w-full flex flex-col items-center justify-start gap-2 t:flex-row t:justify-between">
-        <SearchFilter
-          searchKey={searchKey}
-          searchValue={searchValue}
-          searchLabel={searchLabel}
-          options={JOB_SEARCH_OPTIONS}
-          handleSearchKey={handleSearchKey}
-          handleSearchValue={handleSearchValue}
-        />
+        <div className="w-full t:w-fit z-20 flex">
+          <SearchFilter
+            searchKey={searchKey}
+            searchValue={searchValue}
+            searchLabel={searchLabel}
+            options={JOB_SEARCH_OPTIONS}
+            handleSearchKey={handleSearchKey}
+            handleSearchValue={handleSearchValue}
+          />
+        </div>
 
-        <SortFilter
-          sortLabel={sortLabel}
-          handleIsAsc={handleIsAsc}
-          handleSortKey={handleSortKey}
-          isAsc={isAsc}
-          options={JOB_SORT_OPTIONS}
-          sortKey={sortKey}
-        />
+        <div className="w-full t:w-fit z-10 flex">
+          <SortFilter
+            sortLabel={sortLabel}
+            handleIsAsc={handleIsAsc}
+            handleSortKey={handleSortKey}
+            isAsc={isAsc}
+            options={JOB_SORT_OPTIONS}
+            sortKey={sortKey}
+          />
+        </div>
       </div>
 
       <div className="w-full flex-1 min-h-0">

@@ -41,14 +41,8 @@ const AllTestCases = (props: {
     filter,
   } = useSearch(TEST_CASE_SEARCH_OPTIONS, "problem");
 
-  const {
-    sortLabel,
-    isAsc,
-    sortKey,
-    handleIsAsc,
-    handleSortKey,
-    sort,
-  } = useSort(TEST_CASE_SORT_OPTIONS, "problem");
+  const { sortLabel, isAsc, sortKey, handleIsAsc, handleSortKey, sort } =
+    useSort(TEST_CASE_SORT_OPTIONS, "problem");
 
   const {
     pages,
@@ -133,23 +127,27 @@ const AllTestCases = (props: {
   return (
     <div className="flex flex-col items-center justify-start gap-8 w-full">
       <div className="w-full flex flex-col items-center justify-start gap-2 t:flex-row t:justify-between">
-        <SearchFilter
-          searchKey={searchKey}
-          searchValue={searchValue}
-          searchLabel={searchLabel}
-          options={TEST_CASE_SEARCH_OPTIONS}
-          handleSearchKey={handleSearchKey}
-          handleSearchValue={handleSearchValue}
-        />
+        <div className="w-full t:w-fit z-20 flex">
+          <SearchFilter
+            searchKey={searchKey}
+            searchValue={searchValue}
+            searchLabel={searchLabel}
+            options={TEST_CASE_SEARCH_OPTIONS}
+            handleSearchKey={handleSearchKey}
+            handleSearchValue={handleSearchValue}
+          />
+        </div>
 
-        <SortFilter
-          sortLabel={sortLabel}
-          handleIsAsc={handleIsAsc}
-          handleSortKey={handleSortKey}
-          isAsc={isAsc}
-          options={TEST_CASE_SORT_OPTIONS}
-          sortKey={sortKey}
-        />
+        <div className="w-full t:w-fit z-10 flex">
+          <SortFilter
+            sortLabel={sortLabel}
+            handleIsAsc={handleIsAsc}
+            handleSortKey={handleSortKey}
+            isAsc={isAsc}
+            options={TEST_CASE_SORT_OPTIONS}
+            sortKey={sortKey}
+          />
+        </div>
       </div>
 
       {loading ? (

@@ -200,35 +200,39 @@ const UpdateAchievement = () => {
             </div>
           </div>
 
-          <Select
-            label="Badge Color"
-            id="badge_color"
-            name="badge_color"
-            activeLabel={badgeColor.label}
-            onChange={handleBadgeColor}
-            options={[
-              { label: "Gold", value: "gold" },
-              { label: "Silver", value: "silver" },
-              { label: "Bronze", value: "bronze" },
-            ]}
-            value={badgeColor.value}
-          />
+          <div className="w-full z-20 flex">
+            <Select
+              label="Badge Color"
+              id="badge_color"
+              name="badge_color"
+              activeLabel={badgeColor.label}
+              onChange={handleBadgeColor}
+              options={[
+                { label: "Gold", value: "gold" },
+                { label: "Silver", value: "silver" },
+                { label: "Bronze", value: "bronze" },
+              ]}
+              value={badgeColor.value}
+            />
+          </div>
 
-          <Select
-            label="Category"
-            id="category"
-            name="category"
-            activeLabel={category.label}
-            onChange={handleCategory}
-            options={[
-              { label: "Problems", value: "problems" },
-              { label: "Streak", value: "streak" },
-              { label: "Social", value: "social" },
-              { label: "Skill", value: "skill" },
-              { label: "Special", value: "special" },
-            ]}
-            value={category.value}
-          />
+          <div className="w-full z-10 flex">
+            <Select
+              label="Category"
+              id="category"
+              name="category"
+              activeLabel={category.label}
+              onChange={handleCategory}
+              options={[
+                { label: "Problems", value: "problems" },
+                { label: "Streak", value: "streak" },
+                { label: "Social", value: "social" },
+                { label: "Skill", value: "skill" },
+                { label: "Special", value: "special" },
+              ]}
+              value={category.value}
+            />
+          </div>
         </div>
       </div>
 

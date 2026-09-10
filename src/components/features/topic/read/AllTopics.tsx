@@ -34,14 +34,8 @@ const AllTopics = (paginate: { page: number; limit: number }) => {
     filter,
   } = useSearch(TOPIC_SEARCH_OPTIONS, "name");
 
-  const {
-    sortLabel,
-    isAsc,
-    sortKey,
-    handleIsAsc,
-    handleSortKey,
-    sort,
-  } = useSort(TOPIC_SORT_OPTIONS, "name");
+  const { sortLabel, isAsc, sortKey, handleIsAsc, handleSortKey, sort } =
+    useSort(TOPIC_SORT_OPTIONS, "name");
 
   const {
     pages,
@@ -121,23 +115,27 @@ const AllTopics = (paginate: { page: number; limit: number }) => {
   return (
     <div className="w-full flex flex-col items-start justify-start h-auto gap-8">
       <div className="w-full flex flex-col items-center justify-start gap-2 t:flex-row t:justify-between">
-        <SearchFilter
-          searchKey={searchKey}
-          searchValue={searchValue}
-          searchLabel={searchLabel}
-          options={TOPIC_SEARCH_OPTIONS}
-          handleSearchKey={handleSearchKey}
-          handleSearchValue={handleSearchValue}
-        />
+        <div className="w-full t:w-fit z-20 flex">
+          <SearchFilter
+            searchKey={searchKey}
+            searchValue={searchValue}
+            searchLabel={searchLabel}
+            options={TOPIC_SEARCH_OPTIONS}
+            handleSearchKey={handleSearchKey}
+            handleSearchValue={handleSearchValue}
+          />
+        </div>
 
-        <SortFilter
-          sortLabel={sortLabel}
-          handleIsAsc={handleIsAsc}
-          handleSortKey={handleSortKey}
-          isAsc={isAsc}
-          options={TOPIC_SORT_OPTIONS}
-          sortKey={sortKey}
-        />
+        <div className="w-full t:w-fit z-10 flex">
+          <SortFilter
+            sortLabel={sortLabel}
+            handleIsAsc={handleIsAsc}
+            handleSortKey={handleSortKey}
+            isAsc={isAsc}
+            options={TOPIC_SORT_OPTIONS}
+            sortKey={sortKey}
+          />
+        </div>
       </div>
 
       {loading ? (
