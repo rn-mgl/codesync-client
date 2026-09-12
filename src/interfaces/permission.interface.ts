@@ -1,0 +1,8 @@
+export interface BasePermission {
+  id: number;
+  permission: string;
+  description: string;
+  created_by: number;
+  created_at: string;
+  updated_at: string;
+}
