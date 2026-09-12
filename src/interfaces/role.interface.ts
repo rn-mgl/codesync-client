@@ -1,0 +1,7 @@
+export interface BaseRole {
+  id: number;
+  role: string;
+  created_by: number;
+  created_at: string;
+  updated_at: string;
+}
