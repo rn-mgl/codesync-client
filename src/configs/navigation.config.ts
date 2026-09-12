@@ -1,6 +1,12 @@
 import { IconType } from "react-icons";
 import { FaChartBar, FaFlag, FaStar, FaTags, FaTasks } from "react-icons/fa";
-import { FaFileCode, FaGear, FaLightbulb } from "react-icons/fa6";
+import {
+  FaFileCode,
+  FaGear,
+  FaKey,
+  FaLightbulb,
+  FaUser,
+} from "react-icons/fa6";
 
 export const BASE_NAVIGATIONS: { name: string; url: string; icon: IconType }[] =
   [
@@ -39,11 +45,22 @@ export const BASE_NAVIGATIONS: { name: string; url: string; icon: IconType }[] =
       url: "/codesync/queue?action=count",
       icon: FaTasks,
     },
+
     {
-      name: "Settings",
-      url: "/codesync/settings",
-      icon: FaGear,
+      name: "Roles",
+      url: "/codesync/roles",
+      icon: FaUser,
     },
+    {
+      name: "Permissions",
+      url: "/codesync/permissions",
+      icon: FaKey,
+    },
+    // {
+    //   name: "Settings",
+    //   url: "/codesync/settings",
+    //   icon: FaGear,
+    // },
     // {
     //   name: "Sessions",
     //   url: "/codesync/sessions",
