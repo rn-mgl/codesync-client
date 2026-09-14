@@ -67,7 +67,7 @@ export async function GET(req: NextRequest) {
     const url = env.SERVER_URL;
 
     const response = await fetch(`${url}/role`, {
-      method: "POST",
+      method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
