@@ -23,8 +23,8 @@ const AllRoles = () => {
                   hover:bg-neutral-200 first:rounded-t-md last:rounded-b-md"
       >
         <div className="grid grid-cols-2 w-full p-4 gap-4 text-sm items-center">
-          <p>{role.id}</p>
-          <p className="truncate">{role.role}</p>
+          <p className="p-2">{role.id}</p>
+          <p className="truncate p-2">{role.role}</p>
         </div>
       </Link>
     );
