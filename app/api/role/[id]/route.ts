@@ -23,7 +23,7 @@ export async function GET(
     const id = (await params).id;
 
     const response = await fetch(`${url}/role/${id}`, {
-      method: "POST",
+      method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",

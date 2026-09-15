@@ -8,8 +8,16 @@ export interface BaseRole {
   updated_at: string;
 }
 
-export type RoleList = Pick<BaseRole, "id" | "role">;
+export type RoleForm = Pick<BaseRole, "role">;
+
+export type RoleList = Pick<BaseRole, "id" | "role" | "created_at">;
 
 export type GetAllRolesResponse = APIResponse<
   { roles: BaseRole[] } & APIPaginateResponse
 >;
+
+export type GetRoleResponse = APIResponse<{ role: BaseRole }>;
+
+export type CreateRoleResponse = APIResponse<{ message: string }>;
+
+export type UpdateRoleResponse = APIResponse<{ message: string }>;

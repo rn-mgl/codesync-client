@@ -1,8 +1,7 @@
 import SingleRole from "@/src/components/features/role/read/SingleRole";
-import React from "react";
 import { Toaster } from "sonner";
 
-const Page = () => {
+const Page = async () => {
   return (
     <div className="w-full flex flex-col items-center justify-start l-s:overflow-y-hidden l-s:h-full">
       <Toaster style={{ fontFamily: "var(--font-onest)" }} />

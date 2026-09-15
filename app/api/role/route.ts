@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
       throw new UnauthorizedError();
     }
 
-    const body = req.json();
+    const body = await req.json();
 
     if (!("role" in body)) {
       throw new APIError(`Invalid request.`, StatusCodes.BAD_REQUEST);
