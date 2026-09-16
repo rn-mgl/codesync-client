@@ -3,6 +3,7 @@ import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
 import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
 import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
+import { StatusCodes } from "http-status-codes";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -14,7 +15,11 @@ export async function POST(req: NextRequest) {
       throw new UnauthorizedError();
     }
 
-    const body = req.json();
+    const body = await req.json();
+
+    if (!("permission" in body)) {
+      throw new APIError(`Invalid request.`, StatusCodes.BAD_REQUEST);
+    }
 
     const token = cookies.user.token;
     const url = env.SERVER_URL;
@@ -62,7 +67,7 @@ export async function GET(req: NextRequest) {
     const url = env.SERVER_URL;
 
     const response = await fetch(`${url}/permission`, {
-      method: "POST",
+      method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",

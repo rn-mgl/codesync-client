@@ -8,7 +8,8 @@ type ENDPOINTS =
   | "topic"
   | "hint"
   | "queue"
-  | "role";
+  | "role"
+  | "permission";
 
 type DELETE_ENDPOINTS = ENDPOINTS;
 
