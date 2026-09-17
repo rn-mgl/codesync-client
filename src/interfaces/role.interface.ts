@@ -8,6 +8,13 @@ export interface BaseRole {
   updated_at: string;
 }
 
+export interface RolePermissions {
+  role: string;
+  permission: string;
+  role_id: number;
+  permission_id: number;
+}
+
 export type RoleForm = Pick<BaseRole, "role">;
 
 export type RoleList = Pick<BaseRole, "id" | "role" | "created_at">;
@@ -16,7 +23,10 @@ export type GetAllRolesResponse = APIResponse<
   { roles: BaseRole[] } & APIPaginateResponse
 >;
 
-export type GetRoleResponse = APIResponse<{ role: BaseRole }>;
+export type GetRoleResponse = APIResponse<{
+  role: BaseRole;
+  permissions: RolePermissions[];
+}>;
 
 export type CreateRoleResponse = APIResponse<{ message: string }>;
 

@@ -3,8 +3,13 @@
 import DisplayInputField from "@/src/components/ui/containers/DisplayInputField";
 import Delete from "@/src/components/ui/forms/Delete";
 import ListLoader from "@/src/components/ui/loader/ListLoader";
-import { BaseRole, GetRoleResponse } from "@/src/interfaces/role.interface";
+import {
+  BaseRole,
+  GetRoleResponse,
+  RolePermissions,
+} from "@/src/interfaces/role.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
+import { normalizeString } from "@/src/utils/normalizer.util";
 import { errorToast } from "@/src/utils/toast.util";
 import { DateTime } from "luxon";
 import Link from "next/link";
@@ -12,7 +17,8 @@ import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import React from "react";
 import { FaArrowLeft, FaEdit } from "react-icons/fa";
-import { FaCalendar, FaTrashCan, FaUser } from "react-icons/fa6";
+import { FaCalendar, FaPlus, FaTrashCan, FaUser } from "react-icons/fa6";
+import AddPermissions from "../update/AddPermissions";
 
 const SingleRole = () => {
   const [role, setRole] = React.useState<BaseRole>({
@@ -22,15 +28,38 @@ const SingleRole = () => {
     created_by: 0,
     updated_at: "",
   });
+  const [permissions, setPermissions] = React.useState<RolePermissions[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [canDelete, setCanDelete] = React.useState(false);
+  const [canAddPermissions, setCanAddPermissions] = React.useState(false);
 
   const params: { id?: string } | null = useParams();
 
   const router = useRouter();
 
+  const mappedPermissions = permissions.map((rolePermission) => {
+    return (
+      <div
+        key={`${rolePermission.role_id}-${rolePermission.permission_id}`}
+        className="flex flex-row items-center justify-center bg-neutral-200 w-fit p-1 pl-2 rounded-full text-xs gap-2"
+      >
+        <p className="capitalize">
+          {normalizeString(rolePermission.permission)}
+        </p>
+
+        <button className="p-1 aspect-square rounded-full hover:text-red-600 text-neutral-500">
+          <FaTrashCan />
+        </button>
+      </div>
+    );
+  });
+
   const handleCanDelete = () => {
     setCanDelete((prev) => !prev);
+  };
+
+  const handleCanAddPermissions = () => {
+    setCanAddPermissions((prev) => !prev);
   };
 
   React.useEffect(() => {
@@ -53,9 +82,10 @@ const SingleRole = () => {
           throw new Error(resolve.message);
         }
 
-        const { role } = resolve.data;
+        const { role, permissions } = resolve.data;
 
         setRole(role);
+        setPermissions(permissions);
       } catch (error) {
         errorToast(getErrorMessage(error));
       } finally {
@@ -75,6 +105,10 @@ const SingleRole = () => {
           label="Role"
           postDeleteAction={() => router.push("/codesync/roles")}
         />
+      )}
+
+      {canAddPermissions && (
+        <AddPermissions closeModal={handleCanAddPermissions} />
       )}
 
       <div className="w-full flex justify-between">
@@ -111,25 +145,46 @@ const SingleRole = () => {
       {loading ? (
         <ListLoader />
       ) : (
-        <div className="w-full flex flex-col items-start justify-start">
-          <div className="p-4 bg-primary/80 w-full rounded-t-md font-medium text-secondary">
-            Basic Information
+        <>
+          <div className="w-full flex flex-col items-start justify-start">
+            <div className="p-4 bg-primary/80 w-full rounded-t-md font-medium text-secondary">
+              Basic Information
+            </div>
+
+            <div className="w-full flex flex-col items-start justify-start gap-4 p-2 border-primary/50 border rounded-b-md t:p-4">
+              <DisplayInputField
+                value={role.role}
+                icon={<FaUser />}
+                label="Role"
+              />
+
+              <DisplayInputField
+                value={DateTime.fromSQL(role.created_at).toFormat("DDD")}
+                icon={<FaCalendar />}
+                label="Created At"
+              />
+            </div>
           </div>
 
-          <div className="w-full flex flex-col items-start justify-start gap-4 p-2 border-primary/50 border rounded-b-md t:p-4">
-            <DisplayInputField
-              value={role.role}
-              icon={<FaUser />}
-              label="Role"
-            />
+          <div className="w-full flex flex-col items-start justify-start">
+            <div className="p-2 bg-primary/80 w-full rounded-t-md font-medium text-secondary flex flex-row justify-between">
+              <p className="p-2">Granted Permissions</p>
+              <button
+                onClick={handleCanAddPermissions}
+                className="p-2 rounded-full flex flex-row items-center justify-center gap-2 aspect-square"
+              >
+                <FaPlus />
+              </button>
+            </div>
 
-            <DisplayInputField
-              value={DateTime.fromSQL(role.created_at).toFormat("DDD")}
-              icon={<FaCalendar />}
-              label="Created At"
-            />
+            <div
+              className="w-full text-sm p-2 gap-2 t:p-4 t:gap-4 items-start justify-start
+                         border-primary/50 border rounded-b-md flex flex-row flex-wrap"
+            >
+              {mappedPermissions}
+            </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   );
