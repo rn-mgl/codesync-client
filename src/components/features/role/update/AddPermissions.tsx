@@ -1,23 +1,70 @@
 "use client";
 
+import CheckBox from "@/src/components/ui/fields/CheckBox";
 import ListLoader from "@/src/components/ui/loader/ListLoader";
 import useCheckBox from "@/src/hooks/useCheckBox";
 import { BasePermission } from "@/src/interfaces/permission.interface";
 import {
+  CreateRolePermissionResponse,
   GetRolePermissions,
-  RolePermissions,
 } from "@/src/interfaces/role.interface";
+import { normalizeString } from "@/src/utils/normalizer.util";
+import { successToast } from "@/src/utils/toast.util";
 import { useParams } from "next/navigation";
 import React from "react";
-import { FaFileWaveform, FaXmark } from "react-icons/fa6";
+import { FaXmark } from "react-icons/fa6";
 
 const AddPermissions = (props: { closeModal: () => void }) => {
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
   const [permissions, setPermissions] = React.useState<BasePermission[]>([]);
 
   const { checkedItems, handleCheck, prefillCheckedItems } = useCheckBox();
 
   const params: { id?: string } | null = useParams();
+
+  const permissionOptions = permissions.map((p) => ({
+    label: normalizeString(p.permission),
+    value: p.id,
+  }));
+
+  const handleAddPermission = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      setLoading(true);
+
+      if (!params?.id) {
+        return;
+      }
+
+      const payload = {
+        role: params.id,
+        permissions: checkedItems,
+      };
+
+      const response = await fetch(`/api/role-permission`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ role_permission: payload }),
+      });
+
+      const resolve: CreateRolePermissionResponse = await response.json();
+
+      if (!resolve.success) {
+        throw new Error(resolve.message);
+      }
+
+      const { message } = resolve.data;
+
+      successToast(message);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   React.useEffect(() => {
     const getRolePermissions = async () => {
@@ -46,6 +93,8 @@ const AddPermissions = (props: { closeModal: () => void }) => {
         prefillCheckedItems(role_permissions.map((rp) => rp.permission_id));
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -73,8 +122,19 @@ const AddPermissions = (props: { closeModal: () => void }) => {
           {loading ? (
             <ListLoader />
           ) : (
-            <div className="w-full">
-              <div></div>
+            <form
+              onSubmit={(e) => handleAddPermission(e)}
+              className="w-full flex flex-col items-start justify-center gap-4"
+            >
+              <div className="w-full">
+                <CheckBox
+                  handleCheck={handleCheck}
+                  id="permissions"
+                  name="permissions"
+                  options={permissionOptions}
+                  selectedOptions={checkedItems}
+                />
+              </div>
 
               <button
                 type="submit"
@@ -82,7 +142,7 @@ const AddPermissions = (props: { closeModal: () => void }) => {
               >
                 Update
               </button>
-            </div>
+            </form>
           )}
         </div>
       </div>

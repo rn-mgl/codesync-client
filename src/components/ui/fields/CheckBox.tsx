@@ -34,7 +34,7 @@ const CheckBox = (props: CheckBoxField) => {
           <div
             className={`w-5 h-5 border-2 border-neutral-400 rounded-sm ${checked ? "bg-primary" : "bg-secondary"}`}
           />
-          <p>{option.label}</p>
+          <p className="capitalize">{option.label}</p>
         </label>
       );
     });

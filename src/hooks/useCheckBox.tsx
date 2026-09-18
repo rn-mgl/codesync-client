@@ -11,7 +11,7 @@ export default function useCheckBox() {
 
       const value =
         index === -1
-          ? [...prev, String(selected)]
+          ? [...prev, selected]
           : [...prev.slice(0, index), ...prev.slice(index + 1)];
 
       return value;

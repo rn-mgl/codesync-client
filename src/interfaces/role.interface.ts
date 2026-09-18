@@ -37,3 +37,5 @@ export type GetRolePermissions = APIResponse<{
 export type CreateRoleResponse = APIResponse<{ message: string }>;
 
 export type UpdateRoleResponse = APIResponse<{ message: string }>;
+
+export type CreateRolePermissionResponse = APIResponse<{ message: string }>;
