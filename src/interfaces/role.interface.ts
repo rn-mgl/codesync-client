@@ -1,4 +1,5 @@
 import { APIPaginateResponse, APIResponse } from "./api.interface";
+import { BasePermission } from "./permission.interface";
 
 export interface BaseRole {
   id: number;
@@ -26,6 +27,11 @@ export type GetAllRolesResponse = APIResponse<
 export type GetRoleResponse = APIResponse<{
   role: BaseRole;
   permissions: RolePermissions[];
+}>;
+
+export type GetRolePermissions = APIResponse<{
+  role_permissions: RolePermissions[];
+  permissions: BasePermission[];
 }>;
 
 export type CreateRoleResponse = APIResponse<{ message: string }>;

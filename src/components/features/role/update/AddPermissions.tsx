@@ -1,12 +1,56 @@
 "use client";
 
 import ListLoader from "@/src/components/ui/loader/ListLoader";
+import useCheckBox from "@/src/hooks/useCheckBox";
+import { BasePermission } from "@/src/interfaces/permission.interface";
+import {
+  GetRolePermissions,
+  RolePermissions,
+} from "@/src/interfaces/role.interface";
+import { useParams } from "next/navigation";
 import React from "react";
-import { FaXmark } from "react-icons/fa6";
+import { FaFileWaveform, FaXmark } from "react-icons/fa6";
 
 const AddPermissions = (props: { closeModal: () => void }) => {
   const [loading, setLoading] = React.useState(false);
-  const [permissions, setPermissions] = React.useState([]);
+  const [permissions, setPermissions] = React.useState<BasePermission[]>([]);
+
+  const { checkedItems, handleCheck, prefillCheckedItems } = useCheckBox();
+
+  const params: { id?: string } | null = useParams();
+
+  React.useEffect(() => {
+    const getRolePermissions = async () => {
+      try {
+        if (!params?.id) {
+          return;
+        }
+
+        const response = await fetch(`/api/role-permission/${params.id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        const resolve: GetRolePermissions = await response.json();
+
+        if (!resolve.success) {
+          throw new Error(resolve.message);
+        }
+
+        const { permissions, role_permissions } = resolve.data;
+
+        setPermissions(permissions);
+
+        prefillCheckedItems(role_permissions.map((rp) => rp.permission_id));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getRolePermissions();
+  }, [params?.id, prefillCheckedItems]);
 
   return (
     <div
