@@ -41,6 +41,11 @@ export type GetRolePermissions = APIResponse<{
   permissions: BasePermission[];
 }>;
 
+export type GetUserRoles = APIResponse<{
+  user_roles: UserRoles[];
+  users: BaseUser[];
+}>;
+
 export type CreateRoleResponse = APIResponse<{ message: string }>;
 
 export type UpdateRoleResponse = APIResponse<{ message: string }>;

@@ -21,8 +21,11 @@ export async function GET(
     const token = cookies.user.token;
     const url = env.SERVER_URL;
     const id = (await params).id;
+    const searchParams = new URL(req.url).searchParams;
 
-    const response = await fetch(`${url}/role-permission/${id}`, {
+    const query = searchParams.toString();
+
+    const response = await fetch(`${url}/role-permission/${id}?${query}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,

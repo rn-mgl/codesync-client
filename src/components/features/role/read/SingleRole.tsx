@@ -13,15 +13,14 @@ import { getErrorMessage } from "@/src/utils/general.util";
 import { normalizeString } from "@/src/utils/normalizer.util";
 import { errorToast } from "@/src/utils/toast.util";
 import { DateTime } from "luxon";
+import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import { FaArrowLeft, FaEdit } from "react-icons/fa";
 import { FaCalendar, FaPlus, FaTrashCan, FaUser } from "react-icons/fa6";
 import AddPermissions from "../update/AddPermissions";
-import Table from "@/src/components/ui/containers/Table";
-import Image from "next/image";
+import AssignRoles from "../update/AssignRoles";
 
 const SingleRole = () => {
   const [role, setRole] = React.useState<BaseRole>({
@@ -143,6 +142,10 @@ const SingleRole = () => {
 
       {canAddPermissions && (
         <AddPermissions closeModal={handleCanAddPermissions} />
+      )}
+
+      {canAssignUserRole && (
+        <AssignRoles closeModal={handleCanAssignUserRole} />
       )}
 
       <div className="w-full flex justify-between">

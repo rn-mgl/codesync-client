@@ -7,24 +7,27 @@ import { BasePermission } from "@/src/interfaces/permission.interface";
 import {
   CreateRolePermissionResponse,
   GetRolePermissions,
+  GetUserRoles,
 } from "@/src/interfaces/role.interface";
+import { BaseUser } from "@/src/interfaces/user.interface";
 import { normalizeString } from "@/src/utils/normalizer.util";
 import { successToast } from "@/src/utils/toast.util";
 import { useParams } from "next/navigation";
 import React from "react";
 import { FaXmark } from "react-icons/fa6";
 
-const AddPermissions = (props: { closeModal: () => void }) => {
+const AssignRoles = (props: { closeModal: () => void }) => {
   const [loading, setLoading] = React.useState(true);
   const [permissions, setPermissions] = React.useState<BasePermission[]>([]);
+  const [users, setUsers] = React.useState<BaseUser[]>([]);
 
   const { checkedItems, handleCheck, prefillCheckedItems } = useCheckBox();
 
   const params: { id?: string } | null = useParams();
 
-  const permissionOptions = permissions.map((p) => ({
-    label: normalizeString(p.permission),
-    value: p.id,
+  const userOptions = users.map((u) => ({
+    label: `${u.first_name} ${u.last_name} | ${u.username}`,
+    value: u.id,
   }));
 
   const handleAddPermission = async (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -74,7 +77,7 @@ const AddPermissions = (props: { closeModal: () => void }) => {
         }
 
         const searchParams = {
-          lookup: "permissions",
+          lookup: "users",
         };
 
         const query = new URLSearchParams(searchParams).toString();
@@ -89,17 +92,16 @@ const AddPermissions = (props: { closeModal: () => void }) => {
           },
         );
 
-        const resolve: GetRolePermissions = await response.json();
+        const resolve: GetUserRoles = await response.json();
 
         if (!resolve.success) {
           throw new Error(resolve.message);
         }
 
-        const { permissions, role_permissions } = resolve.data;
+        const { user_roles, users } = resolve.data;
 
-        setPermissions(permissions);
-
-        prefillCheckedItems(role_permissions.map((rp) => rp.permission_id));
+        setUsers(users);
+        prefillCheckedItems(user_roles.map((ur) => ur.id));
       } catch (error) {
         console.log(error);
       } finally {
@@ -110,6 +112,8 @@ const AddPermissions = (props: { closeModal: () => void }) => {
     getRolePermissions();
   }, [params?.id, prefillCheckedItems]);
 
+  console.log(checkedItems);
+
   return (
     <div
       className="w-full h-full flex flex-col items-center justify-center fixed top-0 
@@ -117,7 +121,7 @@ const AddPermissions = (props: { closeModal: () => void }) => {
     >
       <div className="w-full h-full flex flex-col items-center justify-center max-w-(--breakpoint-l-l) p-4 gap-2">
         <div className="w-full rounded-lg capitalize bg-primary text-secondary font-bold flex items-center justify-between p-4">
-          <h1>Add Permission</h1>
+          <h1>Assign Role</h1>
 
           <button
             onClick={props.closeModal}
@@ -140,7 +144,7 @@ const AddPermissions = (props: { closeModal: () => void }) => {
                   handleCheck={handleCheck}
                   id="permissions"
                   name="permissions"
-                  options={permissionOptions}
+                  options={userOptions}
                   selectedOptions={checkedItems}
                 />
               </div>
@@ -159,4 +163,4 @@ const AddPermissions = (props: { closeModal: () => void }) => {
   );
 };
 
-export default AddPermissions;
+export default AssignRoles;
