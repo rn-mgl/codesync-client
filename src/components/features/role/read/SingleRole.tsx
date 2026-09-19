@@ -41,15 +41,11 @@ const SingleRole = () => {
     return (
       <div
         key={`${rolePermission.role_id}-${rolePermission.permission_id}`}
-        className="flex flex-row items-center justify-center bg-neutral-200 w-fit p-1 pl-2 rounded-full text-xs gap-2"
+        className="flex flex-row items-center justify-center bg-neutral-200 w-fit p-1 px-2 rounded-full text-xs gap-2"
       >
         <p className="capitalize">
           {normalizeString(rolePermission.permission)}
         </p>
-
-        <button className="p-1 aspect-square rounded-full hover:text-red-600 text-neutral-500">
-          <FaTrashCan />
-        </button>
       </div>
     );
   });
