@@ -7,6 +7,7 @@ import {
   BaseRole,
   GetRoleResponse,
   RolePermissions,
+  UserRoles,
 } from "@/src/interfaces/role.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
 import { normalizeString } from "@/src/utils/normalizer.util";
@@ -19,6 +20,8 @@ import React from "react";
 import { FaArrowLeft, FaEdit } from "react-icons/fa";
 import { FaCalendar, FaPlus, FaTrashCan, FaUser } from "react-icons/fa6";
 import AddPermissions from "../update/AddPermissions";
+import Table from "@/src/components/ui/containers/Table";
+import Image from "next/image";
 
 const SingleRole = () => {
   const [role, setRole] = React.useState<BaseRole>({
@@ -29,9 +32,11 @@ const SingleRole = () => {
     updated_at: "",
   });
   const [permissions, setPermissions] = React.useState<RolePermissions[]>([]);
+  const [users, setUsers] = React.useState<UserRoles[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [canDelete, setCanDelete] = React.useState(false);
   const [canAddPermissions, setCanAddPermissions] = React.useState(false);
+  const [canAssignUserRole, setCanAssignUserRole] = React.useState(false);
 
   const params: { id?: string } | null = useParams();
 
@@ -50,12 +55,44 @@ const SingleRole = () => {
     );
   });
 
+  const mappedUsers = users.map((user) => {
+    return (
+      <div
+        key={user.id}
+        className="w-full gap-2 p-2 rounded-md flex items-center justify-between bg-neutral-200 t:w-fit"
+      >
+        {user.image !== "" ? (
+          <Image
+            src={user.image}
+            width={100}
+            height={100}
+            className="rounded-full aspect-square"
+            alt="image"
+          />
+        ) : (
+          <div className="p-4 aspect-square rounded-full w-10 h-10 max-w-10 max-h-10 bg-primary"></div>
+        )}
+
+        <div className="w-full">
+          <p className="truncate font-bold text-sm">
+            {user.first_name} {user.last_name} | {user.username}
+          </p>
+          <p className="text-xs">{user.email}</p>
+        </div>
+      </div>
+    );
+  });
+
   const handleCanDelete = () => {
     setCanDelete((prev) => !prev);
   };
 
   const handleCanAddPermissions = () => {
     setCanAddPermissions((prev) => !prev);
+  };
+
+  const handleCanAssignUserRole = () => {
+    setCanAssignUserRole((prev) => !prev);
   };
 
   React.useEffect(() => {
@@ -78,10 +115,11 @@ const SingleRole = () => {
           throw new Error(resolve.message);
         }
 
-        const { role, permissions } = resolve.data;
+        const { role, permissions, users } = resolve.data;
 
         setRole(role);
         setPermissions(permissions);
+        setUsers(users);
       } catch (error) {
         errorToast(getErrorMessage(error));
       } finally {
@@ -178,6 +216,25 @@ const SingleRole = () => {
                          border-primary/50 border rounded-b-md flex flex-row flex-wrap"
             >
               {mappedPermissions}
+            </div>
+          </div>
+
+          <div className="w-full flex flex-col items-start justify-start">
+            <div className="p-2 bg-primary/80 w-full rounded-t-md font-medium text-secondary flex flex-row justify-between">
+              <p className="p-2">Users</p>
+              <button
+                onClick={handleCanAssignUserRole}
+                className="p-2 rounded-full flex flex-row items-center justify-center gap-2 aspect-square"
+              >
+                <FaPlus />
+              </button>
+            </div>
+
+            <div
+              className="w-full text-sm p-2 gap-2 t:p-4 t:gap-4 items-start justify-start
+                         border-primary/50 border rounded-b-md flex flex-row flex-wrap"
+            >
+              {mappedUsers}
             </div>
           </div>
         </>

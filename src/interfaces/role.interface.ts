@@ -1,5 +1,6 @@
 import { APIPaginateResponse, APIResponse } from "./api.interface";
 import { BasePermission } from "./permission.interface";
+import { BaseUser } from "./user.interface";
 
 export interface BaseRole {
   id: number;
@@ -16,6 +17,11 @@ export interface RolePermissions {
   permission_id: number;
 }
 
+export type UserRoles = Pick<
+  BaseUser,
+  "id" | "username" | "first_name" | "last_name" | "email" | "image"
+>;
+
 export type RoleForm = Pick<BaseRole, "role">;
 
 export type RoleList = Pick<BaseRole, "id" | "role" | "created_at">;
@@ -27,6 +33,7 @@ export type GetAllRolesResponse = APIResponse<
 export type GetRoleResponse = APIResponse<{
   role: BaseRole;
   permissions: RolePermissions[];
+  users: UserRoles[];
 }>;
 
 export type GetRolePermissions = APIResponse<{
