@@ -9,7 +9,8 @@ import {
   GetRolePermissions,
 } from "@/src/interfaces/role.interface";
 import { normalizeString } from "@/src/utils/normalizer.util";
-import { successToast } from "@/src/utils/toast.util";
+import { getErrorMessage } from "@/src/utils/general.util";
+import { errorToast, successToast } from "@/src/utils/toast.util";
 import { useParams } from "next/navigation";
 import React from "react";
 import { FaXmark } from "react-icons/fa6";
@@ -30,9 +31,9 @@ const AddPermissions = (props: { closeModal: () => void }) => {
   const handleAddPermission = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    try {
-      setLoading(true);
+    setLoading(true);
 
+    try {
       if (!params?.id) {
         return;
       }
@@ -60,7 +61,7 @@ const AddPermissions = (props: { closeModal: () => void }) => {
 
       successToast(message);
     } catch (error) {
-      console.log(error);
+      errorToast(getErrorMessage(error));
     } finally {
       setLoading(false);
     }
@@ -73,21 +74,12 @@ const AddPermissions = (props: { closeModal: () => void }) => {
           return;
         }
 
-        const searchParams = {
-          lookup: "permissions",
-        };
-
-        const query = new URLSearchParams(searchParams).toString();
-
-        const response = await fetch(
-          `/api/role-permission/${params.id}?${query}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
+        const response = await fetch(`/api/role-permission/${params.id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
           },
-        );
+        });
 
         const resolve: GetRolePermissions = await response.json();
 
@@ -101,7 +93,7 @@ const AddPermissions = (props: { closeModal: () => void }) => {
 
         prefillCheckedItems(role_permissions.map((rp) => rp.permission_id));
       } catch (error) {
-        console.log(error);
+        errorToast(getErrorMessage(error));
       } finally {
         setLoading(false);
       }

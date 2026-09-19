@@ -8,7 +8,8 @@ import {
   GetUserRoles,
 } from "@/src/interfaces/role.interface";
 import { BaseUser } from "@/src/interfaces/user.interface";
-import { successToast } from "@/src/utils/toast.util";
+import { getErrorMessage } from "@/src/utils/general.util";
+import { errorToast, successToast } from "@/src/utils/toast.util";
 import { useParams } from "next/navigation";
 import React from "react";
 import { FaXmark } from "react-icons/fa6";
@@ -26,12 +27,12 @@ const AssignRoles = (props: { closeModal: () => void }) => {
     value: u.id,
   }));
 
-  const handleAddPermission = async (e: React.SubmitEvent<HTMLFormElement>) => {
+  const handleAssignRole = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    try {
-      setLoading(true);
+    setLoading(true);
 
+    try {
       if (!params?.id) {
         return;
       }
@@ -59,7 +60,7 @@ const AssignRoles = (props: { closeModal: () => void }) => {
 
       successToast(message);
     } catch (error) {
-      console.log(error);
+      errorToast(getErrorMessage(error));
     } finally {
       setLoading(false);
     }
@@ -72,13 +73,7 @@ const AssignRoles = (props: { closeModal: () => void }) => {
           return;
         }
 
-        const searchParams = {
-          lookup: "users",
-        };
-
-        const query = new URLSearchParams(searchParams).toString();
-
-        const response = await fetch(`/api/user-role/${params.id}?${query}`, {
+        const response = await fetch(`/api/user-role/${params.id}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -96,7 +91,7 @@ const AssignRoles = (props: { closeModal: () => void }) => {
         setUsers(users);
         prefillCheckedItems(user_roles.map((ur) => ur.id));
       } catch (error) {
-        console.log(error);
+        errorToast(getErrorMessage(error));
       } finally {
         setLoading(false);
       }
@@ -104,8 +99,6 @@ const AssignRoles = (props: { closeModal: () => void }) => {
 
     getRolePermissions();
   }, [params?.id, prefillCheckedItems]);
-
-  console.log(checkedItems);
 
   return (
     <div
@@ -129,24 +122,30 @@ const AssignRoles = (props: { closeModal: () => void }) => {
             <ListLoader />
           ) : (
             <form
-              onSubmit={(e) => handleAddPermission(e)}
+              onSubmit={(e) => handleAssignRole(e)}
               className="w-full flex flex-col items-start justify-center gap-4"
             >
-              <div className="w-full">
-                <CheckBox
-                  handleCheck={handleCheck}
-                  id="permissions"
-                  name="permissions"
-                  options={userOptions}
-                  selectedOptions={checkedItems}
-                />
-              </div>
+              <fieldset
+                disabled={loading}
+                className="w-full flex flex-col items-start justify-center gap-4"
+              >
+                <div className="w-full">
+                  <CheckBox
+                    handleCheck={handleCheck}
+                    id="permissions"
+                    name="permissions"
+                    options={userOptions}
+                    selectedOptions={checkedItems}
+                  />
+                </div>
+              </fieldset>
 
               <button
                 type="submit"
-                className="w-full p-2 rounded-md bg-primary text-secondary font-bold mt-2"
+                disabled={loading}
+                className="w-full p-2 rounded-md bg-primary text-secondary font-bold mt-2 disabled:opacity-50"
               >
-                Update
+                {loading ? "Updating..." : "Update"}
               </button>
             </form>
           )}
