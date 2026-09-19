@@ -60,12 +60,12 @@ const SingleRole = () => {
         key={user.id}
         className="w-full gap-2 p-2 rounded-md flex items-center justify-between bg-neutral-200 t:w-fit"
       >
-        {user.image !== "" ? (
+        {typeof user.image === "string" && user.image !== "" ? (
           <Image
             src={user.image}
             width={100}
             height={100}
-            className="rounded-full aspect-square"
+            className="rounded-full aspect-square w-10 h-10 max-w-10 max-h-10"
             alt="image"
           />
         ) : (

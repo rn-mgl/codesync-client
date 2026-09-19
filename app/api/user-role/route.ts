@@ -3,13 +3,11 @@ import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
 import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
 import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
+import { StatusCodes } from "http-status-codes";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ id?: string }> },
-) {
+export async function POST(req: NextRequest) {
   try {
     const cookies = await getToken({ req });
 
@@ -17,17 +15,23 @@ export async function GET(
       throw new UnauthorizedError();
     }
 
+    const body = await req.json();
+
+    if (!("user_role" in body)) {
+      throw new APIError(`Invalid request.`, StatusCodes.BAD_REQUEST);
+    }
+
     const token = cookies.user.token;
     const url = env.SERVER_URL;
-    const id = (await params).id;
 
-    const response = await fetch(`${url}/role-permission/${id}`, {
-      method: "GET",
+    const response = await fetch(`${url}/user-role`, {
+      method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
         Origin: env.APP_URL,
       },
+      body: JSON.stringify(body),
     });
 
     const resolve: ServerResponse = await response.json();

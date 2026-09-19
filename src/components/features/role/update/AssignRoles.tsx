@@ -3,14 +3,11 @@
 import CheckBox from "@/src/components/ui/fields/CheckBox";
 import ListLoader from "@/src/components/ui/loader/ListLoader";
 import useCheckBox from "@/src/hooks/useCheckBox";
-import { BasePermission } from "@/src/interfaces/permission.interface";
 import {
   CreateRolePermissionResponse,
-  GetRolePermissions,
   GetUserRoles,
 } from "@/src/interfaces/role.interface";
 import { BaseUser } from "@/src/interfaces/user.interface";
-import { normalizeString } from "@/src/utils/normalizer.util";
 import { successToast } from "@/src/utils/toast.util";
 import { useParams } from "next/navigation";
 import React from "react";
@@ -18,7 +15,6 @@ import { FaXmark } from "react-icons/fa6";
 
 const AssignRoles = (props: { closeModal: () => void }) => {
   const [loading, setLoading] = React.useState(true);
-  const [permissions, setPermissions] = React.useState<BasePermission[]>([]);
   const [users, setUsers] = React.useState<BaseUser[]>([]);
 
   const { checkedItems, handleCheck, prefillCheckedItems } = useCheckBox();
@@ -42,15 +38,15 @@ const AssignRoles = (props: { closeModal: () => void }) => {
 
       const payload = {
         role: params.id,
-        permissions: checkedItems,
+        users: checkedItems,
       };
 
-      const response = await fetch(`/api/role-permission`, {
+      const response = await fetch(`/api/user-role`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ role_permission: payload }),
+        body: JSON.stringify({ user_role: payload }),
       });
 
       const resolve: CreateRolePermissionResponse = await response.json();
@@ -82,15 +78,12 @@ const AssignRoles = (props: { closeModal: () => void }) => {
 
         const query = new URLSearchParams(searchParams).toString();
 
-        const response = await fetch(
-          `/api/role-permission/${params.id}?${query}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
+        const response = await fetch(`/api/user-role/${params.id}?${query}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
           },
-        );
+        });
 
         const resolve: GetUserRoles = await response.json();
 

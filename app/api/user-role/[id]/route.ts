@@ -21,7 +21,7 @@ export async function GET(
     const url = env.SERVER_URL;
     const id = (await params).id;
 
-    const response = await fetch(`${url}/role-permission/${id}`, {
+    const response = await fetch(`${url}/user-role/${id}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
