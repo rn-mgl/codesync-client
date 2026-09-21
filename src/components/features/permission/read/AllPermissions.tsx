@@ -22,7 +22,6 @@ const AllPermissions = () => {
       <Link
         href={`/codesync/permissions/${permission.id}`}
         key={permission.id}
-        target="_blank"
         rel="noopener noreferrer"
         className="w-full not-last:border-b-2 border-neutral-400 transition-all
                   hover:bg-neutral-200 first:rounded-t-md last:rounded-b-md"

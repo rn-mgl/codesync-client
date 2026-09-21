@@ -58,7 +58,6 @@ const AllAchievements = (paginate: { page: number; limit: number }) => {
       <Link
         href={`/codesync/achievements/${achievement.slug}`}
         key={achievement.id}
-        target="_blank"
         rel="noopener noreferrer"
         className="w-full bg-neutral-200 rounded-lg p-2 flex flex-row gap-2 group hover:bg-neutral-300 transition-all"
       >

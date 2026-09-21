@@ -142,7 +142,6 @@ const AllProblems = (paginate: { page: number; limit: number }) => {
       <Link
         href={`/codesync/problems/${problem.slug}`}
         key={problem.id}
-        target="_blank"
         rel="noopener noreferrer"
         className="w-full not-last:border-b-2 border-neutral-400 transition-all
                   hover:bg-neutral-200 first:rounded-t-md last:rounded-b-md"
