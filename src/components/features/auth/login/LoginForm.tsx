@@ -67,6 +67,7 @@ const LoginForm = () => {
         redirect: false,
         credentials: JSON.stringify({
           token: data.token,
+          permission: data.permission,
           id: data.user.id,
           name: data.user.name,
           image: data.user.image,
@@ -88,7 +89,10 @@ const LoginForm = () => {
       onSubmit={(e) => handleLogin(e)}
       className="w-full flex flex-col items-center justify-center gap-2"
     >
-      <fieldset disabled={loading} className="w-full flex flex-col items-center justify-center gap-2">
+      <fieldset
+        disabled={loading}
+        className="w-full flex flex-col items-center justify-center gap-2"
+      >
         <Input
           id="email"
           name="email"

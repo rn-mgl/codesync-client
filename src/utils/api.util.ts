@@ -3,14 +3,19 @@ import APIError from "@/lib/APIError";
 import { APIResponse, ErrorResponse } from "@/interfaces//api.interface";
 
 export const isJWTCookie = (cookie: unknown): cookie is JWT => {
-  return (
-    typeof cookie === "object" &&
-    cookie !== null &&
-    "user" in cookie &&
-    typeof cookie.user === "object" &&
-    cookie.user !== null &&
-    "token" in cookie.user
-  );
+  const REQUIRED_FIELDS = ["token", "permission"];
+
+  if (typeof cookie !== "object") return false;
+
+  if (cookie === null) return false;
+
+  if (!("user" in cookie)) return false;
+
+  if (typeof cookie.user !== "object") return false;
+
+  if (cookie.user === null) return false;
+
+  return REQUIRED_FIELDS.every((field) => field in cookie);
 };
 
 export const validateDependencies = () => {

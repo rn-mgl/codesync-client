@@ -8,6 +8,7 @@ export const authOptions: AuthOptions = {
       credentials: {
         credentials: {
           token: "",
+          permission: "",
           id: "",
           name: "",
           image: "",
@@ -31,12 +32,15 @@ export const authOptions: AuthOptions = {
       if (
         user &&
         "token" in user &&
+        "permission" in user &&
         typeof user.token === "string" &&
+        typeof user.permission === "string" &&
         typeof user.id === "number" &&
         typeof user.name === "string"
       ) {
         token.user = {
           token: user.token,
+          permission: user.permission,
           id: user.id,
           name: user.name,
           image: user.image ?? "",

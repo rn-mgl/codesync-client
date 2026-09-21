@@ -21,6 +21,7 @@ export async function GET(req: NextRequest) {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${cookies.user.token}`,
+        Allow: `Actions ${cookies.user.permission}`,
         Origin: env.APP_URL,
       },
     });
