@@ -42,6 +42,7 @@ export async function POST(req: NextRequest) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${cookies.user.token}`,
         Origin: env.APP_URL,
+        Allow: `Actions ${cookies.user.permission}`,
       },
       body: JSON.stringify(body),
     });
@@ -86,6 +87,7 @@ export async function GET(req: NextRequest) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${cookies.user.token}`,
         Origin: env.APP_URL,
+        Allow: `Actions ${cookies.user.permission}`,
       },
     });
 

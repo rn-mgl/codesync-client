@@ -1,4 +1,4 @@
-const REQUIRED_ENV = ["APP_URL", "SERVER_URL"] as const;
+const REQUIRED_ENV = ["APP_URL", "SERVER_URL", "PERMISSION_TOKEN"] as const;
 
 type EnvKeys = (typeof REQUIRED_ENV)[number];
 
