@@ -6,7 +6,11 @@ import { StatusCodes } from "http-status-codes";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
 import { getToken } from "next-auth/jwt";
-import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
+import {
+  getPermissions,
+  handleErrorResponse,
+  isJWTCookie,
+} from "@/src/utils/api.util";
 import { env } from "@/src/configs/env.config";
 
 export async function POST(req: NextRequest) {
@@ -36,13 +40,15 @@ export async function POST(req: NextRequest) {
       throw new UnauthorizedError();
     }
 
+    const permissions = getPermissions(cookies);
+
     const response = await fetch(`${url}/problem`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${cookies.user.token}`,
         Origin: env.APP_URL,
-        Allow: `Actions ${cookies.user.permission}`,
+        Allow: `Actions ${permissions}`,
       },
       body: JSON.stringify(body),
     });
@@ -81,13 +87,15 @@ export async function GET(req: NextRequest) {
 
     const query = params.toString();
 
+    const permissions = getPermissions(cookies);
+
     const response = await fetch(`${url}/problem?${query}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${cookies.user.token}`,
         Origin: env.APP_URL,
-        Allow: `Actions ${cookies.user.permission}`,
+        Allow: `Actions ${permissions}`,
       },
     });
 

@@ -3,7 +3,11 @@ import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
 import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
 import { TopicSchema } from "@/src/schemas/topic.schema";
-import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
+import {
+  getPermissions,
+  handleErrorResponse,
+  isJWTCookie,
+} from "@/src/utils/api.util";
 import { StatusCodes } from "http-status-codes";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
@@ -19,6 +23,7 @@ export async function POST(req: NextRequest) {
 
     const token = cookies.user.token;
     const url = env.SERVER_URL;
+    const permissions = getPermissions(cookies);
     const body = await req.json();
 
     if (!("topic" in body)) {
@@ -44,6 +49,7 @@ export async function POST(req: NextRequest) {
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL,
         "Content-Type": "application/json",
+        Allow: `Actions ${permissions}`,
       },
       body: JSON.stringify({ topic }),
     });
@@ -79,6 +85,7 @@ export async function GET(req: NextRequest) {
 
     const token = cookies.user.token;
     const url = env.SERVER_URL;
+    const permissions = getPermissions(cookies);
     const searchParams = new URL(req.url).searchParams;
 
     const query = searchParams.toString();
@@ -89,6 +96,7 @@ export async function GET(req: NextRequest) {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
         Origin: env.APP_URL,
+        Allow: `Actions ${permissions}`,
       },
     });
 

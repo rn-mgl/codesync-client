@@ -1,5 +1,5 @@
 import { env } from "@/src/configs/env.config";
-import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
+import { getPermissions, handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
 import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
@@ -22,6 +22,7 @@ export async function GET(
 
     const token = cookies.user.token;
     const url = env.SERVER_URL;
+    const permissions = getPermissions(cookies);
     const param = (await params).id;
 
     const searchParams = {
@@ -36,6 +37,7 @@ export async function GET(
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL,
+        Allow: `Actions ${permissions}`,
       },
     });
 
@@ -103,12 +105,15 @@ export async function PATCH(
       );
     }
 
+    const permissions = getPermissions(cookies);
+
     const response = await fetch(`${url}/test-case/${param}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL,
+        Allow: `Actions ${permissions}`,
       },
       body: JSON.stringify(body),
     });
@@ -156,12 +161,15 @@ export async function DELETE(
       );
     }
 
+    const permissions = getPermissions(cookies);
+
     const response = await fetch(`${url}/test-case/${param}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL,
+        Allow: `Actions ${permissions}`,
       },
     });
 

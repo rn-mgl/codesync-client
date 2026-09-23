@@ -3,7 +3,11 @@ import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
 import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
 import { AchievementSchema } from "@/src/schemas/achievement.schema";
-import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
+import {
+  getPermissions,
+  handleErrorResponse,
+  isJWTCookie,
+} from "@/src/utils/api.util";
 import { StatusCodes } from "http-status-codes";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
@@ -37,12 +41,15 @@ export async function GET(
 
     const query = new URLSearchParams(searchParams).toString();
 
+    const permissions = getPermissions(cookies);
+
     const response = await fetch(`${url}/achievement/${slug}?${query}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL,
+        Allow: `Actions ${permissions}`,
       },
     });
 
@@ -114,12 +121,15 @@ export async function PATCH(
 
     const query = new URLSearchParams(searchParams).toString();
 
+    const permissions = getPermissions(cookies);
+
     const response = await fetch(`${url}/achievement/${slug}?${query}`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL,
         "Content-Type": "application/json",
+        Allow: `Actions ${permissions}`,
       },
       body: JSON.stringify({ achievement }),
     });
@@ -174,12 +184,15 @@ export async function DELETE(
 
     const query = new URLSearchParams(searchParams).toString();
 
+    const permissions = getPermissions(cookies);
+
     const response = await fetch(`${url}/achievement/${slug}?${query}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL,
+        Allow: `Actions ${permissions}`,
       },
     });
 

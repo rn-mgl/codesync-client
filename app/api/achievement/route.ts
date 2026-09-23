@@ -3,7 +3,11 @@ import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
 import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
 import { AchievementSchema } from "@/src/schemas/achievement.schema";
-import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
+import {
+  getPermissions,
+  handleErrorResponse,
+  isJWTCookie,
+} from "@/src/utils/api.util";
 import { StatusCodes } from "http-status-codes";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
@@ -22,12 +26,15 @@ export async function GET(req: NextRequest) {
     const searchParams = new URL(req.url).searchParams;
     const query = searchParams.toString();
 
+    const permissions = getPermissions(cookies);
+
     const response = await fetch(`${url}/achievement?${query}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL,
+        Allow: `Actions ${permissions}`,
       },
     });
 
@@ -80,12 +87,15 @@ export async function POST(req: NextRequest) {
     const url = env.SERVER_URL;
     const token = cookies.user.token;
 
+    const permissions = getPermissions(cookies);
+
     const response = await fetch(`${url}/achievement`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL,
         "Content-Type": "application/json",
+        Allow: `Actions ${permissions}`,
       },
       body: JSON.stringify({ achievement }),
     });

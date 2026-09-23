@@ -1,5 +1,5 @@
 import { env } from "@/src/configs/env.config";
-import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
+import { getPermissions, handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
 import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
@@ -19,6 +19,7 @@ export async function POST(req: NextRequest) {
 
     const token = cookies.user.token;
     const url = env.SERVER_URL;
+    const permissions = getPermissions(cookies);
     const body = await req.json();
 
     if (!("testCase" in body)) {
@@ -44,6 +45,7 @@ export async function POST(req: NextRequest) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL,
+        Allow: `Actions ${permissions}`,
       },
       body: JSON.stringify(body),
     });
@@ -80,6 +82,7 @@ export async function GET(req: NextRequest) {
     const searchParams = new URL(req.url).searchParams;
     const token = cookies.user.token;
     const url = env.SERVER_URL;
+    const permissions = getPermissions(cookies);
 
     const query = searchParams.toString();
 
@@ -89,6 +92,7 @@ export async function GET(req: NextRequest) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL,
+        Allow: `Actions ${permissions}`,
       },
     });
 

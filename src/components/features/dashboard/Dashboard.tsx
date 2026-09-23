@@ -16,6 +16,7 @@ import React from "react";
 import { FaArrowRight, FaCheckCircle, FaStar } from "react-icons/fa";
 import { FaCode } from "react-icons/fa6";
 import { Toaster } from "sonner";
+import { da } from "zod/v4/locales";
 
 const ACCEPTANCE_COLOR: Record<string, string> = {
   low: "bg-red-600",
@@ -26,7 +27,9 @@ const ACCEPTANCE_COLOR: Record<string, string> = {
 const Dashboard = () => {
   const [dashboard, setDashboard] = React.useState<DashboardStats | null>(null);
 
-  useSession({ required: true });
+  const data = useSession({ required: true });
+
+  console.log(data);
 
   React.useEffect(() => {
     const fetchDashboard = async () => {

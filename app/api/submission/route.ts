@@ -1,5 +1,9 @@
 import { env } from "@/src/configs/env.config";
-import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
+import {
+  getPermissions,
+  handleErrorResponse,
+  isJWTCookie,
+} from "@/src/utils/api.util";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
 import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
@@ -38,12 +42,15 @@ export async function POST(req: NextRequest) {
       throw new UnauthorizedError();
     }
 
+    const permissions = getPermissions(cookies);
+
     const response = await fetch(`${url}/submission`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${cookies?.user.token}`,
         Origin: env.APP_URL,
+        Allow: `Actions ${permissions}`,
       },
       body: JSON.stringify(body),
     });
@@ -80,6 +87,7 @@ export async function GET(req: NextRequest) {
     const request = new URL(req.url);
     const token = cookies.user.token;
     const url = env.SERVER_URL;
+    const permissions = getPermissions(cookies);
 
     const searchParams: Record<string, string> = {
       source: request.searchParams.get("source") ?? "",
@@ -99,6 +107,7 @@ export async function GET(req: NextRequest) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL,
+        Allow: `Actions ${permissions}`,
       },
     });
 

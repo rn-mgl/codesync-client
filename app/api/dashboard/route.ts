@@ -2,7 +2,11 @@ import { env } from "@/src/configs/env.config";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
 import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
-import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
+import {
+  getPermissions,
+  handleErrorResponse,
+  isJWTCookie,
+} from "@/src/utils/api.util";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -16,12 +20,14 @@ export async function GET(req: NextRequest) {
 
     const url = env.SERVER_URL;
 
+    const permissions = getPermissions(cookies);
+
     const response = await fetch(`${url}/dashboard`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${cookies.user.token}`,
-        Allow: `Actions ${cookies.user.permission}`,
+        Allow: `Actions ${permissions}`,
         Origin: env.APP_URL,
       },
     });

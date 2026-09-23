@@ -41,3 +41,9 @@ export const handleErrorResponse = (error: unknown): ErrorResponse => {
 
   return errorResponse;
 };
+
+export const getPermissions = (cookies: JWT) => {
+  const permissions = cookies.user.permission;
+
+  return permissions.join("~");
+};

@@ -2,7 +2,11 @@ import { env } from "@/src/configs/env.config";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
 import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
-import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
+import {
+  getPermissions,
+  handleErrorResponse,
+  isJWTCookie,
+} from "@/src/utils/api.util";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -20,6 +24,7 @@ export async function GET(
     const token = cookies.user.token;
     const url = env.SERVER_URL;
     const id = (await params).id;
+    const permissions = getPermissions(cookies);
 
     const response = await fetch(`${url}/submission/${id}`, {
       method: "GET",
@@ -27,6 +32,7 @@ export async function GET(
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL,
+        Allow: `Actions ${permissions}`,
       },
     });
 

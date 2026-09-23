@@ -1,5 +1,9 @@
 import { env } from "@/src/configs/env.config";
-import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
+import {
+  getPermissions,
+  handleErrorResponse,
+  isJWTCookie,
+} from "@/src/utils/api.util";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
 import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
@@ -39,12 +43,15 @@ export async function GET(
 
     const query = new URLSearchParams(searchParams).toString();
 
+    const permissions = getPermissions(cookies);
+
     const response = await fetch(`${url}/problem/${slug}?${query}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL ?? "",
+        Allow: `Actions ${permissions}`,
       },
     });
 
@@ -111,12 +118,15 @@ export async function PATCH(
     const slug = param.slug;
     const url = env.SERVER_URL;
 
+    const permissions = getPermissions(cookies);
+
     const response = await fetch(`${url}/problem/${slug}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL,
+        Allow: `Actions ${permissions}`,
       },
       body: JSON.stringify(body),
     });
@@ -163,12 +173,15 @@ export async function DELETE(
 
     const query = new URLSearchParams(searchParams).toString();
 
+    const permissions = getPermissions(cookies);
+
     const response = await fetch(`${url}/problem/${slug}?${query}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL,
+        Allow: `Actions ${permissions}`,
       },
     });
 
