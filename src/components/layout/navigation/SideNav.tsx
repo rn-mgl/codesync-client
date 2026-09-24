@@ -16,12 +16,20 @@ const SideNav = (props: {
 
   const navigations = React.useMemo(
     () => getNavigations(props.permissions),
+
     [props.permissions],
   );
 
   const mappedNavigations = navigations.map((nav) => {
     const isSelected =
-      path === "/codesync" ? nav.url === path : nav.url.startsWith(path);
+      nav.url === "/codesync"
+        ? path === nav.url
+        : nav.url !== "/codesync" &&
+          (nav.url.startsWith(path) || path.includes(nav.url));
+
+    // nav.url === codesync -> home page
+    // nav.url !== codesync && nav.url starts with path -> base route (e.g. codesync/queue?action=count) -> check if nav url starts with base path
+    // path.includes nav.url -> nested route (e.g. codesync/problem/work-tree) check if url path includes the base path
 
     return (
       <Link

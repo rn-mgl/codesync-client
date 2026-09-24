@@ -1,7 +1,9 @@
 "use client";
 
 import Table from "@/src/components/ui/containers/Table";
+import Paginate from "@/src/components/ui/filters/Paginate";
 import BlockLoader from "@/src/components/ui/loader/BlockLoader";
+import usePaginate from "@/src/hooks/usePaginate";
 import {
   BasePermission,
   GetAllPermissionsResponse,
@@ -13,9 +15,20 @@ import { DateTime } from "luxon";
 import Link from "next/link";
 import React from "react";
 
-const AllPermissions = () => {
+const AllPermissions = (paginate: { page: number; limit: number }) => {
   const [permissions, setPermissions] = React.useState<BasePermission[]>([]);
   const [loading, setLoading] = React.useState(true);
+
+  const {
+    limit,
+    canSelectLimit,
+    handleCanSelectLimit,
+    handleLimit,
+    handlePage,
+    handlePages,
+    page,
+    pages,
+  } = usePaginate(paginate);
 
   const mappedPermissions = permissions.map((permission) => {
     return (
@@ -41,7 +54,14 @@ const AllPermissions = () => {
   React.useEffect(() => {
     const getPermissions = async () => {
       try {
-        const response = await fetch(`/api/permission`, {
+        const params = {
+          page: String(page),
+          limit: String(limit),
+        };
+
+        const query = new URLSearchParams(params).toString();
+
+        const response = await fetch(`/api/permission?${query}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -54,9 +74,10 @@ const AllPermissions = () => {
           throw new Error(resolve.message);
         }
 
-        const { permissions } = resolve.data;
+        const { permissions, pagination } = resolve.data;
 
         setPermissions(permissions);
+        handlePages(pagination.pages);
       } catch (error) {
         errorToast(getErrorMessage(error));
       } finally {
@@ -65,17 +86,29 @@ const AllPermissions = () => {
     };
 
     getPermissions();
-  }, []);
+  }, [handlePages, page, limit]);
 
   return (
     <div className="w-full flex flex-col items-start justify-start h-auto gap-8">
       {loading ? (
         <BlockLoader />
       ) : (
-        <Table<PermissionList>
-          headers={["id", "permission", "description", "created_at"]}
-          data={mappedPermissions}
-        />
+        <>
+          <Table<PermissionList>
+            headers={["id", "permission", "description", "created_at"]}
+            data={mappedPermissions}
+          />
+
+          <Paginate
+            canSelectLimit={canSelectLimit}
+            handleCanSelectLimit={handleCanSelectLimit}
+            handleLimit={handleLimit}
+            handlePage={handlePage}
+            limit={limit}
+            page={page}
+            pages={pages}
+          />
+        </>
       )}
     </div>
   );

@@ -4,7 +4,14 @@ import React from "react";
 import { FaPlus } from "react-icons/fa";
 import { Toaster } from "sonner";
 
-const Page = async () => {
+const Page = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: number; limit?: number }>;
+}) => {
+  const page = Number((await searchParams).page) || 0;
+  const limit = Number((await searchParams).limit) || 10;
+
   return (
     <div className="w-full h-full flex flex-col items-center justify-start">
       <Toaster style={{ fontFamily: "var(--font-onest)" }} />
@@ -18,7 +25,7 @@ const Page = async () => {
           <FaPlus />
         </Link>
 
-        <AllPermissions />
+        <AllPermissions limit={limit} page={page} />
       </div>
     </div>
   );

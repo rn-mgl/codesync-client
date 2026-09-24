@@ -3,8 +3,15 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import React from "react";
 import { FaEdit } from "react-icons/fa";
-import { FaCode, FaFileCode, FaLightbulb, FaTrashCan, FaWandMagicSparkles } from "react-icons/fa6";
+import {
+  FaCode,
+  FaFileCode,
+  FaLightbulb,
+  FaTrashCan,
+  FaWandMagicSparkles,
+} from "react-icons/fa6";
 import Languages from "@/components/features/problem/read/Languages";
+import { useSession } from "next-auth/react";
 
 // Toolbar above the code editor: links to the problem's test cases/hints,
 // a language picker, and edit/delete actions.
@@ -17,6 +24,9 @@ const ProblemActions = (props: {
   const [canSelectLanguage, setCanSelectLanguage] = React.useState(false);
 
   const params: { slug?: string } | null = useParams();
+  const { data: session } = useSession({ required: true });
+
+  const permission = session?.user.permission ?? [];
 
   const handleCanSelectLanguage = () => {
     setCanSelectLanguage((prev) => !prev);
@@ -70,21 +80,25 @@ const ProblemActions = (props: {
           <FaWandMagicSparkles />
         </button>
 
-        <Link
-          title="Edit"
-          href={`/codesync/problems/${params?.slug}/edit`}
-          className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
-        >
-          <FaEdit />
-        </Link>
+        {permission.includes("problem:update") && (
+          <Link
+            title="Edit"
+            href={`/codesync/problems/${params?.slug}/edit`}
+            className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
+          >
+            <FaEdit />
+          </Link>
+        )}
 
-        <button
-          title="Delete"
-          onClick={props.handleCanDelete}
-          className="p-2 rounded-full bg-inherit hover:text-danger flex flex-col items-center justify-center"
-        >
-          <FaTrashCan />
-        </button>
+        {permission.includes("problem:delete") && (
+          <button
+            title="Delete"
+            onClick={props.handleCanDelete}
+            className="p-2 rounded-full bg-inherit hover:text-danger flex flex-col items-center justify-center"
+          >
+            <FaTrashCan />
+          </button>
+        )}
       </div>
 
       {canSelectLanguage && (

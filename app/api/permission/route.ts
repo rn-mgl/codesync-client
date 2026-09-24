@@ -72,8 +72,13 @@ export async function GET(req: NextRequest) {
     const token = cookies.user.token;
     const url = env.SERVER_URL;
     const permissions = getPermissions(cookies);
+    const params = new URL(req.url).searchParams;
 
-    const response = await fetch(`${url}/permission`, {
+    const query = params.toString();
+
+    console.log(query);
+
+    const response = await fetch(`${url}/permission?${query}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,

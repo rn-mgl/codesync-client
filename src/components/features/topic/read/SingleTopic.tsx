@@ -21,6 +21,7 @@ import {
   FaTrashCan,
   FaWandMagicSparkles,
 } from "react-icons/fa6";
+import { useSession } from "next-auth/react";
 
 const SingleTopic = () => {
   const [topic, setTopic] = React.useState<BaseTopic>({
@@ -35,6 +36,9 @@ const SingleTopic = () => {
   const [loading, setLoading] = React.useState(true);
 
   const params: { slug?: string } | null = useParams();
+
+  const { data: session } = useSession({ required: true });
+  const permissions = session?.user.permission ?? [];
 
   const router = useRouter();
 
@@ -123,21 +127,25 @@ const SingleTopic = () => {
                   <FaWandMagicSparkles />
                 </button>
 
-                <Link
-                  title="Edit"
-                  href={`/codesync/topics/${params?.slug}/edit`}
-                  className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
-                >
-                  <FaEdit />
-                </Link>
+                {permissions.includes("topic:update") && (
+                  <Link
+                    title="Edit"
+                    href={`/codesync/topics/${params?.slug}/edit`}
+                    className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
+                  >
+                    <FaEdit />
+                  </Link>
+                )}
 
-                <button
-                  title="Delete"
-                  onClick={handleCanDelete}
-                  className="p-2 rounded-full bg-inherit hover:text-danger flex flex-col items-center justify-center"
-                >
-                  <FaTrashCan />
-                </button>
+                {permissions.includes("topic:delete") && (
+                  <button
+                    title="Delete"
+                    onClick={handleCanDelete}
+                    className="p-2 rounded-full bg-inherit hover:text-danger flex flex-col items-center justify-center"
+                  >
+                    <FaTrashCan />
+                  </button>
+                )}
               </div>
             </div>
           </div>

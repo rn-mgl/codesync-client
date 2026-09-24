@@ -2,9 +2,9 @@ import { IconType } from "react-icons";
 import { FaChartBar, FaFlag, FaStar, FaTags, FaTasks } from "react-icons/fa";
 import { FaFileCode, FaKey, FaLightbulb, FaUser } from "react-icons/fa6";
 
-type NAVIGATION = { name: string; url: string; icon: IconType }[];
+type NAVIGATION = { name: string; url: string; icon: IconType };
 
-export const BASE_NAVIGATIONS: NAVIGATION = [
+export const BASE_NAVIGATIONS: NAVIGATION[] = [
   {
     name: "Dashboard",
     url: "/codesync",
@@ -53,27 +53,24 @@ export const BASE_NAVIGATIONS: NAVIGATION = [
   // },
 ];
 
-const ADMIN_NAVIGATIONS: NAVIGATION = [
-  {
+const GUARDED_NAVIGATIONS: { [action: string]: NAVIGATION } = {
+  "queue:read": {
     name: "Queue",
     url: "/codesync/queue?action=count",
     icon: FaTasks,
   },
 
-  {
+  "role:read": {
     name: "Roles",
     url: "/codesync/roles",
     icon: FaUser,
   },
-  {
+
+  "permission:read": {
     name: "Permissions",
     url: "/codesync/permissions",
     icon: FaKey,
   },
-];
-
-const GUARDED_NAVIGATIONS: Record<string, NAVIGATION> = {
-  "admin.actions": ADMIN_NAVIGATIONS,
 };
 
 export const getNavigations = (permissions: string[]) => {
@@ -84,7 +81,7 @@ export const getNavigations = (permissions: string[]) => {
       GUARDED_NAVIGATIONS[permission as keyof typeof GUARDED_NAVIGATIONS];
 
     if (value !== undefined) {
-      NAVIGATIONS.push(...value);
+      NAVIGATIONS.push(value);
     }
   }
 
