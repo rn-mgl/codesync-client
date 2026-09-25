@@ -3,7 +3,7 @@ import APIError from "@/lib/APIError";
 import { JWT } from "next-auth/jwt";
 
 export const isJWTCookie = (cookie: unknown): cookie is JWT => {
-  const REQUIRED_FIELDS = ["token", "permission"];
+  const REQUIRED_FIELDS = ["token", "permissions"];
 
   if (typeof cookie !== "object") return false;
 
