@@ -34,7 +34,7 @@ export const authOptions: AuthOptions = {
       if (
         user &&
         "token" in user &&
-        "permission" in user &&
+        "permissions" in user &&
         typeof user.token === "string" &&
         Array.isArray(user.permissions) &&
         typeof user.id === "number" &&
