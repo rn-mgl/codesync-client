@@ -1,8 +1,8 @@
 "use client";
 
-import { BADGE_COLORS } from "@/src/configs/achievement.config";
 import Table from "@/src/components/ui/containers/Table";
 import DashboardLoader from "@/src/components/ui/loader/DashboardLoader";
+import { BADGE_COLORS } from "@/src/configs/achievement.config";
 import {
   DashboardStats,
   GetDashboardResponse,
@@ -16,7 +16,6 @@ import React from "react";
 import { FaArrowRight, FaCheckCircle, FaStar } from "react-icons/fa";
 import { FaCode } from "react-icons/fa6";
 import { Toaster } from "sonner";
-import { da } from "zod/v4/locales";
 
 const ACCEPTANCE_COLOR: Record<string, string> = {
   low: "bg-red-600",
@@ -27,9 +26,7 @@ const ACCEPTANCE_COLOR: Record<string, string> = {
 const Dashboard = () => {
   const [dashboard, setDashboard] = React.useState<DashboardStats | null>(null);
 
-  const data = useSession({ required: true });
-
-  console.log(data);
+  useSession({ required: true });
 
   React.useEffect(() => {
     const fetchDashboard = async () => {

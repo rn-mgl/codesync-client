@@ -20,16 +20,16 @@ const SideNav = (props: {
     [props.permissions],
   );
 
-  const mappedNavigations = navigations.map((nav) => {
-    const isSelected =
-      nav.url === "/codesync"
-        ? path === nav.url
-        : nav.url !== "/codesync" &&
-          (nav.url.startsWith(path) || path.includes(nav.url));
+  const isBasePath = path === "/codesync";
 
-    // nav.url === codesync -> home page
-    // nav.url !== codesync && nav.url starts with path -> base route (e.g. codesync/queue?action=count) -> check if nav url starts with base path
-    // path.includes nav.url -> nested route (e.g. codesync/problem/work-tree) check if url path includes the base path
+  const mappedNavigations = navigations.map((nav) => {
+    const isDashboard = nav.url === "/codesync";
+
+    const isSelected =
+      (isBasePath && isDashboard) ||
+      (!isBasePath &&
+        !isDashboard &&
+        (nav.url.includes(path) || path.includes(nav.url)));
 
     return (
       <Link
