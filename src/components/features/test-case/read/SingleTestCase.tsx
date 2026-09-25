@@ -22,6 +22,8 @@ import {
   FaWandMagicSparkles,
 } from "react-icons/fa6";
 import TestCaseLoader from "@/src/components/ui/loader/TestCaseLoader";
+import { useSession } from "next-auth/react";
+import { destroy, update } from "@/src/configs/permission.config";
 
 const SingleTestCase = () => {
   const [testCase, setTestCase] = React.useState<TestCaseDetails>({
@@ -44,6 +46,10 @@ const SingleTestCase = () => {
   const [canValidate, setCanValidate] = React.useState(false);
 
   const params: { id?: string } | null = useParams();
+
+  const { data: session } = useSession({ required: true });
+
+  const permissions = session?.user.permissions ?? [];
 
   const router = useRouter();
 
@@ -130,21 +136,25 @@ const SingleTestCase = () => {
               <FaWandMagicSparkles />
             </button>
 
-            <Link
-              title="Edit"
-              href={`/codesync/test-cases/${params?.id}/edit`}
-              className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
-            >
-              <FaEdit />
-            </Link>
+            {permissions.includes(update["test-case"]) && (
+              <Link
+                title="Edit"
+                href={`/codesync/test-cases/${params?.id}/edit`}
+                className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
+              >
+                <FaEdit />
+              </Link>
+            )}
 
-            <button
-              title="Delete"
-              onClick={handleCanDelete}
-              className="p-2 rounded-full bg-inherit hover:text-danger flex flex-col items-center justify-center"
-            >
-              <FaTrashCan />
-            </button>
+            {permissions.includes(destroy["test-case"]) && (
+              <button
+                title="Delete"
+                onClick={handleCanDelete}
+                className="p-2 rounded-full bg-inherit hover:text-danger flex flex-col items-center justify-center"
+              >
+                <FaTrashCan />
+              </button>
+            )}
           </div>
         </div>
       </div>
