@@ -6,7 +6,7 @@ interface User {
   id: number;
   name: string;
   image: string | null;
-  permission: string[];
+  permissions: string[];
 }
 
 declare module "next-auth" {

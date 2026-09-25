@@ -10,7 +10,7 @@ const Navigation = ({ children }: { children: React.ReactNode }) => {
 
   const { data: session } = useSession({ required: true });
 
-  const permissions = session?.user.permission ?? [];
+  const permissions = session?.user.permissions ?? [];
 
   const handleShowSideNav = (source?: "link" | "button") => {
     setShowSideNav((prev) => {

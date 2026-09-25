@@ -67,7 +67,7 @@ const LoginForm = () => {
         redirect: false,
         credentials: JSON.stringify({
           token: data.token,
-          permission: data.permission,
+          permissions: data.permissions,
           id: data.user.id,
           name: data.user.name,
           image: data.user.image,

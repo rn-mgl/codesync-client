@@ -12,6 +12,7 @@ import {
 } from "react-icons/fa6";
 import Languages from "@/components/features/problem/read/Languages";
 import { useSession } from "next-auth/react";
+import { destroy, update } from "@/src/configs/permission.config";
 
 // Toolbar above the code editor: links to the problem's test cases/hints,
 // a language picker, and edit/delete actions.
@@ -26,7 +27,7 @@ const ProblemActions = (props: {
   const params: { slug?: string } | null = useParams();
   const { data: session } = useSession({ required: true });
 
-  const permission = session?.user.permission ?? [];
+  const permission = session?.user.permissions ?? [];
 
   const handleCanSelectLanguage = () => {
     setCanSelectLanguage((prev) => !prev);
@@ -80,7 +81,7 @@ const ProblemActions = (props: {
           <FaWandMagicSparkles />
         </button>
 
-        {permission.includes("problem:update") && (
+        {permission.includes(update.problem) && (
           <Link
             title="Edit"
             href={`/codesync/problems/${params?.slug}/edit`}
@@ -90,7 +91,7 @@ const ProblemActions = (props: {
           </Link>
         )}
 
-        {permission.includes("problem:delete") && (
+        {permission.includes(destroy.problem) && (
           <button
             title="Delete"
             onClick={props.handleCanDelete}

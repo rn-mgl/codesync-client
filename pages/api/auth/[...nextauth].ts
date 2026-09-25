@@ -10,7 +10,7 @@ export const authOptions: AuthOptions = {
       credentials: {
         credentials: {
           token: "",
-          permission: [],
+          permissions: [],
           id: 0,
           name: "",
           image: "",
@@ -36,13 +36,13 @@ export const authOptions: AuthOptions = {
         "token" in user &&
         "permission" in user &&
         typeof user.token === "string" &&
-        Array.isArray(user.permission) &&
+        Array.isArray(user.permissions) &&
         typeof user.id === "number" &&
         typeof user.name === "string"
       ) {
         token.user = {
           token: user.token,
-          permission: user.permission,
+          permissions: user.permissions,
           id: user.id,
           name: user.name,
           image: user.image ?? "",

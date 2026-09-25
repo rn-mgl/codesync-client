@@ -22,6 +22,7 @@ import {
   FaWandMagicSparkles,
 } from "react-icons/fa6";
 import { useSession } from "next-auth/react";
+import { destroy, update } from "@/src/configs/permission.config";
 
 const SingleTopic = () => {
   const [topic, setTopic] = React.useState<BaseTopic>({
@@ -38,7 +39,7 @@ const SingleTopic = () => {
   const params: { slug?: string } | null = useParams();
 
   const { data: session } = useSession({ required: true });
-  const permissions = session?.user.permission ?? [];
+  const permissions = session?.user.permissions ?? [];
 
   const router = useRouter();
 
@@ -127,7 +128,7 @@ const SingleTopic = () => {
                   <FaWandMagicSparkles />
                 </button>
 
-                {permissions.includes("topic:update") && (
+                {permissions.includes(update.topic) && (
                   <Link
                     title="Edit"
                     href={`/codesync/topics/${params?.slug}/edit`}
@@ -137,7 +138,7 @@ const SingleTopic = () => {
                   </Link>
                 )}
 
-                {permissions.includes("topic:delete") && (
+                {permissions.includes(destroy.topic) && (
                   <button
                     title="Delete"
                     onClick={handleCanDelete}

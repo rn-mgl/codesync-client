@@ -21,6 +21,8 @@ import {
   FaTrashCan,
   FaWandMagicSparkles,
 } from "react-icons/fa6";
+import { useSession } from "next-auth/react";
+import { destroy, update } from "@/src/configs/permission.config";
 
 const SingleHint = () => {
   const [hint, setHint] = React.useState<BaseHint>({
@@ -37,6 +39,9 @@ const SingleHint = () => {
   const [canValidate, setCanValidate] = React.useState(false);
 
   const params: { id?: string } | null = useParams();
+
+  const { data: session } = useSession({ required: true });
+  const permissions = session?.user.permissions ?? [];
 
   const router = useRouter();
 
@@ -123,21 +128,25 @@ const SingleHint = () => {
               <FaWandMagicSparkles />
             </button>
 
-            <Link
-              title="Edit"
-              href={`/codesync/hints/${params?.id}/edit`}
-              className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
-            >
-              <FaEdit />
-            </Link>
+            {permissions.includes(update.hint) && (
+              <Link
+                title="Edit"
+                href={`/codesync/hints/${params?.id}/edit`}
+                className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
+              >
+                <FaEdit />
+              </Link>
+            )}
 
-            <button
-              title="Delete"
-              onClick={handleCanDelete}
-              className="p-2 rounded-full bg-inherit hover:text-danger flex flex-col items-center justify-center"
-            >
-              <FaTrashCan />
-            </button>
+            {permissions.includes(destroy.hint) && (
+              <button
+                title="Delete"
+                onClick={handleCanDelete}
+                className="p-2 rounded-full bg-inherit hover:text-danger flex flex-col items-center justify-center"
+              >
+                <FaTrashCan />
+              </button>
+            )}
           </div>
         </div>
       </div>

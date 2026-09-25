@@ -43,7 +43,7 @@ export const handleErrorResponse = (error: unknown): ErrorResponse => {
 };
 
 export const getPermissions = (cookies: JWT) => {
-  const permissions = cookies.user.permission;
+  const permissions = cookies.user.permissions;
 
   return permissions.join("~");
 };
