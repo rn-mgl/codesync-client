@@ -1,7 +1,9 @@
 import { env } from "@/src/configs/env.config";
+import { read } from "@/src/configs/permission.config";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
 import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
+import PermissionDeniedError from "@/src/lib/PermissionDeniedAPIError";
 import {
   getPermissions,
   handleErrorResponse,
@@ -17,6 +19,10 @@ export async function GET(req: NextRequest) {
 
     if (!isJWTCookie(cookies)) {
       throw new UnauthorizedError();
+    }
+
+    if (!cookies.user.permissions.includes(read.queue)) {
+      throw new PermissionDeniedError(read.queue);
     }
 
     const searchParams = new URL(req.url).searchParams;

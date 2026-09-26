@@ -1,7 +1,9 @@
 import { env } from "@/src/configs/env.config";
+import { destroy, read, update } from "@/src/configs/permission.config";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
 import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
+import PermissionDeniedError from "@/src/lib/PermissionDeniedAPIError";
 import {
   getPermissions,
   handleErrorResponse,
@@ -20,6 +22,10 @@ export async function GET(
 
     if (!isJWTCookie(cookies)) {
       throw new UnauthorizedError();
+    }
+
+    if (!cookies.user.permissions.includes(read.permission)) {
+      throw new PermissionDeniedError(read.permission);
     }
 
     const token = cookies.user.token;
@@ -68,6 +74,11 @@ export async function PATCH(
     if (!isJWTCookie(cookies)) {
       throw new UnauthorizedError();
     }
+
+    if (!cookies.user.permissions.includes(update.permission)) {
+      throw new PermissionDeniedError(update.permission);
+    }
+
     const token = cookies.user.token;
     const url = env.SERVER_URL;
     const id = (await params).id;
@@ -122,6 +133,11 @@ export async function DELETE(
     if (!isJWTCookie(cookies)) {
       throw new UnauthorizedError();
     }
+
+    if (!cookies.user.permissions.includes(destroy.permission)) {
+      throw new PermissionDeniedError(destroy.permission);
+    }
+
     const token = cookies.user.token;
     const url = env.SERVER_URL;
     const id = (await params).id;

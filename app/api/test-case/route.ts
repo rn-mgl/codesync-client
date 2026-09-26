@@ -1,8 +1,10 @@
 import { env } from "@/src/configs/env.config";
+import { create, read } from "@/src/configs/permission.config";
 import { getPermissions, handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
 import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
+import PermissionDeniedError from "@/src/lib/PermissionDeniedAPIError";
 import { StatusCodes } from "http-status-codes";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
@@ -15,6 +17,10 @@ export async function POST(req: NextRequest) {
 
     if (!isJWTCookie(cookies)) {
       throw new UnauthorizedError();
+    }
+
+    if (!cookies.user.permissions.includes(create["test-case"])) {
+      throw new PermissionDeniedError(create["test-case"]);
     }
 
     const token = cookies.user.token;
@@ -77,6 +83,10 @@ export async function GET(req: NextRequest) {
 
     if (!isJWTCookie(cookies)) {
       throw new UnauthorizedError();
+    }
+
+    if (!cookies.user.permissions.includes(read["test-case"])) {
+      throw new PermissionDeniedError(read["test-case"]);
     }
 
     const searchParams = new URL(req.url).searchParams;

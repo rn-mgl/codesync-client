@@ -1,6 +1,7 @@
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
 import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
+import PermissionDeniedError from "@/src/lib/PermissionDeniedAPIError";
 import { ProblemSchema } from "@/src/schemas/problem.schema";
 import { StatusCodes } from "http-status-codes";
 import { NextRequest, NextResponse } from "next/server";
@@ -12,6 +13,7 @@ import {
   isJWTCookie,
 } from "@/src/utils/api.util";
 import { env } from "@/src/configs/env.config";
+import { create, read } from "@/src/configs/permission.config";
 
 export async function POST(req: NextRequest) {
   try {
@@ -38,6 +40,10 @@ export async function POST(req: NextRequest) {
 
     if (!isJWTCookie(cookies)) {
       throw new UnauthorizedError();
+    }
+
+    if (!cookies.user.permissions.includes(create.problem)) {
+      throw new PermissionDeniedError(create.problem);
     }
 
     const permissions = getPermissions(cookies);
@@ -80,6 +86,10 @@ export async function GET(req: NextRequest) {
 
     if (!isJWTCookie(cookies)) {
       throw new UnauthorizedError();
+    }
+
+    if (!cookies.user.permissions.includes(read.problem)) {
+      throw new PermissionDeniedError(read.problem);
     }
 
     const url = env.SERVER_URL;

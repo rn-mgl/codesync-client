@@ -1,7 +1,9 @@
 import { env } from "@/src/configs/env.config";
+import { create, read } from "@/src/configs/permission.config";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
 import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
+import PermissionDeniedError from "@/src/lib/PermissionDeniedAPIError";
 import { AchievementSchema } from "@/src/schemas/achievement.schema";
 import {
   getPermissions,
@@ -19,6 +21,10 @@ export async function GET(req: NextRequest) {
 
     if (!isJWTCookie(cookies)) {
       throw new UnauthorizedError();
+    }
+
+    if (!cookies.user.permissions.includes(read.achievement)) {
+      throw new PermissionDeniedError(read.achievement);
     }
 
     const url = env.SERVER_URL;
@@ -63,6 +69,10 @@ export async function POST(req: NextRequest) {
 
     if (!isJWTCookie(cookies)) {
       throw new UnauthorizedError();
+    }
+
+    if (!cookies.user.permissions.includes(create.achievement)) {
+      throw new PermissionDeniedError(create.achievement);
     }
 
     const body = await req.json();

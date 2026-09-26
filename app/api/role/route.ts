@@ -1,7 +1,9 @@
 import { env } from "@/src/configs/env.config";
+import { create, read } from "@/src/configs/permission.config";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
 import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
+import PermissionDeniedError from "@/src/lib/PermissionDeniedAPIError";
 import {
   getPermissions,
   handleErrorResponse,
@@ -17,6 +19,10 @@ export async function POST(req: NextRequest) {
 
     if (!isJWTCookie(cookies)) {
       throw new UnauthorizedError();
+    }
+
+    if (!cookies.user.permissions.includes(create.role)) {
+      throw new PermissionDeniedError(create.role);
     }
 
     const body = await req.json();
@@ -67,6 +73,10 @@ export async function GET(req: NextRequest) {
 
     if (!isJWTCookie(cookies)) {
       throw new UnauthorizedError();
+    }
+
+    if (!cookies.user.permissions.includes(read.role)) {
+      throw new PermissionDeniedError(read.role);
     }
 
     const token = cookies.user.token;

@@ -1,4 +1,5 @@
 import { env } from "@/src/configs/env.config";
+import { destroy, read, update } from "@/src/configs/permission.config";
 import {
   getPermissions,
   handleErrorResponse,
@@ -7,6 +8,7 @@ import {
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
 import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
+import PermissionDeniedError from "@/src/lib/PermissionDeniedAPIError";
 import { ProblemSchema } from "@/src/schemas/problem.schema";
 import { StatusCodes } from "http-status-codes";
 import { getToken } from "next-auth/jwt";
@@ -22,6 +24,10 @@ export async function GET(
 
     if (!isJWTCookie(cookies)) {
       throw new UnauthorizedError();
+    }
+
+    if (!cookies.user.permissions.includes(read.problem)) {
+      throw new PermissionDeniedError(read.problem);
     }
 
     const param = await params;
@@ -85,6 +91,10 @@ export async function PATCH(
 
     if (!isJWTCookie(cookies)) {
       throw new UnauthorizedError();
+    }
+
+    if (!cookies.user.permissions.includes(update.problem)) {
+      throw new PermissionDeniedError(update.problem);
     }
 
     const param = await params;
@@ -161,6 +171,10 @@ export async function DELETE(
 
     if (!isJWTCookie(cookies)) {
       throw new UnauthorizedError();
+    }
+
+    if (!cookies.user.permissions.includes(destroy.problem)) {
+      throw new PermissionDeniedError(destroy.problem);
     }
 
     const url = env.SERVER_URL;

@@ -1,7 +1,9 @@
 import { env } from "@/src/configs/env.config";
+import { destroy, read, update } from "@/src/configs/permission.config";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
 import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
+import PermissionDeniedError from "@/src/lib/PermissionDeniedAPIError";
 import { TopicSchema } from "@/src/schemas/topic.schema";
 import {
   getPermissions,
@@ -22,6 +24,10 @@ export async function GET(
 
     if (!isJWTCookie(cookies)) {
       throw new UnauthorizedError();
+    }
+
+    if (!cookies.user.permissions.includes(read.topic)) {
+      throw new PermissionDeniedError(read.topic);
     }
 
     const token = cookies.user.token;
@@ -82,6 +88,10 @@ export async function PATCH(
 
     if (!isJWTCookie(cookies)) {
       throw new UnauthorizedError();
+    }
+
+    if (!cookies.user.permissions.includes(update.topic)) {
+      throw new PermissionDeniedError(update.topic);
     }
 
     const token = cookies.user.token;
@@ -163,6 +173,10 @@ export async function DELETE(
 
     if (!isJWTCookie(cookies)) {
       throw new UnauthorizedError();
+    }
+
+    if (!cookies.user.permissions.includes(destroy.topic)) {
+      throw new PermissionDeniedError(destroy.topic);
     }
 
     const token = cookies.user.token;
