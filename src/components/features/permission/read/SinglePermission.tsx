@@ -4,6 +4,7 @@ import DisplayInputField from "@/src/components/ui/containers/DisplayInputField"
 import DisplayTextArea from "@/src/components/ui/containers/DisplayTextArea";
 import Delete from "@/src/components/ui/forms/Delete";
 import ListLoader from "@/src/components/ui/loader/ListLoader";
+import { destroy, update } from "@/src/configs/permission.config";
 import {
   BasePermission,
   GetPermissionResponse,
@@ -11,6 +12,7 @@ import {
 import { getErrorMessage } from "@/src/utils/general.util";
 import { errorToast } from "@/src/utils/toast.util";
 import { DateTime } from "luxon";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
@@ -27,6 +29,10 @@ const SinglePermission = () => {
     permission: "",
     updated_at: "",
   });
+
+  const { data: session } = useSession({ required: true });
+
+  const permissions = session?.user.permissions ?? [];
 
   const [canDelete, setCanDelete] = React.useState(false);
 
@@ -96,21 +102,25 @@ const SinglePermission = () => {
 
         <div>
           <div className="flex gap-2">
-            <Link
-              title="Edit"
-              href={`/codesync/permissions/${params?.id}/edit`}
-              className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
-            >
-              <FaEdit />
-            </Link>
+            {permissions.includes(update.permission) && (
+              <Link
+                title="Edit"
+                href={`/codesync/permissions/${params?.id}/edit`}
+                className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
+              >
+                <FaEdit />
+              </Link>
+            )}
 
-            <button
-              title="Delete"
-              onClick={handleCanDelete}
-              className="p-2 rounded-full bg-inherit hover:text-danger flex flex-col items-center justify-center"
-            >
-              <FaTrashCan />
-            </button>
+            {permissions.includes(destroy.permission) && (
+              <button
+                title="Delete"
+                onClick={handleCanDelete}
+                className="p-2 rounded-full bg-inherit hover:text-danger flex flex-col items-center justify-center"
+              >
+                <FaTrashCan />
+              </button>
+            )}
           </div>
         </div>
       </div>

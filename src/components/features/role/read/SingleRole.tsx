@@ -21,6 +21,8 @@ import { FaArrowLeft, FaEdit } from "react-icons/fa";
 import { FaCalendar, FaPlus, FaTrashCan, FaUser } from "react-icons/fa6";
 import AddPermissions from "../update/AddPermissions";
 import AssignRoles from "../update/AssignRoles";
+import { destroy, update } from "@/src/configs/permission.config";
+import { useSession } from "next-auth/react";
 
 const SingleRole = () => {
   const [role, setRole] = React.useState<BaseRole>({
@@ -30,7 +32,9 @@ const SingleRole = () => {
     created_by: 0,
     updated_at: "",
   });
-  const [permissions, setPermissions] = React.useState<RolePermissions[]>([]);
+  const [rolePermissions, setRolePermissions] = React.useState<
+    RolePermissions[]
+  >([]);
   const [users, setUsers] = React.useState<UserRoles[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [canDelete, setCanDelete] = React.useState(false);
@@ -39,9 +43,13 @@ const SingleRole = () => {
 
   const params: { id?: string } | null = useParams();
 
+  const { data: session } = useSession({ required: true });
+
+  const permissions = session?.user.permissions ?? [];
+
   const router = useRouter();
 
-  const mappedPermissions = permissions.map((rolePermission) => {
+  const mappedPermissions = rolePermissions.map((rolePermission) => {
     return (
       <div
         key={`${rolePermission.role_id}-${rolePermission.permission_id}`}
@@ -117,7 +125,7 @@ const SingleRole = () => {
         const { role, permissions, users } = resolve.data;
 
         setRole(role);
-        setPermissions(permissions);
+        setRolePermissions(permissions);
         setUsers(users);
       } catch (error) {
         errorToast(getErrorMessage(error));
@@ -160,13 +168,25 @@ const SingleRole = () => {
 
         <div>
           <div className="flex gap-2">
-            <Link
-              title="Edit"
-              href={`/codesync/roles/${params?.id}/edit`}
-              className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
-            >
-              <FaEdit />
-            </Link>
+            {permissions.includes(update.role) && (
+              <Link
+                title="Edit"
+                href={`/codesync/roles/${params?.id}/edit`}
+                className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
+              >
+                <FaEdit />
+              </Link>
+            )}
+
+            {permissions.includes(destroy.role) && (
+              <button
+                title="Delete"
+                onClick={handleCanDelete}
+                className="p-2 rounded-full bg-inherit hover:text-danger flex flex-col items-center justify-center"
+              >
+                <FaTrashCan />
+              </button>
+            )}
 
             <button
               title="Delete"
@@ -206,6 +226,16 @@ const SingleRole = () => {
           <div className="w-full flex flex-col items-start justify-start">
             <div className="p-2 bg-primary/80 w-full rounded-t-md font-medium text-secondary flex flex-row justify-between">
               <p className="p-2">Granted Permissions</p>
+
+              {permissions.includes(update.role) &&
+                permissions.includes(update.permission) && (
+                  <button
+                    onClick={handleCanAddPermissions}
+                    className="p-2 rounded-full flex flex-row items-center justify-center gap-2 aspect-square"
+                  >
+                    <FaPlus />
+                  </button>
+                )}
               <button
                 onClick={handleCanAddPermissions}
                 className="p-2 rounded-full flex flex-row items-center justify-center gap-2 aspect-square"
@@ -225,12 +255,16 @@ const SingleRole = () => {
           <div className="w-full flex flex-col items-start justify-start">
             <div className="p-2 bg-primary/80 w-full rounded-t-md font-medium text-secondary flex flex-row justify-between">
               <p className="p-2">Users</p>
-              <button
-                onClick={handleCanAssignUserRole}
-                className="p-2 rounded-full flex flex-row items-center justify-center gap-2 aspect-square"
-              >
-                <FaPlus />
-              </button>
+
+              {permissions.includes(update.role) &&
+                permissions.includes(update.permission) && (
+                  <button
+                    onClick={handleCanAssignUserRole}
+                    className="p-2 rounded-full flex flex-row items-center justify-center gap-2 aspect-square"
+                  >
+                    <FaPlus />
+                  </button>
+                )}
             </div>
 
             <div

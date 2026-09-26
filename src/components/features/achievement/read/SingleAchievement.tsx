@@ -20,6 +20,7 @@ import AchievementLoader from "@/src/components/ui/loader/AchievementLoader";
 import { FaArrowLeft, FaEdit } from "react-icons/fa";
 import { FaTrashCan, FaWandMagicSparkles } from "react-icons/fa6";
 import Validate from "@/src/components/ui/forms/Validate";
+import { destroy, update } from "@/src/configs/permission.config";
 
 const SingleAchievement = () => {
   const [achievement, setAchievement] = React.useState<BaseAchievement>({
@@ -40,7 +41,9 @@ const SingleAchievement = () => {
   const [canDelete, setCanDelete] = React.useState(false);
   const [canValidate, setCanValidate] = React.useState(false);
 
-  useSession({ required: true });
+  const { data: session } = useSession({ required: true });
+
+  const permissions = session?.user.permissions ?? [];
 
   const router = useRouter();
 
@@ -130,20 +133,25 @@ const SingleAchievement = () => {
             <FaWandMagicSparkles />
           </button>
 
-          <Link
-            href={`/codesync/achievements/${params?.slug}/edit`}
-            type="button"
-            className="hover:text-accent transition-all p-2"
-          >
-            <FaEdit />
-          </Link>
-          <button
-            onClick={handleCanDelete}
-            type="button"
-            className="p-2 rounded-full hover:text-danger transition-all"
-          >
-            <FaTrashCan />
-          </button>
+          {permissions.includes(update.achievement) && (
+            <Link
+              href={`/codesync/achievements/${params?.slug}/edit`}
+              type="button"
+              className="hover:text-accent transition-all p-2"
+            >
+              <FaEdit />
+            </Link>
+          )}
+
+          {permissions.includes(destroy.achievement) && (
+            <button
+              onClick={handleCanDelete}
+              type="button"
+              className="p-2 rounded-full hover:text-danger transition-all"
+            >
+              <FaTrashCan />
+            </button>
+          )}
         </div>
       </div>
 

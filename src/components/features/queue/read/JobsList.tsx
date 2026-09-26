@@ -30,6 +30,8 @@ import SingleJob from "./SingleJob";
 import JobLogs from "./JobLogs";
 import EditJob from "../update/EditJob";
 import Delete from "@/src/components/ui/forms/Delete";
+import { useSession } from "next-auth/react";
+import { destroy, update } from "@/src/configs/permission.config";
 
 const JobsList = (props: {
   type: JOB_TYPES;
@@ -67,6 +69,10 @@ const JobsList = (props: {
     handlePage,
     handlePages,
   } = usePaginate({ page: props.page, limit: props.limit });
+
+  const { data: session } = useSession({ required: true });
+
+  const permissions = session?.user.permissions ?? [];
 
   const handleSelectedJob = (id: string) => {
     setSelectedJob((prev) => (id === prev ? "" : id));
@@ -159,12 +165,23 @@ const JobsList = (props: {
             <FaTerminal />
           </button>
 
-          <button
-            onClick={() => handleEditJob(job.id)}
-            className="p-2 rounded-md bg-secondary hover:text-green-600"
-          >
-            <FaEdit />
-          </button>
+          {permissions.includes(update.queue) && (
+            <button
+              onClick={() => handleEditJob(job.id)}
+              className="p-2 rounded-md bg-secondary hover:text-green-600"
+            >
+              <FaEdit />
+            </button>
+          )}
+
+          {permissions.includes(destroy.queue) && (
+            <button
+              onClick={() => handleDeleteJob(job.id)}
+              className="p-2 rounded-md bg-secondary hover:text-red-600"
+            >
+              <FaTrash />
+            </button>
+          )}
 
           <button
             onClick={() => handleDeleteJob(job.id)}
@@ -195,7 +212,7 @@ const JobsList = (props: {
         />
       )}
 
-      {editJob && (
+      {permissions.includes(update.queue) && editJob && (
         <EditJob
           id={editJob}
           type={props.type}
@@ -203,7 +220,7 @@ const JobsList = (props: {
         />
       )}
 
-      {deleteJob && (
+      {permissions.includes(destroy.queue) && deleteJob && (
         <Delete
           label={`Job ${deleteJob}`}
           closeForm={() => handleDeleteJob(deleteJob)}
