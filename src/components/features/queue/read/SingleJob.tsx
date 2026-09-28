@@ -99,8 +99,6 @@ const SingleJob = (props: {
 
         const { job } = resolve.data;
 
-        console.log("raw job:", JSON.stringify(job));
-
         setJob(job);
       } catch (error) {
         errorToast(getErrorMessage(error));
