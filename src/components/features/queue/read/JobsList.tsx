@@ -150,7 +150,7 @@ const JobsList = (props: {
             ? DateTime.fromMillis(job.processedOn).toFormat("DDD")
             : "-"}
         </span>
-        <span className="flex items-center justify-start gap-2">
+        <span className="flex items-center justify-start gap-2 overflow-x-auto w-full">
           <button
             onClick={() => handleSelectedJob(job.id)}
             className="p-2 rounded-md bg-secondary"

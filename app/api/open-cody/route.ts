@@ -25,6 +25,16 @@ export async function POST(req: NextRequest) {
       throw new APIError(`Invalid request provided.`, StatusCodes.BAD_REQUEST);
     }
 
+    if (
+      body.request.action === "validate_record" &&
+      !cookies.user.permissions.includes(`${body.request.record_type}:update`)
+    ) {
+      throw new APIError(
+        `Invalid permissions provided.`,
+        StatusCodes.BAD_REQUEST,
+      );
+    }
+
     const url = env.SERVER_URL;
     const token = cookies.user.token;
     const permissions = getPermissions(cookies);
