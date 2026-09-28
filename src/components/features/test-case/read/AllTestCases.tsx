@@ -110,9 +110,9 @@ const AllTestCases = (props: {
           throw new Error(resolve.message);
         }
 
-        const { test_cases, pagination } = resolve.data;
+        const { "test-cases": testCaseList, pagination } = resolve.data;
 
-        setTestCases(test_cases);
+        setTestCases(testCaseList);
         handlePages(pagination.pages);
       } catch (error) {
         errorToast(getErrorMessage(error));

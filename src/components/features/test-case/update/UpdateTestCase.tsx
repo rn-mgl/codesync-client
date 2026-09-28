@@ -100,17 +100,17 @@ const UpdateTestCase = () => {
           throw new Error(resolve.message);
         }
 
-        const { test_case } = resolve.data;
+        const { "test-case": testCaseData } = resolve.data;
 
         setTestCase({
-          problem: test_case.slug,
-          expected_output: test_case.expected_output,
-          input: JSON.stringify(test_case.input, null, 2),
-          memory_limit_mb: String(test_case.memory_limit_mb),
-          order_index: String(test_case.order_index),
-          time_limit_ms: String(test_case.time_limit_ms),
-          is_sample: test_case.is_sample,
-          is_hidden: test_case.is_hidden,
+          problem: testCaseData.slug,
+          expected_output: testCaseData.expected_output,
+          input: JSON.stringify(testCaseData.input, null, 2),
+          memory_limit_mb: String(testCaseData.memory_limit_mb),
+          order_index: String(testCaseData.order_index),
+          time_limit_ms: String(testCaseData.time_limit_ms),
+          is_sample: testCaseData.is_sample,
+          is_hidden: testCaseData.is_hidden,
         });
       } catch (error) {
         errorToast(getErrorMessage(error));

@@ -120,22 +120,24 @@ const SingleHint = () => {
 
         <div>
           <div className="flex gap-2">
-            <button
-              title="Validate"
-              onClick={handleCanValidate}
-              className="p-2 rounded-full bg-inherit hover:text-info flex flex-col items-center justify-center"
-            >
-              <FaWandMagicSparkles />
-            </button>
-
             {permissions.includes(update.hint) && (
-              <Link
-                title="Edit"
-                href={`/codesync/hints/${params?.id}/edit`}
-                className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
-              >
-                <FaEdit />
-              </Link>
+              <>
+                <button
+                  title="Validate"
+                  onClick={handleCanValidate}
+                  className="p-2 rounded-full bg-inherit hover:text-info flex flex-col items-center justify-center"
+                >
+                  <FaWandMagicSparkles />
+                </button>
+
+                <Link
+                  title="Edit"
+                  href={`/codesync/hints/${params?.id}/edit`}
+                  className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
+                >
+                  <FaEdit />
+                </Link>
+              </>
             )}
 
             {permissions.includes(destroy.hint) && (

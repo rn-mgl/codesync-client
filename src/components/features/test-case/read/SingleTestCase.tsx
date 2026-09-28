@@ -79,9 +79,9 @@ const SingleTestCase = () => {
           throw new Error(resolve.message);
         }
 
-        const { test_case } = resolve.data;
+        const { "test-case": testCaseData } = resolve.data;
 
-        setTestCase(test_case);
+        setTestCase(testCaseData);
       } catch (error) {
         errorToast(getErrorMessage(error));
       } finally {
@@ -128,22 +128,24 @@ const SingleTestCase = () => {
 
         <div>
           <div className="flex gap-2">
-            <button
-              title="Validate"
-              onClick={handleCanValidate}
-              className="p-2 rounded-full bg-inherit hover:text-info flex flex-col items-center justify-center"
-            >
-              <FaWandMagicSparkles />
-            </button>
-
             {permissions.includes(update["test-case"]) && (
-              <Link
-                title="Edit"
-                href={`/codesync/test-cases/${params?.id}/edit`}
-                className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
-              >
-                <FaEdit />
-              </Link>
+              <>
+                <button
+                  title="Validate"
+                  onClick={handleCanValidate}
+                  className="p-2 rounded-full bg-inherit hover:text-info flex flex-col items-center justify-center"
+                >
+                  <FaWandMagicSparkles />
+                </button>
+
+                <Link
+                  title="Edit"
+                  href={`/codesync/test-cases/${params?.id}/edit`}
+                  className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
+                >
+                  <FaEdit />
+                </Link>
+              </>
             )}
 
             {permissions.includes(destroy["test-case"]) && (

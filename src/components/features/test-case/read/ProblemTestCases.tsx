@@ -90,9 +90,9 @@ const ProblemTestCases = (props: {
           throw new Error(resolve.message);
         }
 
-        const { test_cases, pagination } = resolve.data;
+        const { "test-cases": testCaseList, pagination } = resolve.data;
 
-        setTestCases(test_cases[props.selectedProblem]);
+        setTestCases(testCaseList[props.selectedProblem]);
         handlePages(pagination.pages);
       } catch (error) {
         errorToast(getErrorMessage(error));

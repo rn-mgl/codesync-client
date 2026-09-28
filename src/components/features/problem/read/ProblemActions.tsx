@@ -73,22 +73,23 @@ const ProblemActions = (props: {
       </div>
 
       <div className="flex gap-2">
-        <button
-          title="Validate"
-          onClick={props.handleCanValidate}
-          className="p-2 rounded-full bg-inherit hover:text-info flex flex-col items-center justify-center"
-        >
-          <FaWandMagicSparkles />
-        </button>
-
         {permission.includes(update.problem) && (
-          <Link
-            title="Edit"
-            href={`/codesync/problems/${params?.slug}/edit`}
-            className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
-          >
-            <FaEdit />
-          </Link>
+          <>
+            <button
+              title="Validate"
+              onClick={props.handleCanValidate}
+              className="p-2 rounded-full bg-inherit hover:text-info flex flex-col items-center justify-center"
+            >
+              <FaWandMagicSparkles />
+            </button>
+            <Link
+              title="Edit"
+              href={`/codesync/problems/${params?.slug}/edit`}
+              className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
+            >
+              <FaEdit />
+            </Link>
+          </>
         )}
 
         {permission.includes(destroy.problem) && (

@@ -236,12 +236,6 @@ const SingleRole = () => {
                     <FaPlus />
                   </button>
                 )}
-              <button
-                onClick={handleCanAddPermissions}
-                className="p-2 rounded-full flex flex-row items-center justify-center gap-2 aspect-square"
-              >
-                <FaPlus />
-              </button>
             </div>
 
             <div

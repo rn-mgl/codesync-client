@@ -125,22 +125,24 @@ const SingleAchievement = () => {
         </Link>
 
         <div className="flex flex-row gap-2">
-          <button
-            onClick={handleCanValidate}
-            type="button"
-            className="p-2 rounded-full hover:text-info transition-all"
-          >
-            <FaWandMagicSparkles />
-          </button>
-
           {permissions.includes(update.achievement) && (
-            <Link
-              href={`/codesync/achievements/${params?.slug}/edit`}
-              type="button"
-              className="hover:text-accent transition-all p-2"
-            >
-              <FaEdit />
-            </Link>
+            <>
+              <button
+                onClick={handleCanValidate}
+                type="button"
+                className="p-2 rounded-full hover:text-info transition-all"
+              >
+                <FaWandMagicSparkles />
+              </button>
+
+              <Link
+                href={`/codesync/achievements/${params?.slug}/edit`}
+                type="button"
+                className="hover:text-accent transition-all p-2"
+              >
+                <FaEdit />
+              </Link>
+            </>
           )}
 
           {permissions.includes(destroy.achievement) && (
