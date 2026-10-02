@@ -1,3 +1,4 @@
+import { canAccess } from "@/src/configs/access.config";
 import { env } from "@/src/configs/env.config";
 import { read } from "@/src/configs/permission.config";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
@@ -21,7 +22,7 @@ export async function GET(req: NextRequest) {
       throw new UnauthorizedError();
     }
 
-    if (!cookies.user.permissions.includes(read.queue)) {
+    if (!canAccess(cookies.user.permissions, "queue:read")) {
       throw new PermissionDeniedError(read.queue);
     }
 

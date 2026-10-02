@@ -1,5 +1,6 @@
 "use client";
 
+import { canAccess } from "@/src/configs/access.config";
 import DisplayInputField from "@/src/components/ui/containers/DisplayInputField";
 import DisplayTextArea from "@/src/components/ui/containers/DisplayTextArea";
 import DisplayToggle from "@/src/components/ui/containers/DisplayToggle";
@@ -23,7 +24,6 @@ import {
 } from "react-icons/fa6";
 import TestCaseLoader from "@/src/components/ui/loader/TestCaseLoader";
 import { useSession } from "next-auth/react";
-import { destroy, update } from "@/src/configs/permission.config";
 
 const SingleTestCase = () => {
   const [testCase, setTestCase] = React.useState<TestCaseDetails>({
@@ -128,7 +128,7 @@ const SingleTestCase = () => {
 
         <div>
           <div className="flex gap-2">
-            {permissions.includes(update["test-case"]) && (
+            {canAccess(permissions, "test-case:update") && (
               <>
                 <button
                   title="Validate"
@@ -148,7 +148,7 @@ const SingleTestCase = () => {
               </>
             )}
 
-            {permissions.includes(destroy["test-case"]) && (
+            {canAccess(permissions, "test-case:destroy") && (
               <button
                 title="Delete"
                 onClick={handleCanDelete}

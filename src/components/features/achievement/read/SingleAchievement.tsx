@@ -1,5 +1,6 @@
 "use client";
 
+import { canAccess } from "@/src/configs/access.config";
 import DisplayInputField from "@/src/components/ui/containers/DisplayInputField";
 import DisplayTextArea from "@/src/components/ui/containers/DisplayTextArea";
 import Delete from "@/src/components/ui/forms/Delete";
@@ -20,7 +21,6 @@ import AchievementLoader from "@/src/components/ui/loader/AchievementLoader";
 import { FaArrowLeft, FaEdit } from "react-icons/fa";
 import { FaTrashCan, FaWandMagicSparkles } from "react-icons/fa6";
 import Validate from "@/src/components/ui/forms/Validate";
-import { destroy, update } from "@/src/configs/permission.config";
 
 const SingleAchievement = () => {
   const [achievement, setAchievement] = React.useState<BaseAchievement>({
@@ -125,7 +125,7 @@ const SingleAchievement = () => {
         </Link>
 
         <div className="flex flex-row gap-2">
-          {permissions.includes(update.achievement) && (
+          {canAccess(permissions, "achievement:update") && (
             <>
               <button
                 onClick={handleCanValidate}
@@ -145,7 +145,7 @@ const SingleAchievement = () => {
             </>
           )}
 
-          {permissions.includes(destroy.achievement) && (
+          {canAccess(permissions, "achievement:destroy") && (
             <button
               onClick={handleCanDelete}
               type="button"

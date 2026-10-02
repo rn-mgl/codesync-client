@@ -1,5 +1,6 @@
 "use client";
 
+import { canAccess } from "@/src/configs/access.config";
 import DisplayInputField from "@/src/components/ui/containers/DisplayInputField";
 import DisplayTextArea from "@/src/components/ui/containers/DisplayTextArea";
 import Delete from "@/src/components/ui/forms/Delete";
@@ -22,7 +23,6 @@ import {
   FaWandMagicSparkles,
 } from "react-icons/fa6";
 import { useSession } from "next-auth/react";
-import { destroy, update } from "@/src/configs/permission.config";
 
 const SingleHint = () => {
   const [hint, setHint] = React.useState<BaseHint>({
@@ -120,7 +120,7 @@ const SingleHint = () => {
 
         <div>
           <div className="flex gap-2">
-            {permissions.includes(update.hint) && (
+            {canAccess(permissions, "hint:update") && (
               <>
                 <button
                   title="Validate"
@@ -140,7 +140,7 @@ const SingleHint = () => {
               </>
             )}
 
-            {permissions.includes(destroy.hint) && (
+            {canAccess(permissions, "hint:destroy") && (
               <button
                 title="Delete"
                 onClick={handleCanDelete}

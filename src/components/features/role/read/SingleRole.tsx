@@ -21,7 +21,7 @@ import { FaArrowLeft, FaEdit } from "react-icons/fa";
 import { FaCalendar, FaPlus, FaTrashCan, FaUser } from "react-icons/fa6";
 import AddPermissions from "../update/AddPermissions";
 import AssignRoles from "../update/AssignRoles";
-import { destroy, update } from "@/src/configs/permission.config";
+import { canAccess } from "@/src/configs/access.config";
 import { useSession } from "next-auth/react";
 
 const SingleRole = () => {
@@ -168,7 +168,7 @@ const SingleRole = () => {
 
         <div>
           <div className="flex gap-2">
-            {permissions.includes(update.role) && (
+            {canAccess(permissions, "role:update") && (
               <Link
                 title="Edit"
                 href={`/codesync/roles/${params?.id}/edit`}
@@ -178,7 +178,7 @@ const SingleRole = () => {
               </Link>
             )}
 
-            {permissions.includes(destroy.role) && (
+            {canAccess(permissions, "role:destroy") && (
               <button
                 title="Delete"
                 onClick={handleCanDelete}
@@ -187,14 +187,6 @@ const SingleRole = () => {
                 <FaTrashCan />
               </button>
             )}
-
-            <button
-              title="Delete"
-              onClick={handleCanDelete}
-              className="p-2 rounded-full bg-inherit hover:text-danger flex flex-col items-center justify-center"
-            >
-              <FaTrashCan />
-            </button>
           </div>
         </div>
       </div>
@@ -227,15 +219,14 @@ const SingleRole = () => {
             <div className="p-2 bg-primary/80 w-full rounded-t-md font-medium text-secondary flex flex-row justify-between">
               <p className="p-2">Granted Permissions</p>
 
-              {permissions.includes(update.role) &&
-                permissions.includes(update.permission) && (
-                  <button
-                    onClick={handleCanAddPermissions}
-                    className="p-2 rounded-full flex flex-row items-center justify-center gap-2 aspect-square"
-                  >
-                    <FaPlus />
-                  </button>
-                )}
+              {canAccess(permissions, "role-permission:sync") && (
+                <button
+                  onClick={handleCanAddPermissions}
+                  className="p-2 rounded-full flex flex-row items-center justify-center gap-2 aspect-square"
+                >
+                  <FaPlus />
+                </button>
+              )}
             </div>
 
             <div
@@ -250,15 +241,14 @@ const SingleRole = () => {
             <div className="p-2 bg-primary/80 w-full rounded-t-md font-medium text-secondary flex flex-row justify-between">
               <p className="p-2">Users</p>
 
-              {permissions.includes(update.role) &&
-                permissions.includes(update.permission) && (
-                  <button
-                    onClick={handleCanAssignUserRole}
-                    className="p-2 rounded-full flex flex-row items-center justify-center gap-2 aspect-square"
-                  >
-                    <FaPlus />
-                  </button>
-                )}
+              {canAccess(permissions, "user-role:sync") && (
+                <button
+                  onClick={handleCanAssignUserRole}
+                  className="p-2 rounded-full flex flex-row items-center justify-center gap-2 aspect-square"
+                >
+                  <FaPlus />
+                </button>
+              )}
             </div>
 
             <div

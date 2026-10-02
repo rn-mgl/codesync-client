@@ -1,10 +1,10 @@
 "use client";
 
+import { canAccess } from "@/src/configs/access.config";
 import DisplayInputField from "@/src/components/ui/containers/DisplayInputField";
 import DisplayTextArea from "@/src/components/ui/containers/DisplayTextArea";
 import Delete from "@/src/components/ui/forms/Delete";
 import ListLoader from "@/src/components/ui/loader/ListLoader";
-import { destroy, update } from "@/src/configs/permission.config";
 import {
   BasePermission,
   GetPermissionResponse,
@@ -102,7 +102,7 @@ const SinglePermission = () => {
 
         <div>
           <div className="flex gap-2">
-            {permissions.includes(update.permission) && (
+            {canAccess(permissions, "permission:update") && (
               <Link
                 title="Edit"
                 href={`/codesync/permissions/${params?.id}/edit`}
@@ -112,7 +112,7 @@ const SinglePermission = () => {
               </Link>
             )}
 
-            {permissions.includes(destroy.permission) && (
+            {canAccess(permissions, "permission:destroy") && (
               <button
                 title="Delete"
                 onClick={handleCanDelete}

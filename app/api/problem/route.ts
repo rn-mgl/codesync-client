@@ -1,3 +1,4 @@
+import { canAccess } from "@/src/configs/access.config";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
 import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
@@ -42,7 +43,7 @@ export async function POST(req: NextRequest) {
       throw new UnauthorizedError();
     }
 
-    if (!cookies.user.permissions.includes(create.problem)) {
+    if (!canAccess(cookies.user.permissions, "problem:create")) {
       throw new PermissionDeniedError(create.problem);
     }
 
@@ -88,7 +89,7 @@ export async function GET(req: NextRequest) {
       throw new UnauthorizedError();
     }
 
-    if (!cookies.user.permissions.includes(read.problem)) {
+    if (!canAccess(cookies.user.permissions, "problem:read")) {
       throw new PermissionDeniedError(read.problem);
     }
 

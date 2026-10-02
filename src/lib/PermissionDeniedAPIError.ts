@@ -5,6 +5,7 @@ const VERBS = {
   create: "create",
   read: "view",
   update: "update",
+  destroy: "delete",
   delete: "delete",
 };
 
@@ -12,6 +13,7 @@ const TARGETS = {
   create: (noun: string) => `${/^[aeiou]/i.test(noun) ? "an" : "a"} ${noun}`,
   read: (noun: string) => `${noun}s`,
   update: (noun: string) => `this ${noun}`,
+  destroy: (noun: string) => `this ${noun}`,
   delete: (noun: string) => `this ${noun}`,
 };
 

@@ -1,3 +1,4 @@
+import { canAccess } from "@/src/configs/access.config";
 import { env } from "@/src/configs/env.config";
 import { create, read } from "@/src/configs/permission.config";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
@@ -23,7 +24,7 @@ export async function POST(req: NextRequest) {
       throw new UnauthorizedError();
     }
 
-    if (!cookies.user.permissions.includes(create.topic)) {
+    if (!canAccess(cookies.user.permissions, "topic:create")) {
       throw new PermissionDeniedError(create.topic);
     }
 
@@ -89,7 +90,7 @@ export async function GET(req: NextRequest) {
       throw new UnauthorizedError();
     }
 
-    if (!cookies.user.permissions.includes(read.topic)) {
+    if (!canAccess(cookies.user.permissions, "topic:read")) {
       throw new PermissionDeniedError(read.topic);
     }
 

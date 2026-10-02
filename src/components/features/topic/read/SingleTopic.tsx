@@ -1,5 +1,6 @@
 "use client";
 
+import { canAccess } from "@/src/configs/access.config";
 import TopicLoader from "@/src/components/ui/loader/TopicLoader";
 import DisplayInputField from "@/src/components/ui/containers/DisplayInputField";
 import DisplayTextArea from "@/src/components/ui/containers/DisplayTextArea";
@@ -22,7 +23,6 @@ import {
   FaWandMagicSparkles,
 } from "react-icons/fa6";
 import { useSession } from "next-auth/react";
-import { destroy, update } from "@/src/configs/permission.config";
 
 const SingleTopic = () => {
   const [topic, setTopic] = React.useState<BaseTopic>({
@@ -120,7 +120,7 @@ const SingleTopic = () => {
 
             <div>
               <div className="flex gap-2">
-                {permissions.includes(update.topic) && (
+                {canAccess(permissions, "topic:update") && (
                   <>
                     <button
                       title="Validate"
@@ -140,7 +140,7 @@ const SingleTopic = () => {
                   </>
                 )}
 
-                {permissions.includes(destroy.topic) && (
+                {canAccess(permissions, "topic:destroy") && (
                   <button
                     title="Delete"
                     onClick={handleCanDelete}

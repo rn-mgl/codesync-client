@@ -1,3 +1,4 @@
+import { canAccess } from "@/src/configs/access.config";
 import { env } from "@/src/configs/env.config";
 import { create, read } from "@/src/configs/permission.config";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
@@ -21,7 +22,7 @@ export async function POST(req: NextRequest) {
       throw new UnauthorizedError();
     }
 
-    if (!cookies.user.permissions.includes(create.role)) {
+    if (!canAccess(cookies.user.permissions, "role:create")) {
       throw new PermissionDeniedError(create.role);
     }
 
@@ -75,7 +76,7 @@ export async function GET(req: NextRequest) {
       throw new UnauthorizedError();
     }
 
-    if (!cookies.user.permissions.includes(read.role)) {
+    if (!canAccess(cookies.user.permissions, "role:read")) {
       throw new PermissionDeniedError(read.role);
     }
 

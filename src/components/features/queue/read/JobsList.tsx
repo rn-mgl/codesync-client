@@ -1,5 +1,6 @@
 "use client";
 
+import { canAccess } from "@/src/configs/access.config";
 import Table from "@/src/components/ui/containers/Table";
 import TableLoader from "@/src/components/ui/loader/TableLoader";
 import SearchFilter from "@/src/components/ui/filters/SearchFilter";
@@ -31,7 +32,6 @@ import JobLogs from "./JobLogs";
 import EditJob from "../update/EditJob";
 import Delete from "@/src/components/ui/forms/Delete";
 import { useSession } from "next-auth/react";
-import { destroy, update } from "@/src/configs/permission.config";
 
 const JobsList = (props: {
   type: JOB_TYPES;
@@ -165,7 +165,7 @@ const JobsList = (props: {
             <FaTerminal />
           </button>
 
-          {permissions.includes(update.queue) && (
+          {canAccess(permissions, "queue:update") && (
             <button
               onClick={() => handleEditJob(job.id)}
               className="p-2 rounded-md bg-secondary hover:text-green-600"
@@ -174,7 +174,7 @@ const JobsList = (props: {
             </button>
           )}
 
-          {permissions.includes(destroy.queue) && (
+          {canAccess(permissions, "queue:destroy") && (
             <button
               onClick={() => handleDeleteJob(job.id)}
               className="p-2 rounded-md bg-secondary hover:text-red-600"
@@ -212,7 +212,7 @@ const JobsList = (props: {
         />
       )}
 
-      {permissions.includes(update.queue) && editJob && (
+      {canAccess(permissions, "queue:update") && editJob && (
         <EditJob
           id={editJob}
           type={props.type}
@@ -220,7 +220,7 @@ const JobsList = (props: {
         />
       )}
 
-      {permissions.includes(destroy.queue) && deleteJob && (
+      {canAccess(permissions, "queue:destroy") && deleteJob && (
         <Delete
           label={`Job ${deleteJob}`}
           closeForm={() => handleDeleteJob(deleteJob)}

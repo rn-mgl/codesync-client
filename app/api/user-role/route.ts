@@ -1,6 +1,8 @@
+import { getMissingPermissions } from "@/src/configs/access.config";
 import { env } from "@/src/configs/env.config";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
+import PermissionDeniedError from "@/src/lib/PermissionDeniedAPIError";
 import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
 import {
   getPermissions,
@@ -17,6 +19,15 @@ export async function POST(req: NextRequest) {
 
     if (!isJWTCookie(cookies)) {
       throw new UnauthorizedError();
+    }
+
+    const missing = getMissingPermissions(
+      cookies.user.permissions,
+      "user-role:sync",
+    );
+
+    if (missing.length) {
+      throw new PermissionDeniedError(missing[0]);
     }
 
     const body = await req.json();

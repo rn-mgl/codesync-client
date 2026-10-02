@@ -1,3 +1,4 @@
+import { canAccess } from "@/src/configs/access.config";
 import { env } from "@/src/configs/env.config";
 import { create, read } from "@/src/configs/permission.config";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
@@ -19,7 +20,7 @@ export async function POST(req: NextRequest) {
       throw new UnauthorizedError();
     }
 
-    if (!cookies.user.permissions.includes(create.hint)) {
+    if (!canAccess(cookies.user.permissions, "hint:create")) {
       throw new PermissionDeniedError(create.hint);
     }
 
@@ -86,7 +87,7 @@ export async function GET(req: NextRequest, {}) {
       throw new UnauthorizedError();
     }
 
-    if (!cookies.user.permissions.includes(read.hint)) {
+    if (!canAccess(cookies.user.permissions, "hint:read")) {
       throw new PermissionDeniedError(read.hint);
     }
 

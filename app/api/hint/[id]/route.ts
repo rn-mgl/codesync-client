@@ -1,3 +1,4 @@
+import { canAccess } from "@/src/configs/access.config";
 import { env } from "@/src/configs/env.config";
 import { destroy, read, update } from "@/src/configs/permission.config";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
@@ -26,7 +27,7 @@ export async function GET(
       throw new UnauthorizedError();
     }
 
-    if (!cookies.user.permissions.includes(read.hint)) {
+    if (!canAccess(cookies.user.permissions, "hint:read")) {
       throw new PermissionDeniedError(read.hint);
     }
 
@@ -77,7 +78,7 @@ export async function PATCH(
       throw new UnauthorizedError();
     }
 
-    if (!cookies.user.permissions.includes(update.hint)) {
+    if (!canAccess(cookies.user.permissions, "hint:update")) {
       throw new PermissionDeniedError(update.hint);
     }
 
@@ -148,7 +149,7 @@ export async function DELETE(
       throw new UnauthorizedError();
     }
 
-    if (!cookies.user.permissions.includes(destroy.hint)) {
+    if (!canAccess(cookies.user.permissions, "hint:destroy")) {
       throw new PermissionDeniedError(destroy.hint);
     }
 

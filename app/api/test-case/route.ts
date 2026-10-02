@@ -1,3 +1,4 @@
+import { canAccess } from "@/src/configs/access.config";
 import { env } from "@/src/configs/env.config";
 import { create, read } from "@/src/configs/permission.config";
 import { getPermissions, handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
@@ -19,7 +20,7 @@ export async function POST(req: NextRequest) {
       throw new UnauthorizedError();
     }
 
-    if (!cookies.user.permissions.includes(create["test-case"])) {
+    if (!canAccess(cookies.user.permissions, "test-case:create")) {
       throw new PermissionDeniedError(create["test-case"]);
     }
 
@@ -85,7 +86,7 @@ export async function GET(req: NextRequest) {
       throw new UnauthorizedError();
     }
 
-    if (!cookies.user.permissions.includes(read["test-case"])) {
+    if (!canAccess(cookies.user.permissions, "test-case:read")) {
       throw new PermissionDeniedError(read["test-case"]);
     }
 

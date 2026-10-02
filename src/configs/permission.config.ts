@@ -32,12 +32,12 @@ export const update = {
 };
 
 export const destroy = {
-  problem: "problem:delete",
-  topic: "topic:delete",
-  hint: "hint:delete",
-  "test-case": "test-case:delete",
-  achievement: "achievement:delete",
-  queue: "queue:delete",
-  role: "role:delete",
-  permission: "permission:delete",
+  problem: "problem:destroy",
+  topic: "topic:destroy",
+  hint: "hint:destroy",
+  "test-case": "test-case:destroy",
+  achievement: "achievement:destroy",
+  queue: "queue:destroy",
+  role: "role:destroy",
+  permission: "permission:destroy",
 };

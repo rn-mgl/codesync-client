@@ -1,3 +1,4 @@
+import { canAccess } from "@/src/configs/access.config";
 import { SupportedLanguages } from "@/src/interfaces/language.interface";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -12,7 +13,6 @@ import {
 } from "react-icons/fa6";
 import Languages from "@/components/features/problem/read/Languages";
 import { useSession } from "next-auth/react";
-import { destroy, update } from "@/src/configs/permission.config";
 
 // Toolbar above the code editor: links to the problem's test cases/hints,
 // a language picker, and edit/delete actions.
@@ -73,7 +73,7 @@ const ProblemActions = (props: {
       </div>
 
       <div className="flex gap-2">
-        {permission.includes(update.problem) && (
+        {canAccess(permission, "problem:update") && (
           <>
             <button
               title="Validate"
@@ -92,7 +92,7 @@ const ProblemActions = (props: {
           </>
         )}
 
-        {permission.includes(destroy.problem) && (
+        {canAccess(permission, "problem:destroy") && (
           <button
             title="Delete"
             onClick={props.handleCanDelete}

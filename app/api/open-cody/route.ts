@@ -1,3 +1,4 @@
+import { canAccessAction } from "@/src/configs/access.config";
 import { env } from "@/src/configs/env.config";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
@@ -27,7 +28,11 @@ export async function POST(req: NextRequest) {
 
     if (
       body.request.action === "validate_record" &&
-      !cookies.user.permissions.includes(`${body.request.record_type}:update`)
+      !canAccessAction(
+        cookies.user.permissions,
+        body.request.record_type,
+        "update",
+      )
     ) {
       throw new APIError(
         `Invalid permissions provided.`,

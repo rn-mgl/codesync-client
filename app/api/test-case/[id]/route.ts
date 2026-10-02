@@ -1,3 +1,4 @@
+import { canAccess } from "@/src/configs/access.config";
 import { env } from "@/src/configs/env.config";
 import { destroy, read, update } from "@/src/configs/permission.config";
 import { getPermissions, handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
@@ -22,7 +23,7 @@ export async function GET(
       throw new UnauthorizedError();
     }
 
-    if (!cookies.user.permissions.includes(read["test-case"])) {
+    if (!canAccess(cookies.user.permissions, "test-case:read")) {
       throw new PermissionDeniedError(read["test-case"]);
     }
 
@@ -81,7 +82,7 @@ export async function PATCH(
       throw new UnauthorizedError();
     }
 
-    if (!cookies.user.permissions.includes(update["test-case"])) {
+    if (!canAccess(cookies.user.permissions, "test-case:update")) {
       throw new PermissionDeniedError(update["test-case"]);
     }
 
@@ -160,7 +161,7 @@ export async function DELETE(
       throw new UnauthorizedError();
     }
 
-    if (!cookies.user.permissions.includes(destroy["test-case"])) {
+    if (!canAccess(cookies.user.permissions, "test-case:destroy")) {
       throw new PermissionDeniedError(destroy["test-case"]);
     }
 
