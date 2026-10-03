@@ -1,5 +1,6 @@
 "use client";
 
+import { canAccess } from "@/src/configs/access.config";
 import Table from "@/src/components/ui/containers/Table";
 import TableLoader from "@/src/components/ui/loader/TableLoader";
 import SearchFilter from "@/src/components/ui/filters/SearchFilter";
@@ -30,6 +31,7 @@ import SingleJob from "./SingleJob";
 import JobLogs from "./JobLogs";
 import EditJob from "../update/EditJob";
 import Delete from "@/src/components/ui/forms/Delete";
+import { useSession } from "next-auth/react";
 
 const JobsList = (props: {
   type: JOB_TYPES;
@@ -67,6 +69,10 @@ const JobsList = (props: {
     handlePage,
     handlePages,
   } = usePaginate({ page: props.page, limit: props.limit });
+
+  const { data: session } = useSession({ required: true });
+
+  const permissions = session?.user.permissions ?? [];
 
   const handleSelectedJob = (id: string) => {
     setSelectedJob((prev) => (id === prev ? "" : id));
@@ -144,7 +150,7 @@ const JobsList = (props: {
             ? DateTime.fromMillis(job.processedOn).toFormat("DDD")
             : "-"}
         </span>
-        <span className="flex items-center justify-start gap-2">
+        <span className="flex items-center justify-start gap-2 overflow-x-auto w-full">
           <button
             onClick={() => handleSelectedJob(job.id)}
             className="p-2 rounded-md bg-secondary"
@@ -159,12 +165,23 @@ const JobsList = (props: {
             <FaTerminal />
           </button>
 
-          <button
-            onClick={() => handleEditJob(job.id)}
-            className="p-2 rounded-md bg-secondary hover:text-green-600"
-          >
-            <FaEdit />
-          </button>
+          {canAccess(permissions, "queue:update") && (
+            <button
+              onClick={() => handleEditJob(job.id)}
+              className="p-2 rounded-md bg-secondary hover:text-green-600"
+            >
+              <FaEdit />
+            </button>
+          )}
+
+          {canAccess(permissions, "queue:destroy") && (
+            <button
+              onClick={() => handleDeleteJob(job.id)}
+              className="p-2 rounded-md bg-secondary hover:text-red-600"
+            >
+              <FaTrash />
+            </button>
+          )}
 
           <button
             onClick={() => handleDeleteJob(job.id)}
@@ -195,7 +212,7 @@ const JobsList = (props: {
         />
       )}
 
-      {editJob && (
+      {canAccess(permissions, "queue:update") && editJob && (
         <EditJob
           id={editJob}
           type={props.type}
@@ -203,7 +220,7 @@ const JobsList = (props: {
         />
       )}
 
-      {deleteJob && (
+      {canAccess(permissions, "queue:destroy") && deleteJob && (
         <Delete
           label={`Job ${deleteJob}`}
           closeForm={() => handleDeleteJob(deleteJob)}

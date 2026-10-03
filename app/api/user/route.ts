@@ -2,7 +2,11 @@ import { env } from "@/src/configs/env.config";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
 import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
-import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
+import {
+  getPermissions,
+  handleErrorResponse,
+  isJWTCookie,
+} from "@/src/utils/api.util";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -17,6 +21,7 @@ export async function GET(req: NextRequest) {
     const token = cookies.user.token;
     const id = cookies.user.id;
     const url = env.SERVER_URL;
+    const permissions = getPermissions(cookies);
 
     const response = await fetch(`${url}/user/${id}`, {
       method: "GET",
@@ -24,6 +29,7 @@ export async function GET(req: NextRequest) {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
         Origin: env.APP_URL,
+        Allow: `Actions ${permissions}`,
       },
     });
 
@@ -61,12 +67,15 @@ export async function PATCH(req: NextRequest) {
     const id = cookies.user.id;
     const formData = await req.formData();
 
+    const permissions = getPermissions(cookies);
+
     const response = await fetch(`${url}/user/${id}`, {
       method: "PATCH",
       body: formData,
       headers: {
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL,
+        Allow: `Actions ${permissions}`,
       },
     });
 

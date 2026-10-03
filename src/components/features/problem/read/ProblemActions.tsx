@@ -1,10 +1,18 @@
+import { canAccess } from "@/src/configs/access.config";
 import { SupportedLanguages } from "@/src/interfaces/language.interface";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import React from "react";
 import { FaEdit } from "react-icons/fa";
-import { FaCode, FaFileCode, FaLightbulb, FaTrashCan, FaWandMagicSparkles } from "react-icons/fa6";
+import {
+  FaCode,
+  FaFileCode,
+  FaLightbulb,
+  FaTrashCan,
+  FaWandMagicSparkles,
+} from "react-icons/fa6";
 import Languages from "@/components/features/problem/read/Languages";
+import { useSession } from "next-auth/react";
 
 // Toolbar above the code editor: links to the problem's test cases/hints,
 // a language picker, and edit/delete actions.
@@ -17,6 +25,9 @@ const ProblemActions = (props: {
   const [canSelectLanguage, setCanSelectLanguage] = React.useState(false);
 
   const params: { slug?: string } | null = useParams();
+  const { data: session } = useSession({ required: true });
+
+  const permission = session?.user.permissions ?? [];
 
   const handleCanSelectLanguage = () => {
     setCanSelectLanguage((prev) => !prev);
@@ -62,29 +73,34 @@ const ProblemActions = (props: {
       </div>
 
       <div className="flex gap-2">
-        <button
-          title="Validate"
-          onClick={props.handleCanValidate}
-          className="p-2 rounded-full bg-inherit hover:text-info flex flex-col items-center justify-center"
-        >
-          <FaWandMagicSparkles />
-        </button>
+        {canAccess(permission, "problem:update") && (
+          <>
+            <button
+              title="Validate"
+              onClick={props.handleCanValidate}
+              className="p-2 rounded-full bg-inherit hover:text-info flex flex-col items-center justify-center"
+            >
+              <FaWandMagicSparkles />
+            </button>
+            <Link
+              title="Edit"
+              href={`/codesync/problems/${params?.slug}/edit`}
+              className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
+            >
+              <FaEdit />
+            </Link>
+          </>
+        )}
 
-        <Link
-          title="Edit"
-          href={`/codesync/problems/${params?.slug}/edit`}
-          className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
-        >
-          <FaEdit />
-        </Link>
-
-        <button
-          title="Delete"
-          onClick={props.handleCanDelete}
-          className="p-2 rounded-full bg-inherit hover:text-danger flex flex-col items-center justify-center"
-        >
-          <FaTrashCan />
-        </button>
+        {canAccess(permission, "problem:destroy") && (
+          <button
+            title="Delete"
+            onClick={props.handleCanDelete}
+            className="p-2 rounded-full bg-inherit hover:text-danger flex flex-col items-center justify-center"
+          >
+            <FaTrashCan />
+          </button>
+        )}
       </div>
 
       {canSelectLanguage && (

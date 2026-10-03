@@ -9,7 +9,7 @@ export interface BaseUser {
   problems_solved: number;
   total_submission: number;
   is_verified: boolean;
-  image: string;
+  image: string | null;
 }
 
 export interface UserForm extends Pick<

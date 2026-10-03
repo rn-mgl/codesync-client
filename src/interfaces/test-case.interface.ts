@@ -54,18 +54,18 @@ export type CreateTestCaseResponse = APIResponse<{ message: string }>;
 
 export type GetTestCaseCountResponse = APIResponse<
   {
-    test_cases: ProblemTestCaseCount;
+    "test-cases": ProblemTestCaseCount;
   } & APIPaginateResponse
 >;
 
 export type GetAllTestCasesResponse = APIResponse<
   {
-    test_cases: ProblemTestCaseList;
+    "test-cases": ProblemTestCaseList;
   } & APIPaginateResponse
 >;
 
 export type GetTestCaseResponse = APIResponse<{
-  test_case: BaseTestCase & Pick<BaseProblem, "slug" | "title">;
+  "test-case": BaseTestCase & Pick<BaseProblem, "slug" | "title">;
 }>;
 
 export type UpdateTestCaseResponse = APIResponse<{ message: string }>;

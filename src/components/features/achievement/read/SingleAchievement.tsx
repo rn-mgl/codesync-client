@@ -1,5 +1,6 @@
 "use client";
 
+import { canAccess } from "@/src/configs/access.config";
 import DisplayInputField from "@/src/components/ui/containers/DisplayInputField";
 import DisplayTextArea from "@/src/components/ui/containers/DisplayTextArea";
 import Delete from "@/src/components/ui/forms/Delete";
@@ -40,7 +41,9 @@ const SingleAchievement = () => {
   const [canDelete, setCanDelete] = React.useState(false);
   const [canValidate, setCanValidate] = React.useState(false);
 
-  useSession({ required: true });
+  const { data: session } = useSession({ required: true });
+
+  const permissions = session?.user.permissions ?? [];
 
   const router = useRouter();
 
@@ -122,28 +125,35 @@ const SingleAchievement = () => {
         </Link>
 
         <div className="flex flex-row gap-2">
-          <button
-            onClick={handleCanValidate}
-            type="button"
-            className="p-2 rounded-full hover:text-info transition-all"
-          >
-            <FaWandMagicSparkles />
-          </button>
+          {canAccess(permissions, "achievement:update") && (
+            <>
+              <button
+                onClick={handleCanValidate}
+                type="button"
+                className="p-2 rounded-full hover:text-info transition-all"
+              >
+                <FaWandMagicSparkles />
+              </button>
 
-          <Link
-            href={`/codesync/achievements/${params?.slug}/edit`}
-            type="button"
-            className="hover:text-accent transition-all p-2"
-          >
-            <FaEdit />
-          </Link>
-          <button
-            onClick={handleCanDelete}
-            type="button"
-            className="p-2 rounded-full hover:text-danger transition-all"
-          >
-            <FaTrashCan />
-          </button>
+              <Link
+                href={`/codesync/achievements/${params?.slug}/edit`}
+                type="button"
+                className="hover:text-accent transition-all p-2"
+              >
+                <FaEdit />
+              </Link>
+            </>
+          )}
+
+          {canAccess(permissions, "achievement:destroy") && (
+            <button
+              onClick={handleCanDelete}
+              type="button"
+              className="p-2 rounded-full hover:text-danger transition-all"
+            >
+              <FaTrashCan />
+            </button>
+          )}
         </div>
       </div>
 

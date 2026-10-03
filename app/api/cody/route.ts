@@ -2,7 +2,11 @@ import { env } from "@/src/configs/env.config";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
 import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
-import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
+import {
+  getPermissions,
+  handleErrorResponse,
+  isJWTCookie,
+} from "@/src/utils/api.util";
 
 import { StatusCodes } from "http-status-codes";
 import { getToken } from "next-auth/jwt";
@@ -27,12 +31,15 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const permissions = getPermissions(cookies);
+
     const response = await fetch(`${url}/cody`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL,
         "Content-Type": "application/json",
+        Allow: `Actions ${permissions}`,
       },
       body: JSON.stringify(body),
     });
@@ -70,6 +77,7 @@ export async function GET(req: NextRequest) {
 
     const token = cookies.user.token;
     const url = env.SERVER_URL;
+    const permissions = getPermissions(cookies);
 
     const response = await fetch(`${url}/cody`, {
       method: "GET",
@@ -77,6 +85,7 @@ export async function GET(req: NextRequest) {
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL,
         "Content-Type": "application/json",
+        Allow: `Actions ${permissions}`,
       },
     });
 

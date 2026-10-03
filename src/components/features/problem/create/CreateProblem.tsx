@@ -6,6 +6,7 @@ import RichTextEditor from "@/src/components/ui/fields/RichTextEditor";
 import Select from "@/src/components/ui/fields/Select";
 import TextArea from "@/src/components/ui/fields/TextArea";
 import Paginate from "@/src/components/ui/filters/Paginate";
+import useCheckBox from "@/src/hooks/useCheckBox";
 import usePaginate from "@/src/hooks/usePaginate";
 import useSelect from "@/src/hooks/useSelect";
 import {
@@ -38,7 +39,6 @@ const CreateProblem = (paginate: { page: number; limit: number }) => {
     slug: "",
   });
   const [topics, setTopics] = React.useState<BaseTopic[]>([]);
-  const [selectedTopics, setSelectedTopics] = React.useState<string[]>([]);
 
   const { select: difficulty, handleSelect: handleDifficulty } =
     useSelect<ProblemForm>({ label: "Easy", value: "easy" }, setProblem);
@@ -57,20 +57,11 @@ const CreateProblem = (paginate: { page: number; limit: number }) => {
     handlePage,
   } = usePaginate(paginate);
 
+  const { checkedItems, handleCheck } = useCheckBox();
+
   const topicOptions = topics.map((topic) => {
     return { label: `${topic.icon} ${topic.name}`, value: topic.slug };
   });
-
-  const handleCheck = (value: string | number) => {
-    setSelectedTopics((prev) =>
-      prev.includes(String(value))
-        ? [
-            ...prev.slice(0, prev.indexOf(String(value))),
-            ...prev.slice(prev.indexOf(String(value)) + 1),
-          ]
-        : [...prev, String(value)],
-    );
-  };
 
   const handleProblem = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -92,7 +83,7 @@ const CreateProblem = (paginate: { page: number; limit: number }) => {
         ...problem,
         editorial: editorialRef.current?.getHTML() ?? "",
         description: descriptionRef.current?.getHTML() ?? "",
-        topics: selectedTopics,
+        topics: checkedItems as string[],
       };
 
       const response = await fetch(`/api/problem`, {
@@ -212,7 +203,7 @@ const CreateProblem = (paginate: { page: number; limit: number }) => {
             id="topics"
             name="topics"
             label="Topics"
-            selectedOptions={selectedTopics}
+            selectedOptions={checkedItems}
             handleCheck={handleCheck}
           />
 

@@ -7,7 +7,9 @@ type ENDPOINTS =
   | "achievement"
   | "topic"
   | "hint"
-  | "queue";
+  | "queue"
+  | "role"
+  | "permission";
 
 type DELETE_ENDPOINTS = ENDPOINTS;
 

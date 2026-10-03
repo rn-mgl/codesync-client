@@ -1,8 +1,15 @@
+import { canAccess } from "@/src/configs/access.config";
 import { env } from "@/src/configs/env.config";
-import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
+import { destroy, read, update } from "@/src/configs/permission.config";
+import {
+  getPermissions,
+  handleErrorResponse,
+  isJWTCookie,
+} from "@/src/utils/api.util";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
 import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
+import PermissionDeniedError from "@/src/lib/PermissionDeniedAPIError";
 import { ProblemSchema } from "@/src/schemas/problem.schema";
 import { StatusCodes } from "http-status-codes";
 import { getToken } from "next-auth/jwt";
@@ -18,6 +25,10 @@ export async function GET(
 
     if (!isJWTCookie(cookies)) {
       throw new UnauthorizedError();
+    }
+
+    if (!canAccess(cookies.user.permissions, "problem:read")) {
+      throw new PermissionDeniedError(read.problem);
     }
 
     const param = await params;
@@ -39,12 +50,15 @@ export async function GET(
 
     const query = new URLSearchParams(searchParams).toString();
 
+    const permissions = getPermissions(cookies);
+
     const response = await fetch(`${url}/problem/${slug}?${query}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL ?? "",
+        Allow: `Actions ${permissions}`,
       },
     });
 
@@ -80,6 +94,10 @@ export async function PATCH(
       throw new UnauthorizedError();
     }
 
+    if (!canAccess(cookies.user.permissions, "problem:update")) {
+      throw new PermissionDeniedError(update.problem);
+    }
+
     const param = await params;
 
     if (!param.slug) {
@@ -111,12 +129,15 @@ export async function PATCH(
     const slug = param.slug;
     const url = env.SERVER_URL;
 
+    const permissions = getPermissions(cookies);
+
     const response = await fetch(`${url}/problem/${slug}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL,
+        Allow: `Actions ${permissions}`,
       },
       body: JSON.stringify(body),
     });
@@ -153,6 +174,10 @@ export async function DELETE(
       throw new UnauthorizedError();
     }
 
+    if (!canAccess(cookies.user.permissions, "problem:destroy")) {
+      throw new PermissionDeniedError(destroy.problem);
+    }
+
     const url = env.SERVER_URL;
     const slug = (await params).slug;
     const token = cookies.user.token;
@@ -163,12 +188,15 @@ export async function DELETE(
 
     const query = new URLSearchParams(searchParams).toString();
 
+    const permissions = getPermissions(cookies);
+
     const response = await fetch(`${url}/problem/${slug}?${query}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL,
+        Allow: `Actions ${permissions}`,
       },
     });
 

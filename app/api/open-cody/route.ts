@@ -1,8 +1,13 @@
+import { canAccessAction } from "@/src/configs/access.config";
 import { env } from "@/src/configs/env.config";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
 import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
-import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
+import {
+  getPermissions,
+  handleErrorResponse,
+  isJWTCookie,
+} from "@/src/utils/api.util";
 import { StatusCodes } from "http-status-codes";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
@@ -21,8 +26,23 @@ export async function POST(req: NextRequest) {
       throw new APIError(`Invalid request provided.`, StatusCodes.BAD_REQUEST);
     }
 
+    if (
+      body.request.action === "validate_record" &&
+      !canAccessAction(
+        cookies.user.permissions,
+        body.request.record_type,
+        "update",
+      )
+    ) {
+      throw new APIError(
+        `Invalid permissions provided.`,
+        StatusCodes.BAD_REQUEST,
+      );
+    }
+
     const url = env.SERVER_URL;
     const token = cookies.user.token;
+    const permissions = getPermissions(cookies);
 
     const response = await fetch(`${url}/open-cody`, {
       method: "POST",
@@ -30,6 +50,7 @@ export async function POST(req: NextRequest) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL,
+        Allow: `Actions ${permissions}`,
       },
       body: JSON.stringify({ request: body.request }),
     });

@@ -52,7 +52,6 @@ const ProblemDetails = (props: {
     return (
       <Link
         href={`/codesync/topics/${topic.slug}`}
-        target="_blank"
         rel="noopener noreferrer"
         key={topic.id}
         className="w-fit px-1.5 py-0.5 rounded-full bg-neutral-300 text-xs flex flex-row items-center justify-between gap-1"

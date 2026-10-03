@@ -1,8 +1,15 @@
+import { canAccess } from "@/src/configs/access.config";
 import { env } from "@/src/configs/env.config";
+import { read } from "@/src/configs/permission.config";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
 import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
-import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
+import PermissionDeniedError from "@/src/lib/PermissionDeniedAPIError";
+import {
+  getPermissions,
+  handleErrorResponse,
+  isJWTCookie,
+} from "@/src/utils/api.util";
 import { StatusCodes } from "http-status-codes";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
@@ -15,6 +22,10 @@ export async function GET(req: NextRequest) {
       throw new UnauthorizedError();
     }
 
+    if (!canAccess(cookies.user.permissions, "queue:read")) {
+      throw new PermissionDeniedError(read.queue);
+    }
+
     const searchParams = new URL(req.url).searchParams;
 
     if (!searchParams.get("action")) {
@@ -23,6 +34,7 @@ export async function GET(req: NextRequest) {
 
     const token = cookies.user.token;
     const url = env.SERVER_URL;
+    const permissions = getPermissions(cookies);
 
     const query = searchParams.toString();
 
@@ -32,6 +44,7 @@ export async function GET(req: NextRequest) {
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL,
         "Content-Type": "application/json",
+        Allow: `Actions ${permissions}`,
       },
     });
 

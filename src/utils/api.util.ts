@@ -1,16 +1,23 @@
-import { JWT } from "next-auth/jwt";
-import APIError from "@/lib/APIError";
 import { APIResponse, ErrorResponse } from "@/interfaces//api.interface";
+import APIError from "@/lib/APIError";
+import { JWT } from "next-auth/jwt";
 
 export const isJWTCookie = (cookie: unknown): cookie is JWT => {
-  return (
-    typeof cookie === "object" &&
-    cookie !== null &&
-    "user" in cookie &&
-    typeof cookie.user === "object" &&
-    cookie.user !== null &&
-    "token" in cookie.user
-  );
+  const REQUIRED_FIELDS = ["token", "permissions"];
+
+  if (typeof cookie !== "object") return false;
+
+  if (cookie === null) return false;
+
+  if (!("user" in cookie)) return false;
+
+  const user = cookie.user;
+
+  if (typeof user !== "object") return false;
+
+  if (user === null) return false;
+
+  return REQUIRED_FIELDS.every((field) => field in user);
 };
 
 export const validateDependencies = () => {
@@ -33,4 +40,10 @@ export const handleErrorResponse = (error: unknown): ErrorResponse => {
   };
 
   return errorResponse;
+};
+
+export const getPermissions = (cookies: JWT) => {
+  const permissions = cookies.user.permissions;
+
+  return permissions.join("~");
 };

@@ -1,5 +1,6 @@
 "use client";
 
+import { canAccess } from "@/src/configs/access.config";
 import DisplayInputField from "@/src/components/ui/containers/DisplayInputField";
 import DisplayTextArea from "@/src/components/ui/containers/DisplayTextArea";
 import Delete from "@/src/components/ui/forms/Delete";
@@ -21,6 +22,7 @@ import {
   FaTrashCan,
   FaWandMagicSparkles,
 } from "react-icons/fa6";
+import { useSession } from "next-auth/react";
 
 const SingleHint = () => {
   const [hint, setHint] = React.useState<BaseHint>({
@@ -37,6 +39,9 @@ const SingleHint = () => {
   const [canValidate, setCanValidate] = React.useState(false);
 
   const params: { id?: string } | null = useParams();
+
+  const { data: session } = useSession({ required: true });
+  const permissions = session?.user.permissions ?? [];
 
   const router = useRouter();
 
@@ -115,29 +120,35 @@ const SingleHint = () => {
 
         <div>
           <div className="flex gap-2">
-            <button
-              title="Validate"
-              onClick={handleCanValidate}
-              className="p-2 rounded-full bg-inherit hover:text-info flex flex-col items-center justify-center"
-            >
-              <FaWandMagicSparkles />
-            </button>
+            {canAccess(permissions, "hint:update") && (
+              <>
+                <button
+                  title="Validate"
+                  onClick={handleCanValidate}
+                  className="p-2 rounded-full bg-inherit hover:text-info flex flex-col items-center justify-center"
+                >
+                  <FaWandMagicSparkles />
+                </button>
 
-            <Link
-              title="Edit"
-              href={`/codesync/hints/${params?.id}/edit`}
-              className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
-            >
-              <FaEdit />
-            </Link>
+                <Link
+                  title="Edit"
+                  href={`/codesync/hints/${params?.id}/edit`}
+                  className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
+                >
+                  <FaEdit />
+                </Link>
+              </>
+            )}
 
-            <button
-              title="Delete"
-              onClick={handleCanDelete}
-              className="p-2 rounded-full bg-inherit hover:text-danger flex flex-col items-center justify-center"
-            >
-              <FaTrashCan />
-            </button>
+            {canAccess(permissions, "hint:destroy") && (
+              <button
+                title="Delete"
+                onClick={handleCanDelete}
+                className="p-2 rounded-full bg-inherit hover:text-danger flex flex-col items-center justify-center"
+              >
+                <FaTrashCan />
+              </button>
+            )}
           </div>
         </div>
       </div>

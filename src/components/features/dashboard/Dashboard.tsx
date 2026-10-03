@@ -1,8 +1,8 @@
 "use client";
 
-import { BADGE_COLORS } from "@/src/configs/achievement.config";
 import Table from "@/src/components/ui/containers/Table";
 import DashboardLoader from "@/src/components/ui/loader/DashboardLoader";
+import { BADGE_COLORS } from "@/src/configs/achievement.config";
 import {
   DashboardStats,
   GetDashboardResponse,
@@ -101,7 +101,8 @@ const Dashboard = () => {
         >
           <div
             style={{
-              backgroundColor: BADGE_COLORS[achievement.badge_color] ?? "#C4C4C4",
+              backgroundColor:
+                BADGE_COLORS[achievement.badge_color] ?? "#C4C4C4",
             }}
             className="aspect-square max-w-12 w-12 h-12 bg-secondary rounded-sm p-1 text-lg flex flex-col items-center justify-center"
           >
@@ -144,7 +145,9 @@ const Dashboard = () => {
                 className="bg-neutral-200 rounded-lg p-4 flex flex-col gap-2 hover:bg-neutral-300 transition-all"
               >
                 <FaCode className="text-accent" />
-                <p className="text-lg font-bold">{dashboard.submissions_today}</p>
+                <p className="text-lg font-bold">
+                  {dashboard.submissions_today}
+                </p>
                 <p className="text-xs text-neutral-500">Submissions Today</p>
               </Link>
 

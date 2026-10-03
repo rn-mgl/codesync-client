@@ -1,8 +1,15 @@
+import { canAccess } from "@/src/configs/access.config";
 import { env } from "@/src/configs/env.config";
+import { destroy, read, update } from "@/src/configs/permission.config";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
 import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
-import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
+import PermissionDeniedError from "@/src/lib/PermissionDeniedAPIError";
+import {
+  getPermissions,
+  handleErrorResponse,
+  isJWTCookie,
+} from "@/src/utils/api.util";
 import { StatusCodes } from "http-status-codes";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
@@ -18,6 +25,10 @@ export async function GET(
       throw new UnauthorizedError();
     }
 
+    if (!canAccess(cookies.user.permissions, "queue:read")) {
+      throw new PermissionDeniedError(read.queue);
+    }
+
     const searchParams = new URL(req.url).searchParams;
 
     if (!searchParams.get("type")) {
@@ -29,6 +40,7 @@ export async function GET(
     const token = cookies.user.token;
     const url = env.SERVER_URL;
     const query = searchParams.toString();
+    const permissions = getPermissions(cookies);
 
     const response = await fetch(`${url}/queue/${id}?${query}`, {
       method: "GET",
@@ -36,6 +48,7 @@ export async function GET(
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
         Origin: env.APP_URL,
+        Allow: `Actions ${permissions}`,
       },
     });
 
@@ -71,6 +84,10 @@ export async function PATCH(
       throw new UnauthorizedError();
     }
 
+    if (!canAccess(cookies.user.permissions, "queue:update")) {
+      throw new PermissionDeniedError(update.queue);
+    }
+
     const body = await req.json();
 
     if (!("queue" in body)) {
@@ -80,6 +97,7 @@ export async function PATCH(
     const token = cookies.user.token;
     const url = env.SERVER_URL;
     const id = (await params).id;
+    const permissions = getPermissions(cookies);
 
     const response = await fetch(`${url}/queue/${id}`, {
       method: "PATCH",
@@ -87,6 +105,7 @@ export async function PATCH(
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL,
+        Allow: `Actions ${permissions}`,
       },
       body: JSON.stringify(body),
     });
@@ -123,6 +142,10 @@ export async function DELETE(
       throw new UnauthorizedError();
     }
 
+    if (!canAccess(cookies.user.permissions, "queue:destroy")) {
+      throw new PermissionDeniedError(destroy.queue);
+    }
+
     const body = await req.json();
 
     if (!("queue" in body)) {
@@ -132,6 +155,7 @@ export async function DELETE(
     const token = cookies.user.token;
     const url = env.SERVER_URL;
     const id = (await params).id;
+    const permissions = getPermissions(cookies);
 
     const response = await fetch(`${url}/queue/${id}`, {
       method: "DELETE",
@@ -139,6 +163,7 @@ export async function DELETE(
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL,
+        Allow: `Actions ${permissions}`,
       },
       body: JSON.stringify(body),
     });

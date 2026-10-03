@@ -1,9 +1,16 @@
+import { canAccess } from "@/src/configs/access.config";
 import { env } from "@/src/configs/env.config";
+import { create, read } from "@/src/configs/permission.config";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
 import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
+import PermissionDeniedError from "@/src/lib/PermissionDeniedAPIError";
 import { AchievementSchema } from "@/src/schemas/achievement.schema";
-import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
+import {
+  getPermissions,
+  handleErrorResponse,
+  isJWTCookie,
+} from "@/src/utils/api.util";
 import { StatusCodes } from "http-status-codes";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
@@ -17,10 +24,16 @@ export async function GET(req: NextRequest) {
       throw new UnauthorizedError();
     }
 
+    if (!canAccess(cookies.user.permissions, "achievement:read")) {
+      throw new PermissionDeniedError(read.achievement);
+    }
+
     const url = env.SERVER_URL;
     const token = cookies.user.token;
     const searchParams = new URL(req.url).searchParams;
     const query = searchParams.toString();
+
+    const permissions = getPermissions(cookies);
 
     const response = await fetch(`${url}/achievement?${query}`, {
       method: "GET",
@@ -28,6 +41,7 @@ export async function GET(req: NextRequest) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL,
+        Allow: `Actions ${permissions}`,
       },
     });
 
@@ -58,6 +72,10 @@ export async function POST(req: NextRequest) {
       throw new UnauthorizedError();
     }
 
+    if (!canAccess(cookies.user.permissions, "achievement:create")) {
+      throw new PermissionDeniedError(create.achievement);
+    }
+
     const body = await req.json();
 
     if (!("achievement" in body)) {
@@ -80,12 +98,15 @@ export async function POST(req: NextRequest) {
     const url = env.SERVER_URL;
     const token = cookies.user.token;
 
+    const permissions = getPermissions(cookies);
+
     const response = await fetch(`${url}/achievement`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
         Origin: env.APP_URL,
         "Content-Type": "application/json",
+        Allow: `Actions ${permissions}`,
       },
       body: JSON.stringify({ achievement }),
     });

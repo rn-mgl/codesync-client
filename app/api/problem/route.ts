@@ -1,13 +1,20 @@
+import { canAccess } from "@/src/configs/access.config";
 import { APIResponse, ServerResponse } from "@/src/interfaces/api.interface";
 import APIError from "@/src/lib/APIError";
 import UnauthorizedError from "@/src/lib/UnauthorizedAPIError";
+import PermissionDeniedError from "@/src/lib/PermissionDeniedAPIError";
 import { ProblemSchema } from "@/src/schemas/problem.schema";
 import { StatusCodes } from "http-status-codes";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
 import { getToken } from "next-auth/jwt";
-import { handleErrorResponse, isJWTCookie } from "@/src/utils/api.util";
+import {
+  getPermissions,
+  handleErrorResponse,
+  isJWTCookie,
+} from "@/src/utils/api.util";
 import { env } from "@/src/configs/env.config";
+import { create, read } from "@/src/configs/permission.config";
 
 export async function POST(req: NextRequest) {
   try {
@@ -36,12 +43,19 @@ export async function POST(req: NextRequest) {
       throw new UnauthorizedError();
     }
 
+    if (!canAccess(cookies.user.permissions, "problem:create")) {
+      throw new PermissionDeniedError(create.problem);
+    }
+
+    const permissions = getPermissions(cookies);
+
     const response = await fetch(`${url}/problem`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${cookies.user.token}`,
         Origin: env.APP_URL,
+        Allow: `Actions ${permissions}`,
       },
       body: JSON.stringify(body),
     });
@@ -75,10 +89,16 @@ export async function GET(req: NextRequest) {
       throw new UnauthorizedError();
     }
 
+    if (!canAccess(cookies.user.permissions, "problem:read")) {
+      throw new PermissionDeniedError(read.problem);
+    }
+
     const url = env.SERVER_URL;
     const params = new URL(req.url).searchParams;
 
     const query = params.toString();
+
+    const permissions = getPermissions(cookies);
 
     const response = await fetch(`${url}/problem?${query}`, {
       method: "GET",
@@ -86,6 +106,7 @@ export async function GET(req: NextRequest) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${cookies.user.token}`,
         Origin: env.APP_URL,
+        Allow: `Actions ${permissions}`,
       },
     });
 

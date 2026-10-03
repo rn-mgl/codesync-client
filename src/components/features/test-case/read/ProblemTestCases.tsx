@@ -90,9 +90,9 @@ const ProblemTestCases = (props: {
           throw new Error(resolve.message);
         }
 
-        const { test_cases, pagination } = resolve.data;
+        const { "test-cases": testCaseList, pagination } = resolve.data;
 
-        setTestCases(test_cases[props.selectedProblem]);
+        setTestCases(testCaseList[props.selectedProblem]);
         handlePages(pagination.pages);
       } catch (error) {
         errorToast(getErrorMessage(error));
@@ -113,7 +113,6 @@ const ProblemTestCases = (props: {
         <div className="w-full flex flex-col items-start justify-center text-sm">
           <Link
             href={`/codesync/test-cases/${tc.id}`}
-            target="_blank"
             rel="noopener noreferrer"
             className="w-full p-4 border-b border-b-neutral-300 bg-neutral-200 rounded-t-md group"
           >

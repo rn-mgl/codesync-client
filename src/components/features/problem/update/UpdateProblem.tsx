@@ -6,6 +6,7 @@ import RichTextEditor from "@/src/components/ui/fields/RichTextEditor";
 import Select from "@/src/components/ui/fields/Select";
 import TextArea from "@/src/components/ui/fields/TextArea";
 import Paginate from "@/src/components/ui/filters/Paginate";
+import useCheckBox from "@/src/hooks/useCheckBox";
 import usePaginate from "@/src/hooks/usePaginate";
 import useSelect from "@/src/hooks/useSelect";
 import {
@@ -40,7 +41,6 @@ const UpdateProblem = (paginate: { page: number; limit: number }) => {
     slug: "",
   });
   const [topics, setTopics] = React.useState<BaseTopic[]>([]);
-  const [selectedTopics, setSelectedTopics] = React.useState<string[]>([]);
 
   const { select: difficulty, handleSelect: handleDifficulty } =
     useSelect<ProblemForm>({ label: "Easy", value: "easy" }, setProblem);
@@ -61,23 +61,12 @@ const UpdateProblem = (paginate: { page: number; limit: number }) => {
     handlePage,
   } = usePaginate(paginate);
 
+  const { checkedItems, handleCheck, prefillCheckedItems } = useCheckBox();
+
   const topicOptions = topics.map((topic) => ({
     label: `${topic.icon} ${topic.name}`,
     value: topic.slug,
   }));
-
-  const handleCheck = (selected: string | number) => {
-    setSelectedTopics((prev) => {
-      const index = prev.indexOf(String(selected));
-
-      const value =
-        index === -1
-          ? [...prev, String(selected)]
-          : [...prev.slice(0, index), ...prev.slice(index + 1)];
-
-      return value;
-    });
-  };
 
   const handleProblem = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -101,7 +90,7 @@ const UpdateProblem = (paginate: { page: number; limit: number }) => {
         ...problem,
         editorial: editorialRef.current?.getHTML() ?? problem.editorial,
         description: descriptionRef.current?.getHTML() ?? problem.description,
-        topics: selectedTopics,
+        topics: checkedItems as string[],
       };
 
       const response = await fetch(`/api/problem/${params.slug}`, {
@@ -157,14 +146,14 @@ const UpdateProblem = (paginate: { page: number; limit: number }) => {
           slug: problem.slug,
         });
 
-        setSelectedTopics(topics.map((topic) => topic.slug));
+        prefillCheckedItems(topics.map((topic) => topic.slug));
       } catch (err) {
         errorToast(getErrorMessage(err));
       }
     };
 
     getProblem();
-  }, [params?.slug]);
+  }, [params?.slug, prefillCheckedItems]);
 
   React.useEffect(() => {
     const getTopics = async () => {
@@ -261,7 +250,7 @@ const UpdateProblem = (paginate: { page: number; limit: number }) => {
             id="topics"
             name="topics"
             label="Topics"
-            selectedOptions={selectedTopics}
+            selectedOptions={checkedItems}
             handleCheck={handleCheck}
           />
 

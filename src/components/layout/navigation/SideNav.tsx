@@ -3,19 +3,33 @@ import { FaBars, FaRightFromBracket, FaXmark } from "react-icons/fa6";
 import Logo from "@/components/global/Logo";
 import React, { Activity } from "react";
 import Link from "next/link";
-import { BASE_NAVIGATIONS } from "@/src/configs/navigation.config";
+import { getNavigations } from "@/src/configs/navigation.config";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 
 const SideNav = (props: {
   showSideNav: boolean;
+  permissions: string[];
   handleShowSideNav: (source?: "link" | "button") => void;
 }) => {
   const path = usePathname() ?? "";
 
-  const mappedNavigations = BASE_NAVIGATIONS.map((nav) => {
+  const navigations = React.useMemo(
+    () => getNavigations(props.permissions),
+
+    [props.permissions],
+  );
+
+  const isBasePath = path === "/codesync";
+
+  const mappedNavigations = navigations.map((nav) => {
+    const isDashboard = nav.url === "/codesync";
+
     const isSelected =
-      path === "/codesync" ? nav.url === path : nav.url.startsWith(path);
+      (isBasePath && isDashboard) ||
+      (!isBasePath &&
+        !isDashboard &&
+        (nav.url.includes(path) || path.includes(nav.url)));
 
     return (
       <Link
@@ -75,7 +89,7 @@ const SideNav = (props: {
           </Activity>
         </div>
 
-        <div className="w-full h-full bg-primary rounded-md flex flex-col items-start justify-start p-2 gap-2">
+        <div className="w-full h-full bg-primary rounded-md flex flex-col items-start justify-start p-2 gap-2 overflow-y-auto">
           {mappedNavigations}
 
           <button

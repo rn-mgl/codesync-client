@@ -3,12 +3,15 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions: AuthOptions = {
   providers: [
-    CredentialsProvider<{ credentials: Record<string, string> }>({
+    CredentialsProvider<{
+      credentials: Record<string, number | string | string[]>;
+    }>({
       name: "Credentials",
       credentials: {
         credentials: {
           token: "",
-          id: "",
+          permissions: [],
+          id: 0,
           name: "",
           image: "",
         },
@@ -31,12 +34,15 @@ export const authOptions: AuthOptions = {
       if (
         user &&
         "token" in user &&
+        "permissions" in user &&
         typeof user.token === "string" &&
+        Array.isArray(user.permissions) &&
         typeof user.id === "number" &&
         typeof user.name === "string"
       ) {
         token.user = {
           token: user.token,
+          permissions: user.permissions,
           id: user.id,
           name: user.name,
           image: user.image ?? "",
