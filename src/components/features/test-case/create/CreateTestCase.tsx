@@ -15,6 +15,7 @@ import { FaCode, FaLink } from "react-icons/fa";
 import { FaClock, FaMemory } from "react-icons/fa6";
 
 const CreateTestCase = (props: { problem?: string }) => {
+  const [loading, setLoading] = React.useState(false);
   const [testCase, setTestCase] = React.useState<TestCaseForm>({
     expected_output: "",
     input: "",
@@ -47,6 +48,10 @@ const CreateTestCase = (props: { problem?: string }) => {
   const handleCreate = async (e: React.SubmitEvent) => {
     e.preventDefault();
 
+    if (loading) return;
+
+    setLoading(true);
+
     try {
       const payload: TestCasePayload = {
         ...testCase,
@@ -74,6 +79,8 @@ const CreateTestCase = (props: { problem?: string }) => {
       successToast(data.message);
     } catch (error: unknown) {
       errorToast(getErrorMessage(error));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -171,9 +178,10 @@ const CreateTestCase = (props: { problem?: string }) => {
 
       <button
         type="submit"
-        className="w-full p-2 rounded-md bg-primary font-black text-secondary"
+        disabled={loading}
+        className="w-full p-2 rounded-md bg-primary font-black text-secondary disabled:opacity-50"
       >
-        Create
+        {loading ? "Creating..." : "Create"}
       </button>
     </form>
   );

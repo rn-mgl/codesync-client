@@ -8,6 +8,7 @@ import React from "react";
 import { FaUser } from "react-icons/fa6";
 
 const CreateRole = () => {
+  const [loading, setLoading] = React.useState(false);
   const [role, setRole] = React.useState<RoleForm>({
     role: "",
   });
@@ -25,6 +26,10 @@ const CreateRole = () => {
 
   const handleCreate = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (loading) return;
+
+    setLoading(true);
 
     try {
       const payload = {
@@ -49,8 +54,9 @@ const CreateRole = () => {
 
       successToast(message);
     } catch (error) {
-      console.log(error);
       errorToast(getErrorMessage(error));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -80,9 +86,10 @@ const CreateRole = () => {
 
       <button
         type="submit"
-        className="w-full p-2 rounded-md bg-primary font-black text-secondary"
+        disabled={loading}
+        className="w-full p-2 rounded-md bg-primary font-black text-secondary disabled:opacity-50"
       >
-        Create
+        {loading ? "Creating..." : "Create"}
       </button>
     </form>
   );

@@ -2,6 +2,7 @@
 
 import Input from "@/src/components/ui/fields/Input";
 import TextArea from "@/src/components/ui/fields/TextArea";
+import BlockLoader from "@/src/components/ui/loader/BlockLoader";
 import {
   UpdateHintResponse,
   HintForm,
@@ -15,6 +16,8 @@ import { FaLink } from "react-icons/fa";
 import { FaArrowDown19, FaArrowTrendUp, FaLightbulb } from "react-icons/fa6";
 
 const UpdateHint = () => {
+  const [loading, setLoading] = React.useState(true);
+  const [saving, setSaving] = React.useState(false);
   const [hint, setHint] = React.useState<HintForm>({
     hint: "",
     level: 0,
@@ -40,6 +43,10 @@ const UpdateHint = () => {
   const handleUpdate = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (saving) return;
+
+    setSaving(true);
+
     try {
       if (!params?.id) return;
 
@@ -62,6 +69,8 @@ const UpdateHint = () => {
       successToast(message);
     } catch (error) {
       errorToast(getErrorMessage(error));
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -96,11 +105,15 @@ const UpdateHint = () => {
         });
       } catch (error) {
         errorToast(getErrorMessage(error));
+      } finally {
+        setLoading(false);
       }
     };
 
     getHint();
   }, [params?.id]);
+
+  if (loading) return <BlockLoader />;
 
   return (
     <form
@@ -161,9 +174,10 @@ const UpdateHint = () => {
 
       <button
         type="submit"
-        className="w-full p-2 rounded-md bg-primary font-black text-secondary"
+        disabled={saving}
+        className="w-full p-2 rounded-md bg-primary font-black text-secondary disabled:opacity-50"
       >
-        Update
+        {saving ? "Updating..." : "Update"}
       </button>
     </form>
   );

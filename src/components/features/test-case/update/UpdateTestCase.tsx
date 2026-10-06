@@ -3,6 +3,7 @@
 import Input from "@/src/components/ui/fields/Input";
 import TextArea from "@/src/components/ui/fields/TextArea";
 import Toggle from "@/src/components/ui/fields/Toggle";
+import BlockLoader from "@/src/components/ui/loader/BlockLoader";
 import { getErrorMessage } from "@/src/utils/general.util";
 import { successToast, errorToast } from "@/src/utils/toast.util";
 import {
@@ -17,6 +18,8 @@ import { FaCode, FaLink } from "react-icons/fa";
 import { FaMemory, FaClock } from "react-icons/fa6";
 
 const UpdateTestCase = () => {
+  const [loading, setLoading] = React.useState(true);
+  const [saving, setSaving] = React.useState(false);
   const [testCase, setTestCase] = React.useState<TestCaseForm>({
     expected_output: "",
     input: "",
@@ -50,6 +53,10 @@ const UpdateTestCase = () => {
   const handleUpdate = async (e: React.SubmitEvent) => {
     e.preventDefault();
 
+    if (saving) return;
+
+    setSaving(true);
+
     try {
       if (!params || !params.id) return;
 
@@ -79,6 +86,8 @@ const UpdateTestCase = () => {
       successToast(data.message);
     } catch (error: unknown) {
       errorToast(getErrorMessage(error));
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -114,11 +123,15 @@ const UpdateTestCase = () => {
         });
       } catch (error) {
         errorToast(getErrorMessage(error));
+      } finally {
+        setLoading(false);
       }
     };
 
     getTestCase();
   }, [params]);
+
+  if (loading) return <BlockLoader />;
 
   return (
     <form
@@ -233,9 +246,10 @@ const UpdateTestCase = () => {
 
       <button
         type="submit"
-        className="w-full p-2 rounded-md bg-primary font-black text-secondary"
+        disabled={saving}
+        className="w-full p-2 rounded-md bg-primary font-black text-secondary disabled:opacity-50"
       >
-        Update
+        {saving ? "Updating..." : "Update"}
       </button>
     </form>
   );

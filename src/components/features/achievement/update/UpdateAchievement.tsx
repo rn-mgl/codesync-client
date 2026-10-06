@@ -4,6 +4,7 @@ import { BADGE_PALETTE } from "@/src/configs/achievement.config";
 import Input from "@/src/components/ui/fields/Input";
 import Select from "@/src/components/ui/fields/Select";
 import TextArea from "@/src/components/ui/fields/TextArea";
+import BlockLoader from "@/src/components/ui/loader/BlockLoader";
 import useSelect from "@/src/hooks/useSelect";
 import {
   AchievementForm,
@@ -19,6 +20,8 @@ import { FaChartLine, FaLink, FaStickyNote } from "react-icons/fa";
 import { FaLockOpen, FaTrophy } from "react-icons/fa6";
 
 const UpdateAchievement = () => {
+  const [loading, setLoading] = React.useState(true);
+  const [saving, setSaving] = React.useState(false);
   const [achievement, setAchievement] = React.useState<
     AchievementForm & Pick<AchievementForm, "icon">
   >({
@@ -62,6 +65,10 @@ const UpdateAchievement = () => {
   const handleCreate = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (saving) return;
+
+    setSaving(true);
+
     try {
       if (!params?.slug) return;
 
@@ -93,6 +100,8 @@ const UpdateAchievement = () => {
       successToast(message);
     } catch (error) {
       errorToast(getErrorMessage(error));
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -128,11 +137,15 @@ const UpdateAchievement = () => {
         });
       } catch (error) {
         errorToast(getErrorMessage(error));
+      } finally {
+        setLoading(false);
       }
     };
 
     getAchievement();
   }, [params?.slug]);
+
+  if (loading) return <BlockLoader />;
 
   return (
     <form
@@ -268,9 +281,10 @@ const UpdateAchievement = () => {
 
       <button
         type="submit"
-        className="w-full p-2 rounded-md bg-primary font-black text-secondary"
+        disabled={saving}
+        className="w-full p-2 rounded-md bg-primary font-black text-secondary disabled:opacity-50"
       >
-        Update
+        {saving ? "Updating..." : "Update"}
       </button>
     </form>
   );

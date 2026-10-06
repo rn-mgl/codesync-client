@@ -5,6 +5,7 @@ import Input from "@/src/components/ui/fields/Input";
 import RichTextEditor from "@/src/components/ui/fields/RichTextEditor";
 import Select from "@/src/components/ui/fields/Select";
 import TextArea from "@/src/components/ui/fields/TextArea";
+import BlockLoader from "@/src/components/ui/loader/BlockLoader";
 import Paginate from "@/src/components/ui/filters/Paginate";
 import useCheckBox from "@/src/hooks/useCheckBox";
 import usePaginate from "@/src/hooks/usePaginate";
@@ -30,6 +31,8 @@ import { FaCode, FaLink, FaPuzzlePiece } from "react-icons/fa6";
 const UpdateProblem = (paginate: { page: number; limit: number }) => {
   const { page, limit } = paginate;
 
+  const [loading, setLoading] = React.useState(true);
+  const [saving, setSaving] = React.useState(false);
   const [problem, setProblem] = React.useState<ProblemForm>({
     title: "",
     constraints: "",
@@ -83,6 +86,11 @@ const UpdateProblem = (paginate: { page: number; limit: number }) => {
 
   const handleUpdate = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (saving) return;
+
+    setSaving(true);
+
     try {
       if (!params?.slug) return;
 
@@ -112,6 +120,8 @@ const UpdateProblem = (paginate: { page: number; limit: number }) => {
       successToast(data.message);
     } catch (err) {
       errorToast(getErrorMessage(err));
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -149,6 +159,8 @@ const UpdateProblem = (paginate: { page: number; limit: number }) => {
         prefillCheckedItems(topics.map((topic) => topic.slug));
       } catch (err) {
         errorToast(getErrorMessage(err));
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -189,6 +201,8 @@ const UpdateProblem = (paginate: { page: number; limit: number }) => {
 
     getTopics();
   }, [handlePages, limit, page]);
+
+  if (loading) return <BlockLoader />;
 
   return (
     <form
@@ -343,9 +357,10 @@ const UpdateProblem = (paginate: { page: number; limit: number }) => {
 
       <button
         type="submit"
-        className="w-full p-2 rounded-md bg-primary font-black text-secondary"
+        disabled={saving}
+        className="w-full p-2 rounded-md bg-primary font-black text-secondary disabled:opacity-50"
       >
-        Update
+        {saving ? "Updating..." : "Update"}
       </button>
     </form>
   );

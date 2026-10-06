@@ -28,6 +28,7 @@ import { FaCode, FaLink, FaPuzzlePiece } from "react-icons/fa6";
 const CreateProblem = (paginate: { page: number; limit: number }) => {
   const { page, limit } = paginate;
 
+  const [loading, setLoading] = React.useState(false);
   const [problem, setProblem] = React.useState<ProblemForm>({
     title: "",
     constraints: "",
@@ -78,6 +79,11 @@ const CreateProblem = (paginate: { page: number; limit: number }) => {
 
   const handleCreate = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (loading) return;
+
+    setLoading(true);
+
     try {
       const problemPayload: ProblemPayload & { topics: string[] } = {
         ...problem,
@@ -105,6 +111,8 @@ const CreateProblem = (paginate: { page: number; limit: number }) => {
       successToast(data.message);
     } catch (err) {
       errorToast(getErrorMessage(err));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -290,9 +298,10 @@ const CreateProblem = (paginate: { page: number; limit: number }) => {
 
       <button
         type="submit"
-        className="w-full p-2 rounded-md bg-primary font-black text-secondary"
+        disabled={loading}
+        className="w-full p-2 rounded-md bg-primary font-black text-secondary disabled:opacity-50"
       >
-        Create
+        {loading ? "Creating..." : "Create"}
       </button>
     </form>
   );

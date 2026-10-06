@@ -62,7 +62,9 @@ const RegisterForm = () => {
       const data = resolve.data;
 
       if (!data.token) {
-        throw new Error(`An error occurred during registration.`);
+        throw new Error(
+          "Registration did not return a verification token. Please try again.",
+        );
       }
 
       router.push("/auth/sending?type=verification");

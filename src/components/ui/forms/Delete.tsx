@@ -5,8 +5,14 @@ import React from "react";
 import { FaXmark } from "react-icons/fa6";
 
 const Delete = (props: DeleteForm) => {
+  const [loading, setLoading] = React.useState(false);
+
   const handleDelete = async (e: React.SubmitEvent) => {
     e.preventDefault();
+
+    if (loading) return;
+
+    setLoading(true);
 
     try {
       const response = await fetch(`/api/${props.endpoint}`, {
@@ -32,6 +38,8 @@ const Delete = (props: DeleteForm) => {
       }
     } catch (error) {
       errorToast(getErrorMessage(error));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -62,9 +70,10 @@ const Delete = (props: DeleteForm) => {
 
             <button
               type="submit"
-              className="w-full p-2 rounded-md bg-primary text-secondary font-bold mt-2"
+              disabled={loading}
+              className="w-full p-2 rounded-md bg-primary text-secondary font-bold mt-2 disabled:opacity-50"
             >
-              Delete
+              {loading ? "Deleting..." : "Delete"}
             </button>
           </form>
         </div>

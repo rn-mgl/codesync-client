@@ -9,6 +9,7 @@ const History = (props: {
   getHistory: (interaction: string) => Promise<void>;
 }) => {
   const [history, setHistory] = React.useState<BaseCody[]>([]);
+  const [loading, setLoading] = React.useState(true);
 
   const mappedHistory = history.map((h) => {
     return (
@@ -43,6 +44,8 @@ const History = (props: {
         setHistory(chats);
       } catch (error) {
         errorToast(getErrorMessage(error));
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -54,7 +57,15 @@ const History = (props: {
       className="w-full flex flex-col items-start justify-start gap-2 absolute backdrop-blur-md bg-primary/40 
               p-2 rounded-md top-8 shadow-md animate-fade max-h-80 overflow-y-auto"
     >
-      {mappedHistory}
+      {loading ? (
+        <>
+          <div className="w-full h-6 rounded-sm bg-neutral-800 animate-pulse" />
+          <div className="w-full h-6 rounded-sm bg-neutral-800 animate-pulse" />
+          <div className="w-full h-6 rounded-sm bg-neutral-800 animate-pulse" />
+        </>
+      ) : (
+        mappedHistory
+      )}
     </div>
   );
 };

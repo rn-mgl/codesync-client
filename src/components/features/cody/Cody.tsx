@@ -199,7 +199,9 @@ const Cody = () => {
       });
 
       if (!response.body) {
-        throw new Error(`Could not parse response.`);
+        throw new Error(
+          "Cody returned an unexpected response. Please try again.",
+        );
       }
 
       // to read the stream from response

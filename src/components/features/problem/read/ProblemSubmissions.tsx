@@ -1,4 +1,5 @@
 import Table from "@/src/components/ui/containers/Table";
+import TableLoader from "@/src/components/ui/loader/TableLoader";
 import {
   GetAllSubmissionsResponse,
   SubmissionList,
@@ -16,12 +17,15 @@ const ProblemSubmissions = (props: {
   handleOpenedSubmission: (id: number) => void;
 }) => {
   const [submissions, setSubmissions] = React.useState<SubmissionList[]>([]);
+  const [loading, setLoading] = React.useState(true);
 
   const params: { slug?: string } | null = useParams();
 
   // Loads the submission history on mount / slug change.
   React.useEffect(() => {
     const getSubmissions = async () => {
+      setLoading(true);
+
       try {
         if (!params?.slug) return;
 
@@ -48,6 +52,8 @@ const ProblemSubmissions = (props: {
         setSubmissions(submissions);
       } catch (error) {
         errorToast(getErrorMessage(error));
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -77,6 +83,8 @@ const ProblemSubmissions = (props: {
       </button>
     );
   });
+
+  if (loading) return <TableLoader rows={4} columns={5} />;
 
   return (
     <Table<SubmissionList>

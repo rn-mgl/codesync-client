@@ -25,6 +25,8 @@ const ACCEPTANCE_COLOR: Record<string, string> = {
 
 const Dashboard = () => {
   const [dashboard, setDashboard] = React.useState<DashboardStats | null>(null);
+  const [error, setError] = React.useState<string | null>(null);
+  const [refreshKey, setRefreshKey] = React.useState(0);
 
   useSession({ required: true });
 
@@ -43,13 +45,16 @@ const Dashboard = () => {
         }
 
         setDashboard(resolve.data.dashboard);
-      } catch (error) {
-        errorToast(getErrorMessage(error));
+      } catch (err) {
+        const message = getErrorMessage(err);
+
+        setError(message);
+        errorToast(message);
       }
     };
 
     fetchDashboard();
-  }, []);
+  }, [refreshKey]);
 
   const mappedProblems =
     dashboard?.recent_problems.map((problem) => {
@@ -128,7 +133,22 @@ const Dashboard = () => {
     <div className="w-full flex flex-col items-center justify-start min-h-full h-auto">
       <Toaster style={{ fontFamily: "var(--font-onest)" }} />
       <div className="w-full flex flex-col items-start justify-start max-w-(--breakpoint-l-l) gap-8">
-        {dashboard ? (
+        {error ? (
+          <div className="bg-neutral-200 rounded-lg p-4 w-full flex flex-col items-start gap-2">
+            <p className="text-sm text-danger">
+              Failed to load the dashboard. {error}
+            </p>
+            <button
+              onClick={() => {
+                setError(null);
+                setRefreshKey((key) => key + 1);
+              }}
+              className="p-2 px-4 rounded-md bg-primary text-secondary text-sm font-bold"
+            >
+              Retry
+            </button>
+          </div>
+        ) : dashboard ? (
           <>
             <div className="grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-3 gap-4 w-full">
               <Link

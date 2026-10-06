@@ -35,7 +35,9 @@ export const handleErrorResponse = (error: unknown): ErrorResponse => {
 
   const errorResponse: APIResponse = {
     success: false,
-    message: isAPIError ? error.message : "An unexpected error occurred.",
+    message: isAPIError
+      ? error.message
+      : "Something went wrong on the server. Please try again later.",
     status: isAPIError ? error.statusCode : 500,
   };
 

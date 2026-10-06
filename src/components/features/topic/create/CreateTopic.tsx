@@ -14,6 +14,7 @@ import { FaLink } from "react-icons/fa";
 import { FaA, FaNoteSticky, FaTag } from "react-icons/fa6";
 
 const CreateTopic = () => {
+  const [loading, setLoading] = React.useState(false);
   const [topic, setTopic] = React.useState<TopicForm>({
     name: "",
     slug: "",
@@ -45,6 +46,10 @@ const CreateTopic = () => {
   const handleCreate = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (loading) return;
+
+    setLoading(true);
+
     try {
       const response = await fetch(`/api/topic`, {
         method: "POST",
@@ -62,6 +67,8 @@ const CreateTopic = () => {
       successToast(message);
     } catch (error) {
       errorToast(getErrorMessage(error));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -123,9 +130,10 @@ const CreateTopic = () => {
 
       <button
         type="submit"
-        className="w-full p-2 rounded-md bg-primary font-black text-secondary"
+        disabled={loading}
+        className="w-full p-2 rounded-md bg-primary font-black text-secondary disabled:opacity-50"
       >
-        Create
+        {loading ? "Creating..." : "Create"}
       </button>
     </form>
   );

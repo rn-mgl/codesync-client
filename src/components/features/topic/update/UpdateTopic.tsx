@@ -2,6 +2,7 @@
 
 import Input from "@/src/components/ui/fields/Input";
 import TextArea from "@/src/components/ui/fields/TextArea";
+import BlockLoader from "@/src/components/ui/loader/BlockLoader";
 import {
   GetTopicResponse,
   TopicForm,
@@ -16,6 +17,8 @@ import { FaLink } from "react-icons/fa";
 import { FaA, FaNoteSticky, FaTag } from "react-icons/fa6";
 
 const UpdateTopic = () => {
+  const [loading, setLoading] = React.useState(true);
+  const [saving, setSaving] = React.useState(false);
   const [topic, setTopic] = React.useState<TopicForm>({
     description: "",
     icon: "",
@@ -43,6 +46,10 @@ const UpdateTopic = () => {
   const handleUpdate = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (saving) return;
+
+    setSaving(true);
+
     try {
       if (!params?.slug) return;
 
@@ -62,6 +69,8 @@ const UpdateTopic = () => {
       successToast(message);
     } catch (error) {
       errorToast(getErrorMessage(error));
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -93,11 +102,15 @@ const UpdateTopic = () => {
         });
       } catch (error) {
         errorToast(getErrorMessage(error));
+      } finally {
+        setLoading(false);
       }
     };
 
     getTopic();
   }, [params?.slug]);
+
+  if (loading) return <BlockLoader />;
 
   return (
     <form
@@ -157,9 +170,10 @@ const UpdateTopic = () => {
 
       <button
         type="submit"
-        className="w-full p-2 rounded-md bg-primary font-black text-secondary"
+        disabled={saving}
+        className="w-full p-2 rounded-md bg-primary font-black text-secondary disabled:opacity-50"
       >
-        Update
+        {saving ? "Updating..." : "Update"}
       </button>
     </form>
   );

@@ -19,6 +19,7 @@ import { FaChartLine, FaLink, FaStickyNote } from "react-icons/fa";
 import { FaLockOpen, FaTrophy } from "react-icons/fa6";
 
 const CreateAchievement = () => {
+  const [loading, setLoading] = React.useState(false);
   const [achievement, setAchievement] = React.useState<AchievementForm>({
     badge_color: "bronze",
     category: "problems",
@@ -58,6 +59,10 @@ const CreateAchievement = () => {
   const handleCreate = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (loading) return;
+
+    setLoading(true);
+
     try {
       const response = await fetch(`/api/achievement`, {
         method: "POST",
@@ -78,6 +83,8 @@ const CreateAchievement = () => {
       successToast(message);
     } catch (error) {
       errorToast(getErrorMessage(error));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -216,9 +223,10 @@ const CreateAchievement = () => {
 
       <button
         type="submit"
-        className="w-full p-2 rounded-md bg-primary font-black text-secondary"
+        disabled={loading}
+        className="w-full p-2 rounded-md bg-primary font-black text-secondary disabled:opacity-50"
       >
-        Create
+        {loading ? "Creating..." : "Create"}
       </button>
     </form>
   );

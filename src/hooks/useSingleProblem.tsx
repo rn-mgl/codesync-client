@@ -221,7 +221,9 @@ export default function useSingleProblem() {
         const data = resolve.data;
 
         if (!data.judge) {
-          throw new Error(`An error occurred during validation.`);
+          throw new Error(
+            "The judge did not return any output for this submission. Please try again.",
+          );
         }
 
         if (type === "run" && "summary" in data) {
@@ -242,9 +244,13 @@ export default function useSingleProblem() {
           });
         }
       } catch (err) {
+        const message = getErrorMessage(err);
+
+        errorToast(message);
+
         submissionDispatch({
           type: `submit_${type}_error`,
-          output: getErrorMessage(err),
+          output: message,
         });
       } finally {
         setSubmitting(null);
@@ -280,9 +286,13 @@ export default function useSingleProblem() {
         },
       });
     } catch (error) {
+      const message = getErrorMessage(error);
+
+      errorToast(message);
+
       submissionDispatch({
         type: "submit_run_error",
-        output: getErrorMessage(error),
+        output: message,
       });
     } finally {
       setActiveDetailsPanel("result");

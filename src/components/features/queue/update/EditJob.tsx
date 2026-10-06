@@ -43,6 +43,7 @@ const EditJob = (props: {
   const [priority, setPriority] = React.useState("");
   const [data, setData] = React.useState("");
   const [loading, setLoading] = React.useState(true);
+  const [acting, setActing] = React.useState(false);
 
   React.useEffect(() => {
     if (!props.id) return;
@@ -90,6 +91,10 @@ const EditJob = (props: {
   }, [props.id, props.type]);
 
   const handleSubmission = async (action: JOB_MODIFY_ACTIONS) => {
+    if (acting) return;
+
+    setActing(true);
+
     try {
       const queue: Record<string, unknown> = {
         type: props.type,
@@ -123,6 +128,8 @@ const EditJob = (props: {
       }
     } catch (error) {
       errorToast(getErrorMessage(error));
+    } finally {
+      setActing(false);
     }
   };
 
@@ -132,7 +139,8 @@ const EditJob = (props: {
     <button
       key={action.action}
       onClick={() => handleSubmission(action.action)}
-      className={`p-2 rounded-md ${action.className} text-secondary font-bold capitalize flex items-center justify-center gap-2 px-4`}
+      disabled={acting}
+      className={`p-2 rounded-md ${action.className} text-secondary font-bold capitalize flex items-center justify-center gap-2 px-4 disabled:opacity-50`}
     >
       <span>{action.action}</span>
       {action.icon}
@@ -179,7 +187,8 @@ const EditJob = (props: {
 
                     <button
                       onClick={() => handleSubmission("change_priority")}
-                      className="w-full p-2 rounded-md bg-primary text-secondary text-sm font-bold mt-2"
+                      disabled={acting}
+                      className="w-full p-2 rounded-md bg-primary text-secondary text-sm font-bold mt-2 disabled:opacity-50"
                     >
                       Update Priority
                     </button>
@@ -197,7 +206,8 @@ const EditJob = (props: {
 
                     <button
                       onClick={() => handleSubmission("update_data")}
-                      className="w-full p-2 rounded-md bg-primary text-secondary text-sm font-bold mt-2"
+                      disabled={acting}
+                      className="w-full p-2 rounded-md bg-primary text-secondary text-sm font-bold mt-2 disabled:opacity-50"
                     >
                       Update Data
                     </button>

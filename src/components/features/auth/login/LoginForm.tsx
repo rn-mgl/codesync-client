@@ -76,6 +76,10 @@ const LoginForm = () => {
 
       if (authenticated?.ok) {
         router.push("/codesync");
+      } else {
+        throw new Error(
+          "Your credentials were accepted but the session could not be created. Please try again.",
+        );
       }
     } catch (err) {
       errorToast(getErrorMessage(err));
