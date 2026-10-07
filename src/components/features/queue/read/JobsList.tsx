@@ -153,14 +153,14 @@ const JobsList = (props: {
         <span className="flex items-center justify-start gap-2 overflow-x-auto w-full">
           <button
             onClick={() => handleSelectedJob(job.id)}
-            className="p-2 rounded-md bg-secondary"
+            className="p-2 rounded-md hover:bg-secondary"
           >
             <FaEllipsis />
           </button>
 
           <button
             onClick={() => handleViewLogs(job.id)}
-            className="p-2 rounded-md bg-secondary hover:text-primary"
+            className="p-2 rounded-md hover:bg-secondary hover:text-primary"
           >
             <FaTerminal />
           </button>
@@ -168,7 +168,7 @@ const JobsList = (props: {
           {canAccess(permissions, "queue:update") && (
             <button
               onClick={() => handleEditJob(job.id)}
-              className="p-2 rounded-md bg-secondary hover:text-green-600"
+              className="p-2 rounded-md hover:bg-secondary hover:text-green-600"
             >
               <FaEdit />
             </button>
@@ -177,18 +177,11 @@ const JobsList = (props: {
           {canAccess(permissions, "queue:destroy") && (
             <button
               onClick={() => handleDeleteJob(job.id)}
-              className="p-2 rounded-md bg-secondary hover:text-red-600"
+              className="p-2 rounded-md hover:bg-secondary hover:text-red-600"
             >
               <FaTrash />
             </button>
           )}
-
-          <button
-            onClick={() => handleDeleteJob(job.id)}
-            className="p-2 rounded-md bg-secondary hover:text-red-600"
-          >
-            <FaTrash />
-          </button>
         </span>
       </p>
     </div>
