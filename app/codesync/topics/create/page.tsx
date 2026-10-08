@@ -1,10 +1,9 @@
-import CreateTopic from "@/src/components/features/topic/create/CreateTopic";
+import TopicForm from "@/src/components/features/topic/form/TopicForm";
 import Link from "next/link";
-import React from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { Toaster } from "sonner";
 
-const Page = async () => {
+const Page = () => {
   return (
     <div className="w-full flex flex-col items-center justify-start min-h-full h-auto">
       <Toaster style={{ fontFamily: "var(--font-onest)" }} />
@@ -23,7 +22,7 @@ const Page = async () => {
             Create Topic
           </div>
 
-          <CreateTopic />
+          <TopicForm mode="create" />
         </div>
       </div>
     </div>

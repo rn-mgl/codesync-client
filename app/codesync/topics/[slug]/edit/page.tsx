@@ -1,11 +1,14 @@
 "use client";
 
-import UpdateTopic from "@/src/components/features/topic/update/UpdateTopic";
+import TopicForm from "@/src/components/features/topic/form/TopicForm";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import { FaArrowLeft } from "react-icons/fa6";
 import { Toaster } from "sonner";
 
 const Page = () => {
+  const params: { slug?: string } | null = useParams();
+
   return (
     <div className="w-full flex flex-col items-center justify-start min-h-full h-auto">
       <Toaster style={{ fontFamily: "var(--font-onest)" }} />
@@ -24,7 +27,7 @@ const Page = () => {
             Edit Topic
           </div>
 
-          <UpdateTopic />
+          <TopicForm mode="update" slug={params?.slug} />
         </div>
       </div>
     </div>

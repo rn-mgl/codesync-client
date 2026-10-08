@@ -4,46 +4,57 @@ import Input from "@/src/components/ui/fields/Input";
 import TextArea from "@/src/components/ui/fields/TextArea";
 import BlockLoader from "@/src/components/ui/loader/BlockLoader";
 import {
+  CreateTopicResponse,
   GetTopicResponse,
-  TopicForm,
+  TopicForm as ITopicForm,
+  TopicFormProps,
   UpdateTopicResponse,
 } from "@/src/interfaces/topic.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
 import { successToast, errorToast } from "@/src/utils/toast.util";
 import { useSession } from "next-auth/react";
-import { useParams } from "next/navigation";
 import React from "react";
 import { FaLink } from "react-icons/fa";
 import { FaA, FaNoteSticky, FaTag } from "react-icons/fa6";
 
-const UpdateTopic = () => {
-  const [loading, setLoading] = React.useState(true);
+const TopicForm: React.FC<TopicFormProps> = (props) => {
+  const { mode } = props;
+  const slug = mode === "update" ? props.slug : undefined;
+  const initialTopic = props.initialTopic;
+  const onSuccess = props.onSuccess;
+  const [loading, setLoading] = React.useState(mode === "update");
   const [saving, setSaving] = React.useState(false);
-  const [topic, setTopic] = React.useState<TopicForm>({
-    description: "",
-    icon: "",
-    name: "",
-    slug: "",
-  });
+  const [topic, setTopic] = React.useState<ITopicForm>(
+    initialTopic || {
+      name: "",
+      slug: "",
+      description: "",
+      icon: "",
+    },
+  );
 
   useSession({ required: true });
-
-  const params: { slug?: string } | null = useParams();
 
   const handleTopic = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
 
+    let appliedValue = value;
+
+    if (name === "icon" && !/\p{Extended_Pictographic}/u.test(appliedValue)) {
+      appliedValue = "";
+    }
+
     setTopic((prev) => {
       return {
         ...prev,
-        [name]: value,
+        [name]: appliedValue,
       };
     });
   };
 
-  const handleUpdate = async (e: React.SubmitEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (saving) return;
@@ -51,22 +62,39 @@ const UpdateTopic = () => {
     setSaving(true);
 
     try {
-      if (!params?.slug) return;
+      if (mode === "create") {
+        const response = await fetch(`/api/topic`, {
+          method: "POST",
+          body: JSON.stringify({ topic }),
+        });
 
-      const response = await fetch(`/api/topic/${params?.slug}`, {
-        method: "PATCH",
-        body: JSON.stringify({ topic }),
-      });
+        const resolve: CreateTopicResponse = await response.json();
 
-      const resolve: UpdateTopicResponse = await response.json();
+        if (!resolve.success) {
+          throw new Error(resolve.message);
+        }
 
-      if (!resolve.success) {
-        throw new Error(resolve.message);
+        const { message } = resolve.data;
+        successToast(message);
+        onSuccess?.(message);
+      } else if (mode === "update") {
+        if (!slug) return;
+
+        const response = await fetch(`/api/topic/${slug}`, {
+          method: "PATCH",
+          body: JSON.stringify({ topic }),
+        });
+
+        const resolve: UpdateTopicResponse = await response.json();
+
+        if (!resolve.success) {
+          throw new Error(resolve.message);
+        }
+
+        const { message } = resolve.data;
+        successToast(message);
+        onSuccess?.(message);
       }
-
-      const { message } = resolve.data;
-
-      successToast(message);
     } catch (error) {
       errorToast(getErrorMessage(error));
     } finally {
@@ -75,11 +103,15 @@ const UpdateTopic = () => {
   };
 
   React.useEffect(() => {
+    if (mode !== "update") {
+      return;
+    }
+
     const getTopic = async () => {
       try {
-        if (!params?.slug) return;
+        if (!slug) return;
 
-        const response = await fetch(`/api/topic/${params?.slug}`, {
+        const response = await fetch(`/api/topic/${slug}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -92,13 +124,13 @@ const UpdateTopic = () => {
           throw new Error(resolve.message);
         }
 
-        const { topic } = resolve.data;
+        const { topic: fetchedTopic } = resolve.data;
 
         setTopic({
-          icon: topic.icon,
-          description: topic.description,
-          name: topic.name,
-          slug: topic.slug,
+          icon: fetchedTopic.icon,
+          description: fetchedTopic.description,
+          name: fetchedTopic.name,
+          slug: fetchedTopic.slug,
         });
       } catch (error) {
         errorToast(getErrorMessage(error));
@@ -108,13 +140,13 @@ const UpdateTopic = () => {
     };
 
     getTopic();
-  }, [params?.slug]);
+  }, [mode, slug]);
 
   if (loading) return <BlockLoader />;
 
   return (
     <form
-      onSubmit={(e) => handleUpdate(e)}
+      onSubmit={handleSubmit}
       className="flex flex-col items-center justify-center w-full gap-8"
     >
       <div className="w-full flex flex-col items-start justify-start">
@@ -173,10 +205,16 @@ const UpdateTopic = () => {
         disabled={saving}
         className="w-full p-2 rounded-md bg-primary font-black text-secondary disabled:opacity-50"
       >
-        {saving ? "Updating..." : "Update"}
+        {saving
+          ? mode === "create"
+            ? "Creating..."
+            : "Updating..."
+          : mode === "create"
+            ? "Create"
+            : "Update"}
       </button>
     </form>
   );
 };
 
-export default UpdateTopic;
+export default TopicForm;
