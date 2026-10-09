@@ -27,6 +27,12 @@ const ProblemDetails = (props: {
     );
   };
 
+  const DIFFICULTY_COLOR = {
+    easy: "var(--color-green-600)",
+    medium: "var(--color-amber-600)",
+    hard: "var(--color-red-600)",
+  };
+
   const mappedConstraints = Object.entries(props.problem.constraints).map(
     ([key, value]) => {
       return (
@@ -96,9 +102,18 @@ const ProblemDetails = (props: {
   return (
     <div className="flex flex-col items-start justify-start gap-4 ">
       <div className="w-full flex flex-col gap-4">
-        <h1 className="text-xl font-bold text-pretty t:text-2xl">
-          {props.problem.id}. {props.problem.title}
-        </h1>
+        <div className="w-full flex flex-row items-center justify-between">
+          <h1 className="text-xl font-bold text-pretty t:text-2xl line-clamp-1">
+            {props.problem.id}. {props.problem.title}
+          </h1>
+
+          <p
+            style={{ background: DIFFICULTY_COLOR[props.problem.difficulty] }}
+            className="w-fit rounded-full px-2 py-0.5 text-secondary text-xs capitalize"
+          >
+            {props.problem.difficulty}
+          </p>
+        </div>
 
         <div className="w-full flex flex-wrap gap-2">{mappedTopics}</div>
 
