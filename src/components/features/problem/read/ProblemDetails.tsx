@@ -33,6 +33,19 @@ const ProblemDetails = (props: {
     hard: "var(--color-red-600)",
   };
 
+  const ACCEPTANCE_COLOR = {
+    low: "var(--color-red-600)",
+    average: "var(--color-amber-600)",
+    high: "var(--color-green-600)",
+  };
+
+  const rate =
+    props.problem?.acceptance_rate < 50
+      ? "low"
+      : props.problem?.acceptance_rate < 75
+        ? "average"
+        : "high";
+
   const mappedConstraints = Object.entries(props.problem.constraints).map(
     ([key, value]) => {
       return (
@@ -102,17 +115,30 @@ const ProblemDetails = (props: {
   return (
     <div className="flex flex-col items-start justify-start gap-4 ">
       <div className="w-full flex flex-col gap-4">
-        <div className="w-full flex flex-row items-center justify-between">
-          <h1 className="text-xl font-bold text-pretty t:text-2xl line-clamp-1">
-            {props.problem.id}. {props.problem.title}
-          </h1>
+        <h1 className="text-xl font-bold text-pretty t:text-2xl line-clamp-1 mr-auto">
+          {props.problem.id}. {props.problem.title}
+        </h1>
 
+        <div className="w-full flex flex-row items-center gap-2">
           <p
             style={{ background: DIFFICULTY_COLOR[props.problem.difficulty] }}
             className="w-fit rounded-full px-2 py-0.5 text-secondary text-xs capitalize"
           >
             {props.problem.difficulty}
           </p>
+
+          <span className="text-xs text-nowrap">
+            {props.problem.acceptance_rate} % acceptance rate
+          </span>
+          <div className="p-1 h-fit rounded-full w-full relative bg-neutral-300 flex flex-col items-start justify-start">
+            <div
+              style={{
+                width: `${props.problem.acceptance_rate || 0}%`,
+                background: ACCEPTANCE_COLOR[rate],
+              }}
+              className=" h-full absolute rounded-full top-0 left-0"
+            ></div>
+          </div>
         </div>
 
         <div className="w-full flex flex-wrap gap-2">{mappedTopics}</div>
