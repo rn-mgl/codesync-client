@@ -1,6 +1,7 @@
 import React from "react";
 import { PaginateProperties } from "@/src/interfaces/filter.interface";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
+import { LuChevronsLeft, LuChevronsRight } from "react-icons/lu";
 
 const Paginate = (props: PaginateProperties) => {
   const [inputValue, setInputValue] = React.useState(String(props.page));
@@ -85,7 +86,16 @@ const Paginate = (props: PaginateProperties) => {
 
   return (
     <div className="flex flex-col w-full justify-between gap-4 t:flex-row-reverse">
-      <div className="w-full flex items-center justify-center gap-1 t:w-fit">
+      <div className="w-full flex items-center justify-start gap-1 t:w-fit overflow-x-auto">
+        <button
+          type="button"
+          onClick={() => props.handlePage(0)}
+          disabled={props.page === 0}
+          className="p-1.5 flex flex-col items-center justify-center rounded-sm border aspect-square w-10 min-w-10 text-xs bg-secondary text-primary disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <LuChevronsLeft className="text-xs" />
+        </button>
+
         <button
           type="button"
           onClick={() => props.handlePage(Math.max(0, props.page - 1))}
@@ -106,6 +116,15 @@ const Paginate = (props: PaginateProperties) => {
           className="p-1.5 flex flex-col items-center justify-center rounded-sm border aspect-square w-10 min-w-10 text-xs bg-secondary text-primary disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <FaChevronRight className="text-xs p-0.5" />
+        </button>
+
+        <button
+          type="button"
+          onClick={() => props.handlePage(Math.max(props.pages - 1, 0))}
+          disabled={props.page >= props.pages - 1}
+          className="p-1.5 flex flex-col items-center justify-center rounded-sm border aspect-square w-10 min-w-10 text-xs bg-secondary text-primary disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <LuChevronsRight className="text-xs" />
         </button>
       </div>
 
