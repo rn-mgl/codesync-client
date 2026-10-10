@@ -6,6 +6,7 @@ import Paginate from "@/src/components/ui/filters/Paginate";
 import SearchFilter from "@/src/components/ui/filters/SearchFilter";
 import SortFilter from "@/src/components/ui/filters/SortFilter";
 import TableLoader from "@/src/components/ui/loader/TableLoader";
+import { canAccess } from "@/src/configs/access.config";
 import {
   PROBLEM_SEARCH_OPTIONS,
   PROBLEM_SORT_OPTIONS,
@@ -24,7 +25,7 @@ import { errorToast } from "@/src/utils/toast.util";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
-import { FaTags, FaXmark } from "react-icons/fa6";
+import { FaPlus, FaTags, FaXmark } from "react-icons/fa6";
 
 const AllProblems = (paginate: { page: number; limit: number }) => {
   const [problems, setProblems] = React.useState<ProblemList[]>([]);
@@ -72,7 +73,8 @@ const AllProblems = (paginate: { page: number; limit: number }) => {
     handlePage,
   } = usePaginate(paginate);
 
-  useSession({ required: true });
+  const { data: session } = useSession({ required: true });
+  const permissions = session?.user.permissions ?? [];
 
   const DIFFICULTY_COLOR = {
     easy: "var(--color-green-600)",
@@ -140,7 +142,7 @@ const AllProblems = (paginate: { page: number; limit: number }) => {
 
     return (
       <Link
-        href={`/codesync/problems/${problem.slug}`}
+        href={`/codesync/problem/${problem.slug}`}
         key={problem.id}
         rel="noopener noreferrer"
         className="w-full not-last:border-b-2 border-neutral-400 transition-all
@@ -214,6 +216,17 @@ const AllProblems = (paginate: { page: number; limit: number }) => {
 
   return (
     <div className="w-full flex flex-col items-start justify-start gap-4 h-auto">
+      {canAccess(permissions, "problem:create") && (
+        <Link
+          href="/codesync/problem/create"
+          className="text-primary font-bold flex flex-row items-center 
+                    justify-center gap-2 hover:border-b px-1"
+        >
+          Add Problem
+          <FaPlus />
+        </Link>
+      )}
+
       <div className="w-full flex flex-col items-center justify-start gap-2">
         <div className="w-full flex flex-col items-center justify-start gap-2 t:flex-row t:justify-between">
           <div className="w-full t:w-fit z-30 flex">

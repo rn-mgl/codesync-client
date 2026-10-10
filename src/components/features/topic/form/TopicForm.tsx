@@ -10,9 +10,11 @@ import {
   TopicFormProps,
   UpdateTopicResponse,
 } from "@/src/interfaces/topic.interface";
+import { canAccess } from "@/src/configs/access.config";
 import { getErrorMessage } from "@/src/utils/general.util";
 import { successToast, errorToast } from "@/src/utils/toast.util";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { FaLink } from "react-icons/fa";
 import { FaA, FaNoteSticky, FaTag } from "react-icons/fa6";
@@ -33,7 +35,21 @@ const TopicForm: React.FC<TopicFormProps> = (props) => {
     },
   );
 
-  useSession({ required: true });
+  const router = useRouter();
+
+  const { data: session, status } = useSession({ required: true });
+
+  const permissions = session?.user.permissions ?? [];
+
+  const hasAccess =
+    status === "authenticated" &&
+    canAccess(permissions, mode === "create" ? "topic:create" : "topic:update");
+
+  React.useEffect(() => {
+    if (status === "authenticated" && !hasAccess) {
+      router.replace("/codesync/topic");
+    }
+  }, [status, hasAccess, router]);
 
   const handleTopic = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -103,6 +119,8 @@ const TopicForm: React.FC<TopicFormProps> = (props) => {
   };
 
   React.useEffect(() => {
+    if (!hasAccess) return;
+
     if (mode !== "update") {
       return;
     }
@@ -140,7 +158,9 @@ const TopicForm: React.FC<TopicFormProps> = (props) => {
     };
 
     getTopic();
-  }, [mode, slug]);
+  }, [mode, slug, hasAccess]);
+
+  if (!hasAccess) return null;
 
   if (loading) return <BlockLoader />;
 

@@ -95,7 +95,7 @@ const SingleHint = () => {
           closeForm={handleCanDelete}
           endpoint={`hint/${params?.id}`}
           label="Hint"
-          postDeleteAction={() => router.push("/codesync/hints")}
+          postDeleteAction={() => router.push("/codesync/hint")}
         />
       )}
 
@@ -110,7 +110,7 @@ const SingleHint = () => {
 
       <div className="w-full flex justify-between">
         <Link
-          href="/codesync/hints"
+          href="/codesync/hint"
           className="text-primary font-bold flex flex-row items-center 
                     justify-center gap-2 hover:border-b px-1 w-fit"
         >
@@ -132,7 +132,7 @@ const SingleHint = () => {
 
                 <Link
                   title="Edit"
-                  href={`/codesync/hints/${params?.id}/edit`}
+                  href={`/codesync/hint/${params?.id}/edit`}
                   className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
                 >
                   <FaEdit />

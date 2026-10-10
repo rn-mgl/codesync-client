@@ -144,7 +144,7 @@ const SingleRole = () => {
           closeForm={handleCanDelete}
           endpoint={`role/${params?.id}`}
           label="Role"
-          postDeleteAction={() => router.push("/codesync/roles")}
+          postDeleteAction={() => router.push("/codesync/role")}
         />
       )}
 
@@ -158,7 +158,7 @@ const SingleRole = () => {
 
       <div className="w-full flex justify-between">
         <Link
-          href="/codesync/roles"
+          href="/codesync/role"
           className="text-primary font-bold flex flex-row items-center 
                         justify-center gap-2 hover:border-b px-1 w-fit"
         >
@@ -171,7 +171,7 @@ const SingleRole = () => {
             {canAccess(permissions, "role:update") && (
               <Link
                 title="Edit"
-                href={`/codesync/roles/${params?.id}/edit`}
+                href={`/codesync/role/${params?.id}/edit`}
                 className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
               >
                 <FaEdit />

@@ -81,18 +81,18 @@ const SinglePermission = () => {
 
   return (
     <div className="flex flex-col items-start justify-start w-full gap-8">
-      {canDelete && (
+      {canDelete && canAccess(permissions, "permission:destroy") && (
         <Delete
           closeForm={handleCanDelete}
           endpoint={`permission/${params?.id}`}
           label="Permission"
-          postDeleteAction={() => router.push("/codesync/permissions")}
+          postDeleteAction={() => router.push("/codesync/permission")}
         />
       )}
 
       <div className="w-full flex justify-between">
         <Link
-          href="/codesync/permissions"
+          href="/codesync/permission"
           className="text-primary font-bold flex flex-row items-center 
                         justify-center gap-2 hover:border-b px-1 w-fit"
         >
@@ -105,7 +105,7 @@ const SinglePermission = () => {
             {canAccess(permissions, "permission:update") && (
               <Link
                 title="Edit"
-                href={`/codesync/permissions/${params?.id}/edit`}
+                href={`/codesync/permission/${params?.id}/edit`}
                 className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
               >
                 <FaEdit />

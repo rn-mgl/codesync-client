@@ -67,7 +67,7 @@ const Dashboard = () => {
 
       return (
         <Link
-          href={`/codesync/problems/${problem.slug}`}
+          href={`/codesync/problem/${problem.slug}`}
           key={problem.id}
           className="w-full not-last:border-b-2 border-neutral-400 transition-all
                     hover:bg-neutral-200 first:rounded-t-md last:rounded-b-md"
@@ -100,7 +100,7 @@ const Dashboard = () => {
     dashboard?.recent_achievements.map((achievement) => {
       return (
         <Link
-          href={`/codesync/achievements/${achievement.slug}`}
+          href={`/codesync/achievement/${achievement.slug}`}
           key={achievement.id}
           className="w-full bg-neutral-200 rounded-lg p-2 flex flex-row gap-2 group hover:bg-neutral-300 transition-all"
         >
@@ -152,7 +152,7 @@ const Dashboard = () => {
           <>
             <div className="grid grid-cols-1 t:grid-cols-2 l-s:grid-cols-3 gap-4 w-full">
               <Link
-                href="/codesync/problems"
+                href="/codesync/problem"
                 className="bg-neutral-200 rounded-lg p-4 flex flex-col gap-2 hover:bg-neutral-300 transition-all"
               >
                 <FaCheckCircle className="text-success" />
@@ -161,7 +161,7 @@ const Dashboard = () => {
               </Link>
 
               <Link
-                href="/codesync/problems"
+                href="/codesync/problem"
                 className="bg-neutral-200 rounded-lg p-4 flex flex-col gap-2 hover:bg-neutral-300 transition-all"
               >
                 <FaCode className="text-accent" />
@@ -172,7 +172,7 @@ const Dashboard = () => {
               </Link>
 
               <Link
-                href="/codesync/achievements"
+                href="/codesync/achievement"
                 className="bg-neutral-200 rounded-lg p-4 flex flex-col gap-2 hover:bg-neutral-300 transition-all t:col-span-2 l-s:col-span-1"
               >
                 <FaStar className="text-warning" />
@@ -185,7 +185,7 @@ const Dashboard = () => {
 
             <div className="w-full flex flex-col items-start justify-start gap-4">
               <Link
-                href="/codesync/problems"
+                href="/codesync/problem"
                 className="text-primary font-bold flex flex-row items-center
                           justify-center gap-2 hover:border-b px-1"
               >
@@ -207,7 +207,7 @@ const Dashboard = () => {
 
             <div className="w-full flex flex-col items-start justify-start gap-4">
               <Link
-                href="/codesync/achievements"
+                href="/codesync/achievement"
                 className="text-primary font-bold flex flex-row items-center
                           justify-center gap-2 hover:border-b px-1"
               >

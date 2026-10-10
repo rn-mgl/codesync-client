@@ -118,7 +118,7 @@ const SingleProblem = () => {
           label="Problem"
           endpoint={`problem/${params?.slug}`}
           postDeleteAction={() => {
-            router.push("/codesync/problems");
+            router.push("/codesync/problem");
           }}
           closeForm={handleCanDelete}
         />
@@ -140,7 +140,7 @@ const SingleProblem = () => {
           {/* Left column: problem description / editorial / submissions / results. */}
           <div className="w-full h-full flex flex-col l-s:overflow-hidden gap-4">
             <Link
-              href="/codesync/problems"
+              href="/codesync/problem"
               className="text-primary font-bold flex flex-row items-center 
                         justify-center gap-2 hover:border-b px-1 w-fit"
             >

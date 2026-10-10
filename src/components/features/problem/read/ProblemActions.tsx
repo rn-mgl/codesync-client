@@ -14,7 +14,7 @@ import {
 import Languages from "@/components/features/problem/read/Languages";
 import { useSession } from "next-auth/react";
 
-// Toolbar above the code editor: links to the problem's test cases/hints,
+// Toolbar above the code editor: links to the problem's test cases/hint,
 // a language picker, and edit/delete actions.
 const ProblemActions = (props: {
   language: SupportedLanguages;
@@ -36,12 +36,12 @@ const ProblemActions = (props: {
   // Content links that take the user to the per-problem pages.
   const contentLinks = [
     {
-      href: `/codesync/test-cases?problem=${params?.slug}`,
+      href: `/codesync/test-case?problem=${params?.slug}`,
       title: "Test Cases",
       icon: <FaFileCode />,
     },
     {
-      href: `/codesync/hints?problem=${params?.slug}`,
+      href: `/codesync/hint?problem=${params?.slug}`,
       title: "Hints",
       icon: <FaLightbulb />,
     },
@@ -84,7 +84,7 @@ const ProblemActions = (props: {
             </button>
             <Link
               title="Edit"
-              href={`/codesync/problems/${params?.slug}/edit`}
+              href={`/codesync/problem/${params?.slug}/edit`}
               className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
             >
               <FaEdit />

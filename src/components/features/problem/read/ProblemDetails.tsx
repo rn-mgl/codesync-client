@@ -70,7 +70,7 @@ const ProblemDetails = (props: {
   const mappedTopics = props.topics.map((topic) => {
     return (
       <Link
-        href={`/codesync/topics/${topic.slug}`}
+        href={`/codesync/topic/${topic.slug}`}
         rel="noopener noreferrer"
         key={topic.id}
         className="w-fit px-1.5 py-0.5 rounded-full bg-neutral-300 text-xs flex flex-row items-center justify-between gap-1"

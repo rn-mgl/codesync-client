@@ -21,6 +21,8 @@ import {
   ACHIEVEMENT_SEARCH_OPTIONS,
   ACHIEVEMENT_SORT_OPTIONS,
 } from "@/src/configs/filter.config";
+import { FaPlus } from "react-icons/fa";
+import { canAccess } from "@/src/configs/access.config";
 
 const AllAchievements = (paginate: { page: number; limit: number }) => {
   const [achievements, setAchievements] = React.useState<
@@ -51,12 +53,14 @@ const AllAchievements = (paginate: { page: number; limit: number }) => {
     handlePages,
   } = usePaginate(paginate);
 
-  useSession({ required: true });
+  const { data: session } = useSession({ required: true });
+
+  const permissions = session?.user.permissions ?? [];
 
   const mappedAchievements = sort(filter(achievements)).map((achievement) => {
     return (
       <Link
-        href={`/codesync/achievements/${achievement.slug}`}
+        href={`/codesync/achievement/${achievement.slug}`}
         key={achievement.id}
         rel="noopener noreferrer"
         className="w-full bg-neutral-200 rounded-lg p-2 flex flex-row gap-2 group hover:bg-neutral-300 transition-all"
@@ -124,6 +128,17 @@ const AllAchievements = (paginate: { page: number; limit: number }) => {
 
   return (
     <div className="w-full flex flex-col items-start justify-start gap-8">
+      {canAccess(permissions, "achievement:create") && (
+        <Link
+          href="/codesync/achievement/create"
+          className="text-primary font-bold flex flex-row items-center 
+                    justify-center gap-2 hover:border-b px-1"
+        >
+          Add Achievement
+          <FaPlus />
+        </Link>
+      )}
+
       <div className="w-full flex flex-col items-center justify-start gap-2 t:flex-row t:justify-between">
         <div className="w-full t:w-fit z-20 flex">
           <SearchFilter

@@ -20,6 +20,10 @@ import {
   HINT_SEARCH_OPTIONS,
   HINT_SORT_OPTIONS,
 } from "@/src/configs/filter.config";
+import Link from "next/link";
+import { FaPlus } from "react-icons/fa";
+import { useSession } from "next-auth/react";
+import { canAccess } from "@/src/configs/access.config";
 
 const AllHints = (props: { problem?: string; page: number; limit: number }) => {
   const [hints, setHints] = React.useState<ProblemHintCount>({});
@@ -50,6 +54,10 @@ const AllHints = (props: { problem?: string; page: number; limit: number }) => {
     handlePage,
     handlePages,
   } = usePaginate({ page: props.page, limit: props.limit });
+
+  const { data: session } = useSession({ required: true });
+
+  const permissions = session?.user.permissions ?? [];
 
   const problemParam = props.problem;
 
@@ -121,7 +129,18 @@ const AllHints = (props: { problem?: string; page: number; limit: number }) => {
   }, [handlePages, problemParam, limit, page]);
 
   return (
-    <div className="w-full flex flex-col gap-8 itemsce justify-start">
+    <div className="w-full flex flex-col gap-8 items-start justify-start">
+      {canAccess(permissions, "hint:create") && (
+        <Link
+          href="/codesync/hint/create"
+          className="text-primary font-bold flex flex-row items-center 
+                    justify-center gap-2 hover:border-b px-1"
+        >
+          Add Hint
+          <FaPlus />
+        </Link>
+      )}
+
       <div className="w-full flex flex-col items-center justify-start gap-2 t:flex-row t:justify-between">
         <div className="w-full t:w-fit z-20 flex">
           <SearchFilter

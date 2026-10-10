@@ -7,9 +7,11 @@ import {
   PermissionForm,
   UpdatePermissionResponse,
 } from "@/src/interfaces/permission.interface";
+import { canAccess } from "@/src/configs/access.config";
 import { getErrorMessage } from "@/src/utils/general.util";
 import { errorToast, successToast } from "@/src/utils/toast.util";
-import { useParams } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import { FaStickyNote } from "react-icons/fa";
 import { FaUser } from "react-icons/fa6";
@@ -21,6 +23,21 @@ const UpdatePermission = () => {
   });
 
   const [loading, setLoading] = React.useState(true);
+
+  const router = useRouter();
+
+  const { data: session, status } = useSession({ required: true });
+
+  const permissions = session?.user.permissions ?? [];
+
+  const hasAccess =
+    status === "authenticated" && canAccess(permissions, "permission:update");
+
+  React.useEffect(() => {
+    if (status === "authenticated" && !hasAccess) {
+      router.replace("/codesync/permission");
+    }
+  }, [status, hasAccess, router]);
 
   const params: { id?: string } | null = useParams();
 
@@ -77,6 +94,8 @@ const UpdatePermission = () => {
   };
 
   React.useEffect(() => {
+    if (!hasAccess) return;
+
     const getPermission = async () => {
       if (!params?.id) {
         return;
@@ -107,7 +126,9 @@ const UpdatePermission = () => {
     };
 
     getPermission();
-  }, [params?.id]);
+  }, [params?.id, hasAccess]);
+
+  if (!hasAccess) return null;
 
   return (
     <form

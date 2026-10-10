@@ -3,6 +3,7 @@
 import Table from "@/src/components/ui/containers/Table";
 import Paginate from "@/src/components/ui/filters/Paginate";
 import BlockLoader from "@/src/components/ui/loader/BlockLoader";
+import { canAccess } from "@/src/configs/access.config";
 import usePaginate from "@/src/hooks/usePaginate";
 import {
   BasePermission,
@@ -12,8 +13,10 @@ import {
 import { getErrorMessage } from "@/src/utils/general.util";
 import { errorToast } from "@/src/utils/toast.util";
 import { DateTime } from "luxon";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
+import { FaPlus } from "react-icons/fa6";
 
 const AllPermissions = (paginate: { page: number; limit: number }) => {
   const [permissions, setPermissions] = React.useState<BasePermission[]>([]);
@@ -30,10 +33,14 @@ const AllPermissions = (paginate: { page: number; limit: number }) => {
     pages,
   } = usePaginate(paginate);
 
+  const { data: session } = useSession({ required: true });
+
+  const userPermissions = session?.user.permissions ?? [];
+
   const mappedPermissions = permissions.map((permission) => {
     return (
       <Link
-        href={`/codesync/permissions/${permission.id}`}
+        href={`/codesync/permission/${permission.id}`}
         key={permission.id}
         rel="noopener noreferrer"
         className="w-full not-last:border-b-2 border-neutral-400 transition-all
@@ -90,6 +97,17 @@ const AllPermissions = (paginate: { page: number; limit: number }) => {
 
   return (
     <div className="w-full flex flex-col items-start justify-start h-auto gap-8">
+      {canAccess(userPermissions, "permission:create") && (
+        <Link
+          href="/codesync/permission/create"
+          className="text-primary font-bold flex flex-row items-center 
+                    justify-center gap-2 hover:border-b px-1"
+        >
+          Add Permission
+          <FaPlus />
+        </Link>
+      )}
+
       {loading ? (
         <BlockLoader />
       ) : (

@@ -3,6 +3,7 @@
 import Input from "@/src/components/ui/fields/Input";
 import TextArea from "@/src/components/ui/fields/TextArea";
 import Toggle from "@/src/components/ui/fields/Toggle";
+import { canAccess } from "@/src/configs/access.config";
 import {
   CreateTestCaseResponse,
   TestCaseForm,
@@ -10,6 +11,8 @@ import {
 } from "@/src/interfaces/test-case.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
 import { successToast, errorToast } from "@/src/utils/toast.util";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { FaCode, FaLink } from "react-icons/fa";
 import { FaClock, FaMemory } from "react-icons/fa6";
@@ -26,6 +29,23 @@ const CreateTestCase = (props: { problem?: string }) => {
     is_hidden: false,
     is_sample: true,
   });
+
+  const router = useRouter();
+
+  const { data: session, status } = useSession({ required: true });
+
+  const permissions = session?.user.permissions ?? [];
+
+  const hasAccess =
+    status === "authenticated" && canAccess(permissions, "test-case:create");
+
+  React.useEffect(() => {
+    if (status === "authenticated" && !hasAccess) {
+      router.replace("/codesync/test-case");
+    }
+  }, [status, hasAccess, router]);
+
+  if (!hasAccess) return null;
 
   const handleTestCase = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,

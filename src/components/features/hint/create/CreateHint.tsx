@@ -2,9 +2,12 @@
 
 import Input from "@/src/components/ui/fields/Input";
 import TextArea from "@/src/components/ui/fields/TextArea";
+import { canAccess } from "@/src/configs/access.config";
 import { CreateHintResponse, HintForm } from "@/src/interfaces/hint.interface";
 import { getErrorMessage } from "@/src/utils/general.util";
 import { successToast, errorToast } from "@/src/utils/toast.util";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { FaLink } from "react-icons/fa";
 import { FaArrowDown19, FaArrowTrendUp, FaLightbulb } from "react-icons/fa6";
@@ -17,6 +20,23 @@ const CreateHint = (props: { problem?: string }) => {
     order_index: 0,
     problem: props.problem ?? "",
   });
+
+  const router = useRouter();
+
+  const { data: session, status } = useSession({ required: true });
+
+  const permissions = session?.user.permissions ?? [];
+
+  const hasAccess =
+    status === "authenticated" && canAccess(permissions, "hint:create");
+
+  React.useEffect(() => {
+    if (status === "authenticated" && !hasAccess) {
+      router.replace("/codesync/hint");
+    }
+  }, [status, hasAccess, router]);
+
+  if (!hasAccess) return null;
 
   const handleHint = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,

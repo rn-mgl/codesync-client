@@ -4,6 +4,7 @@ import Input from "@/src/components/ui/fields/Input";
 import TextArea from "@/src/components/ui/fields/TextArea";
 import Toggle from "@/src/components/ui/fields/Toggle";
 import BlockLoader from "@/src/components/ui/loader/BlockLoader";
+import { canAccess } from "@/src/configs/access.config";
 import { getErrorMessage } from "@/src/utils/general.util";
 import { successToast, errorToast } from "@/src/utils/toast.util";
 import {
@@ -12,7 +13,8 @@ import {
   TestCasePayload,
   UpdateTestCaseResponse,
 } from "@/src/interfaces/test-case.interface";
-import { useParams } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import { FaCode, FaLink } from "react-icons/fa";
 import { FaMemory, FaClock } from "react-icons/fa6";
@@ -30,6 +32,21 @@ const UpdateTestCase = () => {
     is_sample: true,
     is_hidden: false,
   });
+
+  const router = useRouter();
+
+  const { data: session, status } = useSession({ required: true });
+
+  const permissions = session?.user.permissions ?? [];
+
+  const hasAccess =
+    status === "authenticated" && canAccess(permissions, "test-case:update");
+
+  React.useEffect(() => {
+    if (status === "authenticated" && !hasAccess) {
+      router.replace("/codesync/test-case");
+    }
+  }, [status, hasAccess, router]);
 
   const params: { id?: string } | null = useParams();
 
@@ -92,6 +109,8 @@ const UpdateTestCase = () => {
   };
 
   React.useEffect(() => {
+    if (!hasAccess) return;
+
     const getTestCase = async () => {
       try {
         if (!params || !params.id) return;
@@ -129,7 +148,9 @@ const UpdateTestCase = () => {
     };
 
     getTestCase();
-  }, [params]);
+  }, [params, hasAccess]);
+
+  if (!hasAccess) return null;
 
   if (loading) return <BlockLoader />;
 

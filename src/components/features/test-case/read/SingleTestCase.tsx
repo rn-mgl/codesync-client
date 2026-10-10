@@ -103,7 +103,7 @@ const SingleTestCase = () => {
           closeForm={handleCanDelete}
           endpoint={`test-case/${params?.id}`}
           label="Test Case"
-          postDeleteAction={() => router.push("/codesync/test-cases")}
+          postDeleteAction={() => router.push("/codesync/test-case")}
         />
       )}
 
@@ -118,7 +118,7 @@ const SingleTestCase = () => {
 
       <div className="w-full flex justify-between">
         <Link
-          href="/codesync/test-cases"
+          href="/codesync/test-case"
           className="text-primary font-bold flex flex-row items-center 
                     justify-center gap-2 hover:border-b px-1 w-fit"
         >
@@ -140,7 +140,7 @@ const SingleTestCase = () => {
 
                 <Link
                   title="Edit"
-                  href={`/codesync/test-cases/${params?.id}/edit`}
+                  href={`/codesync/test-case/${params?.id}/edit`}
                   className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
                 >
                   <FaEdit />

@@ -12,27 +12,27 @@ export const BASE_NAVIGATIONS: NAVIGATION[] = [
   },
   {
     name: "Problems",
-    url: "/codesync/problems",
+    url: "/codesync/problem",
     icon: FaFlag,
   },
   {
     name: "Topics",
-    url: "/codesync/topics",
+    url: "/codesync/topic",
     icon: FaTags,
   },
   {
     name: "Hints",
-    url: "/codesync/hints",
+    url: "/codesync/hint",
     icon: FaLightbulb,
   },
   {
     name: "Test Cases",
-    url: "/codesync/test-cases",
+    url: "/codesync/test-case",
     icon: FaFileCode,
   },
   {
     name: "Achievements",
-    url: "/codesync/achievements",
+    url: "/codesync/achievement",
     icon: FaStar,
   },
 
@@ -62,13 +62,13 @@ const GUARDED_NAVIGATIONS: { [action: string]: NAVIGATION } = {
 
   "role:read": {
     name: "Roles",
-    url: "/codesync/roles",
+    url: "/codesync/role",
     icon: FaUser,
   },
 
   "permission:read": {
     name: "Permissions",
-    url: "/codesync/permissions",
+    url: "/codesync/permission",
     icon: FaKey,
   },
 };

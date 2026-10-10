@@ -91,7 +91,7 @@ const SingleTopic = () => {
           closeForm={handleCanDelete}
           endpoint={`topic/${params?.slug}`}
           label="Topic"
-          postDeleteAction={() => router.push("/codesync/topics")}
+          postDeleteAction={() => router.push("/codesync/topic")}
         />
       )}
 
@@ -110,7 +110,7 @@ const SingleTopic = () => {
         <>
           <div className="w-full flex justify-between">
             <Link
-              href="/codesync/topics"
+              href="/codesync/topic"
               className="text-primary font-bold flex flex-row items-center 
                         justify-center gap-2 hover:border-b px-1 w-fit"
             >
@@ -132,7 +132,7 @@ const SingleTopic = () => {
 
                     <Link
                       title="Edit"
-                      href={`/codesync/topics/${params?.slug}/edit`}
+                      href={`/codesync/topic/${params?.slug}/edit`}
                       className="p-2 rounded-full bg-inherit hover:text-accent flex flex-col items-center justify-center"
                     >
                       <FaEdit />

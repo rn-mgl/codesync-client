@@ -71,7 +71,7 @@ const ProblemHints = (
   const mappedHints = hints.map((hint) => (
     <Link
       key={hint.id}
-      href={`/codesync/hints/${hint.id}`}
+      href={`/codesync/hint/${hint.id}`}
       rel="noopener noreferrer"
       className="w-full flex flex-col items-start justify-center gap-2 p-4 bg-neutral-200 rounded-md hover:bg-neutral-300 transition-all"
     >
@@ -131,7 +131,7 @@ const ProblemHints = (
         <div className="w-full h-auto max-h-full bg-secondary rounded-lg p-4 flex flex-col items-start justify-start gap-4 overflow-y-auto">
           <div className="w-full flex flex-col gap-4 t:flex-row t:items-center t:justify-between">
             <Link
-              href={`/codesync/hints/create?problem=${props.selectedProblem}`}
+              href={`/codesync/hint/create?problem=${props.selectedProblem}`}
               className="text-primary font-normal flex flex-row items-center
                             justify-center gap-2 hover:bg-secondary/20 p-1 text-sm hover:border-b px-1"
             >

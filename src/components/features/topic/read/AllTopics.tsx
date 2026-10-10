@@ -53,7 +53,7 @@ const AllTopics = (paginate: { page: number; limit: number }) => {
   const mappedTopics = sort(filter(topics)).map((topic) => {
     return (
       <Link
-        href={`/codesync/topics/${topic.slug}`}
+        href={`/codesync/topic/${topic.slug}`}
         key={topic.id}
         rel="noopener noreferrer"
         className="w-full bg-neutral-200 rounded-lg p-2 flex flex-row gap-2 group group hover:bg-neutral-300 transition-all"

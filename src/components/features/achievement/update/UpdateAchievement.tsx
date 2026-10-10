@@ -1,6 +1,7 @@
 "use client";
 
 import { BADGE_PALETTE } from "@/src/configs/achievement.config";
+import { canAccess } from "@/src/configs/access.config";
 import Input from "@/src/components/ui/fields/Input";
 import Select from "@/src/components/ui/fields/Select";
 import TextArea from "@/src/components/ui/fields/TextArea";
@@ -14,7 +15,7 @@ import {
 import { getErrorMessage } from "@/src/utils/general.util";
 import { successToast, errorToast } from "@/src/utils/toast.util";
 import { useSession } from "next-auth/react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import { FaChartLine, FaLink, FaStickyNote } from "react-icons/fa";
 import { FaLockOpen, FaTrophy } from "react-icons/fa6";
@@ -35,7 +36,21 @@ const UpdateAchievement = () => {
     unlock_criteria: "",
   });
 
-  useSession({ required: true });
+  const router = useRouter();
+
+  const { data: session, status } = useSession({ required: true });
+
+  const permissions = session?.user.permissions ?? [];
+
+  const hasAccess =
+    status === "authenticated" &&
+    canAccess(permissions, "achievement:update");
+
+  React.useEffect(() => {
+    if (status === "authenticated" && !hasAccess) {
+      router.replace("/codesync/achievement");
+    }
+  }, [status, hasAccess, router]);
 
   const params: { slug?: string } | null = useParams();
 
@@ -106,6 +121,8 @@ const UpdateAchievement = () => {
   };
 
   React.useEffect(() => {
+    if (!hasAccess) return;
+
     const getAchievement = async () => {
       try {
         if (!params?.slug) return;
@@ -143,7 +160,9 @@ const UpdateAchievement = () => {
     };
 
     getAchievement();
-  }, [params?.slug]);
+  }, [params?.slug, hasAccess]);
+
+  if (!hasAccess) return null;
 
   if (loading) return <BlockLoader />;
 

@@ -12,15 +12,22 @@ import { errorToast } from "@/src/utils/toast.util";
 import { DateTime } from "luxon";
 import Link from "next/link";
 import React from "react";
+import { FaPlus } from "react-icons/fa6";
+import { useSession } from "next-auth/react";
+import { canAccess } from "@/src/configs/access.config";
 
 const AllRoles = () => {
   const [roles, setRoles] = React.useState<BaseRole[]>([]);
   const [loading, setLoading] = React.useState(true);
 
+  const { data: session } = useSession({ required: true });
+
+  const permissions = session?.user.permissions ?? [];
+
   const mappedRoles = roles.map((role) => {
     return (
       <Link
-        href={`/codesync/roles/${role.id}`}
+        href={`/codesync/role/${role.id}`}
         key={role.id}
         rel="noopener noreferrer"
         className="w-full not-last:border-b-2 border-neutral-400 transition-all
@@ -70,6 +77,17 @@ const AllRoles = () => {
 
   return (
     <div className="w-full flex flex-col items-start justify-start h-auto gap-8">
+      {canAccess(permissions, "role:create") && (
+        <Link
+          href="/codesync/role/create"
+          className="text-primary font-bold flex flex-row items-center 
+                    justify-center gap-2 hover:border-b px-1"
+        >
+          Add Role
+          <FaPlus />
+        </Link>
+      )}
+
       {loading ? (
         <BlockLoader />
       ) : (

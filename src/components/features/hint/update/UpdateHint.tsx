@@ -8,9 +8,11 @@ import {
   HintForm,
   GetHintResponse,
 } from "@/src/interfaces/hint.interface";
+import { canAccess } from "@/src/configs/access.config";
 import { getErrorMessage } from "@/src/utils/general.util";
 import { successToast, errorToast } from "@/src/utils/toast.util";
-import { useParams } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import { FaLink } from "react-icons/fa";
 import { FaArrowDown19, FaArrowTrendUp, FaLightbulb } from "react-icons/fa6";
@@ -24,6 +26,21 @@ const UpdateHint = () => {
     order_index: 0,
     problem: "",
   });
+
+  const router = useRouter();
+
+  const { data: session, status } = useSession({ required: true });
+
+  const permissions = session?.user.permissions ?? [];
+
+  const hasAccess =
+    status === "authenticated" && canAccess(permissions, "hint:update");
+
+  React.useEffect(() => {
+    if (status === "authenticated" && !hasAccess) {
+      router.replace("/codesync/hint");
+    }
+  }, [status, hasAccess, router]);
 
   const params: { id?: string } | null = useParams();
 
@@ -75,6 +92,8 @@ const UpdateHint = () => {
   };
 
   React.useEffect(() => {
+    if (!hasAccess) return;
+
     const getHint = async () => {
       try {
         if (!params?.id) return;
@@ -111,7 +130,9 @@ const UpdateHint = () => {
     };
 
     getHint();
-  }, [params?.id]);
+  }, [params?.id, hasAccess]);
+
+  if (!hasAccess) return null;
 
   if (loading) return <BlockLoader />;
 

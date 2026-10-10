@@ -6,8 +6,11 @@ import {
   CreatePermissionResponse,
   PermissionForm,
 } from "@/src/interfaces/permission.interface";
+import { canAccess } from "@/src/configs/access.config";
 import { getErrorMessage } from "@/src/utils/general.util";
 import { errorToast, successToast } from "@/src/utils/toast.util";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { FaStickyNote } from "react-icons/fa";
 import { FaUser } from "react-icons/fa6";
@@ -19,6 +22,23 @@ const CreatePermission = () => {
   });
 
   const [loading, setLoading] = React.useState(false);
+
+  const router = useRouter();
+
+  const { data: session, status } = useSession({ required: true });
+
+  const permissions = session?.user.permissions ?? [];
+
+  const hasAccess =
+    status === "authenticated" && canAccess(permissions, "permission:create");
+
+  React.useEffect(() => {
+    if (status === "authenticated" && !hasAccess) {
+      router.replace("/codesync/permission");
+    }
+  }, [status, hasAccess, router]);
+
+  if (!hasAccess) return null;
 
   const handlePermission = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,

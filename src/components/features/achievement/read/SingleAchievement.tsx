@@ -100,7 +100,7 @@ const SingleAchievement = () => {
           endpoint={`achievement/${params?.slug}`}
           label="achievement"
           postDeleteAction={() => {
-            router.push("/codesync/achievements");
+            router.push("/codesync/achievement");
           }}
         />
       ) : null}
@@ -116,7 +116,7 @@ const SingleAchievement = () => {
 
       <div className="w-full flex flex-row not-last-of-type:justify-between">
         <Link
-          href="/codesync/achievements"
+          href="/codesync/achievement"
           className="text-primary font-bold flex flex-row items-center 
                     justify-center gap-2 hover:border-b px-1 w-fit"
         >
@@ -136,7 +136,7 @@ const SingleAchievement = () => {
               </button>
 
               <Link
-                href={`/codesync/achievements/${params?.slug}/edit`}
+                href={`/codesync/achievement/${params?.slug}/edit`}
                 type="button"
                 className="hover:text-accent transition-all p-2"
               >

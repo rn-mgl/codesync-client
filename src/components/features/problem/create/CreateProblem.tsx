@@ -6,6 +6,7 @@ import RichTextEditor from "@/src/components/ui/fields/RichTextEditor";
 import Select from "@/src/components/ui/fields/Select";
 import TextArea from "@/src/components/ui/fields/TextArea";
 import Paginate from "@/src/components/ui/filters/Paginate";
+import { canAccess } from "@/src/configs/access.config";
 import useCheckBox from "@/src/hooks/useCheckBox";
 import usePaginate from "@/src/hooks/usePaginate";
 import useSelect from "@/src/hooks/useSelect";
@@ -22,6 +23,7 @@ import { getErrorMessage } from "@/src/utils/general.util";
 import { successToast, errorToast } from "@/src/utils/toast.util";
 import { Editor } from "@tiptap/react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { FaCode, FaLink, FaPuzzlePiece } from "react-icons/fa6";
 
@@ -47,7 +49,20 @@ const CreateProblem = (paginate: { page: number; limit: number }) => {
   const editorialRef = React.useRef<Editor | null>(null);
   const descriptionRef = React.useRef<Editor | null>(null);
 
-  useSession({ required: true });
+  const router = useRouter();
+
+  const { data: session, status } = useSession({ required: true });
+
+  const permissions = session?.user.permissions ?? [];
+
+  const hasAccess =
+    status === "authenticated" && canAccess(permissions, "problem:create");
+
+  React.useEffect(() => {
+    if (status === "authenticated" && !hasAccess) {
+      router.replace("/codesync/problem");
+    }
+  }, [status, hasAccess, router]);
 
   const {
     pages,
@@ -150,6 +165,8 @@ const CreateProblem = (paginate: { page: number; limit: number }) => {
 
     getTopics();
   }, [handlePages, page, limit]);
+
+  if (!hasAccess) return null;
 
   return (
     <form

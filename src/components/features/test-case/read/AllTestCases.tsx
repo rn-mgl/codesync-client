@@ -20,6 +20,10 @@ import {
   TEST_CASE_SEARCH_OPTIONS,
   TEST_CASE_SORT_OPTIONS,
 } from "@/src/configs/filter.config";
+import Link from "next/link";
+import { FaPlus } from "react-icons/fa6";
+import { useSession } from "next-auth/react";
+import { canAccess } from "@/src/configs/access.config";
 
 const AllTestCases = (props: {
   problem?: string;
@@ -54,6 +58,9 @@ const AllTestCases = (props: {
     handlePage,
     handlePages,
   } = usePaginate({ page: props.page, limit: props.limit });
+
+  const { data } = useSession({ required: true });
+  const permissions = data?.user.permissions ?? [];
 
   const handleSelectedProblem = (problem: string) => {
     setSelectedProblem((prev) => (prev === problem ? null : problem));
@@ -125,7 +132,22 @@ const AllTestCases = (props: {
   }, [problemParam, limit, page, handlePages]);
 
   return (
-    <div className="flex flex-col items-center justify-start gap-8 w-full">
+    <div className="flex flex-col items-start justify-start gap-8 w-full">
+      {canAccess(permissions, "test-case:create") && (
+        <Link
+          href={
+            props.problem
+              ? `/codesync/test-case/create?problem=${props.problem}`
+              : `/codesync/test-case/create`
+          }
+          className="text-primary font-bold flex flex-row items-center 
+                    justify-center gap-2 hover:border-b px-1"
+        >
+          Add Test Case
+          <FaPlus />
+        </Link>
+      )}
+
       <div className="w-full flex flex-col items-center justify-start gap-2 t:flex-row t:justify-between">
         <div className="w-full t:w-fit z-20 flex">
           <SearchFilter

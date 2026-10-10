@@ -112,7 +112,7 @@ const ProblemTestCases = (props: {
       >
         <div className="w-full flex flex-col items-start justify-center text-sm">
           <Link
-            href={`/codesync/test-cases/${tc.id}`}
+            href={`/codesync/test-case/${tc.id}`}
             rel="noopener noreferrer"
             className="w-full p-4 border-b border-b-neutral-300 bg-neutral-200 rounded-t-md group"
           >
@@ -209,7 +209,7 @@ const ProblemTestCases = (props: {
             </div>
 
             <Link
-              href={`/codesync/test-cases/create?problem=${props.selectedProblem}`}
+              href={`/codesync/test-case/create?problem=${props.selectedProblem}`}
               className="text-primary font-normal flex flex-row items-center
                             justify-center gap-2 hover:bg-secondary/20 p-1 text-sm hover:border-b px-1"
             >

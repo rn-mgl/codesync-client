@@ -6,9 +6,11 @@ import {
   RoleForm,
   GetRoleResponse,
 } from "@/src/interfaces/role.interface";
+import { canAccess } from "@/src/configs/access.config";
 import { getErrorMessage } from "@/src/utils/general.util";
 import { errorToast, successToast } from "@/src/utils/toast.util";
-import { useParams } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import { FaUser } from "react-icons/fa6";
 
@@ -18,6 +20,21 @@ const UpdateRole = () => {
   });
 
   const [loading, setLoading] = React.useState(true);
+
+  const router = useRouter();
+
+  const { data: session, status } = useSession({ required: true });
+
+  const permissions = session?.user.permissions ?? [];
+
+  const hasAccess =
+    status === "authenticated" && canAccess(permissions, "role:update");
+
+  React.useEffect(() => {
+    if (status === "authenticated" && !hasAccess) {
+      router.replace("/codesync/role");
+    }
+  }, [status, hasAccess, router]);
 
   const params: { id?: string } | null = useParams();
 
@@ -69,6 +86,8 @@ const UpdateRole = () => {
   };
 
   React.useEffect(() => {
+    if (!hasAccess) return;
+
     const getRole = async () => {
       if (!params?.id) {
         return;
@@ -99,7 +118,9 @@ const UpdateRole = () => {
     };
 
     getRole();
-  }, [params?.id]);
+  }, [params?.id, hasAccess]);
+
+  if (!hasAccess) return null;
 
   return (
     <form

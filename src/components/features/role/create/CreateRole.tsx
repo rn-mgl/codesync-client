@@ -2,8 +2,11 @@
 
 import Input from "@/src/components/ui/fields/Input";
 import { CreateRoleResponse, RoleForm } from "@/src/interfaces/role.interface";
+import { canAccess } from "@/src/configs/access.config";
 import { getErrorMessage } from "@/src/utils/general.util";
 import { errorToast, successToast } from "@/src/utils/toast.util";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { FaUser } from "react-icons/fa6";
 
@@ -12,6 +15,23 @@ const CreateRole = () => {
   const [role, setRole] = React.useState<RoleForm>({
     role: "",
   });
+
+  const router = useRouter();
+
+  const { data: session, status } = useSession({ required: true });
+
+  const permissions = session?.user.permissions ?? [];
+
+  const hasAccess =
+    status === "authenticated" && canAccess(permissions, "role:create");
+
+  React.useEffect(() => {
+    if (status === "authenticated" && !hasAccess) {
+      router.replace("/codesync/role");
+    }
+  }, [status, hasAccess, router]);
+
+  if (!hasAccess) return null;
 
   const handleRole = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

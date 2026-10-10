@@ -1,6 +1,7 @@
 "use client";
 
 import light from "@/public/global/LogoLight.svg";
+import { canAccess } from "@/src/configs/access.config";
 import { BADGE_PALETTE } from "@/src/configs/achievement.config";
 import Input from "@/src/components/ui/fields/Input";
 import Select from "@/src/components/ui/fields/Select";
@@ -13,6 +14,7 @@ import {
 import { getErrorMessage } from "@/src/utils/general.util";
 import { successToast, errorToast } from "@/src/utils/toast.util";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import React from "react";
 import { FaChartLine, FaLink, FaStickyNote } from "react-icons/fa";
@@ -31,7 +33,21 @@ const CreateAchievement = () => {
     icon: "",
   });
 
-  useSession({ required: true });
+  const router = useRouter();
+
+  const { data: session, status } = useSession({ required: true });
+
+  const permissions = session?.user.permissions ?? [];
+
+  const hasAccess =
+    status === "authenticated" &&
+    canAccess(permissions, "achievement:create");
+
+  React.useEffect(() => {
+    if (status === "authenticated" && !hasAccess) {
+      router.replace("/codesync/achievement");
+    }
+  }, [status, hasAccess, router]);
 
   const { select: category, handleSelect: handleCategory } = useSelect(
     { label: "Problems", value: "problems" },
@@ -87,6 +103,8 @@ const CreateAchievement = () => {
       setLoading(false);
     }
   };
+
+  if (!hasAccess) return null;
 
   return (
     <form
