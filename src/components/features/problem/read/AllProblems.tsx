@@ -229,7 +229,7 @@ const AllProblems = (paginate: { page: number; limit: number }) => {
 
       <div className="w-full flex flex-col items-center justify-start gap-2">
         <div className="w-full flex flex-col items-center justify-start gap-2 t:flex-row t:justify-between">
-          <div className="w-full t:w-fit z-30 flex">
+          <div className="w-full t:w-fit z-40 flex">
             <SearchFilter
               searchKey={searchKey}
               searchValue={searchValue}
@@ -240,7 +240,7 @@ const AllProblems = (paginate: { page: number; limit: number }) => {
             />
           </div>
 
-          <div className="w-full t:w-fit z-20 flex">
+          <div className="w-full t:w-fit z-30 flex">
             <SortFilter
               sortLabel={sortLabel}
               handleIsAsc={handleIsAsc}
@@ -253,7 +253,7 @@ const AllProblems = (paginate: { page: number; limit: number }) => {
         </div>
 
         <div className="w-full flex flex-col items-center justify-between gap-2 t:flex-row">
-          <div className="w-full t:w-fit z-10 flex">
+          <div className="w-full t:w-fit z-20 flex">
             <MultiSelect
               activeLabel="Select a Topic"
               id="topics"
@@ -265,7 +265,7 @@ const AllProblems = (paginate: { page: number; limit: number }) => {
             />
           </div>
 
-          <div className="w-full t:w-fit z-0 flex">
+          <div className="w-full t:w-fit z-10 flex">
             <MultiSelect
               activeLabel="Select a Difficulty"
               id="difficulty"
