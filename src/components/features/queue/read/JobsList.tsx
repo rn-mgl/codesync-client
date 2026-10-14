@@ -138,8 +138,10 @@ const JobsList = (props: {
       className="w-full not-last:border-b-2 border-neutral-400 transition-all
                 hover:bg-neutral-200 first:rounded-t-md last:rounded-b-md text-left"
     >
-      <p className="w-full grid grid-cols-6 items-center p-2 gap-4 text-sm *:p-2">
-        <span>{job.opts.prevMillis ?? job.id}</span>
+      <div className="w-full grid grid-cols-6 items-center p-2 gap-4 text-sm *:p-2">
+        <span className="line-clamp-1 truncate">
+          {job.opts.prevMillis ?? job.id}
+        </span>
         <span className="capitalize">{normalizeString(job.name)}</span>
         <span className="capitalize">
           {typeof job.progress === "number" ? job.progress : "-"}
@@ -183,7 +185,7 @@ const JobsList = (props: {
             </button>
           )}
         </span>
-      </p>
+      </div>
     </div>
   ));
 
