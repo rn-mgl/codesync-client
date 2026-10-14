@@ -23,8 +23,6 @@ export default withAuth(
     const segments = req.nextUrl.pathname.split("/");
     const lastSegment = segments.at(-1);
 
-    console.log(segments);
-
     if (lastSegment === "create" || lastSegment === "edit") {
       const isCreate = lastSegment === "create";
       const action = isCreate ? "create" : "update";
@@ -46,7 +44,7 @@ export default withAuth(
     } else {
       const recordType = segments[2];
 
-      if (!recordType) {
+      if (!recordType || recordType === "profile") {
         return NextResponse.next();
       }
 
