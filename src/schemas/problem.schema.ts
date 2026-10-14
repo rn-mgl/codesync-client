@@ -51,6 +51,7 @@ const InputFormatSchema = z.object({
       type: z
         .string({ error: "Each parameter needs a type." })
         .min(1, { error: "Each parameter needs a type." }),
+      hidden: z.boolean().optional(),
     }),
     { error: "Input format must include a list of parameters." },
   ),

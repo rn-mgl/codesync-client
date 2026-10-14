@@ -9,6 +9,7 @@ export const generateBoilerPlate = (
   const style = inputFormat.style; // function or class
   const name = inputFormat.name; // function or class name
   const methodName = inputFormat.method ?? "solve";
+  const visibleParams = inputFormat.params.filter((param) => !param.hidden);
 
   const definitionComment = getDataStructureComment(
     inputFormat,
@@ -21,7 +22,7 @@ export const generateBoilerPlate = (
 
   switch (language) {
     case "javascript":
-      parameters = inputFormat.params.map((param) => param.name).join(", "); // parameters
+      parameters = visibleParams.map((param) => param.name).join(", "); // parameters
       boilerPlate =
         definitionComment +
         (style === "class"
@@ -29,7 +30,7 @@ export const generateBoilerPlate = (
           : `function ${name}(${parameters}) {\n\t\n}`);
       break;
     case "php":
-      parameters = inputFormat.params
+      parameters = visibleParams
         .map((param) => `$${param.name}`)
         .join(", ");
       boilerPlate = `<?php\n\n${definitionComment}${
@@ -39,7 +40,7 @@ export const generateBoilerPlate = (
       }`;
       break;
     case "java":
-      parameters = inputFormat.params
+      parameters = visibleParams
         .map((param) => `${getJavaType(param.type)} ${param.name}`)
         .join(", ");
       boilerPlate =
@@ -50,8 +51,8 @@ export const generateBoilerPlate = (
       break;
     case "python":
       parameters = style === "class"
-        ? `self` + (inputFormat.params.length ? `, ${inputFormat.params.map((param) => param.name).join(", ")}` : "")
-        : inputFormat.params.map((param) => param.name).join(", ");
+        ? `self` + (visibleParams.length ? `, ${visibleParams.map((param) => param.name).join(", ")}` : "")
+        : visibleParams.map((param) => param.name).join(", ");
       boilerPlate =
         definitionComment +
         (style === "class"
@@ -167,7 +168,9 @@ const getDataStructureComment = (
   language: SupportedLanguages,
 ): string => {
   const types = [
-    ...inputFormat.params.map((param) => param.type),
+    ...inputFormat.params
+      .filter((param) => !param.hidden)
+      .map((param) => param.type),
     outputFormat.type,
   ];
 

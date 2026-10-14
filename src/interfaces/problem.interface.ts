@@ -13,7 +13,7 @@ export interface InputFormat {
   version: number;
   name: string;
   method?: string;
-  params: { name: string; type: string }[];
+  params: { name: string; type: string; hidden?: boolean }[];
 }
 
 export interface OutputFormat {
