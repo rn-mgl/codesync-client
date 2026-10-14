@@ -246,7 +246,9 @@ export default function useSingleProblem() {
       } catch (err) {
         const message = getErrorMessage(err);
 
-        errorToast(message);
+        if (type === "run") {
+          setActiveDetailsPanel("result");
+        }
 
         submissionDispatch({
           type: `submit_${type}_error`,
