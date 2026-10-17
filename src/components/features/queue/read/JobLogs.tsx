@@ -11,7 +11,11 @@ import {
 import { getErrorMessage } from "@/src/utils/general.util";
 import { normalizeString } from "@/src/utils/normalizer.util";
 import { errorToast } from "@/src/utils/toast.util";
-import { FaMagnifyingGlass, FaXmark } from "react-icons/fa6";
+import {
+  FaArrowRotateRight,
+  FaMagnifyingGlass,
+  FaXmark,
+} from "react-icons/fa6";
 import React from "react";
 
 const JobLogs = (props: {
@@ -31,48 +35,56 @@ const JobLogs = (props: {
   const [limit, setLimit] = React.useState(25);
   const [canSelectLimit, setCanSelectLimit] = React.useState(false);
 
-  React.useEffect(() => {
+  const getLogs = React.useCallback(async () => {
     if (!props.id) return;
 
-    const getLogs = async () => {
-      setLoading(true);
-
-      try {
-        const searchParams = {
-          action: "logs",
-          type: props.type,
-          page: String(page),
-          limit: String(limit),
-        };
-
-        const query = new URLSearchParams(searchParams).toString();
-
-        const response = await fetch(`/api/queue/${props.id}?${query}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        const resolve: GetJobLogsResponse = await response.json();
-
-        if (!resolve.success) {
-          throw new Error(resolve.message);
-        }
-
-        const { logs, pagination } = resolve.data;
-
-        setLogs(logs);
-        setPages(pagination.pages ?? 0);
-      } catch (error) {
-        errorToast(getErrorMessage(error));
-      } finally {
-        setLoading(false);
-      }
+    let logLines: QueueJobLogs = {
+      count: 0,
+      logs: [],
+      pages: 0,
     };
 
-    getLogs();
+    let pages = 0;
+
+    try {
+      const searchParams = {
+        action: "logs",
+        type: props.type,
+        page: String(page),
+        limit: String(limit),
+      };
+
+      const query = new URLSearchParams(searchParams).toString();
+
+      const response = await fetch(`/api/queue/${props.id}?${query}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const resolve: GetJobLogsResponse = await response.json();
+
+      if (!resolve.success) {
+        throw new Error(resolve.message);
+      }
+
+      const { logs, pagination } = resolve.data;
+
+      logLines = logs;
+      pages = pagination.pages ?? 0;
+    } catch (error) {
+      errorToast(getErrorMessage(error));
+    } finally {
+      setLogs(logLines);
+      setPages(pages);
+      setLoading(false);
+    }
   }, [props.id, props.type, page, limit]);
+
+  React.useEffect(() => {
+    getLogs();
+  }, [getLogs]);
 
   const searchTerm = searchValue.trim().toLowerCase();
 
@@ -127,12 +139,22 @@ const JobLogs = (props: {
         <div className="w-full flex-1 min-h-0 bg-secondary rounded-lg p-4 flex flex-col items-start justify-start gap-4 overflow-hidden">
           <div className="w-full flex flex-col items-start justify-start shrink-0">
             <div className="p-4 bg-primary/80 w-full rounded-t-md font-medium text-secondary flex items-center justify-between">
-              Logs
               <span>
+                Logs |{" "}
                 {searchTerm
                   ? `${filteredLogs.length} / ${logs.count}`
                   : logs.count}
               </span>
+
+              <button
+                className=" p-1 rounded-full"
+                onClick={() => {
+                  getLogs();
+                  setLoading(true);
+                }}
+              >
+                <FaArrowRotateRight />
+              </button>
             </div>
 
             <div className="w-full flex flex-col items-start justify-start gap-4 p-2 border border-neutral-400 rounded-b-md t:p-4">
